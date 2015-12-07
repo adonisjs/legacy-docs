@@ -1,3 +1,6 @@
+
+{% raw %}
+
 # Request 
 
 The request object is sent along with every HTTP request and has a handful of methods to read request information. 
@@ -410,3 +413,5 @@ if(!profile.moved()){
   return profile.errors().message
 }
 ```
+
+{% endraw %}
