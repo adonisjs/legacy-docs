@@ -138,16 +138,6 @@ Set helps in declaring variables inside HTML templates, think of them as replace
 {{ username }}
 ```
 
-### raw
-
-The raw tag is helpful when you want to ignore a set of code to be processed by the template engine. It is useful when you are using frontend data binding libraries like Angular or VueJs.
-
-```twig,line-numbers
-{% raw %}
-  {{2 + 2}} will not be processed
-{% endraw %}
-```
-
 ### block
 Block tag defines a block with unique name, and data inside that block can be overridden later.
 
