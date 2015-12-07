@@ -85,7 +85,7 @@ The benefit of this approach is it makes your controllers testable as you can mo
 
 Type hinting is an alternate to `static inject` method as IoC container will try to make your dependencies by reading your constructor arguments. While using constructor type hinting you have to replace `/` with `_` for your namespace.
 
-```
+```javascript,line-numbers
 class UserController {
 
   constructor (App_Model_User) {
