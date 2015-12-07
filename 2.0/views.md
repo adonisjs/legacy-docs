@@ -1,3 +1,6 @@
+
+{% raw %}
+
 # Views
 
 Adonis ships with a beautiful template engine to create dynamic HTML pages. Views are stored inside `resources/views` directory and are defined with `.html` extension.
@@ -604,3 +607,5 @@ App.on('after:start', function () {
   View.addGlobal('name', 'value')
 })
 ```
+
+{% endraw %}
