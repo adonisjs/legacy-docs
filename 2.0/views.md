@@ -576,7 +576,7 @@ You can also extend views to register your own filters and global methods to be 
 
 ### Adding filter
 
-```twig,line-numbers
+```javascript,line-numbers
 const App = use('App')
 const View = use('View')
 
@@ -589,7 +589,7 @@ App.on('after:start', function () {
 
 ### Adding global
 
-```twig,line-numbers
+```javascript,line-numbers
 const App = use('App')
 const View = use('View')
 
