@@ -56,7 +56,7 @@ above is a master view with shared HTML markup, now you can extend this view and
 
 While making views, you can pass a data object as the second parameter, which can be consumed by your views using special syntax.
 
-```twig,line-numbers
+```javascript,line-numbers
 yield response.view('index', {title: 'Home'})
 ```
 
