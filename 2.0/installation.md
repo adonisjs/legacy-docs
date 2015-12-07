@@ -33,7 +33,8 @@ npm install -g adonis-cli
 ```
 
 ### generate project
-```
+
+```bash,line-numbers
 adonis new yardstick
 cd yardstick
 npm start
