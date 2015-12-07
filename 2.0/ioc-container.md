@@ -19,7 +19,7 @@ Binding objects to IoC container requires a namespace and a return value to be u
 
 ### bind
 
-```
+```javascript,line-numbers
 Ioc.bind('App/Hello', function () {
   return 'Hello World!'
 })
@@ -27,13 +27,13 @@ Ioc.bind('App/Hello', function () {
 
 Above we created a binding with a unique namespace called `App/Hello` which returns a string called `Hello World`. Now this binding can be used by resolving it from IoC container.
 
-```
+```javascript,line-numbers
 const Hello = use('App/Hello')
 ```
 
 ### singleton
 
-```
+```javascript,line-numbers
 Ioc.singleton('App/Time', function () {
   return new Date().getTime()
 })
@@ -43,7 +43,7 @@ Above we bind a singleton, which means the return value will be same every time 
 
 ### dependency injection
 
-```
+```javascript,line-numbers
 Ioc.bind('App/User', function (app) {
   const Redis = app.use('App/Redis')
   const Validator = app.use('App/Validator')
@@ -58,13 +58,14 @@ It is fairly simple to inject other bindings inside your binding. Also it does n
 Managers are like your bindings but they have different purpose, `object` exposed via manager needs to have `extend` method and is used for extending implementations. Mail provider is an example of same
 
 ### registering Mail as a manager inside Ioc container
-```
+
+```javascript,line-numbers
 Ioc.manager('Adonis/Addons/Mail', Mail)
 ```
 
 ### extend 
 
-```
+```javascript,line-numbers
 Ioc.extend('Adonis/Addons/Mail', 'sendgrid', function () {
   return new SendGrid()
 })
@@ -79,7 +80,7 @@ Alias is key/value pair to identify a namespace with it's alias. For example
 1. `Adonis/Addons/Mail` has alias of `Mail`
 2. `Adonis/Src/Route` has a alias of `Route`
 
-```
+```javascript,line-numbers
 Ioc.alias('Route','Adonis/Src/Route')
 ```
 
@@ -89,13 +90,13 @@ Alias works both for managers and bindings.
 
 Autoloading is handled cleverly by IoC container, it does not require all the files in memory instead while resolving dependencies it tries to make a sequence of `namespace` and see if required namespace is inside a given path. 
 
-```
+```javascript,line-numbers
 Ioc.autoload('App',path.join(__dirname,'./app'))
 ```
 
 Now any file inside `./app` directory can be referenced as `App/<filePath>` as Adonis will lazy load it for you.
 
-```
+```javascript,line-numbers
 use('App/Http/routes')
 use('App/Http/Middleware/Cors')
 ```
@@ -114,7 +115,7 @@ Resolving dependencies is a sequential process and IoC container will try to fin
 
 Use will return binded value using it's namespace
 
-```
+```javascript,line-numbers
 const Route = Ioc.use('Adonis/Src/Route')
 ```
 
@@ -129,7 +130,7 @@ Make is smarter and will try to satisfy dependencies until the last injection an
   - if return value is a `Class` will try to follow the entire process again.
   - otherwise returns original return value.
 
-```
+```javascript,line-numbers
 Class UserController {
     
     static get inject () {
