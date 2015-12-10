@@ -64,5 +64,5 @@ const namedMiddleware = {
 
 ```javascript,line-numbers
 // app/Http/routes.js
-Route.get('/profile/:id', 'UserController.show').middleware(['auth'])
+Route.get('/profile/:id', 'UserController.show').middlewares(['auth'])
 ```
