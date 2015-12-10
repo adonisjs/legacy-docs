@@ -186,7 +186,7 @@ Expectations of middleware should be satisfied before a request can reach your r
 To attach middleware to your route, you can make use of `middleware` method.
 
 ```javascript,line-numbers
-Route.get('/profile', 'ProfileController.show').middleware(['auth'])
+Route.get('/profile', 'ProfileController.show').middlewares(['auth'])
 ```
 
 ## Groups
