@@ -1,6 +1,6 @@
 # Installation
 
-Installing Adonis is fairly simple and requires `>= node 4.0` with npm `>= 3.0`. Also, it is recommended to make use of [nvm](https://github.com/creationix/nvm) to install and manage multiple versions of NodeJs.
+Installing Adonis is fairly simple process which requires `>= node 4.0` with npm `>= 3.0`. Also, it is recommended to make use of [nvm](https://github.com/creationix/nvm) to install and manage multiple versions of NodeJs.
 
 - [Es6 Features](#es6-features)
 - [Installing Adonis Cli](#installing-adonis-cli)
@@ -8,10 +8,10 @@ Installing Adonis is fairly simple and requires `>= node 4.0` with npm `>= 3.0`.
 
 ## Es6 Features
 
-Adonis is built on top of `Es6` also known as `ES2015`, making the code more enjoyable and cleaner to read. We do not make use of any transpiler and depends upon core v8 implemented features.
+Adonis is built on top of `Es6` also known as `ES2015`, which makes the code more enjoyable and cleaner to read. We do not make use of any transpiler and depends upon core v8 implemented features.
 
 <div class="note">
-  <p> 
+  <p>
     <strong>Note</strong>
     Latest version of NodeJs supports following features.
   </p>
@@ -33,7 +33,8 @@ npm install -g adonis-cli
 ```
 
 ### generate project
-```
+
+```bash,line-numbers
 adonis new yardstick
 cd yardstick
 npm start

@@ -1,3 +1,6 @@
+
+{% raw %}
+
 # Views
 
 Adonis ships with a beautiful template engine to create dynamic HTML pages. Views are stored inside `resources/views` directory and are defined with `.html` extension.
@@ -53,7 +56,7 @@ above is a master view with shared HTML markup, now you can extend this view and
 
 While making views, you can pass a data object as the second parameter, which can be consumed by your views using special syntax.
 
-```twig,line-numbers
+```javascript,line-numbers
 yield response.view('index', {title: 'Home'})
 ```
 
@@ -133,16 +136,6 @@ Set helps in declaring variables inside HTML templates, think of them as replace
 ```twig,line-numbers
 {% set username="doe" %}
 {{ username }}
-```
-
-### raw
-
-The raw tag is helpful when you want to ignore a set of code to be processed by the template engine. It is useful when you are using frontend data binding libraries like Angular or VueJs.
-
-```twig,line-numbers
-{% raw %}
-  {{2 + 2}} will not be processed
-{% endraw %}
 ```
 
 ### block
@@ -400,7 +393,7 @@ Inside `boostrap/start.js` file, you can add your own custom filters
 const App = use('App')
 const View = use('View')
 
-App.on('after:start', function () {
+App.on('start', function () {
   View.addFilter('date', function (value, format) {
     return moment(value).format(format)
   })
@@ -417,7 +410,7 @@ and finally you can make use of the above filter as
 Inheritance makes your code reusable by allowing `extending`, `including` and `importing` other templates.
 
 ### include
-By including a template you share the current template scope with the template under inheritance, it is good for isolating markup to be reused under a different .html file.
+By including a template you share the current template scope with the template under inheritance, it is good for isolated markup to be reused under a different .html file.
 
 ```twig,line-numbers
 {# resources/views/user.html #}
@@ -489,7 +482,7 @@ Also you can define alias from exported variable as follows
 
 ## Expressions
 
-You can make use of multiple different expressions while defining your views, which includes
+You can make use of different expressions while defining your views, which includes
 
 ### Maths
 
@@ -583,11 +576,11 @@ You can also extend views to register your own filters and global methods to be 
 
 ### Adding filter
 
-```twig,line-numbers
+```javascript,line-numbers
 const App = use('App')
 const View = use('View')
 
-App.on('after:start', function () {
+App.on('start', function () {
   View.addFilter('name', function () {
     // logic goes here
   })
@@ -596,11 +589,13 @@ App.on('after:start', function () {
 
 ### Adding global
 
-```twig,line-numbers
+```javascript,line-numbers
 const App = use('App')
 const View = use('View')
 
-App.on('after:start', function () {
+App.on('start', function () {
   View.addGlobal('name', 'value')
 })
 ```
+
+{% endraw %}

@@ -8,7 +8,7 @@ Config provider makes use of `dot-notation` while getting/setting values for a g
 const Config = use('Config')
 ```
 
-## get <span>(key [, defaultValue])</span>
+#### get <span>(key [, defaultValue])</span>
 
 ```javascript,line-numbers
 Config.get('database.mysql.host')
@@ -16,7 +16,7 @@ Config.get('database.mysql.host')
 Config.get('database.mysql.host', 'localhost')
 ```
 
-## set <span>(key, value)</span>
+#### set <span>(key, value)</span>
 
 ```javascript,line-numbers
 Config.set('database.mysql.host', '127.0.0.1')

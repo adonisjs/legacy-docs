@@ -19,10 +19,10 @@ Above command will create a new class called `Auth.js` with `handle` method to r
 
 ```javascript,line-numbers
 class Auth {
-  
+
   *handle (request, response, next) {
     if(!auth) {
-      response.unAuthorized("Login first")
+      response.status(401).send("Login first")
       return
     }
     yield next
@@ -37,7 +37,7 @@ handle method is called automatically on your middleware and should `yield next`
 
 ## Registering Middleware
 
-So far you have created a middleware but have not registered it yet, same can be done inside `app/Http/kernel.js` file. 
+So far you have created a middleware but have not registered it yet, same can be done inside `app/Http/kernel.js` file.
 
 ### global middleware
 

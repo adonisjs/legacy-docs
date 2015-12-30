@@ -1,6 +1,6 @@
 # Helpers
 
-Helpers provider gives you handy methods to lookup paths to different directories for Adonis application. It is very hard to get the reference to a given path especially for service providers installed as npm modules.
+Helpers provider gives you handy methods to accomplish common tasks, which can be getting paths to different directories for Adonis application. It is very hard to get the reference to a given path especially for service providers installed as npm modules.
 
 - [Basic Usage](#basic-usage)
 - [Methods](#methods)
@@ -12,6 +12,9 @@ Helpers provider gives you handy methods to lookup paths to different directorie
   - [storagePath](#storagepath)
   - [resourcesPath](#resourcespath)
   - [viewsPath](#viewspath)
+  - [migrationPath](#migrationpath)
+  - [base64Encode](#base64encode)
+  - [base64Decode](#base64decode)
 
 ## Basic Usage
 
@@ -95,4 +98,27 @@ returns path to the views directory, you can also build a path to a given file i
 Helpers.viewsPath()
 // or
 Helpers.viewsPath('index.html')
+```
+
+### migrationPath <span>([toFile])</span>
+returns path to migrations directory, you can also build a path to a given file inside migrations directory.
+
+```javascript,line-numbers
+Helpers.migrationPath()
+// or
+Helpers.migrationPath('create_users_table.js')
+```
+
+### base64Encode <span>([unencoded])</span>
+returns encoded base64 string
+
+```javascript,line-numbers
+Helpers.base64Encode('Adonis Framework')
+```
+
+### base64Decode <span>([encoded])</span>
+returns decoded base64 string
+
+```javascript,line-numbers
+Helpers.base64Decode('QWRvbmlzIEZyYW1ld29yaw==')
 ```

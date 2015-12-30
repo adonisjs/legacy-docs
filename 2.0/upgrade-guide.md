@@ -6,7 +6,7 @@ This guide outlines the requirements and breakings changes to upgrade Adonis to 
 
 ## Upgrading to v2
 
-The majority of `Adonis 2.x.x` code has been re-written from scratch to improve stability and performance. Since Io.js has been merged into NodeJs, we do not support Io.js officially.
+The majority of `Adonis 2.0.0` code has been re-written from scratch to improve stability and performance. Since IO.js has been merged into NodeJs, we do not support IO.js officially.
 
 ## Breaking Changes
 
@@ -68,11 +68,11 @@ Route.group('v1', function () {
 
 ### Global middleware runs even if no routes have been registered.
 
-Earlier global middleware used to run when the request used to hit a valid registered route since this is not the ideal behavior, now they will be executed even if there are no registered routes.
+Earlier global middleware used to run when a request reaches a valid registered route since this is not the ideal behavior, now they will be executed even if there are no registered routes.
 
 ### pm2 is removed.
 
-pm2 is a daemon that runs node processes in a background and watch files for changes, the moment a file changes it will restart the server again. Also, it manages crashes in production by restarting the server again after the crash.
+pm2 is a daemon that runs node processes in a background and watch files for changes, the moment a file changes it will restart the server again. Also, it manage crashes in production by restarting the server again after the crash.
 
 We have removed pm2 for several reasons:
 
@@ -93,7 +93,7 @@ New service providers have been introduced to give you extra arms while writing 
 
 ### Now providers can expose `extend` method to outside world to give support for extending features.
 
-It is very important for service providers to be extended and offer more functionality, from `2.x.x` service providers can expose an API to outside world for same. For example
+It is very important for service providers to be extended and offer more functionality, from `2.0.0` service providers can expose an API to outside world for same. For example
 
 Session provider offers an API to add more drivers.
 

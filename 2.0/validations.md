@@ -1,3 +1,0 @@
-# Validations
-
-Coming Soon.

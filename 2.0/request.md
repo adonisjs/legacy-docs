@@ -1,6 +1,9 @@
-# Request 
 
-The request object is sent along with every HTTP request and has a handful of methods to read request information. 
+{% raw %}
+
+# Request
+
+The request object is sent along with every HTTP request and has a handful of methods to read request information.
 
 - [Reading request information](#reading-request-information)
 - [Request methods](#request-methods)
@@ -13,7 +16,7 @@ The request object is sent along with every HTTP request and has a handful of me
 
 ## Reading request information
 
-As Adonis receives a new HTTP request, it injects `request` object to all registered middleware and route handler, which can be used to read/modify values from a given request.
+When Adonis receives a new HTTP request, it injects `request` object to all registered middleware and route handler, which can be used to read/modify values from a given request.
 
 ```javascript,line-numbers
 Route.get('/', function * (request, response) {
@@ -57,14 +60,14 @@ request.except('password')
 request.except(['password'])
 ```
 
-#### get 
+#### get
 returns all `get` values
 
 ```javascript,line-numbers
 request.get()
 ```
 
-#### post 
+#### post
 returns all `post` values
 
 ```javascript,line-numbers
@@ -84,7 +87,7 @@ identifies whether a request is pjax based upon `X-PJAX` header
 request.pjax()
 ```
 
-#### method 
+#### method
 returns request method/http verb
 
 ```javascript,line-numbers
@@ -220,7 +223,6 @@ Below is the list of drivers supported by session provider and they can be confi
 
 1. file - Saved inside a local file on server
 2. cookie - Values are encrypted and sent back to browser as cookies
-3. redis - Values are saved inside a redis store.
 
 #### put (key, value)
 
@@ -260,14 +262,25 @@ yield request.session.pull('username')
 
 ### Flash Messages
 
-Flash messages are stored inside session for a single request and will be cleared after the redirect. A good example will be to send form errors back on form submission failure.
+Flash messages are stored inside session for a single request and will be cleared on next request.
+
+In order to make use of flash messages, you need to make use of flash middleware, which is included with new installation of Adonis.
+
+```
+// app/Http/kernel.js
+const globalMiddleware = [
+  'App/Http/Middleware/Flash'
+]
+```
+
+A good example of flash messages will be to send form errors back on form submission failure.
 
 ```javascript,line-numbers
 * store (request, response) {
-  
+
   yield Validator.validate(rules, request.all())
-  
-  if(validator.fails()){
+
+  if (validator.fails()) {
     yield request.flashAll()
     return response.redirect('back')
   }
@@ -317,7 +330,7 @@ request.old('username', 'doe')
 
 ## Uploading Files
 
-File uploads are handled with care in Adonis, and each uploaded file is an instance of `File` class that has a ton of methods to save and check file metadata.
+File uploads are handled with care in Adonis, and each uploaded file is an instance of `File` class that has a ton of methods to save file and check it's metadata.
 
 #### file (key)
 returns uploaded file instance using it's key
@@ -410,3 +423,5 @@ if(!profile.moved()){
   return profile.errors().message
 }
 ```
+
+{% endraw %}

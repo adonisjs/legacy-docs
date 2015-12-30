@@ -7,7 +7,7 @@ Dependency Injection is a very simple term of removing all hard coded references
 
 ## Dependency Injection in general
 
-Let's create a simple module and see what problems we may face without having dependency injection and how simple it is to inject dependencies. To create a module in NodeJs, we make use of `CommonJs` module patterns that let us expose our code using `module.exports`.
+Let's create a simple module and see what problems we may face without having dependency injection and how simple it is to inject dependencies. To create a module in NodeJs, we make use of `CommonJs` module pattern that let us expose our code using `module.exports`.
 
 ### Vanilla approach
 ```
@@ -46,7 +46,7 @@ module.exports = function (User, Validator) {
 }
 ```
 
-Above module accepts `User` and `Validator` as arguments, which really can be anything. This approach gives us flexibility as we easily `mock` dependencies while testing our module.
+Above module accepts `User` and `Validator` as arguments, which really can be anything. This approach gives us flexibility as we can easily `mock` dependencies while testing our module.
 
 It is fundamentally correct but has downsides as it is not maintainable for large applications. Take the below scenario
 
@@ -76,7 +76,7 @@ module.exports = function BaseModel (Mysql) {
 
 4. Now Mysql is dependent upon some config library and so on.
 
-This huge chain of dependencies makes hard to maintain a long-term project as to require one module you have to require a chain of modules, which may look something like this.
+This huge chain of dependencies makes it hard to maintain a long-term project as to require one module you have to require a chain of modules, which may look something like this.
 
 ```
 var config = require('./config')
@@ -86,7 +86,7 @@ var User = require('./User')(BaseModel)
 var register = require('./register')(User)
 ```
 
-This list may grow depending upon the nature of your project and seriously is not maintainable, that is why always you will find everyone hard-coding dependencies right into the module.
+This list may grow depending upon the nature of your project and seriously is not maintainable, that is why you will always find everyone hard-coding dependencies right into the module using require method.
 
 ## Dependency Injection In Adonis
 

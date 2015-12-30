@@ -1,6 +1,6 @@
 # Env
 
-Env provider gives you the access to `environment` variables. You start by defining environment specific variables in `.env` file under your project root.
+Env provider gives you the access to `environment` variables. You start by defining environment specific variables in `.env` file under the root of your project.
 
 - [Defining Environment Variables](#defining-environment-variables)
 - [Reading Values](#reading-variables)
@@ -19,7 +19,7 @@ APP_KEY=BDx8VD8AbRfV16ur60P9J5lLAnmAITtY
 
 ## Reading Values
 
-Once you have `.env` file in place, you start reading values from it.
+Once you have `.env` file in place, you can start reading values from it.
 
 ### get <span>(key [, defaultValue])</span>
 

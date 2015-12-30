@@ -51,7 +51,7 @@ adds key/value pair to response header
 response.header('Content-Type', 'application/json')
 ```
 
-## Cookies 
+## Cookies
 
 You can also attach cookies to your response
 
@@ -82,9 +82,9 @@ removes existing cookie from response
 response.clearCookie('name')
 ```
 
-## Redirects 
+## Redirects
 
-Redirecting to a different path is a common requirement for a web applications. As Adonis is a tightly integrated framework, you can leverage out of box redirection mechanisms.
+Redirecting to a different path is a common requirement for a web application. As Adonis is a tightly integrated framework, you can leverage out of box redirection mechanisms.
 
 #### redirect (url)
 

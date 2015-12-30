@@ -1,6 +1,6 @@
 # Routing
 
-Routes help you in exposing endpoints to outside world that can be used to interact with your application. Adonis has rich routing vocabulary makes it easier for you to define routes and their actions.
+Routes help you in exposing urls to outside world that can be used to interact with your application. Adonis has rich routing vocabulary makes it easier for you to define routes and their actions.
 
 - [Basic routing](#basic-routing)
   - [Route closures](#route-closures)
@@ -16,7 +16,6 @@ Routes help you in exposing endpoints to outside world that can be used to inter
   - [prefix](#prefix)
   - [domain](#domain)
 - [Form Method Spoofing](#form-method-spoofing)
-- [CORS](#cors)
 
 ## Basic routing
 
@@ -28,13 +27,13 @@ You start by defining your routes inside `app/Http/routes.js` file by requiring 
 const Route = use('Route')
 
 Route.get('/', function * () {
-  
+
   // handle request
 
 })
 ```
 
-`Closures` are callbacks and oftenly accepted as the second parameter to your route definition. Note here route closure has a special `*` symbol after function keyword. This defines a [generator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) in ES6. You won't have to worry much about generators here, just remember they make it easier to write async code by removing callbacks completely from your code.
+`Closures` are callbacks and oftenly accepted as the second parameter to your route definition. Note here route closure has a special `*` symbol after function keyword. This defines a [generator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) in ES6. You won't have to worry much about generators here, just remember they make it easier to write async code by removing callbacks.
 
 ### Http verbs
 
@@ -42,7 +41,7 @@ Route.get('/', function * () {
 
 ```javascript,line-numbers
 Route.get('/', function * () {
-  
+
 })
 ```
 
@@ -50,7 +49,7 @@ Route.get('/', function * () {
 
 ```javascript,line-numbers
 Route.post('/', function * () {
-  
+
 })
 ```
 
@@ -58,7 +57,7 @@ Route.post('/', function * () {
 
 ```javascript,line-numbers
 Route.put('/', function * () {
-  
+
 })
 ```
 
@@ -66,7 +65,7 @@ Route.put('/', function * () {
 
 ```javascript,line-numbers
 Route.delete('/', function * () {
-  
+
 })
 ```
 
@@ -74,7 +73,7 @@ Route.delete('/', function * () {
 
 ```javascript,line-numbers
 Route.patch('/', function * () {
-  
+
 })
 ```
 
@@ -86,7 +85,7 @@ You can respond with the same action for multiple requests with following method
 
 ```javascript,line-numbers
 Route.match(['get','post'], '/', function * () {
-  
+
 })
 ```
 
@@ -95,7 +94,7 @@ any method will include **get,post,put,patch,delete,options**
 
 ```javascript,line-numbers
 Route.any('/', function * () {
-  
+
 })
 ```
 
@@ -153,7 +152,7 @@ Route.get('/make/:drink?', function (request, response) {
 })
 ```
 
-`?` defines optional parameters, also `param` method accepts another argument that is the default value for param that does not exist.` 
+`?` defines optional parameters, also `param` method accepts another argument that is the default value for param that does not exist.`
 
 ## Route controllers
 
@@ -169,7 +168,7 @@ Above route will look for `index` method inside `HomeController` which is an ES6
 // app/Http/Controllers/HomeController.js
 
 class HomeController {
-  
+
   * index (request, response) {
     response.send("Hello World! ")
   }  
@@ -196,7 +195,7 @@ Think of them as grouping your routes under common settings or configuration wit
 ```javascript,line-numbers
 
 Route.group('name', function () {
-  
+
   // all routes under this callback are part of this group
 
 })
@@ -209,7 +208,7 @@ prefix group of routes with defined path.
 
 ```javascript,line-numbers
 Route.group('version1', function () {
-  
+
   Route.get('/', ...)
 
 }).prefix('/v1')
@@ -250,36 +249,4 @@ Html form tags do not support all verbs apart from `GET` and `POST`,  where meth
   <input type="hidden" name="_method" value="PUT">
 </form>
 
-```
-
-## CORS
-
-Cross-origin resource sharing is a way to allow HTTP requests coming in from different domain. It is very common in AJAX requests where the browser will block all Cross domain requests if they are not enabled or allowed by the server. Read more about [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)
-
-Adonis ships a lean middleware that can be used on routes to enable CORS.
-
-### For all routes
-
-Define CORS as a `global middleware` inside `app/Http/kernel.js` file to enable it for all routes.
-
-### For specific routes
-
-```javascript,line-numbers
-Route.group('cors', function () {
-  
-}).middleware(['Cors'])
-```
-
-### Settings
-
-`config/cors.js` has a list of options can be used to configure CORS.
-
-```javascript,line-numbers
-module.exports = {
-  
-  origin    : "*",
-  methods   : "GET, POST, PUT",
-  headers   : "Content-type, Authorization"
-
-}
 ```
