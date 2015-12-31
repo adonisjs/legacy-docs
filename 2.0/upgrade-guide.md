@@ -2,26 +2,26 @@
 
 This guide outlines the requirements and breakings changes to upgrade Adonis to lastest version. As Adonis follows [semver](http://semver.org/), upgrade guides is only valid for major releases, for other minor/patch releases look into release notes.
 
-- [Upgrading to v2](upgrading-to-v2)
+- [Upgrading to 2.0](upgrading-to-2.0)
 
-## Upgrading to v2
+## Upgrading to 2.0
 
 The majority of `Adonis 2.0.0` code has been re-written from scratch to improve stability and performance. Since IO.js has been merged into NodeJs, we do not support IO.js officially.
 
 ## Breaking Changes
 
-### Removed deferred providers
+#### Removed deferred providers
 
 Deferred providers have been removed for the sake of simplicity, and you are expected to remove unwanted providers from `bootstrap/app.js` file as they will impact the application boot time.
 
-### Ioc.bind does not type hint dependencies anymore and instead inject `app` as a parameter to the callback.
+#### Ioc.bind does not type hint dependencies anymore and instead inject `app` as a parameter to the callback.
 
-Earlier you have to type hint dependencies inside your custom providers, which was bit ugly and less readable, and now the entire app instance is injected to the callback method, giving you the flexibility to fetch dependencies instead of type hinting
+Earlier you have to type hint dependencies inside your custom providers, which was bit ugly and less readable, now the IOC container instance is injected to the callback method, giving you the flexibility to fetch dependencies instead of type hinting
 
 **earlier**
 
 ```javascript,line-numbers
-class FileProvider extends ServiceProvider{
+class FileProvider extends ServiceProvider {
 
   * register () {
     this.app.bind('Addons/FileProvider', function (App_Src_Config,App_Src_Helpers) {

@@ -1,6 +1,6 @@
 # Routing
 
-Routes help you in exposing urls to outside world that can be used to interact with your application. Adonis has rich routing vocabulary makes it easier for you to define routes and their actions.
+Routes help you in exposing urls to outside world that can be used to interact with your application. Adonis has rich routing vocabulary which makes it easier for you to define routes and their actions.
 
 - [Basic routing](#basic-routing)
   - [Route closures](#route-closures)
@@ -21,7 +21,7 @@ Routes help you in exposing urls to outside world that can be used to interact w
 
 You start by defining your routes inside `app/Http/routes.js` file by requiring `Route` provider. Always try to keep your routes file clean and never include any application logic inside this file.
 
-### Route closures
+#### Route closures
 
 ```javascript,line-numbers
 const Route = use('Route')
@@ -35,9 +35,9 @@ Route.get('/', function * () {
 
 `Closures` are callbacks and oftenly accepted as the second parameter to your route definition. Note here route closure has a special `*` symbol after function keyword. This defines a [generator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) in ES6. You won't have to worry much about generators here, just remember they make it easier to write async code by removing callbacks.
 
-### Http verbs
+#### Http verbs
 
-#### get request
+##### get request
 
 ```javascript,line-numbers
 Route.get('/', function * () {
@@ -45,7 +45,7 @@ Route.get('/', function * () {
 })
 ```
 
-#### post request
+##### post request
 
 ```javascript,line-numbers
 Route.post('/', function * () {
@@ -53,7 +53,7 @@ Route.post('/', function * () {
 })
 ```
 
-#### put request
+##### put request
 
 ```javascript,line-numbers
 Route.put('/', function * () {
@@ -61,7 +61,7 @@ Route.put('/', function * () {
 })
 ```
 
-#### delete request
+##### delete request
 
 ```javascript,line-numbers
 Route.delete('/', function * () {
@@ -69,7 +69,7 @@ Route.delete('/', function * () {
 })
 ```
 
-#### patch request
+##### patch request
 
 ```javascript,line-numbers
 Route.patch('/', function * () {
@@ -77,11 +77,11 @@ Route.patch('/', function * () {
 })
 ```
 
-### Multiple verbs
+#### Multiple verbs
 
 You can respond with the same action for multiple requests with following methods.
 
-#### match
+##### match
 
 ```javascript,line-numbers
 Route.match(['get','post'], '/', function * () {
@@ -89,7 +89,7 @@ Route.match(['get','post'], '/', function * () {
 })
 ```
 
-#### any
+##### any
 any method will include **get,post,put,patch,delete,options**
 
 ```javascript,line-numbers
@@ -98,7 +98,7 @@ Route.any('/', function * () {
 })
 ```
 
-### Named Routes
+#### Named Routes
 
 Think of named routes as giving a unique name to a given route. It is helpful when you want to generate fully qualified URL to routes with a shortcut.
 
@@ -108,19 +108,19 @@ Route.get('/users/profile/:id', ... ).as('profile')
 
 Let's say you want to reference the above route inside a different file, so there are multiple ways of doing it.
 
-#### Bad
+##### Bad
 
 ```markup,line-numbers
 /users/profile/1
 ```
 
-#### Better
+##### Better
 
 ```markup,line-numbers
 Route.url('/users/profile/:id', {id:1})
 ```
 
-#### Good
+##### Good
 
 ```markup,line-numbers
 Route.url('profile', {id:1})
@@ -132,7 +132,7 @@ Named routes give you the power to make use of the last example, which is readab
 
 Route parameters are transparent dynamic segments on URL. With Adonis, you can define optional and required parameters and get values for them in route actions.
 
-### Required parameters
+#### Required parameters
 
 ```javascript,line-numbers
 Route.get('/make/:drink', function * (request, response) {
@@ -143,7 +143,7 @@ Route.get('/make/:drink', function * (request, response) {
 
 Here `:drink` is a required parameter on the route that needs to be present to invoke defined action.
 
-### Optional parameters
+#### Optional parameters
 
 ```javascript,line-numbers
 Route.get('/make/:drink?', function (request, response) {
