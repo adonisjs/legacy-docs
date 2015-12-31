@@ -2,28 +2,22 @@
 
 Query scopes help you in defining expressive bindings to query builder. For example: - to fetch all active users you can define scope with a where clause on user status.
 
-<p>&nbsp;</p>
-
 - [Defining Scopes](#defining-scopes)
 - [Using Scopes](#using-scopes)
 - [Passing Arguments](#passing-arguments)
-
-<p>&nbsp;</p>
 
 ## Defining Scopes
 You need to follow some conventions while defining query scopes. You start by using a fixed keyword `scope` and then define `Pascal case` string.
 
 ```javascript,line-numbers
-class User extends Lucid{
+class User extends Lucid {
 
-  scopeActive(query){
-    return query.where('status',1)
+  scopeActive (query) {
+    return query.where('status', 1)
   }
 
 }
 ```
-
-<p>&nbsp;</p>
 
 ## Using Scopes
 Now you can make use of query scopes while using query scopes there is no need to make use of `scope` keyword, and you can use rest of the method as `camel case.'
@@ -32,16 +26,14 @@ Now you can make use of query scopes while using query scopes there is no need t
 const activeUsers = yield User.active().fetch()
 ```
 
-<p>&nbsp;</p>
-
 ## Passing Arguments
 At times, you need to pass arguments to your query scopes and same can be done quite easily.
 
 ```javascript,line-numbers
-class User extends Lucid{
+class User extends Lucid {
 
-  scopeFromCountry(query,country){
-    return query.where('country',country)
+  scopeFromCountry (query, country) {
+    return query.where('country', country)
   }
 
 }
@@ -50,4 +42,3 @@ class User extends Lucid{
 ```javascript,line-numbers
 const indianUsers = yield User.fromCountry('India').fetch()
 ```
-1

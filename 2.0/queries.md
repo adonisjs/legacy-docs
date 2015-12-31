@@ -1,10 +1,8 @@
 # Queries
 
-Database provider supports simple queries to complex joins and streams for large data chunks. With right configuration settings you can use Database provider.
+Database provider supports simple queries to complex joins and streams for large data chunks. With right configuration settings you can make queries to database with in a matter of seconds.
 
-Under the hood, it makes use of [knex](#http://knexjs.org/#Builder), and anything true with knex is true with Database provider.
-
-<p>&nbsp;</p>
+Under the hood, it makes use of [knex](http://knexjs.org/#Builder), and anything true with knex is true with Database provider.
 
 - [Selects](#selects)
 - [Where Clauses](#where-clauses)
@@ -16,8 +14,6 @@ Under the hood, it makes use of [knex](#http://knexjs.org/#Builder), and anythin
 - [Aggregates](#aggregates)
 - [Helpers](#helpers)
 
-<p>&nbsp;</p>
-
 ## Selects
 
 #### select <span>([columns])</span>
@@ -26,8 +22,6 @@ select takes an optional array of columns to fetch while making select query.
 ```javascript,line-numbers
 yield Database.select('username','email').from('users')
 ```
-
-<p>&nbsp;</p>
 
 #### from <span>(table) alias:table</span>
 defines table to select from
@@ -40,12 +34,9 @@ yield Database.table('users')
 yield Database('users')
 ```
 
-<p>&nbsp;</p>
-
 ## Where clauses
 Below methods give you an expressive vocabulary to add where clauses to query builder.
 
-<p>&nbsp;</p>
 #### where <span>(~mixed~)</span>
 Add where clause to query builder
 
@@ -71,7 +62,6 @@ yield Database.where('age','>',20)
 yield Database.where('age','in',[18,40,56])
 ```
 
-<p>&nbsp;</p>
 #### whereNot <span>(~mixed~)</span>
 Adds where not clause to query builder.
 
@@ -87,7 +77,6 @@ yield Database.whereNot({id:1})
 yield Database.whereNot('age','<',18)
 ```
 
-<p>&nbsp;</p>
 #### whereIn <span>(column, array|callback|builder)</span>
 Shorthand for `where('id', 'in', array)`
 
@@ -105,7 +94,6 @@ yield Database.from('users').whereIn('account_id',subquery)
 ```
 
 
-<p>&nbsp;</p>
 #### whereNotIn <span>(column, array|callback|builder)</span>
 
 ```javascript,line-numbers
@@ -122,7 +110,6 @@ yield Database.from('users').whereNotIn('account_id',subquery)
 ```
 
 
-<p>&nbsp;</p>
 #### whereNull <span>(column)</span>
 
 ```javascript,line-numbers
@@ -133,7 +120,6 @@ yield Database.whereNull('deleted_at')
 yield Database.whereNull('deleted_at').orWhereNull('updated_at')
 ```
 
-<p>&nbsp;</p>
 #### whereNotNull <span>(column)</span>
 
 ```javascript,line-numbers
@@ -144,7 +130,6 @@ yield Database.whereNotNull('deleted_at')
 yield Database.whereNotNull('deleted_at').whereNotNull('updated_at')
 ```
 
-<p>&nbsp;</p>
 #### whereExists <span>(builder|callback)</span>
 
 ```javascript,line-numbers
@@ -153,7 +138,6 @@ yield Database('users').whereExists(function () {
 })
 ```
 
-<p>&nbsp;</p>
 #### whereNotExists <span>(builder|callback)</span>
 
 ```javascript,line-numbers
@@ -162,14 +146,12 @@ yield Database('users').whereNotExists(function () {
 })
 ```
 
-<p>&nbsp;</p>
 #### whereBetween <span>(column,range)</span>
 
 ```javascript,line-numbers
 yield Database('users').whereBetween('votes',[1,100])
 ```
 
-<p>&nbsp;</p>
 #### whereNotBetween <span>(column,range)</span>
 
 ```javascript,line-numbers
@@ -177,14 +159,12 @@ yield Database('users').whereNotBetween('votes',[1,100])
 ```
 
 
-<p>&nbsp;</p>
 #### whereRaw <span>(query,bindings)</span>
 
 ```javascript,line-numbers
 yield Database('users').whereRaw('id = ?',[1])
 ```
 
-<p>&nbsp;</p>
 ## Join Methods
 Use below methods to define joins between multiple database tables.
 
@@ -200,7 +180,6 @@ yield Database('users').innerJoin('accounts',function () {
 })
 ```
 
-<p>&nbsp;</p>
 #### leftJoin <span>(column,~mixed~)</span>
 Same interface as innerJoin
 
@@ -208,7 +187,6 @@ Same interface as innerJoin
 yield Database('users').leftJoin('accounts','users.id','accounts.user_id')
 ```
 
-<p>&nbsp;</p>
 #### leftOuterJoin <span>(column,~mixed~)</span>
 
 ```javascript,line-numbers
@@ -221,7 +199,6 @@ yield Database('users').leftOuterJoin('accounts', function() {
 })
 ```
 
-<p>&nbsp;</p>
 #### rightJoin <span>(column,~mixed~)</span>
 
 ```javascript,line-numbers
@@ -235,7 +212,6 @@ yield Database('users').rightJoin('accounts', function() {
 ```
 
 
-<p>&nbsp;</p>
 #### rightOuterJoin <span>(column,~mixed~)</span>
 
 ```javascript,line-numbers
@@ -249,7 +225,6 @@ yield Database('users').rightOuterJoin('accounts', function() {
 ```
 
 
-<p>&nbsp;</p>
 #### outerJoin <span>(column,~mixed~)</span>
 
 ```javascript,line-numbers
@@ -263,7 +238,6 @@ yield Database('users').outerJoin('accounts', function() {
 ```
 
 
-<p>&nbsp;</p>
 #### fullOuterJoin <span>(column,~mixed~)</span>
 
 ```javascript,line-numbers
@@ -276,7 +250,6 @@ yield Database('users').fullOuterJoin('accounts', function() {
 })
 ```
 
-<p>&nbsp;</p>
 #### crossJoin <span>(column,~mixed~)</span>
 
 ```javascript,line-numbers
@@ -289,7 +262,6 @@ yield Database('users').crossJoin('accounts', function() {
 })
 ```
 
-<p>&nbsp;</p>
 #### joinRaw <span>(sql,[bindings])</span>
 
 ```javascript,line-numbers
@@ -300,7 +272,6 @@ yield Database('users').joinRaw('natural full join table1').where('id', 1)
 yield Database.select('*').from('accounts').join(Database.raw('natural full join table1')).where('id', 1)
 ```
 
-<p>&nbsp;</p>
 ## Ordering, Limits ...
 
 #### distinct
@@ -308,37 +279,31 @@ yield Database.select('*').from('accounts').join(Database.raw('natural full join
 yield Database('users').distinct('age').select()
 ```
 
-<p>&nbsp;</p>
 #### groupBy <span>(names)</span>
 ```javascript,line-numbers
 yield Database('users').groupBy('age')
 ```
 
-<p>&nbsp;</p>
 #### orderBy <span>(column,direction)</span>
 ```javascript,line-numbers
 yield Database('users').orderBy('id','desc')
 ```
 
-<p>&nbsp;</p>
 #### having <span>(column,operator,value)</span>
 ```javascript,line-numbers
 yield Database('users').having('count','>',10)
 ```
 
-<p>&nbsp;</p>
 #### offset <span>(value)</span>
 ```javascript,line-numbers
 yield Database('users').offset(0)
 ```
 
-<p>&nbsp;</p>
 #### limit <span>(value)</span>
 ```javascript,line-numbers
 yield Database('users').limit(20).offset(0)
 ```
 
-<p>&nbsp;</p>
 #### union <span>(queries,[wrap])</span>
 Creates a union query using an array or list of callbacks with optional wrap values
 set's to false by default.
@@ -349,7 +314,6 @@ yield Database('users').whereNull('last_name').union(function () {
 })
 ```
 
-<p>&nbsp;</p>
 #### unionAll <span>(queries,[wrap])</span>
 Same interface as union
 
@@ -359,7 +323,6 @@ yield Database('users').whereNull('last_name').unionAll(function () {
 })
 ```
 
-<p>&nbsp;</p>
 ## Inserts
 
 #### insert <span>(data,[returning])</span>
@@ -372,7 +335,6 @@ yield Database('users').insert({username:'foo'})
 yield Database('users').insert({username:'foo'},'id')
 ```
 
-<p>&nbsp;</p>
 #### bulk inserts <span>(data,[returning])</span>
 You can insert an array of objects to bulk insert rows.
 
@@ -380,7 +342,6 @@ You can insert an array of objects to bulk insert rows.
 yield Database('users').insert([{username:'foo'},{username:'bar'}])
 ```
 
-<p>&nbsp;</p>
 #### returning <span>(column)</span>
 You can also define field to be returned after insert , which only works for PostgreSQL.
 
@@ -389,7 +350,6 @@ yield Database('users').returning('id').insert({username:'foo'})
 ```
 
 
-<p>&nbsp;</p>
 ## Updates
 
 #### update <span>(data,[returning]) / (key, value, [returning])</span>
@@ -401,7 +361,6 @@ yield Database('users').where('age', '>', 18).update({allowed:1})
 yield Database('users').where('age', '>', 18).update('allowed',1)
 ```
 
-<p>&nbsp;</p>
 ## Deletes
 
 #### delete <span>(alias:del)</span>
@@ -420,7 +379,6 @@ Remove all rows from a given table using truncate command.
 yield Database('users').truncate()
 ```
 
-<p>&nbsp;</p>
 ## Aggregates
 Using provider you can make use of aggregate methods like `max`, `min` , `increment` , `decrement` etc.
 
@@ -434,7 +392,6 @@ yield Database('users').count('active')
 yield Database('users').count('active as a')
 ```
 
-<p>&nbsp;</p>
 #### min <span>(column)</span>
 
 ```javascript,line-numbers
@@ -443,7 +400,6 @@ yield Database('users').min('age')
 yield Database('users').min('age as a')
 ```
 
-<p>&nbsp;</p>
 #### max <span>(column)</span>
 
 ```javascript,line-numbers
@@ -452,7 +408,6 @@ yield Database('users').max('age')
 yield Database('users').max('age as a')
 ```
 
-<p>&nbsp;</p>
 #### sum <span>(column)</span>
 
 ```javascript,line-numbers
@@ -461,7 +416,6 @@ yield Database('users').sum('products')
 yield Database('users').sum('products as p')
 ```
 
-<p>&nbsp;</p>
 #### avg <span>(column)</span>
 
 ```javascript,line-numbers
@@ -470,21 +424,18 @@ yield Database('users').avg('age')
 yield Database('users').avg('age as a')
 ```
 
-<p>&nbsp;</p>
 #### increment <span>(column,amount)</span>
 
 ```javascript,line-numbers
 yield Database('users').where('id',1).increment('health',10)
 ```
 
-<p>&nbsp;</p>
 #### decrement <span>(column,amount)</span>
 
 ```javascript,line-numbers
 yield Database('users').where('id',1).decrement('health',10)
 ```
 
-<p>&nbsp;</p>
 ## Helpers
 
 Database provider also supports some commonly used helpers to make it easier for you to manipulate data while making queries.
@@ -494,7 +445,6 @@ Database provider also supports some commonly used helpers to make it easier for
 const userIds = yield Database('users').pluck('id')
 ```
 
-<p>&nbsp;</p>
 #### first <span>(columns)</span>
 It only selects the first matching row and returns an object instead of array. Optionally you can pass
 fields to be selected.
@@ -505,7 +455,6 @@ yield Database('users').first()
 yield Database('users').first('id','username','email')
 ```
 
-<p>&nbsp;</p>
 #### columnInfo <span>([columns])</span>
 
 Returns an object of columns with their type definition from selected table

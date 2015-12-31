@@ -37,6 +37,8 @@ Route.get('/', function * () {
 
 #### Http verbs
 
+Http verbs are methods defined while making an HTTP request. Adonis has support for all request methods.
+
 ##### get request
 
 ```javascript,line-numbers
@@ -171,7 +173,7 @@ class HomeController {
 
   * index (request, response) {
     response.send("Hello World! ")
-  }  
+  }
 
 }
 
@@ -202,7 +204,7 @@ Route.group('name', function () {
 
 ```
 
-### prefix
+#### prefix
 
 prefix group of routes with defined path.
 
@@ -214,7 +216,7 @@ Route.group('version1', function () {
 }).prefix('/v1')
 ```
 
-### domain
+#### domain
 
 register group of routes for a given domain only
 
@@ -226,7 +228,7 @@ Route.group('blog', function () {
 }).domain('blog.example.org')
 ```
 
-### middleware
+#### middleware
 
 middleware can also be attached to a group of routes
 

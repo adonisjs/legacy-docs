@@ -7,11 +7,11 @@ The request object is sent along with every HTTP request and has a handful of me
 
 - [Reading request information](#reading-request-information)
 - [Request methods](#request-methods)
-  - [Headers](#headers)
-  - [Cookies](#cookies)
-  - [Content negotiation](#content-negotiation)
-  - [Session Management](#session-management)
-  - [Flash Messages](#flash-messages)
+- [Headers](#headers)
+- [Cookies](#cookies)
+- [Content negotiation](#content-negotiation)
+- [Session Management](#session-management)
+- [Flash Messages](#flash-messages)
 - [Uploading Files](#uploading-files)
 
 ## Reading request information
@@ -146,7 +146,7 @@ request.params()
 ```
 
 
-### Headers
+## Headers
 
 #### header (key [, defaultValue])
 returns value from request headers for a given key or fallback to a default value.
@@ -162,7 +162,7 @@ returns all headers for a given request.
 request.headers()
 ```
 
-### Cookies
+## Cookies
 Cookies in Adonis are encrypted and signed to prevent them from getting modified. Make sure to set `APP_KEY` inside `.env` otherwise, cookies will be sent plain.
 
 #### cookie (key [, defaultValue])
@@ -179,7 +179,7 @@ returns all cookies for a given request
 request.cookies()
 ```
 
-### Content negotiation
+## Content negotiation
 Content negotiation is a term used to find out the best matching response type for a given request. Adonis provides helpful methods to get best possible response content type for a given request.
 
 #### is (keys...)
@@ -213,7 +213,7 @@ switch (type) {
 
 ```
 
-### Session Management
+## Session Management
 
 Adonis has out of the box support for managing sessions to short-lived flash messages. Make sure to setup `APP_KEY` inside `.env` file to keep your sessions encrypted.
 
@@ -260,13 +260,13 @@ fetch and remove key/value pair from session
 yield request.session.pull('username')
 ```
 
-### Flash Messages
+## Flash Messages
 
 Flash messages are stored inside session for a single request and will be cleared on next request.
 
 In order to make use of flash messages, you need to make use of flash middleware, which is included with new installation of Adonis.
 
-```
+```javascript,line-numbers
 // app/Http/kernel.js
 const globalMiddleware = [
   'App/Http/Middleware/Flash'

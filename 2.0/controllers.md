@@ -2,19 +2,20 @@
 
 Controllers in MVC is a layer between your views and models that respond to incoming requests registered using routes. They have plenty of benefits over route `Closures`.
 
-You start by creating controllers inside `app/Http/Controllers` directory and reference controllers with their filename within your routes. Alternatively you can make use of `ace command` to generate a new controller.
-
-```bash,line-numbers
-node ace make:controller Home
-// or
-node ace make:controller Home --plain
-```
-
 - [Defining Controllers](#defining-controllers)
 - [Resourceful Controllers](#resourceful-controllers)
 - [Dependency Injection](#dependency-injection)
   - [type hinting dependencies](#type-hinting-dependencies)
   - [via inject method](#via-inject-method)
+
+You start by creating controllers inside `app/Http/Controllers` directory and reference controllers with their filename within your routes. Alternatively you can make use of `ace command` to generate a new controller.
+
+```bash,line-numbers
+./ace make:controller Home
+// or
+./ace make:controller Home --plain
+```
+
 
 ## Defining Controllers
 
@@ -33,7 +34,7 @@ class UserController {
 module.exports = HomeController
 ```
 
-### Inside routes.js file
+#### Inside routes.js file
 
 ```javascript,line-numbers
 Route.get('/users', 'UserController.index')
@@ -61,7 +62,7 @@ route | verb | action
 
 One of the biggest benefits of using controllers over closures is they support solid dependency injection out of the box. Dependencies are injected using the namespace as everything is registered and resolved out of IoC container.
 
-### using inject method
+#### using inject method
 
 ```javascript,line-numbers
 class UserController {
@@ -81,7 +82,7 @@ class UserController {
 
 The benefit of this approach is it makes your controllers testable as you can mock dependencies while testing them.
 
-### type hinting dependencies
+#### type hinting dependencies
 
 Type hinting is an alternate to `static inject` method as IoC container will try to make your dependencies by reading your constructor arguments. While using constructor type hinting you have to replace `/` with `_` for your namespace.
 
@@ -95,6 +96,6 @@ class UserController {
 }
 ```
 
-<div class="note">
-  <p> <strong> Note: </strong> Typehinting has no advantage over `static inject` method, it is all about personal preference. </p>
+<div class="__note">
+  <strong> Note: </strong> Typehinting has no advantage over `static inject` method, it is all about personal preference.
 </div>

@@ -1,18 +1,18 @@
-## CORS
+# CORS
 
 Cross-origin resource sharing is a way to allow HTTP requests coming in from different domain. It is very common in AJAX requests where the browser will block all Cross domain requests if they are not enabled or allowed by the server. Read more about [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)
 
 Adonis ships a lean middleware that can be used on routes to enable CORS.
 
-### For all routes
+#### For all routes
 
 Define CORS as a `global middleware` inside `app/Http/kernel.js` file to enable it for all routes.
 
-### For specific routes
+#### For specific routes
 
 Add it to the list of `namedMiddleware` and use it on specific routes.
 
-```
+```javascript,line-numbers
 // app/Http/kernel.js
 const namedMiddleware = {
   Cors: 'App/Http/Middleware/Cors'
@@ -25,7 +25,7 @@ Route.group('cors', function () {
 }).middleware(['Cors'])
 ```
 
-### Settings
+#### Settings
 
 `config/cors.js` has a list of options can be used to configure CORS.
 
@@ -40,7 +40,7 @@ module.exports = {
 }
 ```
 
-#### origin
+##### origin
 Origin can accept multiple values
 1. to disable CORS simply set it to `false`.
 2. to allow the same origin from where request is received set it to `true`.
@@ -52,10 +52,10 @@ origin: function (requestOrigin) {
 }
 ```
 
-#### methods
+##### methods
 Http methods/verbs to allow.
 
-#### headers
+##### headers
 As origin, headers also accept multiple values
 1. to disable all headers set to `false`.
 2. to allow all headers defined inside `Access-Control-Request-Headers` set it to `true`.
@@ -67,11 +67,11 @@ headers: function (requestedHeaders) {
 }
 ```
 
-#### exposeHeaders <span>( optional )</span>
+##### exposeHeaders <span>( optional )</span>
 Comma separated headers to expose as `Access-Control-Expose-Headers`.
 
-#### credentials <span>( optional )</span>
+##### credentials <span>( optional )</span>
 Allow or disallow `Access-Control-Allow-Credentials` using a boolean value
 
-#### maxAge <span>( optional )</span>
+##### maxAge <span>( optional )</span>
 Sets `Access-Control-Allow-Max-Age`

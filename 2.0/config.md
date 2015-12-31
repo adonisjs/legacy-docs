@@ -12,6 +12,7 @@ const Config = use('Config')
 
 ```javascript,line-numbers
 Config.get('database.mysql.host')
+
 // or set default value if incase host does not exists
 Config.get('database.mysql.host', 'localhost')
 ```

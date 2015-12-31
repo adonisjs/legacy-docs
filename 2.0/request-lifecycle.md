@@ -7,13 +7,13 @@ Adonis application is divided into two components and each request entering your
 - [Terminal Command](#terminal-command)
 
 ## Boot Lifecycle
-Before your application can accept incoming requests, you are supposed to boot Adonis server using `node ace serve` command, which will invoke `server.js` file to start server on a given host and port.
+Before your application can accept incoming requests, you are supposed to boot Adonis server using `npm start` command, which will invoke `server.js` file to start server on a given host and port.
 
 #### registering providers
 bootstrap process involves registering providers to the IOC container, which is done inside `bootstrap/http.js` file. All providers mentioned inside `bootstrap/app.js` are registered and become available for use.
 
 #### autoloading
-`app` directory under the root of your project is registered for autoloading, which are lazy loaded and exported only when they are required. Adonis follows the concept of namespaces, which means all files under `app` directory will given a namespace, which can be used to require that file.
+`app` directory under the root of your project is registered for autoloading, files under this directory are lazy loaded and exported only when they are required. Adonis follows the concept of namespaces, which means all files under `app` directory will given a namespace, which can be used to require that file.
 
 Read more about [autoloading]().
 

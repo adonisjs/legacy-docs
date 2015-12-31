@@ -7,14 +7,12 @@ Helpers provider gives you handy methods to accomplish common tasks, which can b
   - [basePath](#basepath)
   - [appPath](#apppath)
   - [publicPath](#publicpath)
-  - [appNamespace](#appnamespace)
+  - [appNameSpace](#appnamespace)
   - [configPath](#configpath)
   - [storagePath](#storagepath)
   - [resourcesPath](#resourcespath)
   - [viewsPath](#viewspath)
   - [migrationPath](#migrationpath)
-  - [base64Encode](#base64encode)
-  - [base64Decode](#base64decode)
 
 ## Basic Usage
 
@@ -27,21 +25,21 @@ const publicPath = Helpers.publicPath()
 
 ## Methods
 
-### basePath
+#### basePath
 returns path to the root of project.
 
 ```javascript,line-numbers
 Helpers.basePath()
 ```
 
-### appPath
+#### appPath
 returns path to the app directory.
 
 ```javascript,line-numbers
 Helpers.appPath()
 ```
 
-### publicPath <span>([toFile])</span>
+#### publicPath <span>([toFile])</span>
 returns path to the public directory, optionally you can build path to a given file inside public directory.
 
 ```javascript,line-numbers
@@ -50,17 +48,17 @@ Helpers.publicPath()
 Helpers.publicPath('style.css')
 ```
 
-### appNamespace
+#### appNameSpace
 returns application namespace, defined under `package.json` file.
 
 ```javascript,line-numbers
-const appNamespace = Helpers.appNamespace()
+const appNameSpace = Helpers.appNameSpace()
 
 // fetching user controller
-const UserController = use(`${appNamespace}/Http/Controllers/UserController`)
+const appNameSpace = use(`${appNameSpace}/Http/Controllers/UserController`)
 ```
 
-### configPath <span>([toFile])</span>
+#### configPath <span>([toFile])</span>
 returns path to the config directory, optionally you can build path to a given file inside config directory.
 
 ```javascript,line-numbers
@@ -69,7 +67,7 @@ Helpers.configPath()
 Helpers.configPath('database.js')
 ```
 
-### storagePath <span>([toFile])</span>
+#### storagePath <span>([toFile])</span>
 returns path to the storage directory, optionally you can build path to a given file inside config directory.
 
 <div class="note">
@@ -82,7 +80,7 @@ Helpers.storagePath()
 Helpers.storagePath('users.yaml')
 ```
 
-### resourcesPath <span>([toFile])</span>
+#### resourcesPath <span>([toFile])</span>
 returns path to the storage directory, like many other methods you can build a path to a given file inside resources directory.
 
 ```javascript,line-numbers
@@ -91,34 +89,18 @@ Helpers.resourcesPath()
 Helpers.resourcesPath('views')
 ```
 
-### viewsPath <span>([toFile])</span>
-returns path to the views directory, you can also build a path to a given file inside views directory.
+#### viewsPath
+returns path to the views directory.
 
 ```javascript,line-numbers
 Helpers.viewsPath()
-// or
-Helpers.viewsPath('index.html')
 ```
 
-### migrationPath <span>([toFile])</span>
+#### migrationsPath <span>([toFile])</span>
 returns path to migrations directory, you can also build a path to a given file inside migrations directory.
 
 ```javascript,line-numbers
-Helpers.migrationPath()
+Helpers.migrationsPath()
 // or
-Helpers.migrationPath('create_users_table.js')
-```
-
-### base64Encode <span>([unencoded])</span>
-returns encoded base64 string
-
-```javascript,line-numbers
-Helpers.base64Encode('Adonis Framework')
-```
-
-### base64Decode <span>([encoded])</span>
-returns decoded base64 string
-
-```javascript,line-numbers
-Helpers.base64Decode('QWRvbmlzIEZyYW1ld29yaw==')
+Helpers.migrationsPath('create_users_table.js')
 ```

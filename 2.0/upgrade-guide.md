@@ -10,13 +10,15 @@ The majority of `Adonis 2.0.0` code has been re-written from scratch to improve 
 
 ## Breaking Changes
 
+Breaking changes with 2.0 is expected as majority of code is re-written from scratch for performance gains. Read the below points carefully as it will help you in smooth transition from 1.0 to 2.0.
+
 #### Removed deferred providers
 
 Deferred providers have been removed for the sake of simplicity, and you are expected to remove unwanted providers from `bootstrap/app.js` file as they will impact the application boot time.
 
-#### Ioc.bind does not type hint dependencies anymore and instead inject `app` as a parameter to the callback.
+#### Typehinting removed from providers
 
-Earlier you have to type hint dependencies inside your custom providers, which was bit ugly and less readable, now the IOC container instance is injected to the callback method, giving you the flexibility to fetch dependencies instead of type hinting
+Earlier you have to type hint dependencies inside your custom providers, which was bit ugly and less readable, now the IOC container instance is injected to the callback method, giving you the flexibility to fetch dependencies instead of type hinting.
 
 **earlier**
 
@@ -48,7 +50,7 @@ class FileProvider extends ServiceProvider{
 }
 ```
 
-### Route.group `close` method has been removed.
+#### Route.group `close` method has been removed.
 
 Earlier you were supposed to close route groups when creating a group but now groups are smart enough to close themselves.
 
@@ -66,11 +68,11 @@ Route.group('v1', function () {
 }).prefix('/v1')
 ```
 
-### Global middleware runs even if no routes have been registered.
+#### Improved middleware flow
 
 Earlier global middleware used to run when a request reaches a valid registered route since this is not the ideal behavior, now they will be executed even if there are no registered routes.
 
-### pm2 is removed.
+#### pm2 is removed.
 
 pm2 is a daemon that runs node processes in a background and watch files for changes, the moment a file changes it will restart the server again. Also, it manage crashes in production by restarting the server again after the crash.
 
@@ -81,7 +83,7 @@ We have removed pm2 for several reasons:
 
 ## Features Introduced
 
-### Bunch of new service providers.
+#### Bunch of new service providers.
 
 New service providers have been introduced to give you extra arms while writing your Node applications. Which includes:
 
@@ -91,7 +93,7 @@ New service providers have been introduced to give you extra arms while writing 
 * Mail
 * Socket.Io
 
-### Now providers can expose `extend` method to outside world to give support for extending features.
+#### Power to extend providers
 
 It is very important for service providers to be extended and offer more functionality, from `2.0.0` service providers can expose an API to outside world for same. For example
 
@@ -103,9 +105,9 @@ Ioc.extend('Adonis/Src/Session', 'mongo', function (app) {
 })
 ```
 
-### Seamless migrations
+#### Seamless migrations
 
-Under the hood, we still make use of `knex` to run database operations, but as Adonis is all about writing expressive code, we have added our migrations provider.
+Under the hood, we still make use of `knex` to run database operations, but as Adonis is all about writing expressive code, we have added our own migrations provider.
 
 Now you can write migrations as follows
 
@@ -121,29 +123,6 @@ class CreateUsersTable extends Schema {
       table.string('username')
       table.timestamps()
     })
-  }
-
-}
-
-```
-
-### Database seeders
-
-Database seeding is a concept of adding dummy data to database required to setup or test apps, and you can make use of below concept to seed databases on the fly.
-
-```javascript,line-numbers
-
-const Faker = use('Faker')
-const Db = use('Db')
-
-class UsersSeeder {
-
-  * run () {
-    const user = {
-      username : Faker.name.username(),
-      email    : Faker.name.email()
-    }
-    yield Db.insert(user)
   }
 
 }

@@ -12,7 +12,7 @@ Middleware are filters to your routes, and often used for modifying or authentic
 To create a middleware you need to create a file inside the Middleware directory, or you can make use of `ace command` to generate a middleware for you.
 
 ```bash-line-numbers
-node ace make:middleware Auth
+./ace make:middleware Auth
 ```
 
 Above command will create a new class called `Auth.js` with `handle` method to respond to an incoming request.
@@ -31,7 +31,7 @@ class Auth {
 }
 ```
 
-### handle
+#### handle
 
 handle method is called automatically on your middleware and should `yield next` to handover request to next middleware or to route action.
 
@@ -39,7 +39,7 @@ handle method is called automatically on your middleware and should `yield next`
 
 So far you have created a middleware but have not registered it yet, same can be done inside `app/Http/kernel.js` file.
 
-### global middleware
+#### global middleware
 
 Global middleware are defined as an array and get's executed in same order on every request. Good examples of same are `BodyParser` and `CORS`, which are shipped with the installation of Adonis.
 
@@ -51,7 +51,7 @@ const globalMiddleware = [
 ]
 ```
 
-### named middleware
+#### named middleware
 
 Named middleware are stored as `key/value` pairs where keys are later referenced on routes.
 

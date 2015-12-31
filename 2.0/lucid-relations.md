@@ -5,8 +5,6 @@ Lucid makes it easier for you to fetch related data from multiple models out of 
 
 Every database driven application requires data relations and fetching them manually can be overhead to maintain, that's why lucid makes it super easy and readable to resolve multiple relations.
 
-<p>&nbsp;</p>
-
 - [Basic Usage](#basic-usage)
 - [Relationships](#relationships)
   - [hasOne](#hasOne)
@@ -27,11 +25,9 @@ Every database driven application requires data relations and fetching them manu
   - [attach](#attach)
   - [detach](#detach)
 
-<p>&nbsp;</p>
-
 ## Basic Usage
 
-Setting up and fetching relations are super easy with Lucid. Let's take the below example where we want to fetch all posts by a given user/author for a given post.
+Setting up and fetching relations are super easy with Lucid. Let's take the below example where we want to fetch all posts by a given user/author.
 
 #### User model
 
@@ -40,9 +36,9 @@ Setting up and fetching relations are super easy with Lucid. Let's take the belo
 
 class User extends Lucid {
 
-  posts() {
+  posts () {
     return this.hasMany('App/Model/Post')
-  }  
+  }
 
 }
 ```
@@ -75,13 +71,9 @@ const post = yield Post.find(1)
 const postAuthor = yield post.author().fetch()
 ```
 
-<p>&nbsp;</p>
-
 ## Relationships
 
 Depending upon the nature of relation you can easily define relationships using `expressive` methods.
-
-<p>&nbsp;</p>
 
 #### hasOne <span>(model,targetKey,foreignKey)</span>
 
@@ -150,19 +142,16 @@ class User extends Lucid {
 ```
 
 
-<p>&nbsp;</p>
-
 ## Fetching Relations
 
-Lucid provides a handful of convenient ways to fetch relations while keeping your code readable and expressive.
-<p>&nbsp;</p>
+Lucid provides a handful of convenient ways to fetch relations while keeping your code readable and expressive
 
 #### with <span>(*models)</span>
 
 `with` method provides a convenient way to fetch host model with its relation under one data object. Also, you can fetch nested relations or multiple relations using `with` method.
 
 ```javascript,line-numbers
-const user = yield User.where('id',1).first().with('posts').fetch()
+const user = yield User.where('id', 1).first().with('posts').fetch()
 ```
 
 #### nested relations
@@ -174,13 +163,9 @@ const postsFromIndia = yield Country.where('locale','IND').with('users.posts').f
 ```
 So simple it is ! final result will have all the users from a given country with their posts under a child object.
 
-<p>&nbsp;</p>
-
 ## Extending Relations
 
 Defining relations is of no good if you cannot define their behavior while fetching them. Think of a situation where you want to pull only published posts for a given user? Let's achieve desired results in different ways.
-
-<p>&nbsp;</p>
 
 #### query methods
 
@@ -236,8 +221,6 @@ class User extends Lucid {
 
 }
 ```
-
-<p>&nbsp;</p>
 
 ## Inserting Related Models
 

@@ -19,7 +19,7 @@ Now in order to make use of Validation provider you need to register it inside `
 
 ```javascript,line-numbers
 const providers = [
-  'adonis-validation-provider/provider/Validator'
+  'adonis-validation-provider/providers/Validator'
 ]
 ```
 
@@ -32,12 +32,12 @@ const aliases = {
 ```
 
 ## Basic Usage
-For the most basic validation, you need to define rules and same can be done with your data models, or maybe you have a dedicated service for defining validation rules.
+For the most basic validation, you need to define rules and same can be done in your Lucid models, or you can have a dedicated service for defining validation rules.
 
 ```javascript,line-numbers
 const Validator = use('Validator')
 
-class UserController{
+class UserController {
 
   *store (request, response) {
 
@@ -74,6 +74,7 @@ All rules defined by Indicative are available to Validation provider. Documentat
 Indicative [raw validations](http://indicative.adonisjs.com/docs/2.0/raw) are available as :-
 
 ```javascript,line-numbers
+const Validator = use('Validator')
 Validator.is.array([22, 18])
 ```
 
@@ -99,7 +100,7 @@ var phoneNumber = function(data, field, message, args, get){
       return
     }
     reject(message)
-  });                
+  });
 };
 
 Validator.extend('phoneNo',phoneNumber,'Enter valid phone number')

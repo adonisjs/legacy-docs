@@ -18,7 +18,7 @@ Also make sure to give it an alias, so that you don't have to refer it with the 
 
 ```javascript,line-numbers
 const aliases = {
-  'Encryption' : 'Adonis/Src/Encryption'
+  Encryption : 'Adonis/Src/Encryption'
 }
 ```
 

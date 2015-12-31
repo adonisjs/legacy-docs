@@ -1,6 +1,6 @@
 # IoC Container
 
-To understand Ioc Container you should know what [Dependency Injection](/dependency-injection) is and why it is required ? IoC container is a layer to register and resolve dependencies out of a container that has several benefits.
+To understand Ioc Container you should know what [Dependency Injection](dependency-injection) is and why it is required ? IoC container is a layer to register and resolve dependencies out of a container that has several benefits.
 
 - [Binding](#binding)
   - [bind](#bind)
@@ -17,9 +17,11 @@ To understand Ioc Container you should know what [Dependency Injection](/depende
 
 Binding objects to IoC container requires a namespace and a return value to be used while resolving the dependency.
 
-### bind
+#### bind
 
 ```javascript,line-numbers
+const Ioc = require('adonis-fold').Ioc
+
 Ioc.bind('App/Hello', function () {
   return 'Hello World!'
 })
@@ -31,9 +33,11 @@ Above we created a binding with a unique namespace called `App/Hello` which retu
 const Hello = use('App/Hello')
 ```
 
-### singleton
+#### singleton
 
 ```javascript,line-numbers
+const Ioc = require('adonis-fold').Ioc
+
 Ioc.singleton('App/Time', function () {
   return new Date().getTime()
 })
@@ -41,7 +45,7 @@ Ioc.singleton('App/Time', function () {
 
 Above we bind a singleton, which means the return value will be same every time we resolve this binding out of IoC container. The Ioc container has plenty of other benefits apart from registering and resolving the object.
 
-### dependency injection
+#### dependency injection
 
 ```javascript,line-numbers
 Ioc.bind('App/User', function (app) {
@@ -57,13 +61,13 @@ It is fairly simple to inject other bindings inside your binding. Also it does n
 
 Managers are like your bindings but they have different purpose, `object` exposed via manager needs to have `extend` method and is used for extending implementations. Mail provider is an example of same
 
-### registering Mail as a manager inside Ioc container
+#### registering Mail as a manager inside Ioc container
 
 ```javascript,line-numbers
 Ioc.manager('Adonis/Addons/Mail', Mail)
 ```
 
-### extend
+#### extend
 
 ```javascript,line-numbers
 Ioc.extend('Adonis/Addons/Mail', 'sendgrid', function () {
@@ -73,7 +77,7 @@ Ioc.extend('Adonis/Addons/Mail', 'sendgrid', function () {
 
 Using `extend` method you can extend `Mail` provider shipped with Adonis and add your own custom implementation, after this it is `Mail` provider's responsibility to understand and add `sendgrid` as a driver.
 
-### alias
+#### alias
 
 Alias is key/value pair to identify a namespace with it's alias. For example
 
@@ -111,7 +115,7 @@ Resolving dependencies is a sequential process and IoC container will try to fin
 3. try requiring as node module
 4. throws an error, saying module not found.
 
-### use
+#### use
 
 Use will return binded value using it's namespace
 
@@ -119,28 +123,35 @@ Use will return binded value using it's namespace
 const Route = Ioc.use('Adonis/Src/Route')
 ```
 
-### make
+#### make
 
-Make is smarter and will try to satisfy dependencies until the last injection and always returns an instance of class. Below is the list of rules followed by `make` method based upon data type.
+Make is smarter and will try to satisfy dependencies until the last injection and always returns an instance of class if value passed to make is a class. Below is the list of rules followed by `make` method based upon data type.
 
-1. **Class** - will introspect to find dependecies using `constructor` or `static inject` getter.
-2. **Provider** - makes use of `use` method and returns value returned by provider as providers itself are responsible for satisfying their dependencies.
-3. **Any other data type** - returns the original reference as IoC container does know how to make anything else from `Classes`.
-4. **Autoload Namespace** Get value using `use` method.
-  - if return value is a `Class` will try to follow the entire process again.
-  - otherwise returns original return value.
+##### Class
+will introspect to find dependecies using `constructor` or `static inject` getter.
+
+##### Provider
+makes use of `use` method and returns value returned by provider as providers itself are responsible for satisfying their dependencies.
+
+##### Any other data type
+returns the original reference as IoC container does know how to make anything else from `Classes`.
+
+##### Autoload Namespace
+Get value using `use` method and follow below rules after that.
+1. if return value is a `Class` will try to follow the entire process again.
+2. otherwise returns original return value.
 
 ```javascript,line-numbers
 Class UserController {
 
-    static get inject () {
-      return ["Adonis/Addonis/Mail","App/Model/User"]
-    }
+  static get inject () {
+    return ["Adonis/Addons/Mail","App/Model/User"]
+  }
 
-    constructor (Mail, User) {
-      this.mail = Mail
-      this.user = User
-    }
+  constructor (Mail, User) {
+    this.mail = Mail
+    this.user = User
+  }
 
 }
 

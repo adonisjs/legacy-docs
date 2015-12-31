@@ -1,6 +1,4 @@
-
 {% raw %}
-
 # Views
 
 Adonis ships with a beautiful template engine to create dynamic HTML pages. Views are stored inside `resources/views` directory and are defined with `.html` extension.
@@ -9,6 +7,8 @@ Adonis ships with a beautiful template engine to create dynamic HTML pages. View
 - [Variables](#variables)
 - [Tags](#tags)
 - [Filters](#filters)
+  - [Built-in Filter](#built-in-filter)
+  - [Adding Your Own Filters](#adding-your-own-filters)
 - [Inheritance](#inheritance)
   - [include](#include)
   - [extends](#extends)
@@ -35,7 +35,6 @@ You can make use of views inside your controllers and middleware through respons
 </body>
 </html>
 ```
-
 above is a master view with shared HTML markup, now you can extend this view and replace blocks with your defined content.
 
 ```twig,line-numbers
@@ -70,7 +69,7 @@ yield response.view('index', {title: 'Home'})
 
 Tags are keywords that can be used to manipulate and display data in your views, think of them as javascript keywords but inside HTML.
 
-### if
+#### if
 
 ```twig,line-numbers
 {% if age > '18' %}
@@ -90,7 +89,7 @@ also, you can make use of `else` and `elif`
 {% endif %}
 ```
 
-### for
+#### for
 
 For loop will help you in iterating over arrays and objects.
 
@@ -129,7 +128,7 @@ Finally, you can combine `else` statement with `for` loop to show something when
 {% endfor %}
 ```
 
-### set
+#### set
 
 Set helps in declaring variables inside HTML templates, think of them as replacement to `var`
 
@@ -138,7 +137,7 @@ Set helps in declaring variables inside HTML templates, think of them as replace
 {{ username }}
 ```
 
-### block
+#### block
 Block tag defines a block with unique name, and data inside that block can be overridden later.
 
 ```twig,line-numbers
@@ -161,29 +160,29 @@ Here `capitalize` filter will turn hello world into Hello world.
 
 Also, there are multiple ways to call a filter, depending upon your situation, you can choose the preferred one.
 
-### using pipe (|) symbol
+#### using pipe (|) symbol
 ```twig,line-numbers
 {{ "hello world" | capitalize }}
 ```
 
-### using filter tag
+#### using filter tag
 ```twig,line-numbers
 {% filter capitalize %}
   Hello world
 {% endfilter %}
 ```
 
-### Built-in filters
+#### Built-in filters
 Adonis ships with a handful of commonly used filters. Also, you are free to add your own filters.
 
-#### abs
+##### abs
 Return the absolute value for given argument
 
 ```twig,line-numbers
 {{ age | abs }}
 ```
 
-#### batch
+##### batch
 return batches of an object inside a loop, it is helpful when printing HTML grid.
 
 ```twig,line-numbers
@@ -196,31 +195,31 @@ return batches of an object inside a loop, it is helpful when printing HTML grid
 {% endfor %}
 ```
 
-#### capitalize
+##### capitalize
 Will make first character uppercase and all other lower case.
 
 ```twig,line-numbers
 {{ name | capitalize }}
 ```
 
-#### default
+##### default
 It will show the default value if existing value is null or undefined.
 
 ```twig,line-numbers
 {{ title | default('Adonis') }}
 ```
 
-#### escape
+##### escape
 By default views will eliminate strings containing `&, <, >, ‘, and '`, escape will convert special characters into html safe sequences.
 
-#### first
+##### first
 Returns first item from an array.
 
 ```twig,line-numbers
 {{ ['foo','bar'] | first }}
 ```
 
-#### groupby
+##### groupby
 Group your arrays using a defined property. See below example
 
 ```twig,line-numbers
@@ -231,14 +230,14 @@ Group your arrays using a defined property. See below example
 {{ users | groupby('age') | json }}
 ```
 
-#### indent <span>(width=4,indentFirstLine=false)</span>
+##### indent <span>(width=4,indentFirstLine=false)</span>
 Indent each line inside a string with given spaces.
 
 ```twig,line-numbers
 {{ text | indent(2,true) }}
 ```
 
-#### join
+##### join
 Implementation of Javascript native join method
 
 ```twig,line-numbers
@@ -246,28 +245,28 @@ Implementation of Javascript native join method
 {# -> 1,2,3 #}
 ```
 
-#### json
+##### json
 Shows JSON representation of an array or Object
 
 ```twig,line-numbers
 {{ [{username:'foo'}] | json }}
 ```
 
-#### last
+##### last
 Returns last item from an array.
 
 ```twig,line-numbers
 {{ ['foo','bar'] | last }}
 ```
 
-#### length
+##### length
 Returns length of an array.
 
 ```twig,line-numbers
 {{ ['foo','bar'] | length }}
 ```
 
-#### list
+##### list
 Converts an array into a list, think of it as replacement to `join`, but it also works for strings.
 
 ```twig,line-numbers
@@ -275,7 +274,7 @@ Converts an array into a list, think of it as replacement to `join`, but it also
 {# -> foo, bar #}
 ```
 
-#### lower
+##### lower
 Converts value to lowercase
 
 ```twig,line-numbers
@@ -283,22 +282,25 @@ Converts value to lowercase
 {# -> hello world #}
 ```
 
-#### random
+##### random
 Returns random item from an array
 
 ```twig,line-numbers
 {{ ['foo', 'bar', 'baz'] | random }}
 ```
 
-#### rejectattr
+##### rejectattr
 Filters an array and remove objects containing defined attributes
 
 ```twig,line-numbers
-{% set users = [{username: 'doe', age: 22, admin: true}, {username: 'dim', age: 22, admin: false}] %}
+{% set users = [
+  {username: 'doe', age: 22, admin: true},
+  {username: 'dim', age: 22, admin: false}
+] %}
 {{ users | rejectattr('admin') | json }}
 ```
 
-#### replace
+##### replace
 Implementation of javascript native `replace` method, first argument can be a regex.
 
 ```twig,line-numbers
@@ -306,14 +308,14 @@ Implementation of javascript native `replace` method, first argument can be a re
 {# -> Hello Everyone #}
 ```
 
-#### reverse
+##### reverse
 Reverse a given value
 
 ```twig,line-numbers
 {{ "Hello World" | reverse }}
 ```
 
-#### round <span>(value, precision=0, method='common')</span>
+##### round <span>(value, precision=0, method='common')</span>
 Round the number to a given precision using defined method
 
 ```twig,line-numbers
@@ -324,7 +326,7 @@ Round the number to a given precision using defined method
 {# -> 42.5 #}
 ```
 
-#### slice
+##### slice
 Slice an array into multiple sub arrays
 
 ```twig,line-numbers
@@ -339,10 +341,10 @@ Slice an array into multiple sub arrays
 {% endfor %}
 ```
 
-#### string
+##### string
 Make a string unicode if it isn’t already.
 
-#### striptags
+##### striptags
 Strip Html,XML tags from a string
 
 ```twig,line-numbers
@@ -350,7 +352,7 @@ Strip Html,XML tags from a string
 {# -> Hello World #}
 ```
 
-#### title
+##### title
 converts string to a title with each word first letter will be uppercase
 
 ```twig,line-numbers
@@ -358,10 +360,10 @@ converts string to a title with each word first letter will be uppercase
 {# -> Hello World #}
 ```
 
-#### trim
+##### trim
 Javascript implementation of trim.
 
-#### truncate
+##### truncate
 Returns a truncate copy of string.
 
 ```twig,line-numbers
@@ -369,22 +371,22 @@ Returns a truncate copy of string.
 {# -> Grumpy wizards make toxic brew... #}
 ```
 
-#### upper
+##### upper
 Makes entire string uppercase.
 
-#### urlencode
+##### urlencode
 Makes value url friendly (uses UTF-8 encoding).
 
-#### wordcount
+##### wordcount
 Count words in a string
 
-#### float
+##### float
 Converts value to a float.
 
-#### int
+##### int
 Converts value to an integer.
 
-### Adding your own filters
+#### Adding your own filters
 If built-in filters are not enough for you, then you can consider adding your own filters using `View` provider. Ideally you can add your own custom filters anywhere you really want, but let's try to keep things organized.
 
 Inside `boostrap/start.js` file, you can add your own custom filters
@@ -409,7 +411,7 @@ and finally you can make use of the above filter as
 ## Inheritance
 Inheritance makes your code reusable by allowing `extending`, `including` and `importing` other templates.
 
-### include
+#### include
 By including a template you share the current template scope with the template under inheritance, it is good for isolated markup to be reused under a different .html file.
 
 ```twig,line-numbers
@@ -428,7 +430,7 @@ Now you can include above template as follows
 {% endfor %}
 ```
 
-### extends
+#### extends
 Extending a view is little different from including a view, as after extending a view you can replace `block` inside it.
 
 ```twig,line-numbers
@@ -452,7 +454,7 @@ Extending a view is little different from including a view, as after extending a
 {% endblock %}
 ```
 
-### import
+#### import
 Importing a view helps in exposing macros to be used by parent view, view under import does not have access to the scope of the parent view
 
 ```twig,line-numbers
@@ -484,7 +486,7 @@ Also you can define alias from exported variable as follows
 
 You can make use of different expressions while defining your views, which includes
 
-### Maths
+#### Maths
 
 * Addition : `+`
 * Subtraction : `-`
@@ -500,7 +502,7 @@ You can make use of different expressions while defining your views, which inclu
 {{ 10 / 2 }}
 ```
 
-### Comparison
+#### Comparison
 
 * `==`
 * `!=`
@@ -515,7 +517,7 @@ You can make use of different expressions while defining your views, which inclu
 {% endif %}
 ```
 
-### Logical
+#### Logical
 
 * `and`
 * `or`
@@ -527,7 +529,7 @@ You can make use of different expressions while defining your views, which inclu
 {% endif %}
 ```
 
-### If Expression
+#### If Expression
 
 Just like coffeescript inline expressions, you can make use of if expression as follows
 
@@ -541,7 +543,7 @@ also you can make use of it inside a function call
 {{ getAge(dob if dob else "1990-10-10") }}
 ```
 
-### Regular Expressions
+#### Regular Expressions
 
 Just like javascript you can call regular expressions inside a view
 
@@ -574,7 +576,7 @@ Service injection helps you in injecting dependencies inside your views, Which m
 
 You can also extend views to register your own filters and global methods to be used inside your html files. Consider adding them inside `boostrap/start.js` file.
 
-### Adding filter
+#### Adding filter
 
 ```javascript,line-numbers
 const App = use('App')
@@ -587,7 +589,7 @@ App.on('start', function () {
 })
 ```
 
-### Adding global
+#### Adding global
 
 ```javascript,line-numbers
 const App = use('App')

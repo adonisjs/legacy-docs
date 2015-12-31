@@ -11,10 +11,8 @@ Installing Adonis is a fairly simple process which requires `>= node 4.0` with n
 Adonis is built on top of `Es6` also known as `ES2015`, which makes the code more enjoyable and cleaner to read. We do not make use of any transpiler and depends upon core v8 implemented features.
 
 <div class="__note">
-  <p>
-    <strong>Note</strong>
-    Latest version of NodeJs supports following features.
-  </p>
+  <strong>Note</strong>
+  Latest version of NodeJs supports following features.
 </div>
 
 1. Es6 Generators.

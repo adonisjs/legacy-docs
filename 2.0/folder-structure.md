@@ -2,7 +2,7 @@
 
 In Adonis, every folder and file have a logical place in your project structure. We tried following tested industry conventions to setup folder structure.
 
-```
+```bash,line-numbers
 ├── app/
 │ ├── Commands/
 │ ├── Http/
@@ -19,6 +19,7 @@ In Adonis, every folder and file have a logical place in your project structure.
 │ ├── kernel.js
 │ ├── start.js
 ├── config/
+├── migrations/
 ├── public/
 ├── resources/
 │ ├── views
@@ -60,7 +61,10 @@ Helper directory to isolate certain tasks and re-use them inside your controller
 Adonis joins different components under this directory and you will likely never have to get into it except from adding new providers inside `bootstrap/app.js`.
 
 ## config
-Keeping all configuration inside this directory helps you in making use of [Config]() provider which get/set values using a fluent syntax. Make sure to export config values using `module.exports`.
+Storing all configuration inside this directory helps you in making use of [Config](/config) provider which get/set values using a fluent syntax. Make sure to export config values using `module.exports`.
+
+## migrations
+Stores your database migrations
 
 ## public
 static resources to be available to everyone. Consider keeping your `css` or `images` here.
