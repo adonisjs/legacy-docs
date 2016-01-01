@@ -40,7 +40,10 @@ const safePassword = yield Hash.make('some-value', 10)
 ```javascript,line-numbers
 const Hash = use('Hash')
 try {
-  yield Hash.verify('plain-value', 'safe-value')
+  const isSame = yield Hash.verify('plain-value', 'safe-value')
+  if (isSame) {
+    // do something
+  }
 } catch (e) {
   // value does not match
 }

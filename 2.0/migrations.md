@@ -20,7 +20,6 @@ Each migration represents a version of your database state, where you can modify
 
 
 ```javascript,line-numbers
-
 const Schema = use('Schema')
 
 class User extends Schema {
@@ -45,11 +44,11 @@ Schema files have two required functions `up` and `down`.
 ### up
 
 `up` method is executed when you run your migrations and is helpful for creating/modifying schema. Above we created
-a table called `users` using `createTable` method and defined multiple fields with their attributes.
+a table called `users` using `create` method and defined multiple fields with their attributes.
 
 ### down
 
-`down` method is executed when you rollback your migrations and is always opposite of `up` method. Above we are dropping table users using `dropTable` method.
+`down` method is executed when you rollback your migrations and is always opposite of `up` method. Above we are dropping table users using `drop` method.
 
 ## Ace Commands
 

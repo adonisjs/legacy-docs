@@ -34,7 +34,7 @@ As Adonis is a new kid and growing rapidly we planned to stick to [Git Flow](htt
 
 There is lot more to coding than following the above guidelines. Adonis may seem like a huge framework but it is combination of small tested components. Some of them are written specifically for Adonis, which are known as Service providers, where others are standalone modules called [poppins](https://github.com/poppinss).
 
-While contributing do may sure, the features are requesting to get merged are not bloated. Also never accept configuration directly on your library methods, instead define a file inside `config` directory and read configuration from `Config` provider.
+While contributing please make sure, the features you are requesting to get merged are not bloated. Also never accept configuration directly on your library methods, instead define a file inside `config` directory and read configuration using `Config` provider.
 
 ## Help
 

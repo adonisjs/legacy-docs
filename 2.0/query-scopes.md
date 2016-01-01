@@ -20,7 +20,7 @@ class User extends Lucid {
 ```
 
 ## Using Scopes
-Now you can make use of query scopes while using query scopes there is no need to make use of `scope` keyword, and you can use rest of the method as `camel case.'
+While using scoped methods there is no need to make use of `scope` keyword, and you can use rest of the method as `camel case`.
 
 ```javascript,line-numbers
 const activeUsers = yield User.active().fetch()

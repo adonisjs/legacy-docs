@@ -1,9 +1,7 @@
 
 # Database Relations
 
-Lucid makes it easier for you to fetch related data from multiple models out of the box.
-
-Every database driven application requires data relations and fetching them manually can be overhead to maintain, that's why lucid makes it super easy and readable to resolve multiple relations.
+Every database driven application requires data relations and fetching them manually can be overhead to maintain, that's why lucid makes it super easy and readable to resolve and set relations.
 
 - [Basic Usage](#basic-usage)
 - [Relationships](#relationships)
@@ -27,7 +25,7 @@ Every database driven application requires data relations and fetching them manu
 
 ## Basic Usage
 
-Setting up and fetching relations are super easy with Lucid. Let's take the below example where we want to fetch all posts by a given user/author.
+Setting up and fetching relations are super easy with Lucid. Let's take the below example where you want to fetch all posts by a given user/author.
 
 #### User model
 

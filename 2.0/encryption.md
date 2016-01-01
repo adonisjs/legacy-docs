@@ -2,7 +2,7 @@
 
 Encryption provider is based upon [NodeJs crypto](https://nodejs.org/api/crypto.html) to encrypt and decrypt values with a SALT. By default all values are encrypted using `aes-256-cbc` algorithm.
 
-Make sure to set `APP_KEY` in your `.env` file to make encryption work. Additionally you can also define different encryption algorithm using `ENCRYPTION` key.
+Make sure to set `appKey` in your `config/app.js` file to make encryption work. Additionally you can also define different encryption algorithm using `encryption` key.
 
 ## Setup
 

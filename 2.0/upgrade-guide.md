@@ -1,6 +1,6 @@
 # Upgrade
 
-This guide outlines the requirements and breakings changes to upgrade Adonis to lastest version. As Adonis follows [semver](http://semver.org/), upgrade guides is only valid for major releases, for other minor/patch releases look into release notes.
+This guide outlines the requirements and breakings changes to upgrade Adonis to lastest version. As Adonis follows [semver](http://semver.org/), upgrade guides is only valid for major releases, for other minor/patch releases look into [release notes](release-notes).
 
 - [Upgrading to 2.0](upgrading-to-2.0)
 
@@ -20,7 +20,7 @@ Deferred providers have been removed for the sake of simplicity, and you are exp
 
 Earlier you have to type hint dependencies inside your custom providers, which was bit ugly and less readable, now the IOC container instance is injected to the callback method, giving you the flexibility to fetch dependencies instead of type hinting.
 
-**earlier**
+##### earlier
 
 ```javascript,line-numbers
 class FileProvider extends ServiceProvider {
@@ -34,7 +34,7 @@ class FileProvider extends ServiceProvider {
 }
 ```
 
-**now**
+##### now
 
 ```javascript,line-numbers
 class FileProvider extends ServiceProvider{
@@ -54,14 +54,14 @@ class FileProvider extends ServiceProvider{
 
 Earlier you were supposed to close route groups when creating a group but now groups are smart enough to close themselves.
 
-**earlier**
+##### earlier
 ```javascript,line-numbers
 Route.group('v1', function () {
   ...
 }).prefix('/v1').close()
 ```
 
-**npw**
+##### now
 ```javascript,line-numbers
 Route.group('v1', function () {
   ...
@@ -70,61 +70,49 @@ Route.group('v1', function () {
 
 #### Improved middleware flow
 
-Earlier global middleware used to run when a request reaches a valid registered route since this is not the ideal behavior, now they will be executed even if there are no registered routes.
+Earlier global middleware used to run on urls with valid registered routes, since this is not the ideal behavior, now they will be executed even if there are no registered routes.
 
 #### pm2 is removed.
 
 pm2 is a daemon that runs node processes in a background and watch files for changes, the moment a file changes it will restart the server again. Also, it manage crashes in production by restarting the server again after the crash.
 
-We have removed pm2 for several reasons:
+We have removed pm2 for several reasons
 
-* First it's better to install pm2 globally and manage multiple servers, instead of using a separate pm2 for each application.
-* Next we have plans to add services like `Vagrant` for seamless provisioning and will likely going to have a better solution than just dropping pm2 in your code base.
+1. First it's better to install pm2 globally and manage multiple servers, instead of using a separate pm2 for each application.
+2. Next we have plans to add services like `Vagrant` for seamless provisioning and will likely going to have a better solution than just dropping pm2 in your code base.
 
-## Features Introduced
+#### ace commands
 
-#### Bunch of new service providers.
+Earlier ace commands used to define the command identifier inside the signature, which means all commands needs to be loaded while running a single command. Now signature only defines the expectations of command and command identifier inside set inside `bootstrap/app.js` file.
 
-New service providers have been introduced to give you extra arms while writing your Node applications. Which includes:
-
-* Redis
-* Encryption
-* Hashing
-* Mail
-* Socket.Io
-
-#### Power to extend providers
-
-It is very important for service providers to be extended and offer more functionality, from `2.0.0` service providers can expose an API to outside world for same. For example
-
-Session provider offers an API to add more drivers.
-
-```javascript,line-number
-Ioc.extend('Adonis/Src/Session', 'mongo', function (app) {
-  return new MongoSessionStore()
-})
-```
-
-#### Seamless migrations
-
-Under the hood, we still make use of `knex` to run database operations, but as Adonis is all about writing expressive code, we have added our own migrations provider.
-
-Now you can write migrations as follows
-
+##### earlier
 ```javascript,line-numbers
+class Generator {
 
-const Schema = use('Schema')
-
-class CreateUsersTable extends Schema {
-
-  up () {
-    this.create('users', function (table) {
-      table.increments()
-      table.string('username')
-      table.timestamps()
-    })
+  signature () {
+    return 'make:controller {name} {--plain}'
   }
 
 }
 
+// and inside bootstrap/app.js
+const commands = [
+  'Adonis/Commands/Generator'
+]
+```
+
+###### now
+```javascript,line-numbers
+class Generator {
+
+  signature () {
+    return '{name} {--plain}'
+  }
+
+}
+
+// and inside bootstrap/app.js
+const commands = {
+  'make:controller' : 'Adonis/Commands/Generator'
+}
 ```

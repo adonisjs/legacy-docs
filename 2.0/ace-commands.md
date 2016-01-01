@@ -284,12 +284,12 @@ class CreateUser {
   }
 
   * handle (options, flags) {
-    user.name = options.name
-    user.email = options.email
-    user.password = options.password
-    user.role = flags.admin ? 'admin' : 'user'
+    this.user.name = options.name
+    this.user.email = options.email
+    this.user.password = options.password
+    this.user.role = flags.admin ? 'admin' : 'user'
 
-    yield user.create()
+    yield this.user.create()
     Ansi.success('Created user')
   }
 

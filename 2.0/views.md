@@ -583,7 +583,7 @@ const App = use('App')
 const View = use('View')
 
 App.on('start', function () {
-  View.addFilter('name', function () {
+  View.filter('name', function () {
     // logic goes here
   })
 })
@@ -596,7 +596,7 @@ const App = use('App')
 const View = use('View')
 
 App.on('start', function () {
-  View.addGlobal('name', 'value')
+  View.global('name', 'value')
 })
 ```
 

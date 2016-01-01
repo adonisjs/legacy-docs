@@ -243,12 +243,11 @@ Route.group('blog', function () {
 
 ## Form Method Spoofing
 
-Html form tags do not support all verbs apart from `GET` and `POST`,  where method spoofing helps you in defining HTTP verbs as a form field.
+Html form tags do not support all verbs apart from `GET` and `POST`,  where method spoofing helps you in defining HTTP verbs under query string.
 
 ```html,line-numbers
 
-<form method="POST" action="/user/1">
-  <input type="hidden" name="_method" value="PUT">
+<form method="POST" action="/create?_method=PUT">
 </form>
 
 ```

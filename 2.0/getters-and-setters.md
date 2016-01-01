@@ -3,7 +3,7 @@
 Getters and setters allow you to format attributes on your data models. Converting user statuses from integer to strings, formatting phone numbers before saving are good examples of Setters.
 
 ## Getters
-Getters transform data after you fetch them from your database and to define a getter you make use of defined pattern. For example `first_name` field inside the database will be accessed as `getFirstName` , where you convert actual field name to Pascal case and prepend keyword get to it.
+Getters transform data after you fetch them from your database and to define a getter you make use of a defined pattern. For example `first_name` field inside the database will be accessed as `getFirstName` , where you convert actual field name to Pascal case and prepend `get` keyword to it.
 
 ```javascript,line-numbers
 class User extends Lucid {
@@ -20,8 +20,7 @@ Now when you fetch data using your model, `status` field will be transformed on 
 ```javascript,line-numbers
 const User = use('App/Model/User')
 const user = yield User.where('id',1).first().fetch()
-
-return user.toJSON().status
+user.toJSON().status
 ```
 
 ## Setters
