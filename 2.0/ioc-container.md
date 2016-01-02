@@ -1,6 +1,6 @@
 # IoC Container
 
-To understand Ioc Container you should know what [Dependency Injection](dependency-injection) is and why it is required ? IoC container is a layer to register and resolve dependencies out of a container that has several benefits.
+To understand Ioc Container you should know what [Dependency Injection](dependency-injection) is and why it is required. An IoC container is a layer to register and resolve dependencies out of a container and has several benefits when building modern applications.
 
 - [Binding](#binding)
   - [bind](#bind)
@@ -15,7 +15,7 @@ To understand Ioc Container you should know what [Dependency Injection](dependen
 
 ## Binding
 
-Binding objects to IoC container requires a namespace and a return value to be used while resolving the dependency.
+Binding objects to the IoC container requires a namespace and a return value to be used when resolving the dependency.
 
 #### bind
 
@@ -27,7 +27,7 @@ Ioc.bind('App/Hello', function () {
 })
 ```
 
-Above we created a binding with a unique namespace called `App/Hello` which returns a string called `Hello World`. Now this binding can be used by resolving it from IoC container.
+Above we created a binding with a unique namespace called `App/Hello` which returns the string `Hello World`. This binding can now be used by resolving it from the IoC container.
 
 ```javascript,line-numbers
 const Hello = use('App/Hello')
@@ -43,7 +43,7 @@ Ioc.singleton('App/Time', function () {
 })
 ```
 
-Above we bind a singleton, which means the return value will be same every time we resolve this binding out of IoC container. The Ioc container has plenty of other benefits apart from registering and resolving the object.
+Above we bind a singleton, which means the return value will be same every time we resolve this binding out of the IoC container. The Ioc container has plenty of other benefits apart from registering and resolving objects.
 
 #### dependency injection
 
@@ -55,13 +55,13 @@ Ioc.bind('App/User', function (app) {
 })
 ```
 
-It is fairly simple to inject other bindings inside your binding. Also it does not matter whether `Redis` was registered before or after your binding, IoC container will resolve it for you as long as it has been registered.
+It is fairly simple to inject other bindings inside your binding. Also, it does not matter whether `Redis` was registered before or after your binding, IoC container will resolve it for you as long as it has been registered.
 
 ## Managers
 
-Managers are like your bindings but they have different purpose, `object` exposed via manager needs to have `extend` method and is used for extending implementations. Mail provider is an example of same
+Managers are like your bindings but they have different purpose, `object` exposed via manager needs to have an `extend` method and is used for extending implementations. The Mail provider is an example of this.
 
-#### registering Mail as a manager inside Ioc container
+#### registering Mail as a manager inside the Ioc container
 
 ```javascript,line-numbers
 Ioc.manager('Adonis/Addons/Mail', Mail)
@@ -75,24 +75,24 @@ Ioc.extend('Adonis/Addons/Mail', 'sendgrid', function () {
 })
 ```
 
-Using `extend` method you can extend `Mail` provider shipped with Adonis and add your own custom implementation, after this it is `Mail` provider's responsibility to understand and add `sendgrid` as a driver.
+Using the `extend` method you can extend the `Mail` provider shipped with Adonis and add your own custom implementation. It is then the `Mail` provider's responsibility to understand and add `sendgrid` as a driver.
 
 #### alias
 
-Alias is key/value pair to identify a namespace with it's alias. For example
+Alias is key/value pair to identify a namespace with its alias. For example
 
-1. `Adonis/Addons/Mail` has alias of `Mail`
-2. `Adonis/Src/Route` has a alias of `Route`
+1. `Adonis/Addons/Mail` has an alias of `Mail`
+2. `Adonis/Src/Route` has an alias of `Route`
 
 ```javascript,line-numbers
 Ioc.alias('Route','Adonis/Src/Route')
 ```
 
-Alias works both for managers and bindings.
+Alias works for both managers and bindings.
 
 ## Autoloading
 
-Autoloading is handled cleverly by IoC container, it does not require all the files in memory instead while resolving dependencies it tries to make a sequence of `namespace` and see if required namespace is inside a given path.
+Autoloading is handled cleverly by the IoC container, it does not require all the files in memory. Instead, while resolving dependencies, it tries to make a sequence of `namespace`s and see if the required namespace is inside a given path.
 
 ```javascript,line-numbers
 Ioc.autoload('App',path.join(__dirname,'./app'))
@@ -107,17 +107,17 @@ use('App/Http/Middleware/Cors')
 
 ## Resolving Dependencies
 
-Resolving dependencies is a sequential process and IoC container will try to find the requested namespace in given order.
+Resolving dependencies is a sequential process and the IoC container will try to find the requested namespace in given order.
 
-1. looks for registered provider.
-2. looks for alias and re-resolve provider with it's namespace
-2. looks for autoloaded path.
-3. try requiring as node module
+1. looks for the registered provider.
+2. looks for an alias and re-resolve provider with its namespace
+2. looks for an autoloaded path.
+3. tries requiring as a node module
 4. throws an error, saying module not found.
 
 #### use
 
-Use will return binded value using it's namespace
+Use will return binded value using its namespace
 
 ```javascript,line-numbers
 const Route = Ioc.use('Adonis/Src/Route')
@@ -125,21 +125,21 @@ const Route = Ioc.use('Adonis/Src/Route')
 
 #### make
 
-Make is smarter and will try to satisfy dependencies until the last injection and always returns an instance of class if value passed to make is a class. Below is the list of rules followed by `make` method based upon data type.
+Make is smarter and will try to satisfy dependencies until the last injection and always returns an instance of the class if the value passed to make is a class. Below are the list of the rules followed by the `make` method based on data type of the argument.
 
 ##### Class
 will introspect to find dependecies using `constructor` or `static inject` getter.
 
 ##### Provider
-makes use of `use` method and returns value returned by provider as providers itself are responsible for satisfying their dependencies.
+makes use of the `use` method and returns value returned by the provider, as providers are responsible for satisfying their own dependencies.
 
 ##### Any other data type
-returns the original reference as IoC container does know how to make anything else from `Classes`.
+returns the original reference as the IoC container does know how to make anything else from `Classes`.
 
 ##### Autoload Namespace
-Get value using `use` method and follow below rules after that.
-1. if return value is a `Class` will try to follow the entire process again.
-2. otherwise returns original return value.
+Gets value using the `use` method and follows the below rules:
+1. if the return value is a `Class`, try to follow the entire process again.
+2. otherwise return the original return value.
 
 ```javascript,line-numbers
 Class UserController {
