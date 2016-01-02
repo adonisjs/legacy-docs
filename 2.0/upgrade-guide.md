@@ -2,7 +2,7 @@
 
 This guide outlines the requirements and breakings changes to upgrade Adonis to lastest version. As Adonis follows [semver](http://semver.org/), upgrade guides is only valid for major releases, for other minor/patch releases look into [release notes](release-notes).
 
-- [Upgrading to 2.0](upgrading-to-2.0)
+- [Upgrading to 2.0](#upgrading-to-2.0)
 
 ## Upgrading to 2.0
 
