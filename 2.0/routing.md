@@ -182,7 +182,7 @@ module.exports = HomeController
 
 ## Middleware
 
-Expectations of middleware should be satisfied before a request can reach your route actions. You can read more about [Middleware](/middleware) as they make it super easy to write maintainable and DRY code.
+Expectations of middleware should be satisfied before a request can reach your route actions. You can read more about [Middleware](/docs/2.0/middleware) as they make it super easy to write maintainable and DRY code.
 
 To attach middleware to your route, you can make use of `middleware` method.
 
