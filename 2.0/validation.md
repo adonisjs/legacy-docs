@@ -19,7 +19,7 @@ Now in order to make use of Validation provider you need to register it inside `
 
 ```javascript,line-numbers
 const providers = [
-  'adonis-validation-provider/providers/Validator'
+  'adonis-validation-provider/providers/ValidatorProvider'
 ]
 ```
 
