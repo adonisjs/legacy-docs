@@ -65,13 +65,13 @@ class UserController {
 ## Custom Messages
 `validate` method accepts a 3rd argument to print custom messages when validation fails, as the system generated messages are not helpful for humans.
 
-Read moe about custom messages at [Indicative Custom Messages](http://indicative.adonisjs.com/docs/2.0/basics#custom-messages)
+Read moe about custom messages at [Indicative Custom Messages](http://indicative.adonisjs.com/#indicative-basics-custom-messages)
 
 ## Available Rules
-All rules defined by Indicative are available to Validation provider. Documentation on rules is available at [Indicative schema rules](http://indicative.adonisjs.com/docs/2.0/schema-rules#rules)
+All rules defined by Indicative are available to Validation provider. Documentation on rules is available at [Indicative schema rules](http://indicative.adonisjs.com/#indicative-schema-rules)
 
 ## Raw Validations
-Indicative [raw validations](http://indicative.adonisjs.com/docs/2.0/raw) are available as :-
+Indicative [raw validations](http://indicative.adonisjs.com/#indicative-raw-validations) are available as :-
 
 ```javascript,line-numbers
 const Validator = use('Validator')
@@ -80,7 +80,7 @@ Validator.is.array([22, 18])
 
 ## Extending
 
-As every application has different nature, you may want to extend the validator to add your own rules. Same can be done using the below example. Also read more about [extending indicative](http://indicative.adonisjs.com/docs/2.0/extending)
+As every application has different nature, you may want to extend the validator to add your own rules. Same can be done using the below example. Also read more about [extending indicative](http://indicative.adonisjs.com/#indicative-extending)
 
 ```javascript,line-numbers
 var phoneNumber = function(data, field, message, args, get){
