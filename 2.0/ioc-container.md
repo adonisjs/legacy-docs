@@ -1,6 +1,6 @@
 # IoC Container
 
-To understand Ioc Container you should know what [Dependency Injection](dependency-injection) is and why it is required. An IoC container is a layer to register and resolve dependencies out of a container and has several benefits when building modern applications.
+To understand Ioc Container you should know what [Dependency Injection](controllers#dependency-injection) is and why it is required. An IoC container is a layer to register and resolve dependencies out of a container and has several benefits when building modern applications.
 
 - [Binding](#binding)
   - [bind](#bind)
