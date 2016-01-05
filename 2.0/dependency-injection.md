@@ -10,7 +10,7 @@ Dependency Injection is a very simple term of removing all hard coded references
 Let's create a simple module and see what problems we may face without having dependency injection and how simple it is to inject dependencies. To create a module in NodeJs, we make use of `CommonJs` module pattern that let us expose our code using `module.exports`.
 
 ### Vanilla approach
-```
+```javascript,line-numbers
 var User = require('./models/User')
 var Validator = require('./lib/Validator')
 
@@ -33,7 +33,7 @@ Now to test the above module we need to have `User` model and `Validator` librar
 
 ### Injecting via arguments
 
-```
+```javascript,line-numbers
 module.exports = function (User, Validator) {
 
   return  {
@@ -52,7 +52,7 @@ It is fundamentally correct but has downsides as it is not maintainable for larg
 
 1. A module name `request.js` is dependent upon `User` model
 
-```
+```javascript,line-numbers
 module.exports = function (User) {
 
 }
@@ -60,7 +60,7 @@ module.exports = function (User) {
 
 2. Now `User` model is dependent upon a `baseModel`
 
-```
+```javascript,line-numbers
 module.exports = function User (BaseModel) {
 
 }
@@ -68,7 +68,7 @@ module.exports = function User (BaseModel) {
 
 3. Also `baseModel` is dependent upon some database library
 
-```
+```javascript,line-numbers
 module.exports = function BaseModel (Mysql) {
 
 }
@@ -78,7 +78,7 @@ module.exports = function BaseModel (Mysql) {
 
 This huge chain of dependencies makes it hard to maintain a long-term project as to require one module you have to require a chain of modules, which may look something like this.
 
-```
+```javascript,line-numbers
 var config = require('./config')
 var Mysql = require('Mysql')(config)
 var BaseModel = require('./baseModel')(Mysql)
@@ -93,7 +93,7 @@ This list may grow depending upon the nature of your project and seriously is no
 Adonis tries to solve out this problem with the help of Ioc container, which stores and make dependencies using namespaces. Make sure to read [Ioc Container](ioc-container) documentation.
 
 
-```
+```javascript,line-numbers
 class UserController {
 
   constructor (User, Config, Validator) {
