@@ -90,7 +90,7 @@ This list may grow depending upon the nature of your project and seriously is no
 
 ## Dependency Injection In Adonis
 
-Adonis tries to solve out this problem with the help of Ioc container, which stores and make dependencies using namespaces. Make sure to read [Ioc Container](/ioc-container) documentation.
+Adonis tries to solve out this problem with the help of Ioc container, which stores and make dependencies using namespaces. Make sure to read [Ioc Container](ioc-container) documentation.
 
 
 ```
