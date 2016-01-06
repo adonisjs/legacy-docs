@@ -237,7 +237,7 @@ Route.group('blog', function () {
 
   Route.get('/post', ...)
 
-}).middleware(['auth'])
+}).middlewares(['auth'])
 ```
 
 
