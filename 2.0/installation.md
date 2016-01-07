@@ -1,36 +1,38 @@
 # Installation
 
-Installing Adonis is a fairly simple process which requires `>= node 4.0` with npm `>= 3.0`. Also, it is recommended to make use of [nvm](https://github.com/creationix/nvm) to install and manage multiple versions of NodeJs.
+Installing Adonis is a fairly simple process which requires `>= node 4.0` with `>= npm 3.0`. We also recommend [nvm](https://github.com/creationix/nvm) to install and manage multiple versions of NodeJS.
 
-- [Es6 Features](#es6-features)
+- [ES6 Features](#es6-features)
 - [Installing Adonis Cli](#installing-adonis-cli)
 - [Cloning Repo](#cloning-repo)
 
-## Es6 Features
+## ES6 Features
 
-Adonis is built on top of `Es6` also known as `ES2015`, which makes the code more enjoyable and cleaner to read. We do not make use of any transpiler and depends upon core v8 implemented features.
+Adonis is built on top of `ES6` also known as `ES2015`, which makes the code more enjoyable and cleaner to read. We do not make use of any transpiler and depends upon core v8 implemented features.
 
 <div class="__note">
   <strong>Note</strong>
-  Latest version of NodeJs supports following features.
+  The latest version of NodeJS supports the following features.
 </div>
 
-1. Es6 Generators.
-2. Es6 Classes.
-3. Es6 Variable types ( support for let and const ).
+1. ES6 Generators.
+2. ES6 Classes.
+3. ES6 Variable types (support for `let` and `const`).
 4. Template Strings.
 5. Arrow Functions
-6. Proxies ( with --harmony_proxies flag )
+6. Proxies (with `--harmony_proxies` flag)
 
 ## Installing Adonis CLI
 
-Cli is a terminal tool to scaffold and generate Adonis project with all required dependencies.
+CLI is a terminal tool to scaffold and generate the Adonis project with all required dependencies.
+
+#### Install the CLI
 
 ```bash,line-numbers
 npm install -g adonis-cli
 ```
 
-#### generate project
+#### Generate a new project
 
 ```bash,line-numbers
 adonis new yardstick
@@ -40,7 +42,7 @@ npm start
 
 ## Cloning
 
-You can also clone [adonis-app](https://github.com/adonisjs/adonis-app.git) manually and then install required dependencies using npm
+You can also clone [adonis-app](https://github.com/adonisjs/adonis-app.git) manually and then install required dependencies, using npm:
 
 ```bash,line-numbers
 git clone --dissociate https://github.com/adonisjs/adonis-app yardstick
@@ -48,7 +50,7 @@ cd yardstick
 npm install --production
 ```
 
-and then finally you can start the app by running
+and then finally you can start the app by running:
 
 ```bash,line-numbers
 npm start
