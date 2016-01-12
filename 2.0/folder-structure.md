@@ -6,12 +6,12 @@ In Adonis, every folder and file have a logical place in your project structure.
 ├── app/
 │ ├── Commands/
 │ ├── Http/
-│ ├── Model/
-│ ├── Services/
 │ │ ├── Controllers/
 │ │ ├── Middleware/
 │ │ ├── routes.js
 │ │ ├── kernel.js
+│ ├── Model/
+│ ├── Services/
 ├── bootstrap/
 │ ├── app.js
 │ ├── http.js
