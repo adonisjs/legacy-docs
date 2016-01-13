@@ -152,7 +152,7 @@ const usingAdonis = yield Ansi.confirm('Are are using adonis ?')
 Propmts to select a single answer
 
 ```javascript,line-numbers
-const frameworkOfChoice = yield Ansi.confirm('Which framework do you use ?', ['Express', 'Koa', 'Sails', 'Adonis'])
+const frameworkOfChoice = yield Ansi.choice('Which framework do you use ?', ['Express', 'Koa', 'Sails', 'Adonis'])
 ```
 
 ##### aniticipate <span>(question, choices, default)</span>
