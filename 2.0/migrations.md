@@ -7,7 +7,7 @@ Not only it gives the flexibility to create the schema using `Javascript`, but i
 - [Overview](#overview)
 - [Ace Commands](#ace-commands)
 - [Query Methods](#query-methods)
-  - [Modifying Building](#table-building)
+  - [Modifying Table](#modifying-table)
   - [Schema Building](#schema-building)
   - [Chainable](#chainable)
 
