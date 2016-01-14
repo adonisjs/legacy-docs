@@ -326,6 +326,18 @@ Round the number to a given precision using defined method
 {# -> 42.5 #}
 ```
 
+##### route <span>(values=object)</span>
+Returns path to a named route.
+
+```
+Route.post('/profile/:id', 'ProfileController.update').as('updateProfile')
+```
+```twig,line-numbers
+<form method="POST" action="{{ 'updateProfile' | route({id: 1}) }}">
+...
+</form>
+```
+
 ##### slice
 Slice an array into multiple sub arrays
 

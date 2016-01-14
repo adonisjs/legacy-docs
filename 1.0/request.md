@@ -72,8 +72,15 @@ Parse HTTP request body and get post fields.
 request.post()
 ```
 
-### all
+### raw
+Returns HTTP Post raw data
 
+```javascript,line-numbers
+request.raw()
+```
+
+
+### all
 Fetch merged object containing get and post values
 
 ```javascript,line-numbers
@@ -111,7 +118,6 @@ request.headers()
 ```
 
 ### path
-
 Get request path for current URL.
 
 ```javascript,line-numbers
@@ -119,11 +125,21 @@ request.path()  // /user/1
 ```
 
 ### method
-
 Get request method
 
 ```javascript,line-numbers
 request.method() // GET
+```
+
+### match
+Matches an array or single route pattern with current request url. It is helpful when you want to find whether current url falls in one of the given routes. `Shield` middleware makes use of it.
+
+```javascript,line-numbers
+request.match('/user/(.+)')
+// or
+request.match('user/:id', 'user/:id/profile')
+// or
+request.match(['user/:id', 'user/:id/profile'])
 ```
 
 ### ajax
@@ -139,7 +155,6 @@ if(request.ajax()){
 ```
 
 ### pjax
-
 
 Determine whether the request is a pjax request or not.
 
