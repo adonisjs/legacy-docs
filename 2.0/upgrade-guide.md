@@ -1,8 +1,14 @@
 # Upgrade
 
-This guide outlines the requirements and breakings changes to upgrade Adonis to lastest version. As Adonis follows [semver](http://semver.org/), upgrade guides is only valid for major releases, for other minor/patch releases look into [release notes](release-notes).
+This guide outlines the requirements and breaking changes to upgrade Adonis to latest version. As Adonis follows [semver](http://semver.org/), upgrade guides is only valid for major releases, breaking changes for something new, for other minor/patch releases look into [release notes](release-notes).
 
+- [Release of Adonis middleware](#release-of-adonis-middleware)
 - [Upgrading to 2.0](#upgrading-to-2.0)
+
+## Release of Adonis middleware
+New package [adonis-middleware](https://github.com/adonisjs/adonis-middleware) has bunch of new middleware to keep your applications secure and stable. With it's release, you are supposed to delete your local middleware under `app/Http/Middleware`. This guide is also valid if your were/are using `adonis-framework 2.0.5` or lower.
+
+Watch this video to keep yourself updated.
 
 ## Upgrading to 2.0
 
