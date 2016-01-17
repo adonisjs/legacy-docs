@@ -102,7 +102,7 @@ Now any file inside `./app` directory can be referenced as `App/<filePath>` as A
 
 ```javascript,line-numbers
 use('App/Http/routes')
-use('App/Http/Middleware/Cors')
+use('Adonis/Middleware/Cors')
 ```
 
 ## Resolving Dependencies

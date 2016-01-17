@@ -46,8 +46,8 @@ Global middleware are defined as an array and get's executed in same order on ev
 ```javascript,line-numbers
 // app/Http/kernel.js
 const globalMiddleware = [
-  'App/Http/Middleware/BodyParser',
-  'App/Http/Middleware/Cors'
+  'Adonis/Middleware/BodyParser',
+  'Adonis/Middleware/Cors'
 ]
 ```
 

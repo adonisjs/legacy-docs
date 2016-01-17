@@ -15,7 +15,7 @@ Add it to the list of `namedMiddleware` and use it on specific routes.
 ```javascript,line-numbers
 // app/Http/kernel.js
 const namedMiddleware = {
-  Cors: 'App/Http/Middleware/Cors'
+  Cors: 'Adonis/Middleware/Cors'
 }
 ```
 

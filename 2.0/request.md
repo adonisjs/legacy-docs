@@ -269,7 +269,7 @@ In order to make use of flash messages, you need to make use of flash middleware
 ```javascript,line-numbers
 // app/Http/kernel.js
 const globalMiddleware = [
-  'App/Http/Middleware/Flash'
+  'Adonis/Middleware/Flash'
 ]
 ```
 
@@ -419,7 +419,7 @@ profile.uploadName()
 errors occurred while moving a file, it will be an instance of `Error` class
 
 ```javascript,line-numbers
-if(!profile.moved()){
+if (!profile.moved()) {
   return profile.errors().message
 }
 ```

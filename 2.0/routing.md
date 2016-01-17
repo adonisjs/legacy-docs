@@ -118,13 +118,13 @@ Let's say you want to reference the above route inside a different file, so ther
 
 ##### Better
 
-```markup,line-numbers
+```javascript,line-numbers
 Route.url('/users/profile/:id', {id:1})
 ```
 
 ##### Good
 
-```markup,line-numbers
+```javascript,line-numbers
 Route.url('profile', {id:1})
 ```
 

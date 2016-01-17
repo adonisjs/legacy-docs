@@ -127,7 +127,6 @@ csp: {
   directives: {
   },
   reportOnly: false,
-  reportUri: '/csp-report',
   setAllHeaders: false,
   disableAndroid: true
 }
@@ -164,9 +163,6 @@ By default Shield will set the required HTTP headers to enforce CSP policies whe
 
 #### reportOnly
 `reportOnly` will thrown an error, instead will return a warning and will execute all scripts.
-
-#### reportUri
-Browsers will send the violation report on defined report uri. You need to register this route manually. Also make sure to ignore this route inside CSRF `filterUris`.
 
 ```javascript,line-numbers
 Route.post('csp-report', function * (request, response) {  
