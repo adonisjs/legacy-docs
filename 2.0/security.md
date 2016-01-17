@@ -1,3 +1,5 @@
+{% raw %}
+
 # Security
 
 Adonis includes a middleware called `Shield` to protect your applications from malware attacks and fake requests. It includes commonly required security features like CSRF protection and many more.
@@ -211,3 +213,5 @@ This setting will stop IE from executing unknown script in context of your websi
   noopen: true
 }
 ```
+
+{% endraw %}
