@@ -102,7 +102,7 @@ You can access CSRF token inside your views and controllers using following help
 ```
 
 ##### csrfToken
-```
+```javascript,line-numbers
 request.csrfToken()
 ```
 
