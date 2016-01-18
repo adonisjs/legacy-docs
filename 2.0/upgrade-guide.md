@@ -8,7 +8,8 @@ This guide outlines the requirements and breaking changes to upgrade Adonis to l
 ## Release of Adonis middleware
 New package [adonis-middleware](https://github.com/adonisjs/adonis-middleware) has bunch of new middleware to keep your applications secure and stable. With it's release, you are supposed to delete your local middleware under `app/Http/Middleware`. This guide is also valid if your were/are using `adonis-framework 2.0.5` or lower.
 
-Watch this video to keep yourself updated.
+Watch this [video](https://www.youtube.com/watch?v=Pu4Y-CWH4yE) to keep yourself updated.
+
 
 ## Upgrading to 2.0
 
