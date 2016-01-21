@@ -1,6 +1,6 @@
 # Configuration
 
-All of your application configuration is stored inside the config directory. You are free to add more files to this directory which are autoloaded and you can access them using the `Config` provider.
+All of your application configuration is stored inside the [config directory](https://github.com/adonisjs/adonis-app/tree/master/config). You are free to add more files to this directory which are autoloaded and you can access them using the `Config` provider.
 
 - [App Key](#app-key)
 - [Trust Proxy](#trust-proxy)
@@ -8,13 +8,13 @@ All of your application configuration is stored inside the config directory. You
 
 ## App Key
 
-Application key is required to be setup to keep your application data encrypted. Sessions, cookies and Encryption provider makes use of this key and will send out plain data if key is not set.
+Application key is required to be setup to keep your application data encrypted. Sessions, Cookies and Encryption provider makes use of this key and will send out plain data if it is not set.
 
 Inside `config/app.js` file you can define the `appKey`, which is automatically set if you create a new project using `adonis-cli`.
 
 ## Trust Proxy
 
-It is a very common use case to deploy node applications behind a proxy server or load balancer like nginx. Now when a request passes through a proxy server lot of request information is sent over `X-Forwarded-*` headers. For example `Host` is passed as `X-Forwarded-Host`. If your application is behind a proxy server then do set this accordingly.
+It is a very common use case to deploy node applications behind a proxy server or load balancer like [nginx](http://nginx.org/). Now when a request passes through a proxy server lot of request information is sent over `X-Forwarded-*` headers. For example `Host` is passed as `X-Forwarded-Host`. If your application is behind a proxy server then do set this accordingly.
 
 There are multiple ways to tell adonis on whether to trust `X-Forwarded-*` headers or not.
 
@@ -48,4 +48,4 @@ trustProxy: function (remoteAddress) {
 
 ## Static Resources
 
-Static resources are server from `public` directory of every adonis application and configuration for static resources is defined under `config/static.js` file. You can set custom headers, define `Cache-Control` header or enable/disable gzip support.
+Static resources are served from `public` directory of every adonis application. The configuration for static resources is defined under `config/static.js` file. You can set custom headers, define `Cache-Control` header or enable/disable gzip support.
