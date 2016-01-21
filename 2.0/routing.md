@@ -144,14 +144,14 @@ You can also defined a nested RESTful routes.
 Route.resource('users.comments', 'UserCommentsController')
 
 // Which is equals to
-// Route.get('users/comments', 'UsersController.index').as('users.comments.index')
-// Route.get('users/comments/:id', 'UsersController.show').as('users.comments.show')
-// Route.get('users/comments/create' 'UsersController.create').as('users.comments.create')
-// Route.get('users/comments/:id/edit', 'UsersController.edit').as('users.comments.edit')
-// Route.post('users/comments', 'UsersController.store').as('users.comments.store')
-// Route.put('users/comments/:id', 'UsersController.update').as('users.comments.update')
-// Route.patch('users/comments/:id', 'UsersController.update')
-// Route.delete('users/comments/:id', 'UsersController.destroy').as('users.comments.destroy')
+// Route.get('users/comments', 'UserCommentsController.index').as('users.comments.index')
+// Route.get('users/comments/:id', 'UserCommentsController.show').as('users.comments.show')
+// Route.get('users/comments/create' 'UserCommentsController.create').as('users.comments.create')
+// Route.get('users/comments/:id/edit', 'UserCommentsController.edit').as('users.comments.edit')
+// Route.post('users/comments', 'UserCommentsController.store').as('users.comments.store')
+// Route.put('users/comments/:id', 'UserCommentsController.update').as('users.comments.update')
+// Route.patch('users/comments/:id', 'UserCommentsController.update')
+// Route.delete('users/comments/:id', 'UserCommentsController.destroy').as('users.comments.destroy')
 ```
 
 
