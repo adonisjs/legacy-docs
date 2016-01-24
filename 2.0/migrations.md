@@ -272,7 +272,7 @@ Creates a JSON column, using `json` type in PostgreSQL and defaulting to text fo
 databases.
 
 ```javascript,line-numbers
-table.enum('status',['draft','published'])
+table.json('json_data')
 ```
 
 ##### uuid <span>(name)</span>
