@@ -65,7 +65,7 @@ class UserController {
 ## Custom Messages
 `validate` method accepts a 3rd argument to print custom messages when validation fails, as the system generated messages are not helpful for humans.
 
-Read moe about custom messages at [Indicative Custom Messages](http://indicative.adonisjs.com/#indicative-basics-custom-messages)
+Read more about custom messages at [Indicative Custom Messages](http://indicative.adonisjs.com/#indicative-basics-custom-messages)
 
 ## Available Rules
 All rules defined by Indicative are available to Validation provider. Documentation on rules is available at [Indicative schema rules](http://indicative.adonisjs.com/#indicative-schema-rules)
