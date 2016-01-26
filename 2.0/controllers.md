@@ -42,7 +42,7 @@ Route.get('/users', 'UserController.index')
 
 ## Resourceful Controllers
 
-Resourceful routes define multiple routes and attach conventional methods to them under single route definition.
+[Resourceful routes](http://adonisjs.com/docs/2.0/routing#restful-routes) define multiple routes and attach conventional methods to them under single route definition.
 
 ```javascript,line-numbers
 Route.resource('/users', 'UserController')
@@ -53,9 +53,11 @@ Following routes will be bound to UserController
 route | verb | action
 -------| -----|-----------
 /users | GET | UserController.index
+/users/create | GET | UserController.create
 /users | POST | UserController.store
 /users/:id | GET | UserController.show
-/users/:id | PUT | UserController.update
+/users/:id/edit | GET | UserController.edit
+/users/:id | PUT/PATCH | UserController.update
 /users/:id | DELETE | UserController.destroy
 
 ## Dependency Injection
