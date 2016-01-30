@@ -146,6 +146,10 @@ Named routes give you the power to make use of the last example, which is readab
 
 #### Route Extensions
 
+<div class="__note">
+​ <strong> Note: </strong> Route Extensions have been introduced in version `2.0.9`.
+</div>
+
 Route extensions helps in making decision on how to reply for a given route. Think of it as registering verbose url's with `.html`, `.json` or `.xml` extensions and then inside your controllers, you can make decisions on what to send based upon the route extension.
 
 ``` javascript,line-numbers

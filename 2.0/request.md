@@ -175,7 +175,7 @@ request.hasBody()
 
 tells request format based upon [route extension](/routing#route-extensions). You need to register route extensions before using this method.
 
-``` 
+``` javascript,line-numbers
 const format = request.format()
 switch (format) {
   case 'json':
@@ -189,8 +189,6 @@ switch (format) {
 }
 ```
 
-
-
 #### match ('keys...')
 
 Tells whether given keys matches the pattern of current url or not.
@@ -202,8 +200,6 @@ request.match(['/user/(.+)', '/profile/:id'])
 // or
 request.match('/user/(.+)', '/profile/:id')
 ```
-
-
 
 ## Headers
 

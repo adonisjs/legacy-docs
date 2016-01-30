@@ -58,15 +58,13 @@ adds key/value pair to response header
 response.header('Content-Type', 'application/json')
 ```
 
-
-
 ## Descriptive Methods
 
 Response object has support for descriptive methods, which will auto set the response status for you.
 
 <div class="__note">
 
-​	<strong> Note: </strong> Descriptive methods have been introduced in version `2.0.8`.
+​	<strong> Note: </strong> Descriptive methods have been introduced in version `2.0.9`.
 
 </div>
 
