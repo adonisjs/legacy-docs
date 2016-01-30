@@ -84,8 +84,6 @@ Following routes will be bound to UserController
 Route.resource('users', 'UserController').except(['create', 'edit', 'destroy'])
 ```
 
-
-
 #### only <span>([actions])</span>
 `only` is the opposite of except and will only set the defined action by filtering out all others. Make sure to use one at a time not both.
 
@@ -93,19 +91,15 @@ Route.resource('users', 'UserController').except(['create', 'edit', 'destroy'])
 Route.resource('users', 'UserController').only(['store', 'update', 'index'])
 ```
 
-
-
 #### nested resources
 
 You can also set nested resources using `resource` method.
 
-``` 
+``` javascript,line-numbers
 Route.resource('user.posts', 'PostsController')
 ```
 
 and above will setup following routes for you.
-
-
 
 | route                         | verb      | action                  |
 | ----------------------------- | --------- | ----------------------- |

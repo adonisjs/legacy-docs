@@ -179,13 +179,13 @@ tells request format based upon [route extension](/routing#route-extensions). Yo
 const format = request.format()
 switch (format) {
   case 'json':
-  	response.ok({key: value})
+    response.ok({key: value})
     break
   case 'html':
-  	response.ok('Hello world')
+    response.ok('Hello world')
     break
   default:
-  	response.ok('Default response')
+    response.ok('Default response')
 }
 ```
 
