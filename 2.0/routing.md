@@ -7,6 +7,7 @@ Routes help you in exposing urls to outside world that can be used to interact w
   - [Http Verbs](#http-verbs)
   - [Multiple verbs](#multiple-verbs)
   - [Named routes](#named-routes)
+  - [Route Extensions](#route-extensions)
 - [Route parameters](#route-parameters)
   - [Required parameters](#required-parameters)
   - [Optional parameters](#optional-parameters)
@@ -23,7 +24,7 @@ You start by defining your routes inside `app/Http/routes.js` file by requiring 
 
 #### Route closures
 
-```javascript,line-numbers
+``` javascript,line-numbers
 const Route = use('Route')
 
 Route.get('/', function * () {
@@ -41,7 +42,7 @@ Http verbs are methods defined while making an HTTP request. Adonis has support 
 
 ##### get request
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.get('/', function * () {
 
 })
@@ -49,7 +50,7 @@ Route.get('/', function * () {
 
 ##### post request
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.post('/', function * () {
 
 })
@@ -57,7 +58,7 @@ Route.post('/', function * () {
 
 ##### put request
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.put('/', function * () {
 
 })
@@ -65,7 +66,7 @@ Route.put('/', function * () {
 
 ##### delete request
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.delete('/', function * () {
 
 })
@@ -73,7 +74,7 @@ Route.delete('/', function * () {
 
 ##### patch request
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.patch('/', function * () {
 
 })
@@ -85,16 +86,17 @@ You can respond with the same action for multiple requests with following method
 
 ##### match
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.match(['get','post'], '/', function * () {
 
 })
 ```
 
 ##### any
+
 any method will include **get,post,put,patch,delete,options**
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.any('/', function * () {
 
 })
@@ -104,7 +106,7 @@ Route.any('/', function * () {
 
 Think of named routes as giving a unique name to a given route. It is helpful when you want to generate fully qualified URL to routes with a shortcut.
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.get('/users/profile/:id', ... ).as('profile')
 ```
 
@@ -112,23 +114,64 @@ Let's say you want to reference the above route inside a different file, so ther
 
 ##### Bad
 
-```markup,line-numbers
+``` markup,line-numbers
 /users/profile/1
 ```
 
 ##### Better
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.url('/users/profile/:id', {id:1})
 ```
 
 ##### Good
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.url('profile', {id:1})
 ```
 
 Named routes give you the power to make use of the last example, which is readable and also keeps your code DRY as after changing the initial route definition you won't have to change a single line of code elsewhere.
+
+
+
+#### Route Extensions
+
+Route extensions helps in making decision on how to reply for a given route. Think of it as registering verbose url's with `.html` or `.json` extensions and then inside your controllers, you can make decisions on what to send based upon the route extension.
+
+``` javascript,line-numbers
+Route.get('/users', 'UsersController.index').formats(['json', 'html'])
+```
+
+By registering the above route, you will be able to handle requests on 3 different urls.
+
+1. /users
+2. /users.json
+3. /users.html
+
+
+
+All of the above routes will be handled by `UsersController.index` method, and there you can make decision on how to respond from your controller.
+
+``` 
+// app/Http/Controller/UsersController
+
+* index (request, response) {
+  const format = request.format()
+  	
+  switch (format) {
+  	case 'html':
+    	yield response.sendView('users')
+        break
+    case 'json':
+    	response.send({key: value})
+        break
+  }  
+}
+```
+
+You can think of it as an alternative to [Content Negotiation](/request#content-negotiation).
+
+
 
 ## Route parameters
 
@@ -136,7 +179,7 @@ Route parameters are transparent dynamic segments on URL. With Adonis, you can d
 
 #### Required parameters
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.get('/make/:drink', function * (request, response) {
   const drink = request.param('drink')
   response.send(`I will make ${drink} for you`)
@@ -147,7 +190,7 @@ Here `:drink` is a required parameter on the route that needs to be present to i
 
 #### Optional parameters
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.get('/make/:drink?', function (request, response) {
   const drink = request.param('drink', 'coffee')
   response.send(`I will make ${drink} for you`)
@@ -160,13 +203,13 @@ Route.get('/make/:drink?', function (request, response) {
 
 `Closures` are good but not great, to keep your routes file clean it's always good practice to make use of controllers. Controllers are used in the combination of `Controller.method` as string.
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.get('/', 'HomeController.index')
 ```
 
 Above route will look for `index` method inside `HomeController` which is an ES6 class.
 
-```javascript,line-numbers
+``` javascript,line-numbers
 // app/Http/Controllers/HomeController.js
 
 class HomeController {
@@ -186,7 +229,7 @@ Expectations of middleware should be satisfied before a request can reach your r
 
 To attach middleware to your route, you can make use of `middlewares` method.
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.get('/profile', 'ProfileController.show').middlewares(['auth'])
 ```
 
@@ -194,7 +237,7 @@ Route.get('/profile', 'ProfileController.show').middlewares(['auth'])
 
 Think of them as grouping your routes under common settings or configuration without declaring the same thing on individual routes.
 
-```javascript,line-numbers
+``` javascript,line-numbers
 
 Route.group('name', function () {
 
@@ -208,7 +251,7 @@ Route.group('name', function () {
 
 prefix group of routes with defined path.
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.group('version1', function () {
 
   Route.get('/', ...)
@@ -220,7 +263,7 @@ Route.group('version1', function () {
 
 register group of routes for a given domain only
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.group('blog', function () {
 
   Route.get('/post', ...)
@@ -232,7 +275,7 @@ Route.group('blog', function () {
 
 middleware can also be attached to a group of routes
 
-```javascript,line-numbers
+``` javascript,line-numbers
 Route.group('blog', function () {
 
   Route.get('/post', ...)
@@ -241,11 +284,12 @@ Route.group('blog', function () {
 ```
 
 
+
 ## Form Method Spoofing
 
 Html form tags do not support all verbs apart from `GET` and `POST`,  where method spoofing helps you in defining HTTP verbs under query string.
 
-```html,line-numbers
+``` html,line-numbers
 
 <form method="POST" action="/create?_method=PUT">
 </form>
