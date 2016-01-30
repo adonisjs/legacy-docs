@@ -1,6 +1,6 @@
 # Controllers
 
-Controllers in MVC is a layer between your views and models that respond to incoming requests registered using routes. They have plenty of benefits over route `Closures`.
+Controllers in MVC is a layer between your views and models that respond to incoming requests using registered routes. They have plenty of benefits over route `Closures`.
 
 - [Defining Controllers](#defining-controllers)
 - [Resourceful Controllers](#resourceful-controllers)
@@ -18,8 +18,6 @@ You start by creating controllers inside `app/Http/Controllers` directory and re
 // or
 ./ace make:controller Home --plain
 ```
-
-
 
 ## Defining Controllers
 
@@ -45,11 +43,26 @@ Route.get('/users', 'UserController.index')
 ```
 
 ## Resourceful Controllers
+Resourceful routes define multiple REST friendly routes and attach conventional methods to them under single route definition.
 
-Resourceful routes define multiple routes and attach conventional methods to them under single route definition.
+[REST](https://en.wikipedia.org/wiki/Representational_state_transfer) is coordinated set of constraints that lead to a higher-performing and more maintainable software architecture.
 
-``` javascript,line-numbers
-Route.resource('users', 'UserController')
+RESTful systems typically communicate over HTTP and interface with external systems as [web resources](https://en.wikipedia.org/wiki/Web_resource) by [Uniform Resource Identifiers (URIs)](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier).
+
+You can define a RESTful resource by using the `resource` method.
+
+```javascript,line-numbers
+Route.resource('users', 'UsersController')
+
+// Which is equals to
+// Route.get('users', 'UsersController.index').as('users.index')
+// Route.get('users/:id', 'UsersController.show').as('users.show')
+// Route.get('users/create' 'UsersController.create').as('users.create')
+// Route.get('users/:id/edit', 'UsersController.edit').as('users.edit')
+// Route.post('users', 'UsersController.store').as('users.store')
+// Route.put('users/:id', 'UsersController.update').as('users.update')
+// Route.patch('users/:id', 'UsersController.update')
+// Route.delete('users/:id', 'UsersController.destroy').as('users.destroy')
 ```
 
 Following routes will be bound to UserController
@@ -64,10 +77,7 @@ Following routes will be bound to UserController
 | /users/:id      | PUT/PATCH | UserController.update  |
 | /users/:id      | DELETE    | UserController.destroy |
 
-
-
 #### except <span>([actions])</span>
-
 `except` helps you in filtering the routes a resource will setup for you. All other actions will be configured apart from the actions defined as an array.
 
 ``` javascript,line-numbers
@@ -77,7 +87,6 @@ Route.resource('users', 'UserController').except(['create', 'edit', 'destroy'])
 
 
 #### only <span>([actions])</span>
-
 `only` is the opposite of except and will only set the defined action by filtering out all others. Make sure to use one at a time not both.
 
 ``` javascript,line-numbers
