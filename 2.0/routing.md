@@ -4,7 +4,7 @@ Routes help you in exposing urls to outside world that can be used to interact w
 
 - [Basic routing](#basic-routing)
   - [Route closures](#route-closures)
-  - [Http Verbs](#http-verbs)
+  - [HTTP Verbs](#http-verbs)
   - [Multiple verbs](#multiple-verbs)
   - [Named routes](#named-routes)
   - [Route Extensions](#route-extensions)
@@ -20,7 +20,7 @@ Routes help you in exposing urls to outside world that can be used to interact w
 
 ## Basic routing
 
-You start by defining your routes inside `app/Http/routes.js` file by requiring `Route` provider. Always try to keep your routes file clean and never include any application logic inside this file.
+You start by defining your routes inside [`app/Http/routes.js`](https://github.com/adonisjs/adonis-app/blob/master/app/Http/routes.js) file by requiring `Route` provider. Always try to keep your routes file clean and never include any application logic inside this file.
 
 #### Route closures
 
@@ -36,14 +36,16 @@ Route.get('/', function * () {
 
 `Closures` are callbacks and oftenly accepted as the second parameter to your route definition. Note here route closure has a special `*` symbol after function keyword. This defines a [generator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) in ES6. You won't have to worry much about generators here, just remember they make it easier to write async code by removing callbacks.
 
-#### Http verbs
+#### HTTP verbs
 
-Http verbs are methods defined while making an HTTP request. Adonis has support for all request methods.
+HTTP verbs are methods defined while making an HTTP request.Adonis has support for all request methods.
 
 ##### get request
 
 ``` javascript,line-numbers
 Route.get('/', function * () {
+
+  // handle request
 
 })
 ```
@@ -53,6 +55,8 @@ Route.get('/', function * () {
 ``` javascript,line-numbers
 Route.post('/', function * () {
 
+  // handle request
+
 })
 ```
 
@@ -60,6 +64,8 @@ Route.post('/', function * () {
 
 ``` javascript,line-numbers
 Route.put('/', function * () {
+
+  // handle request
 
 })
 ```
@@ -69,6 +75,8 @@ Route.put('/', function * () {
 ``` javascript,line-numbers
 Route.delete('/', function * () {
 
+    // handle request
+
 })
 ```
 
@@ -76,6 +84,8 @@ Route.delete('/', function * () {
 
 ``` javascript,line-numbers
 Route.patch('/', function * () {
+
+    // handle request
 
 })
 ```
@@ -130,13 +140,13 @@ Route.url('/users/profile/:id', {id:1})
 Route.url('profile', {id:1})
 ```
 
-Named routes give you the power to make use of the last example, which is readable and also keeps your code DRY as after changing the initial route definition you won't have to change a single line of code elsewhere.
+Named routes give you the power to make use of the last example, which is readable and also keeps your code [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) as after changing the initial route definition you won't have to change a single line of code elsewhere.
 
 
 
 #### Route Extensions
 
-Route extensions helps in making decision on how to reply for a given route. Think of it as registering verbose url's with `.html` or `.json` extensions and then inside your controllers, you can make decisions on what to send based upon the route extension.
+Route extensions helps in making decision on how to reply for a given route. Think of it as registering verbose url's with `.html`, `.json` or `.xml` extensions and then inside your controllers, you can make decisions on what to send based upon the route extension.
 
 ``` javascript,line-numbers
 Route.get('/users', 'UsersController.index').formats(['json', 'html'])
@@ -169,7 +179,7 @@ All of the above routes will be handled by `UsersController.index` method, and t
 }
 ```
 
-You can think of it as an alternative to [Content Negotiation](/request#content-negotiation).
+You can think of it as an companion to [Content Negotiation](/request#content-negotiation).
 
 
 
@@ -287,7 +297,8 @@ Route.group('blog', function () {
 
 ## Form Method Spoofing
 
-Html form tags do not support all verbs apart from `GET` and `POST`,  where method spoofing helps you in defining HTTP verbs under query string.
+HTML form tags do not support all verbs apart from `GET` and `POST`.
+So, when using `PUT`, `PATCH` or `DELETE` routes you will need to add a query string to the form's action that the router will use to know which verb you are using.
 
 ``` html,line-numbers
 
