@@ -162,9 +162,8 @@ By registering the above route, you will be able to handle requests on 3 differe
 
 All of the above routes will be handled by `UsersController.index` method, and there you can make decision on how to respond from your controller.
 
-``` 
+```javascript,line-numbers
 // app/Http/Controller/UsersController
-
 * index (request, response) {
   const format = request.format()
   	
