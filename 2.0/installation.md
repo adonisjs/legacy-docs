@@ -58,10 +58,10 @@ npm start
 
 <div class="__note">
   <strong>Note</strong>
-  If you would like to have hot-reloading you can use [nodemon](http://nodemon.io/) to run your application.
-
-  ```bash,line-numbers
-  npm install -g nodemon
-  nodemon --watch app --harmony_proxies server.js
-  ```
+  If you would like to have hot-reloading you can use [nodemon](http://nodemon.io/) to run your application as below:
 </div>
+
+```bash,line-numbers
+npm install -g nodemon
+nodemon --watch app --harmony_proxies server.js
+```
