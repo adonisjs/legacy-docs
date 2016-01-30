@@ -408,7 +408,7 @@ const App = use('App')
 const View = use('View')
 
 App.on('start', function () {
-  View.addFilter('date', function (value, format) {
+  View.filter('date', function (value, format) {
     return moment(value).format(format)
   })
 })
