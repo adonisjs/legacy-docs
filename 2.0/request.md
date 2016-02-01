@@ -173,7 +173,7 @@ request.hasBody()
 
 #### format
 
-tells request format based upon [route extension](/routing#route-extensions). You need to register route extensions before using this method.
+tells request format based upon [route extension](routing#route-extensions). You need to register route extensions before using this method.
 
 ``` javascript,line-numbers
 const format = request.format()

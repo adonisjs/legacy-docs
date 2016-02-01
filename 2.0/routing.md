@@ -182,7 +182,7 @@ All of the above routes will be handled by `UsersController.index` method, and t
 }
 ```
 
-You can think of it as an companion to [Content Negotiation](/request#content-negotiation).
+You can think of it as an companion to [Content Negotiation](request#content-negotiation).
 
 
 
