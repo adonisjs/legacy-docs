@@ -76,9 +76,9 @@ yield Mail.send('receipt', {name: 'doe', amount: 22}, function (message) {
 yield Mail.send(['welcome', 'welcome.text', 'welcome.watch'])
 ```
 
-1. **welcome** - html body for email
-2. **welcome.text** - plain text body for email
-3. **welcome.watch** - Apple watch html for email body
+1. **welcome** - html body for email.
+2. **welcome.text** - plain text body for email.
+3. **welcome.watch** - Apple watch html for email body (experimental).
 
 #### raw <span>(body, callback, [configKey])</span>
 
@@ -140,7 +140,7 @@ message.subject('Welcome to Adonis')
 ```
 
 #### priority <span>(level)</span>
-Email priority to be set on emails, not all email providers entertain priority and ignores it. Can be one of the followings.
+Email priority to be set for email. It can be one of the followings.
 
 - high, low, normal
 
@@ -170,7 +170,7 @@ options to the `attach` method are optional and can be one of the following
 
 | key | type | description
 | ---- | ----- | ---------
-| filename | String | name of the file. If not defined, will be used from file path.
+| filename | String | name of the file. If not defined, will be created from the file path.
 | contentType | String | attachment content type. If not defined, will be picked from the file extension.
 | contentDisposition | String | content disposition, defaults to `attachment`.
 | encoding | String | attachment encoding, can be `base64`, `hex`, `binary`.
@@ -216,11 +216,11 @@ Drivers configured with mail provider will use the default configuration defined
 yield Mail.send(view, data, callback, 'alternate.config')
 ```
 
-<div class="__note"> using the alternate configuration is a decision made by drivers. If a driver does not entertain the alternate configuration, there is nothing much you can do.</div>
+<div class="__note"> Drivers will make the decision on whether or not to use the alternate configuration.</div>
 
 ## Switching drivers
 
-Mail provider makes use of defined driver inside `config/mail.js` file. But also gives you an opportunity to use a different driver on runtime.
+Mail provider makes use of driver defined inside `config/mail.js` file. But also gives you an opportunity to use a different driver on runtime.
 
 ```javascript,line-numbers
 const mandrill = Mail.driver('mandrill')
@@ -231,32 +231,69 @@ yield Mail.driver('mandrill').send('....')
 
 ## Adding driver
 
-You can extend mail provider by adding a new driver to the list. Same can be done inside `bootstrap/start.js` file.
+You can extend mail provider by adding a new driver. As mail provider makes use of nodemailer, it will nice if you make use of node mailer transport and wrap it as a driver. Also, there are no hard rules on making use of node mailer.
 
-```javascript,line-number
+#### Usage with node mailer transport
+
+```javascript
+class MailGun {
+ 
+  constructor (Config) {
+    this.config = Config
+    this.transport = this._createTransport('mail.mailgun')
+  }
+
+  _createTranport (configKey) {
+    const options = this.config.get(configKey)
+    const nodemailer = require('nodemailer')
+    const mailgunTransport = require('nodemailer-mailgun-transport')
+    return nodemailer.createTransport(mailgunTransport(options))
+  }
+
+  send (message, configKey) {
+    let transport = this.transport
+    /**
+     * here we make sure to entertain alternate configuration
+     * sent with send method.
+     */
+    if (configKey) {
+      transport = this._createTransport(configKey)
+    }
+    return transport.sendMail(message)
+  }
+}
+```
+
+Every driver should have a `send` method, and it should return a Promise, and that is the only requirement for a driver. 
+
+Finally, we will add our driver to the Ioc container and specifying that we want to extend the mail provider. Same can be done inside `bootstrap/start.js`.
+
+```javascript,line-numbers
 App.on('start', function () {
  
- Ioc.extend('Adonis/Addons/Mail', 'postman', function (app) {
-   return new PostMan()
- })
+  Ioc.extend('Adonis/Addons/Mail', 'mailgun', function (app) {
+    const Config = app.use('Adonis/Src/Config')
+    return new MailGun(Config)
+  })
 
 })
 ```
 
-and later you can make use of the registered driver like any other drivers.
+
 
 ## Testing emails
 
-It can become tedious to test your emails, and they will be sent out to your actual customers. To make it easier, mail providers comes with a `log` driver. It will write emails to a log file instead of sending them to the mail server.
+It can become tedious to write tests for emails as they will be sent out to actual email addresses. To make it easier, mail providers comes with a `log` driver. It will write emails to a log file instead of sending them to the mail server.
 
 By default emails will be written to `storage/logs/mail.eml`. You can also read emails from this file to make sure they are formatted correctly.
 
 #### config/mail.js
 
 ```javascript,line-numbers
-driver: 'log',
-
-log: {
- toPath: Helpers.storagePath('logs/mail.eml')
+module.exports = {
+    driver: 'log',
+    log: {
+        toPath: Helpers.storagePath('logs/mail.eml')
+    }
 }
 ```
