@@ -5,6 +5,7 @@ Adonis mail provider makes it super easy to send emails from your application. I
 Adonis mail also comes with a `Log` driver, which can be used to test your emails in the development environment.
 
 - [Installing](#installing)
+- [Drivers](#drivers)
 - [Basic Usage](#basic-usage)
 - [Sending emails](#sending-emails)
 - [Building email message](#building-email-message)
@@ -33,6 +34,23 @@ const providers = [
 const aliases = {
   Mail: 'Adonis/Addons/Mail'
 }
+```
+
+## Drivers
+Mail provider does not install direct dependencies required by mail drivers, and you must install them when you want to use a particular driver.
+
+#### Mandrill
+Mandrill requires [got](https://www.npmjs.com/package/got) to make request to Mandrill API in order to send emails. Make sure to install it when you are using the Mandrill driver.
+
+```bash,line-numbers
+npm i --save got
+```
+
+#### Amazon SES
+Amazon SES driver is dependent upon [nodemailer ses transport](https://github.com/andris9/nodemailer-ses-transport), and you are required to install it before sending emails using SES driver.
+
+```bash,line-numbers
+npm i --save nodemailer-ses-transport
 ```
 
 ## Basic Usage
@@ -278,8 +296,6 @@ App.on('start', function () {
 
 })
 ```
-
-
 
 ## Testing emails
 
