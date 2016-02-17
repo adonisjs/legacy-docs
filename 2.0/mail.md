@@ -60,7 +60,7 @@ Once you have registered mail provider, you are ready to make use of it. Make su
 ```javascript,line-numbers
 const Mail = use('Mail')
 
-yield Mail.send('emails/welcome', function (message) {
+yield Mail.send('emails/welcome', {} , function (message) {
   message.to('someone@example.org')
   message.from('me@example.org')
   message.subject('Welcome to Adonis')
