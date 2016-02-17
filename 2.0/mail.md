@@ -253,7 +253,7 @@ You can extend mail provider by adding a new driver. As mail provider makes use 
 
 #### Usage with node mailer transport
 
-```javascript
+```javascript,line-numbers
 class MailGun {
  
   constructor (Config) {
