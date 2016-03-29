@@ -42,7 +42,7 @@ class Greet {
   }
 
   * handle (options, flags) {
-    Ansi.success(`Hello {options.name}`)
+    Ansi.success(`Hello ${options.name}`)
   }
 }
 ```
