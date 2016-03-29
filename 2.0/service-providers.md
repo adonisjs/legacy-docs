@@ -72,6 +72,8 @@ Next, we need to bind the above class inside the Ioc container and for that we w
 ##### providers/Hello/HelloProvider.js
 
 ```javascript,line-numbers
+'use strict'
+
 const ServiceProvider = require('adonis-fold').ServiceProvider
 
 class HelloProvider extends ServiceProvider {
