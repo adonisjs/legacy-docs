@@ -2,6 +2,10 @@
 
 Collections attach methods to arrays and dictionaries so that you can manipulate them with ease. Under the hood `Lucid` also returns a copy of collection when you fetch values from your database.
 
+- [Setup](#setup)
+- [Grabbing Collection](#grabbing-collection)
+- [Converting array to collection instance](#converting-array-to-collection-instance)
+
 ## Setup
 
 Before you can use the Collection provider you need to register it inside `bootstrap/app.js` file.
