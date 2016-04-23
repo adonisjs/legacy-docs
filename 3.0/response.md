@@ -250,7 +250,7 @@ Below is the list of all descriptive methods and their corresponding Http status
 
 ## Extending Response
 
-In order to extend response, you can define your own macros. The best time to define macros after booting the app.
+In order to extend response, you can define your own macros. The best time to define macros is after the app is booted.
 
 Same can be done inside `app/Listeners/Http.js`.
 
