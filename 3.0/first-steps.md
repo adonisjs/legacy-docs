@@ -2,7 +2,7 @@
 title: First Steps
 permalink: first-steps
 categories:
-	- getting-started
+- getting-started
 ---
 
 {{TOC}}
