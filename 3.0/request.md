@@ -245,6 +245,60 @@ Returns all headers as an object.
 request.headers()
 ```
 
+
+## Request Collection
+
+A common requirement for web applications is to deal with multiple records for a single entity. For example:
+
+Creating multiple new users from an HTML form.
+
+```twig
+<form method="POST" action="/users">
+	<h2> User 1 </h2>
+	<input type="email" name="email[]" />
+	<input type="password" name="password[]" />
+
+	<h2> User 2 </h2>
+	<input type="email" name="email[]" />
+	<input type="password" name="password[]" />
+	
+	<button type="submit> Create Users </button>
+</form>
+```
+
+Submitting the above form will result in data with below format.
+
+```
+{
+	email: ['bar@foo.com', 'baz@foo.com'],
+	password: ['secret', 'secret1']
+}
+```
+
+It seems pretty neat, but it is really hard to process and create multiple users. In order to create users you need to get this data into the right format, which is:
+
+```
+[
+	{
+		email: 'bar@foo.com',
+		password: 'secret'
+	},
+	{
+		email: 'baz@foo.com',
+		password: 'secret1'
+	}	
+]
+```
+
+Adonis can make this process really easy with a single line of code.
+
+#### collect(keys...)
+
+```javascript
+const users = request.collect('email', 'password')
+const ids = yield User.createMany(users)
+```
+
 ## Cookies
 
 Cookies are encrypted and signed in Adonis. Which means any tampering to a cookie will make it invalid. 
@@ -454,4 +508,22 @@ Access flash values from the last request.
 
 ```javascript
 request.old('username')
+```
+
+## Extending Request
+
+In order to extend request, you can define your own macros. The best time to define macros is after the app is booted.
+
+Same can be done inside `app/Listeners/Http.js`.
+
+#### macro(name, callback)
+
+```javascript
+Http.onStart = function () {
+	const Request = use('Request')
+	
+	Request.macro('cartValue', function () {
+		return this.cookie('cartValue', 0)
+	})
+}
 ```
