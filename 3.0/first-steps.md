@@ -3,7 +3,7 @@ title: First Steps
 permalink: first-steps
 weight: 2
 categories:
-	- getting-started
+- getting-started
 ---
 
 {{TOC}}
