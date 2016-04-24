@@ -1,6 +1,7 @@
 ---
 title: Request
 permalink: request
+weight: 1
 categories:
 	- basics
 ---
@@ -136,7 +137,7 @@ request.ajax()
 
 [Pjax](https://www.google.co.in/search?q=Pjax#q=What+is+Pjax) is a hybrid `ajax` request.  If you are from Ruby on Rails world, it is quite similar to Turbolinks.
 
-```
+```javascript
 request.pjax()
 ```
 
@@ -268,7 +269,7 @@ Creating multiple new users from an HTML form.
 
 Submitting the above form will result in data with below format.
 
-```
+```json
 {
 	email: ['bar@foo.com', 'baz@foo.com'],
 	password: ['secret', 'secret1']
@@ -277,7 +278,7 @@ Submitting the above form will result in data with below format.
 
 It seems pretty neat, but it is really hard to process and create multiple users. In order to create users you need to get this data into the right format, which is:
 
-```
+```json
 [
 	{
 		email: 'bar@foo.com',
@@ -313,7 +314,7 @@ In order to make your cookie encrypted, make sure to define `APP_KEY` inside you
 
 Returns the cookie value for a given key. Default value is returned when existing value does not exists.
 
-```
+```javascript
 request.cookie('cartTotal')
 // or
 request.cookie('cartTotal' 0)
@@ -406,7 +407,7 @@ yield request.session.forget('name')
 
 Pulls and removes the value for a given key. Think of it as calling `get` and `forget` together.
 
-```
+```javascript
 const username = yield request.session.pull('username')
 ```
 

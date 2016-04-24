@@ -1,6 +1,7 @@
 ---
 title: File Uploads
 permalink: file-uploads
+weight: 3
 categories:
 	- basics
 ---
@@ -124,7 +125,7 @@ if (!avatar.isMoved()) {
 
 Returns the complete path to the uploaded file.
 
-```
+```javascript
 yield avatar.move(Helpers.storagePath('uploads'))
 if (avatar.isMoved()) {
 	response.send(`Uploaded to ${avatar.uploadPath()}`)
@@ -135,7 +136,7 @@ if (avatar.isMoved()) {
 
 Returns the name of the uploaded file.
 
-```
+```javascript
 yield avatar.move(Helpers.storagePath('uploads'), 'foo.jpg')
 if (avatar.isMoved()) {
 	response.send(`Uploaded as ${avatar.uploadName()}`)

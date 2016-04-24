@@ -1,6 +1,7 @@
 ---
 title: Response
 permalink: response
+weight: 2
 categories:
 	- basics
 ---

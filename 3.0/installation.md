@@ -1,6 +1,7 @@
 ---
 title: Installation
 permalink: installation
+weight: 1
 categories:
 	- getting-started
 ---
@@ -20,7 +21,7 @@ Adonis has no other dependencies other than NodeJs and Npm.We also recommend mak
 
 Adonis cli is a command line utility to install stable and development releases of Adonis with all required dependencies.
 
-```
+```bash
 npm i -g adonis-cli
 ```
 
@@ -28,7 +29,7 @@ npm i -g adonis-cli
 
 Once you have installed the `adonis-cli`, run the following command to create a new project.
 
-```
+```bash
 adonis new yardstick
 cd yardstick
 npm run dev
@@ -40,7 +41,7 @@ All major releases of Adonis starts with a dev release. This is the time where a
 
 In order to create a dev project, simply add `--dev` flag to the new command.
 
-```
+```bash
 adonis new yardstick --dev
 ```
 
@@ -50,14 +51,14 @@ Setting up a new Adonis project is a combination of multiple actions, which can 
 
 ### Clone the repo
 
-```
+```bash
 git clone --dissociate https://github.com/adonisjs/adonis-app yardstick
 cd yardstick
 ```
 
 ### Install Dependencies
 
-```
+```bash
 npm install
 ```
 
@@ -66,7 +67,7 @@ npm install
 
 Once the installation process is completed, you can start the application by using below commands.
 
-```
+```bash
 npm start
 // or
 npm run dev // to start server with hot-reloading

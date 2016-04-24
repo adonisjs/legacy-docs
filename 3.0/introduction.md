@@ -1,6 +1,7 @@
 ---
 title: Introduction
 permalink: introduction
+weight: 0
 categories:
 	- getting-started
 ---

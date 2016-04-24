@@ -1,6 +1,7 @@
 ---
 title: Routing
 permalink: routing
+weight: 0
 categories:
 	- basics
 ---
