@@ -6,13 +6,13 @@ categories:
 - getting-started
 ---
 
-{{TOC}}
-
 This guide will walk you through the important parts of setting up a new project with Adonis.
+
+{{TOC}}
 
 ## Environment
 
-Every application is developed in development environment and is deployed is production environment. 
+Every application is developed in development environment and is deployed in production environment. 
 
 Switching between these environments can become a daunting task, since you have different configuration settings for each environment.
 
@@ -26,7 +26,7 @@ Adonis makes the use of `.env` files, saved inside the root of your project. Fol
 
 Adonis automatically will load the `.env` file from the root of your project.
 
-But that may not be the case when you have common configuration settings your multiple projects and you want to load `.env` from a global location.
+But that may not be the case when you have common configuration settings for your multiple projects and you want to load `.env` from a global location.
 
 Simply pass `ENV_PATH` to the start script and Adonis will know where to load the file from.
 
