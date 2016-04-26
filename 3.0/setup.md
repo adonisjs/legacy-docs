@@ -1,9 +1,9 @@
 ---
-title: First Steps
-permalink: first-steps
-weight: 2
+title: Setup
+permalink: setup
+weight: 0
 categories:
-- getting-started
+- first-steps
 ---
 
 This guide will walk you through the important parts of setting up a new project with Adonis.
