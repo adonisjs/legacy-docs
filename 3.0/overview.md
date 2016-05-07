@@ -45,7 +45,12 @@ Don't worry, if you do not fully understand the above code, but you can see with
 
 MVC stands for **Model**, **View** and **Controller**.
 
-![](http://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2012/10/mvc1.png)
+<div class='pixels-photo'>
+  <p>
+    <img src='https://drscdn.500px.org/photo/152746175/m%3D900/9972f8c30c163f019a50ba15b8a70f9b' alt='MVC Flow Chart by virkofficials on 500px.com'>
+  </p>
+  <a href='https://500px.com/photo/152746175/mvc-flow-chart-by-virkofficials' alt='MVC Flow Chart by virkofficials on 500px.com'></a>
+</div>
 
 1. Model is the layer of data you retrieve/persist to the SQL databases like Mysql, Sqlite, PostgreSQL etc.
 2. Controller is a method which responds to a HTTP request, this is the place where you interact with your Model to fetch data and send it to your views.
@@ -91,7 +96,12 @@ Writing server applications requires lot of work and needs to be organised withi
 
 IoC container is box to store all the pieces of your application, so that you can use them whenever you need them. When these pieces are stored inside the container, they are given a unique namespace.
 
-[![](https://i.imgsafe.org/fef00cc.png)](https://i.imgsafe.org/fef00cc.png)
+<div class='pixels-photo'>
+  <p>
+    <img src='https://drscdn.500px.org/photo/152747515/m%3D900/7ea4b04b936b129499d35a800aea6848' alt='Ioc container by virkofficials on 500px.com'>
+  </p>
+  <a href='https://500px.com/photo/152747515/ioc-container-by-virkofficials' alt='Ioc container by virkofficials on 500px.com'></a>
+</div>
 
 
 `use` keyword is a function added to the globals by the IoC container. It works same as the standard `require` function. Which means.
