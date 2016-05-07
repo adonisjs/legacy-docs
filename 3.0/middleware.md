@@ -90,7 +90,7 @@ Named middleware are middleware registered with a name. These middleware are not
 
 Adonis Auth middleware is a great example of named middleware. It is defined as 
 
-```
+```javascript
 const namedMiddleware = {
 	auth: 'Adonis/Middleware/Auth'
 }

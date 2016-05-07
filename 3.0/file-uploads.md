@@ -22,7 +22,7 @@ class ProfileController {
 
 		const avatar = request.file('avatar')
 
-		if (images.indexOf(avatar.extension() <= -1) {
+		if (images.indexOf(avatar.extension()) <= -1) {
 			response.send('Upload a valid image')
 			return
 		}
