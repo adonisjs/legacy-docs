@@ -32,8 +32,9 @@ Let's make use of ace to create a middleware.
 
 It will create a file called `CountryDetector.js`
 
-**app/Http/Middleware/CountryDetector.js**
-```
+##### app/Http/Middleware/CountryDetector.js
+
+```javascript
 'use strict'
 
 class CountryDetector {
@@ -81,7 +82,7 @@ Now each request will have a property called `country` attached to it, since we 
 
 ## Global Middleware
 
-Global middleware are executed on every request. They follow the QUEUE approach, which means they are executed in the order they are registered.
+Global middleware are executed on every request. They follow the QUEUE approach, which means they are executed in the order they are registered inside an array.
 
 ## Named Middleware
 
