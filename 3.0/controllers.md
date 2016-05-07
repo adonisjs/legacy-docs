@@ -73,7 +73,7 @@ Route.resources('users', 'UserController')
 ```
 
 | Url | Verb | Controller Method | Purpose |
-|-----|------|-------------------|---------|
+|-----|------|-------------------|---------| 
 | /users | GET | index | Show list of all users |
 | /users/create | GET | create | Display a form to create a new user. |
 | /users | POST | store | Create a new user |
