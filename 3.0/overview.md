@@ -7,8 +7,6 @@ categories:
 - getting-started
 ---
 
-# Overview
-
 Adonis is a NodeJs MVC Framework. It encapsulates the boring parts of Web development and offers you a nice API to work with.
 
 Every web application needs following at certain stage. 
