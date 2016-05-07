@@ -24,18 +24,20 @@ Make use of `ace` to create a new controller.
 
 Above command will create `UserController.js` file inside the Controllers directory.
 
-##### app/Http/Controllers/UserController.js
+## Basic Controller
+
 ```javascript
 class UserController {
 
 	* index (request, response) {
-		
+		response.send('Hello world from controller!')		
 	}
 
 }
 
 module.exports = UserController
 ```
+
 
 ## Binding Controllers to Routes
 
