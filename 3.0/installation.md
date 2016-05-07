@@ -6,8 +6,6 @@ categories:
 	- getting-started
 ---
 
-{{TOC}}
-
 Installing Adonis is a fairly simple process and will take only few minutes. If you ever face any problems, please [file an issue](https://github.com/adonisjs/adonis-framework/issues).
 
 ## Requirements
@@ -37,7 +35,7 @@ npm run dev
 
 ## Dev Release
 
-All major releases of Adonis starts with a dev release. This is the time where all features get locked, but left for testing and feedback before the final release.
+All major releases of Adonis starts with a dev release. This is the time where all features get locked, but left for user testing and feedback before the final release.
 
 In order to create a dev project, simply add `--dev` flag to the new command.
 

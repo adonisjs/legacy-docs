@@ -31,6 +31,7 @@ class ProfileController {
 		
 		if (!avatar.isMoved()) {
 			response.send(avatar.errors())
+			return
 		}
 		
 		response.send(`Uploaded to ${avatar.uploadPath()}`)

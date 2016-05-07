@@ -8,31 +8,25 @@ categories:
 
 Majority of the security features are baked into Adonis from starting. Adonis ships with a middleware called [shield](https://github.com/adonisjs/adonis-middleware) to protect your apps from common web/malware attacks.
 
-{{TOC}}
-
 ## Setup
 
 Every application has `shield` middleware pre-configured, but it's always nice to understand how the setup process works.
 
-### Installing Middleware
+Install the middleware if already not included
 
 ```bash
 npm i --save adonis-middleware
 ```
 
-### Setting Up the Provider
+Installed provider makes sure to register all the middleware to the IoC container, which later can be referenced inside your Http kernel file.
 
-Provider makes sure to register all the middleware to the IoC container, which later can be referenced inside your Http kernel file.
-
-**bootstrap/app.js**
+##### bootstrap/app.js
 ```javascript
 const providers = [
 	...,
 	'adonis-middleware/providers/AppMiddlewareProvider'
 ]
 ```
-
-### Registering Middleware
 
 Finally you need to register the middleware inside the `app/Http/kernel.js` file.
 
@@ -53,7 +47,6 @@ CSRF Protection is the first step towards keeping your application secure from u
 
 You can learn more about CSRF [here](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)).
 
-**config/shield.js**
 ```javascript
 csrf: {
 	enable: true,
@@ -62,17 +55,13 @@ csrf: {
 }
 ```
 
-#### enable
-
-A boolean to turn on/off CSRF for entire application.
-
-#### methods
-
-HTTP verbs to be protected by CSRF. Consider adding all verbs which allows the end user to add or modify data.
+Key | Value | Description
+------|-------|----------
+enable | Boolean | A boolean to turn on/off CSRF for entire application.
+methods | Array | HTTP verbs to be protected by CSRF. Consider adding all verbs which allows the end user to add or modify data.
+filterUris | Array | A list of Urls/Routes to ignore. You can pass actual routes definition or a regular expression to match. For example-
 
 #### filterUris
-
-A list of Urls/Routes to ignore. You can pass actual routes definition or a regular expression to match. For example-
 
 ```javascript
 filterUris: ['/user/:id'] // will match /user/id
@@ -80,11 +69,10 @@ filterUris: ['/user/:id'] // will match /user/id
 filterUris: ['/user/(.+)'] // will match /user*
 ```
 
-### Validating Requests
 
 All requests are validated automatically by the `shield` middleware. Validation failure will abort the request and throws an `EBADCSRFTOKEN` Exception.
 
-While validating the requests, it will try to read the CSRF token from defined inputs.
+While validating the requests, middleware will try to read the CSRF token from defined inputs.
 
 1. Request body or query string having `_csrf` field.
 2. Request header with following keys.
@@ -92,7 +80,7 @@ While validating the requests, it will try to read the CSRF token from defined i
 	- **x-csrf-token**
 	- **x-xsrf-token**
 
-### Getting Access To The Token
+## Accessing CSRF Token
 
 In order to send the token along with each request, you need access to it. There are few view and request helpers to fetch the token from.
 
@@ -116,7 +104,7 @@ Above will create an hidden input field with value set to CSRF Token.
 request.csrfToken()
 ```
 
-### Error Handling
+#### Error Handling
 
 On validation failure an `EBADCSRFTOKEN` Exception is thrown and same can be handled within the `app/Listeners/Http.js` file.
 

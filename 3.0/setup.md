@@ -1,9 +1,9 @@
 ---
 title: Setup
 permalink: setup
-weight: 2
+weight: 0
 categories:
-- getting-started
+- first-steps
 ---
 
 This guide will walk you through the important parts of setting up a new project with Adonis.

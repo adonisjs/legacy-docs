@@ -1,9 +1,9 @@
 ---
 title: Configuration
 permalink: config
-weight: 0
+weight: 1
 categories:
-- first-steps
+- providers
 ---
 
 Adonis application configuration is managed via config files. Each config file is defined inside the `config` directory in the root of every application.
