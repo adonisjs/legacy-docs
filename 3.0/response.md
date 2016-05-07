@@ -1,22 +1,14 @@
 ---
 title: Response
 permalink: response
-weight: 2
+weight: 4
 categories:
 	- basics
 ---
 
-{{TOC}}
+Response object is used to respond back to a given HTTP request. 
 
-Just like Request Object, Response Object is also sent along with every HTTP request. By the end of this guide you will know:
-
-1. How to respond back to a given request.
-2. How to render views.
-3. Redirect request to a different url/route.
-
-## Responding to a request
-
-In Adonis requests get finished when you explicitly respond to them, which means returning a value from the route action will never finish the request.
+## Response Methods
 
 #### send(body)
 
@@ -56,21 +48,6 @@ Creates a JSONP response. It will make use of `callback` defined as the query st
 response.json({name: 'doe'})
 ```
 
-
-#### xml(root, body)
-
-Create a xml response from JSON.
-
-```javascript
-response.xml('person', {firstName: 'John'})
-
-/* returns
-<?xml version="1.0" encoding="UTF-8"?>
-<person>
-	<firstName>John</firstName>
-</person>
-*/
-```
 
 #### vary(field)
 
@@ -154,38 +131,6 @@ response.route('profile', {id: 1})
 
 // redirects to /user/1
 ```
-
-## Cookies
-
-Response object is used to set cookies before ending the response.
-
-#### cookie(key, value, [options])
-
-```javascript
-response.cookie('cartValue', '210')
-// or
-response.cookie('cartValue', '210', options)
-```
-
-**options**
-| Property       | type    | description                              |
-| -------------- | ------- | ---------------------------------------- |
-| path           | String  | cookie path                              |
-| expires        | Date    | absolute expiration date for the cookie (Date object) |
-| maxAge         | String  | relative max age of the cookie from when the client receives it (seconds) |
-| domain         | String  | domain for the cookie                    |
-| secure         | Boolean | Marks the cookie to be used with HTTPS only |
-| httpOnly       | Boolean | Flags the cookie to be accessible only by the web server |
-| firstPartyOnly | Boolean | Defines cookie to be used by the same domain only |
-
-#### clearCookie(key)
-
-Removes existing cookie from response.
-
-```javascript
-response.clearCookie('cartValue')
-```
-
 
 ## Descriptive Methods
 

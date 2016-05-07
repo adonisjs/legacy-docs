@@ -6,16 +6,6 @@ categories:
 	- basics
 ---
 
-{{TOC}}
-
-Request object contains a lot of useful information for a given HTTP request. By the end of this guide you will know
-
-1. How to extract information for current request.
-2. How to get/set cookies and session values.
-3. How to flash data for a single request.
-
-## What is a Request Object?
-
 Request object is a sugared layer on top of NodeJs Http request object. It makes it so easy to read information off the request, which is not fun when dealing with raw HTTP requests.
 
 ## Request Methods
@@ -95,7 +85,7 @@ request.stale()
 
 #### ip
 
-Returns most trusted ip address for a given request. If you are application is behind a proxy server like Nginx, make sure to enable to `http.trustProxy` inside the `config/app.js` file.
+Returns most trusted ip address for a given request. If you are application is behind a proxy server like Nginx, make sure to enable `http.trustProxy` inside the `config/app.js` file.
 
 ```javascript
 request.ip()
@@ -300,30 +290,6 @@ const users = request.collect('email', 'password')
 const ids = yield User.createMany(users)
 ```
 
-## Cookies
-
-Cookies are encrypted and signed in Adonis. Which means any tampering to a cookie will make it invalid. 
-
-In order to make your cookie encrypted, make sure to define `APP_KEY` inside your `.env` file. Alternatively you can make use of `ace` to create the key for you.
-
-```bash
-./ace generate:key
-```
-
-#### cookie(key, [defaultValue])
-
-Returns the cookie value for a given key. Default value is returned when existing value does not exists.
-
-```javascript
-request.cookie('cartTotal')
-// or
-request.cookie('cartTotal' 0)
-```
-
-#### cookies
-
-Returns all cookies as an object.
-
 ## Content Negotiation
 
 Content Negotiation is a mechanism defined to find the best response type for a given request. The end-user can define the best resource type based upon their requirements.
@@ -341,7 +307,7 @@ const isPlain = request.is('html', 'plain')
 Returns the best matching response type for a given request.
 
 ```javascript
-const type = request.accept('json', 'html', 'xml')
+const type = request.accept('json', 'html')
 
 switch (type) {
 	
@@ -351,164 +317,8 @@ switch (type) {
 	case 'html':
 		response.send('<h1>Hello world</h1>')
 		break
-	case 'xml':
-		response.xml({hello:"world"})
-		break
-
 }
 
-```
-
-## Sessions
-
-Adonis has out of the box support session management. All sessions are long lived based upon their expiry. Also you can create flash messages, which are valid only for the next request.
-
-### Drivers
-
-Adonis ships with `cookie` and `file` driver, which are configured inside `config/session.js` file.
-
-### Methods
-
-#### put(key, value)
-
-```javascript
-yield request.session.put('username', 'doe')
-// or
-yield request.session.put({username: 'doe'})
-```
-
-#### get(key, [defaultValue])
-
-Returns the session value for a given key.
-
-```javascript
-const username = yield request.session.get('username')
-// or
-const userId = yield request.session.get('userId', 123)
-```
-
-#### all
-
-Returns all session values as an object
-
-```javascript
-const sessionValues = yield request.session.all()
-```
-
-#### forget(key)
-
-Remove value for a given key
-
-```javascript
-yield request.session.forget('name')
-```
-
-#### pull(key, [defaultValue])
-
-Pulls and removes the value for a given key. Think of it as calling `get` and `forget` together.
-
-```javascript
-const username = yield request.session.pull('username')
-```
-
-## Flash Messages
-
-In order to make use of flash messages, make sure to enable the `Flash` middleware by adding the below line to the list of global middleware.
-
-**app/Http/kernel.js**
-
-```javascript
-const globalMiddleware = [
-	...,
-	'Adonis/Middleware/Flash'
-]
-```
-
-Flash messages are extremely useful when you want to send the errors back on form submission. Let's take the example of user signup.
-
-**app/Http/Controllers/UserController**
-
-```javascript
-class UserContoller {
-
-	* signup (request, response) {
-		const validation = yield Validator.validate(rules, request.all())
-		if (validation.fails()) {
-			yield request.withAll().flash()
-			response.redirect('back')
-		}
-	}
-
-}
-```
-
-`request.withAll().flash()` will flash all the values submitted by the form back to the signup page.
-
-So you can set them back to the form fields, instead of asking the end-user to re-type everything.
-
-```twig
-{{ form.open({method: 'UserController.signup'}) }}
-	
-	{{ form.text('email', old('email')) }}
-	{{ form.password('password', old('password')) }}
-	
-	{{ form.submit('Create Account') }}
-
-{{ form.close() }}
-```
-
-
-### Flash Methods
-
-#### withAll
-
-Will flash everything from `request.all()`
-
-```javascript
-yield request.withAll().flash()
-```
-
-#### withOnly(keys...)
-
-Flash values only for defined keys.
-
-```javascript
-yield request.withOnly('email').flash()
-```
-
-#### withOut(keys...)
-
-Flash all except defined keys
-
-```javascript
-yield request.withOut('password').flash()
-```
-
-#### with(values)
-
-Flash a custom object
-
-```javascript
-yield request.with({error: 'Please fill in all details'})
-```
-
-#### andWith(values)
-
-Chainable method to send custom object with request data.
-
-```javascript
-yield request
-	.withAll()
-	.andWith({error: 'Please fill in all details'})
-	.flash()
-```
-
-#### old(key, [defaultValue])
-
-Access flash values from the last request.
-
-```javascript
-request.old('username')
 ```
 
 ## Extending Request

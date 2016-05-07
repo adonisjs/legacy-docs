@@ -1,18 +1,16 @@
 ---
 title: Configuration
 permalink: config
-weight: 1
+weight: 0
 categories:
 - first-steps
 ---
-
-{{TOC}}
 
 Adonis application configuration is managed via config files. Each config file is defined inside the `config` directory in the root of every application.
 
 Make sure to export an object from your config files. For example-
 
-**config/app.js**
+##### config/app.js
 ```javascript
 module.exports = {
 	appKey: '...'

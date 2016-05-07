@@ -1,16 +1,14 @@
 ---
 title: Static Files
 permalink: static-files
-weight: 7
+weight: 8
 categories:
 	- basics
 ---
 
-{{TOC}}
-
 Static resources are served by the core of the framework. Each HTTP request with `GET` and `HEAD` verb will be check against a static file inside your `public` directory.
 
-If file does not exist, it will start by resolving the route and goes on from there.
+If that file does not exist, Adonis will start by resolving the route and goes on from there.
 
 ## How it Works
 

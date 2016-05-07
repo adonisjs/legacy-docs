@@ -1,14 +1,12 @@
 ---
 title: Setup
 permalink: setup
-weight: 0
+weight: 2
 categories:
-- first-steps
+- getting-started
 ---
 
 This guide will walk you through the important parts of setting up a new project with Adonis.
-
-{{TOC}}
 
 ## Environment
 
@@ -22,11 +20,11 @@ Adonis makes the use of `.env` files, saved inside the root of your project. Fol
 2. Create a different `.env` file on your server or automate the process of creating this file at the time of deployment.
 3. Store all sensitive key/value pairs inside this file. For example - OAuth Keys, STMP Credentials etc.
 
-### Loading Environment File
+## Loading Environment File
 
 Adonis automatically will load the `.env` file from the root of your project.
 
-But that may not be the case when you have common configuration settings for your multiple projects and you want to load `.env` from a global location.
+But that may not be the case when you have common configuration settings for multiple projects and you want to load `.env` from a global location.
 
 Simply pass `ENV_PATH` to the start script and Adonis will know where to load the file from.
 
@@ -50,9 +48,30 @@ There is a separate guide on [Security](security), make sure to read it carefull
 ./ace --help
 ```
 
-Above command will show a help screen with list of all available commands, which looks quite similar to the below screenshot.
+Above command will show a help screen with list of all available commands.
 
-![Adonis Ace Commands](https://i.imgsafe.org/0620a44.png)
+```
+  Commands:
+
+    repl
+    deploy [options]
+    make:controller [options] <name>
+    make:migration [options] <name>
+    make:model [options] <name>
+    make:view [options] <name>
+    make:command <name>
+    make:hook [options] <name>
+    make:middleware <name>
+    make:seed <name>
+    make:listener [options] <name>
+    migration:run [options]
+    migration:rollback [options]
+    migration:refresh [options]
+    migration:reset [options]
+    db:seed [options]
+    migration:status
+    key:generate [options]
+```
 
 In order to know more about a specific command, run the following.
 
@@ -60,7 +79,7 @@ In order to know more about a specific command, run the following.
 ./ace make:controller --help
 ```
 
-### Fixing Ace File
+## Fixing Ace File
 
 `ace` is an executable file lives in the root of your project. While creating a new project, Adonis will setup this file based upon the OS and the installed location of NodeJs. 
 

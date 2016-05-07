@@ -1,41 +1,52 @@
 ---
 title: File Uploads
 permalink: file-uploads
-weight: 3
+weight: 7
 categories:
 	- basics
 ---
 
-{{TOC}}
-
 Files are uploaded with care in Adonis. You can control the upload behaviour by configuring values inside `config/bodyParser.js`.
 
-By the end of this guide you will know:
+## Basic Usage
 
-1. How to validate uploaded files.
-2. How to upload single/multiple files.
-3. Gracefully handle upload errors.
-
-#### file(key)
-
-Returns the instance of an upload file.
+You can get the access to a file instance using the name of `input[type="file"]` field.
 
 ```javascript
-const avatar = request.file('avatar')
+'use strict'
+
+class ProfileController {
+
+	* addAvatar (request, response) {
+		const images = ['jpg', 'png', 'gif']
+
+		const avatar = request.file('avatar')
+
+		if (images.indexOf(avatar.extension() <= -1) {
+			response.send('Upload a valid image')
+			return
+		}
+		
+		yield avatar.move()
+		
+		if (!avatar.isMoved()) {
+			response.send(avatar.errors())
+		}
+		
+		response.send(`Uploaded to ${avatar.uploadPath()}`)
+		
+	}
+
+}
 ```
 
-Now you can perform various actions on the file instance.
-
-
-#### files
-
-Returns all files as an object
+To get all uploaded files, make use of `files` method
 
 ```javascript
 request.files()
 ```
 
-## File Instance
+## File Instance Methods
 
 Below is the list of available methods on file instance.
 
