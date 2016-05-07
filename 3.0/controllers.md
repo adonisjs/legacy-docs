@@ -72,15 +72,15 @@ const Route = use('Route')
 Route.resources('users', 'UserController')
 ```
 
-| Url | Verb | Controller Method | Purpose
-|----|-------------------|------------
-| /users | GET | index | Show list of all users
-| /users/create | GET | create | Display a form to create a new user.
-| /users | POST | store | Create a new user
-| /users/:id | GET | show | Display a user using the id
-| /users/:id/edit | GET | edit | Display the form to edit the user.
-| /users/:id | PUT/PATCH | update | Update details for a given user id
-| /users/:id | DELETE | destroy | Delete a given user with id.
+| Url | Verb | Controller Method | Purpose |
+|-----|------|-------------|-----|-------- |
+| /users | GET | index | Show list of all users |
+| /users/create | GET | create | Display a form to create a new user. |
+| /users | POST | store | Create a new user |
+| /users/:id | GET | show | Display a user using the id |
+| /users/:id/edit | GET | edit | Display the form to edit the user. |
+| /users/:id | PUT/PATCH | update | Update details for a given user id |
+| /users/:id | DELETE | destroy | Delete a given user with id. |
 
 ## Filtering Resources
 
@@ -119,9 +119,9 @@ Route
 
 Above will add a new route and action to your resource called `popular`.
 
-| Url | Verb | Controller Method | Purpose
-|----|-------------------|------------
-| /posts/popular | GET | popular | Display popular blog posts.
+| Url | Verb | Controller Method | Purpose |
+|----|-------|-------------------|----------|
+| /posts/popular | GET | popular | Display popular blog posts. |
 
 Also you can define different/multiple verbs when trying to add a new collection.
 
@@ -143,6 +143,6 @@ Route
 
 Above will add comments route to the posts resource.
 
-| Url | Verb | Controller Method | Purpose
-|----|-------------------|------------
-| /posts/:id/comments | GET | comments | List all comments for a given posts.
+| Url | Verb | Controller Method | Purpose |
+|----|-------|-------------------|---------|
+| /posts/:id/comments | GET | comments | List all comments for a given posts.|

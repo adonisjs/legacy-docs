@@ -137,7 +137,7 @@ yield request.withOut('password').flash()
 Flash a custom object
 
 ```javascript
-yield request.with({error: 'Please fill in all details'})
+yield request.with({error: 'Please fill in all details'}).flash()
 ```
 
 #### andWith(values)
