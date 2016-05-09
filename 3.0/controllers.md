@@ -6,7 +6,9 @@ categories:
 	- basics
 ---
 
-Controllers are C in MVC, they bind your models to your views while responding to a given HTTP Request.
+Controllers represents **C** in MVC. They are the common point of interaction between your models and views. 
+
+In typical Web applications, you will begin by defining a controller method on your routes, make use of models to fetch data and send that data to views.
 
 ## Creating Controllers
 
@@ -50,10 +52,9 @@ const Route = use('Route')
 Route.get('/users', 'UserController.index')
 ```
 
-A Controller is referenced as a string. 
-
-1. The first part before the `dot(.)` is a reference to the controller file. Which is `UserController`.
-2. Second part is the reference to the method on the controller. Which is `index`.
+1. A Controller is referenced as a string.
+2. The first part before the `dot(.)` is a reference to the controller file. Which is `UserController`.
+3. Second part is the reference to the method on the controller. Which is `index`.
 
 You can also reference nested controllers using the directory separator `/`.
 
@@ -63,7 +64,7 @@ Route.get('/users', 'Admin/UserController.index')
 
 ## ResourceFul Routes
 
-CRUD applications are built on the idea of Creating, Reading, Updating and Deleting records from a database table.
+CRUD applications are built on the idea of **Creating, Reading, Updating and Deleting** records from a database table.
 
 Since these are very common operations, Adonis helps you in defining conventional routes and their Controller actions using a term called `resource.`
 
@@ -86,9 +87,11 @@ Route.resources('users', 'UserController')
 
 ## Filtering Resources
 
-`resources` will create total of 7 routes. May or may not these route are required by your applications. 
+`resources` will create total of 7 routes. Depending upon the nature of your application, you might or might not require all routes.
 
 #### except(actions)
+
+`except` will not register routes for the given actions.
 ```javascript
 Route
 	.resource('users', 'UserController')
@@ -129,8 +132,8 @@ Also you can define different/multiple verbs when trying to add a new collection
 
 ```javascript
 Route
-	.resource('posts', 'PostController')
-	.addCollection('guest', ['POST'])
+  .resource('posts', 'PostController')
+  .addCollection('guest', ['POST'])
 ```
 
 #### addMember(route, [verbs=GET))
@@ -139,8 +142,8 @@ Route
 
 ```javascript
 Route
-	.resource('posts', 'PostController')
-	.addMember('comments')
+  .resource('posts', 'PostController')
+  .addMember('comments')
 ```
 
 Above will add comments route to the posts resource.

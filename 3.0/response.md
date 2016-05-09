@@ -1,18 +1,18 @@
 ---
 title: Response
 permalink: response
-weight: 4
+weight: 2
 categories:
 	- basics
 ---
 
-Response object is used to respond back to a given HTTP request. 
+Response object is also a sugared layer on top of NodeJs HTTP response. It offers handful of expressive methods to make response for HTTP requests.
 
 ## Response Methods
 
 #### send(body)
 
-Send method will return the body back to the client. You can send different data types and Adonis knows how to parse them and set correct headers for them.
+Send method will end by request by responding the request with given data. You can send different data types and Adonis knows how to parse them and set correct headers for them.
 
 ```javascript
 response.send('Hello world')

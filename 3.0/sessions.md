@@ -1,18 +1,21 @@
 ---
 title: Sessions
 permalink: sessions
-weight: 3
+weight: 4
 categories:
 	- basics
 ---
 
-Adonis has out of the box support session management. All sessions are long lived based upon their expiry. Also you can create flash messages, which are valid only for the next request.
+Adonis has out of the box support session management. Adonis also has support for flash messages, which are only valid for the upcoming request.
 
 ## Drivers
 
-Adonis ships with `cookie` and `file` driver, which are configured inside `config/session.js` file.
+Adonis ships with `cookie` and `file` driver, which can be configured inside `config/session.js` file.
 
 ## Methods
+
+All of the session methods are available on the `request` object.
+
 
 #### put(key, value)
 
@@ -28,7 +31,7 @@ Route.get('/user', function * (request, response) {
 
 #### get(key, [defaultValue])
 
-0Returns the session value for a given key.
+Returns the session value for a given key.
 
 ```javascript
 Route.get('/user', function * (request, response) {
@@ -77,7 +80,7 @@ const globalMiddleware = [
 
 Flash messages are extremely useful when you want to send the errors back on form submission. Let's take the example of user signup.
 
-**app/Http/Controllers/UserController**
+##### app/Http/Controllers/UserController
 
 ```javascript
 class UserContoller {

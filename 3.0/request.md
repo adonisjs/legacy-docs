@@ -188,7 +188,7 @@ request.params()
 ```
 
 #### format
-Returns current for a given request. In order to make it work, to need to define [Route Extensions](routing#route-extensions)
+Returns current format for a given request. In order to make it work, to need to define [Route Formats](routing#route-formats)
 
 ```javascript
 request.format()

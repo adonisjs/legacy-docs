@@ -1,12 +1,12 @@
 ---
 title: Cookie
 permalink: cookies
-weight: 2
+weight: 3
 categories:
 	- basics
 ---
 
-Cookies are encrypted and signed in Adonis. Which means any tampering to a cookie will make it invalid. 
+Cookies in Adonis are encrypted and signed. Which means any tampering to a cookie will make it invalid. 
 
 In order to make your cookie encrypted, make sure to define `APP_KEY` inside your `.env` file. Alternatively you can make use of `ace` to generate the key for you.
 
