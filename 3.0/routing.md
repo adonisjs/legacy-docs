@@ -1,6 +1,7 @@
 ---
 title: Routing
 permalink: routing
+description: Creating Routes in AdonisJs.
 weight: 0
 categories:
 	- basics
