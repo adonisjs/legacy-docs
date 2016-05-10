@@ -346,13 +346,13 @@ yield Database.from('users').where('username', 'doe')
 The difference between the sql and query event is the output they produce. `sql` event will print the actual query and time taken by the query.
 
 ##### sql event output
-```
+```sql
 + 1.38 ms : select * from `users` where `username` = 'doe'
 ```
 
 ##### query event output
 
-```
+```son
 {
     method: 'select',
     options: {},
