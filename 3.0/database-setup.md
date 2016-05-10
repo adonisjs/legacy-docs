@@ -40,7 +40,6 @@ const Env = use('Env')
 module.exports = {
 
     connection: Env.get('DB_CONNECTION', 'sqlite'),
-    migrationsTable: 'adonis_schema',
 
     // SQLITE
     sqlite: {
@@ -61,6 +60,7 @@ module.exports = {
             database: Env.get('MYSQL_DATABASE', 'adonis')
         }
     }
+}
 ```
 
 This is how database configuration file looks for a new application. In brief, this file contains multiple objects, each defining a unique connection for any database client.
@@ -90,6 +90,7 @@ Below are the ways you can define settings for different database clients.
 One of the following libraries needs to be installed for using the mysql adapter.
 
 [client: mysql](https://www.npmjs.com/package/mysql)
+
 [client: mysql2](https://www.npmjs.com/package/mysql2)
 
 
@@ -271,13 +272,13 @@ Above query chain is equivalent to following SQL query.
 select * from `users` where `age` = 22 order by `id` desc
 ```
 
-It is so easy to build up simple and complex queries using the query builder. Here `yield` keyword will execute the query chain and will return the result back to assigned variable.
+It is so easy to build up simple and complex queries using the query builder. The `yield` keyword will execute the query chain and will return the result back to assigned variable.
 
 You can learn more about [Query builder here.](query-builder)
 
 ## Switching Database Connection
 
-Switching database connection is one of the most common requirement while building multi-tenant apps. Adonis gives you ample of options to switch/use different connections on runtime.
+Switching database connection is one of the most common requirement while building multi-tenant apps. Adonis makes it process easier and let you define different connections on runtime.
 
 Assuming you have defined following connections inside your config file.
 
@@ -304,7 +305,6 @@ yield Database
     .where('username', 'doe')
 ```
 
-It cannot become easier than this.
 
 #### close
 
@@ -319,8 +319,6 @@ Database.close('personnaMysql')
 
 There are a handful of ways to debug database operations, so let's review all of them.
 
-### Debug globally
-
 You can debug globally for a given connection by setting up debug property on your database connection settings.
 
 ```javascript
@@ -331,28 +329,28 @@ mysql: {
 }
 ```
 
-### Event listeners
-
 Setting up `debug` on your connection property will log queries to your server console and gives you less control over the output. Alternatively, you can also listen the `query` or `sql` events.
 
 ```javascript
 Database.on('query', console.log)
+yield Database.from('users').where('username', 'doe')
 ```
 
 or
 
 ```javascript
 Database.on('sql', console.log)
+yield Database.from('users').where('username', 'doe')
 ```
 
 The difference between the sql and query event is the output they produce. `sql` event will print the actual query and time taken by the query.
 
-**sql event output**
+##### sql event output
 ```
 + 1.38 ms : select * from `users` where `username` = 'doe'
 ```
 
-**query event output**
+##### query event output
 
 ```
 {
@@ -363,13 +361,8 @@ The difference between the sql and query event is the output they produce. `sql`
 }
 ```
 
-### Single query debug
+That's not all, you can also debug a single query by chaining the event listener.
 
-At times, you may want to debug a single query instead of all the queries on a given connection.
-
-Consider making use of one of the following methods to achieve desired results.
-
-#### sql event
 
 ```javascript
 yield Database.on('sql', console.log)
@@ -377,7 +370,7 @@ yield Database.on('sql', console.log)
 .where('username', 'doe')
 ```
 
-#### query event
+or
 
 ```javascript
 yield Database.on('query', console.log)
@@ -385,7 +378,7 @@ yield Database.on('query', console.log)
 .where('username', 'doe')
 ```
 
-#### debug
+or
 
 ```javascript
 yield Database.debug()
