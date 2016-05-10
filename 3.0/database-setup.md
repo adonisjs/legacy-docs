@@ -4,26 +4,10 @@ description: Setting up database with Adonis
 permalink: database-setup
 weight: 0
 categories:
-    - Database
+- Database
 ---
 
-{{TOC}}
-
-# Database Setup
-
-This is a getting started guide to configure your application database.
-
-By the end of this guide you will know:
-
-1. List of databases supported by Adonis.
-2. How to configure database settings for your application.
-3. Using multiple connections for building multi-tenant apps.
-4. Debugging queries.
-
-
-## Introduction
-
-Adonis has support for following SQL databases.
+Adonis officially supports SQL databases like MySQL, PostgreSQL, SQLite, etc. Below is the list of supported databases.
 
 1. PostgreSQL
 2. MySQL
@@ -31,13 +15,13 @@ Adonis has support for following SQL databases.
 4. Oracle
 5. Sqlite
 
-All of the above databases are fully supported and can be accessed using unified Javascript syntax.
+All of the above mentioned databases are fully supported and can be accessed using unified Javascript syntax.
 
 ## Why to use an ORM?
 
 ORM stands for Object-relational mapping, which provides convenient ways to access database layer from any given programming language.
 
-With Adonis, you will never have to write SQL queries to interact with a database, which eliminates the use of learning SQL syntax. Also, when you switch between multiple SQL database client, your code will remain the same.
+With Adonis, you will never have to write SQL queries to interact with a database. Also, when you switch between multiple SQL database clients, your code will remain the same.
 
 ## Configuration
 
@@ -45,7 +29,7 @@ Configuring database is simple and controlled by a dedicated configuration file 
 
 With every new installation of Adonis, you will have `config/database.js` file. By default it is configured to make use of `sqlite`, but you are free to use any supported database client.
 
-**config/database.js**
+##### config/database.js
 
 ```javascript
 'use strict'
@@ -81,7 +65,7 @@ module.exports = {
 
 This is how database configuration file looks for a new application. In brief, this file contains multiple objects, each defining a unique connection for any database client.
 
-### Connection
+## Default Connection
 
 The first property that needs to be defined is `connection`. It accepts a string, which is a reference to a connection object within the same file.
 
@@ -101,7 +85,7 @@ Value defined next to the `connection` key will be used as the default database 
 
 Below are the ways you can define settings for different database clients.
 
-### Mysql
+#### Mysql
 
 One of the following libraries needs to be installed for using the mysql adapter.
 
@@ -136,7 +120,7 @@ mysql: {
 }
 ```
 
-### Sqlite
+#### Sqlite
 
 Sqlite3 binding needs to be installed for using the sqlite connection.
 
@@ -151,7 +135,7 @@ sqlite: {
 }
 ```
 
-### Postgres SQL
+#### Postgres SQL
 
 Postgres binding needs to be installed for using Postgres connection.
 
@@ -181,7 +165,7 @@ pg: {
 }
 ```
 
-### Oracle
+#### Oracle
 
 One of the following bindings needs to be installed for using Oracle DB.
 
@@ -202,7 +186,7 @@ oracle: {
 }
 ```
 
-### Maria DB
+#### Maria DB
 
 MariaDB binding should be installed before using the mariadb connection.
 

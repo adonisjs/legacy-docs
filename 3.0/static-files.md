@@ -18,9 +18,9 @@ If that file does not exist, Adonis will start by resolving the route and goes o
 2. Javascript Files
 3. Fonts, Images or anything you want to serve directly.
 
-You access these files without the `/public` inside your url's. For example-
+You access these files without the **/public** inside your url's. For example-
 
-A file called `public/style.css` will be accessible on `http://localhost:3333/style.css`.
+A file called `public/style.css` will be accessible on http://localhost:3333/style.css.
 
 ## Configuration
 
@@ -48,6 +48,6 @@ Enable or disable etag generation.
 
 #### extensions
 
-1. Set `false` for no special treatment. 
+1. Set `false` for no special treatment.
 2. An array of extensions to be used when searching for files. If file with original name is not found, it will try to find them with given extensions.
 

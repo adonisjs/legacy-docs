@@ -4,7 +4,7 @@ permalink: routing
 description: Creating Routes in AdonisJs.
 weight: 0
 categories:
-	- basics
+    - basics
 ---
 
 Routes are defined inside `app/Http/routes.js` file. It is a good practice to keep this file clean and move all required logic to different files/directories.
@@ -14,11 +14,11 @@ Routes are defined inside `app/Http/routes.js` file. It is a good practice to ke
 const Route = use('Route')
 
 Route.get('/about', function * (request, response) {
-	response.send('You are looking at the about page')
+    response.send('You are looking at the about page')
 })
 ```
 
-Above we defined a route for the url `/about`. Whenever someone will visit this url, they will see the message **You are looking at the about page**.
+Above we defined a route for the URL `/about`. Whenever someone will visit this URL, they will see the message **You are looking at the about page**.
 
 ## HTTP Verbs
 
@@ -26,13 +26,13 @@ HTTP verbs are also known as HTTP methods. `Route.get` defines a route for the `
 
 Below is the list of Route methods and their corresponding HTTP verbs.
 
-Verb |	Method
+Verb |    Method
 -----|-------
-GET	| Route.get
-POST |	Route.post
-PUT |	Route.put
-PATCH	| Route.patch
-DELETE |	Route.delete
+GET    | Route.get
+POST |    Route.post
+PUT |    Route.put
+PATCH    | Route.patch
+DELETE |    Route.delete
 
 Above are the commonly used HTTP verbs, for uncommon verbs you can make use of the `Route.route` method.
 
@@ -66,12 +66,12 @@ Route.any('/', function * (request, response) {
 
 ## Route Parameters
 
-Route parameters are dynamic url segments. Which means you can register a route to accept the user id within the url.
+Route parameters are dynamic URL segments. Which means you can register a route to accept the user id within the URL.
 
 ```javascript
 Route.get('/user/:id', function * (request, response) {
-	const userId = request.param('id')
-	response.send(`Profile for ${userId}`)
+    const userId = request.param('id')
+    response.send(`Profile for ${userId}`)
 })
 ```
 
@@ -81,8 +81,8 @@ You can also define optional route parameters by appending `?` to the parameter 
 
 ```javascript
 Route.get('/user/:id?', function * (request, response) {
-	const userId = request.param('id', 1)
-	response.send(`Profile for ${userId}`)
+    const userId = request.param('id', 1)
+    response.send(`Profile for ${userId}`)
 })
 ```
 
@@ -103,7 +103,7 @@ const params = request.params()
 
 ## Route Formats
 
-In order to build data agnostic applications, it is very important to be explicit with your urls. Route extensions is a step towards that goal.
+In order to build data agnostic applications, it is very important to be explicit with your URLs. Route extensions is a step towards that goal.
 
 #### formats(values, [strict=false])
 
@@ -122,16 +122,16 @@ You can identify the format of a request inside your route action.
 
 ```javascript
 Route
-	.get('/users', function * (request, response) {
-		const format = request.format()
+    .get('/users', function * (request, response) {
+        const format = request.format()
 
-		if (format === 'json') {
-			response.json(users)
-		} else {
-			yield response.sendView('users', {users})
-		}
-	})
-	.formats(['json'])
+        if (format === 'json') {
+            response.json(users)
+        } else {
+            yield response.sendView('users', {users})
+        }
+    })
+    .formats(['json'])
 ```
 
 ## Named Routes
@@ -139,15 +139,15 @@ Route
 Routes are defined inside `app/Http/routes.js` file, but they are used everywhere. For example-
 
 1. Inside a view, to create navigation bar.
-2. Inside Controllers, to redirect to a different url, etc.
+2. Inside Controllers, to redirect to a different URL, etc.
 
-As your application will grow, you will find yourself changing route url's quite often.
+As your application will grow, you will find yourself changing route URLs quite often.
 
 Now changing them inside the routes file is quite easy, but finding their references inside the views and controllers is not something you are going to enjoy.
 
 #### as(name)
 
-`as` method will give a unique name/identity to a route. So that you can use it with it's name instead of the url.
+`as` method will give a unique name/identity to a route. So that you can use it with its name instead of the URL.
 
 ```javascript
 Route
@@ -169,7 +169,7 @@ Now you can use it inside your views as using the linkTo helper.
 ```
 
 #### route([data])
-route is a filter which can be used when you just want the link to a route, instead of a complete anchor tag.
+The route is a filter which can be used when you just want the link to a route, instead of a complete anchor tag.
 
 ```twig
 <a href="{{ 'profile' | route({id: 1}) }}"> View Profile </a>
@@ -178,15 +178,15 @@ route is a filter which can be used when you just want the link to a route, inst
 
 ## Prefixing Routes
 
-You make use of Route group in order to define a prefix for bunch of routes.
+You make use of Route group in order to define a prefix for a bunch of routes.
 
 ```javascript
 Route.group('v1', function () {
-	Route.get('/users', '...')
+    Route.get('/users', '...')
 }).prefix('/api/v1')
 ```
 
-Above route will have a url `/api/v1/users`.
+Above route will have an URL `/api/v1/users`.
 
 ## Domains
 
@@ -194,7 +194,7 @@ Adonis makes it super easy to define routes only for a given domain.
 
 ```javascript
 Route.group('api', function () {
-	Route.get('/users', '...')
+    Route.get('/users', '...')
 }).domain('api.example.org')
 ```
 
@@ -204,9 +204,9 @@ Let's take a step forward and define dynamic domains. Dynamic domains are define
 
 ```javascript
 Route.group('v1', function () {
-	Route.get('/account', function * (request, response) {
-		const user = request.param('user')
-	})
+    Route.get('/account', function * (request, response) {
+        const user = request.param('user')
+    })
 }).domain(':user.example.org')
 ```
 
@@ -232,7 +232,7 @@ Route.on('/').render('welcome')
 
 ## Form Method Spoofing
 
-We learned about different HTTP verbs, but unfortunately standard HTML forms does not allow anything over GET and POST.
+We learned about different HTTP verbs, but unfortunately standard HTML forms do not allow anything over GET and POST.
 
 Form method spoofing makes it easier to define the verb as a query string.
 
@@ -241,4 +241,4 @@ Form method spoofing makes it easier to define the verb as a query string.
 </form>
 ```
 
-`_method` takes precedence over the actual HTTP verb, so in above case Adonis will call the route action defined with PUT verb.
+`_method` takes precedence over the actual HTTP verb, so in above case, Adonis will call the route action defined with PUT verb.

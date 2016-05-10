@@ -1,5 +1,5 @@
 ---
-title: Configuration
+title: Config
 permalink: config
 weight: 1
 categories:

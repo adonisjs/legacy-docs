@@ -10,7 +10,7 @@ Middleware is a layer of classes executed before your Routes actions.
 
 Middleware has more than a single use case. Official middleware shipped with Adonis are used for various reasons. For example-
 
-The body parser middleware is responsible for parsing request body and handle file uploads. Whereas the Auth middleware is used to authenticate request and throw `401` Exception whenever the request is not made by an authenticated user.
+The body Parser middleware is responsible for parsing request body and handle file uploads. Whereas the Auth middleware is used to authenticate request and throw `401` Exception whenever the request is not made by an authenticated user.
 
 Middleware has capabilities to:
 
