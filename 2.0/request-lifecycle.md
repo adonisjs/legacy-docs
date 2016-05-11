@@ -22,7 +22,7 @@ Next we register routes and middleware to be used for http requests.
 
 ## Http Requests
 
-Http requests are layered through middleware before reaching your registered route, if a route is not found for a request, it will look for a static resource inside `public` directory and finally will throw a 404 error if nothing is found.
+Http requests are layered through middleware before reaching your registered route, if a static resource inside `public` directory is not found for a request, it will look for a route and finally will throw a 404 error if nothing is found.
 
 Pre-flight request for `CORS` do not even reach to the point of resolving route or static resource as middleware has the power to finish the request at any stage.
 
