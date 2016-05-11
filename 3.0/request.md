@@ -3,10 +3,10 @@ title: Request
 permalink: request
 weight: 1
 categories:
-	- basics
+  - basics
 ---
 
-Request object is a sugared layer on top of NodeJs Http request object. It makes it so easy to read information off the request, which is not fun when dealing with raw HTTP requests.
+Request object is a sugared layer on top of Node.js HTTP request object. It makes it so easy to read information off the request, which is not fun when dealing with raw HTTP requests.
 
 ## Request Methods
 
@@ -36,15 +36,15 @@ const data = request.only('name', 'email', 'age')
 
 // returns
 {
-	name: '..',
-	email: '..',
-	age: '..'
+  name: '..',
+  email: '..',
+  age: '..'
 }
 ```
 
 #### except(keys...)
 
-Opposite of `only`.
+Opposite of `only()`.
 
 ```javascript
 const data = request.except('_csrf', 'submit')
@@ -77,7 +77,7 @@ request.fresh()
 
 #### stale
 
-Opposite of `fresh`
+Opposite of `fresh()`
 
 ```javascript
 request.stale()
@@ -109,7 +109,7 @@ request.secure()
 
 #### subdomains
 
-Returns an array of subdomains for a given url. For example- `api.example.org` will have the subdomain as `['api']`.
+Returns an array of subdomains for a given url. For example, `api.example.org` will have the subdomain as `['api']`.
 
 ```javascript
 request.subdomains()
@@ -153,7 +153,7 @@ request.url()
 
 #### originalUrl
 
-`originalUrl` returns the untouched version of current url.
+`originalUrl()` returns the untouched version of current url.
 
 ```javascript
 request.originalUrl()
@@ -169,7 +169,7 @@ request.method()
 
 #### param(key, [defaultValue])
 
-Returns route param for a given key
+Returns route param for a given key.
 
 ```javascript
 request.param('id')
@@ -181,14 +181,14 @@ request.param('drink', 'shake')
 
 #### params()
 
-Returns all params as an object
+Returns all params as an object.
 
 ```javascript
 request.params()
 ```
 
 #### format
-Returns current format for a given request. In order to make it work, to need to define [Route Formats](routing#route-formats)
+Returns current format for a given request. In order to make it work, to need to define [Route Formats](routing#route-formats).
 
 ```javascript
 request.format()
@@ -245,15 +245,15 @@ Creating multiple new users from an HTML form.
 
 ```twig
 <form method="POST" action="/users">
-	<h2> User 1 </h2>
-	<input type="email" name="email[]" />
-	<input type="password" name="password[]" />
+  <h2> User 1 </h2>
+  <input type="email" name="email[]" />
+  <input type="password" name="password[]" />
 
-	<h2> User 2 </h2>
-	<input type="email" name="email[]" />
-	<input type="password" name="password[]" />
-	
-	<button type="submit> Create Users </button>
+  <h2> User 2 </h2>
+  <input type="email" name="email[]" />
+  <input type="password" name="password[]" />
+  
+  <button type="submit> Create Users </button>
 </form>
 ```
 
@@ -261,8 +261,8 @@ Submitting the above form will result in data with below format.
 
 ```json
 {
-	email: ['bar@foo.com', 'baz@foo.com'],
-	password: ['secret', 'secret1']
+  email: ['bar@foo.com', 'baz@foo.com'],
+  password: ['secret', 'secret1']
 }
 ```
 
@@ -270,18 +270,18 @@ It seems pretty neat, but it is really hard to process and create multiple users
 
 ```json
 [
-	{
-		email: 'bar@foo.com',
-		password: 'secret'
-	},
-	{
-		email: 'baz@foo.com',
-		password: 'secret1'
-	}	
+  {
+    email: 'bar@foo.com',
+    password: 'secret'
+  },
+  {
+    email: 'baz@foo.com',
+    password: 'secret1'
+  } 
 ]
 ```
 
-Adonis can make this process really easy with a single line of code.
+AdonisJs can make this process really easy with a single line of code.
 
 #### collect(keys...)
 
@@ -310,13 +310,13 @@ Returns the best matching response type for a given request.
 const type = request.accept('json', 'html')
 
 switch (type) {
-	
-	case 'json':
-		response.json({hello:"world"})
-		break
-	case 'html':
-		response.send('<h1>Hello world</h1>')
-		break
+  
+  case 'json':
+    response.json({hello:"world"})
+    break
+  case 'html':
+    response.send('<h1>Hello world</h1>')
+    break
 }
 
 ```
@@ -331,10 +331,10 @@ Same can be done inside `app/Listeners/Http.js`.
 
 ```javascript
 Http.onStart = function () {
-	const Request = use('Request')
-	
-	Request.macro('cartValue', function () {
-		return this.cookie('cartValue', 0)
-	})
+  const Request = use('Request')
+  
+  Request.macro('cartValue', function () {
+    return this.cookie('cartValue', 0)
+  })
 }
 ```

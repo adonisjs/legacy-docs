@@ -7,19 +7,19 @@ categories:
 - Database
 ---
 
-Adonis officially supports SQL databases like MySQL, PostgreSQL, SQLite, etc. Below is the list of supported databases.
+AdonisJs officially supports SQL databases like MySQL, PostgreSQL, SQLite, etc. Below is the list of supported databases.
 
 1. PostgreSQL
 2. MySQL
 3. MariaDB
 4. Oracle
-5. Sqlite
+5. SQLite
 
 All of the above mentioned databases are fully supported and can be accessed using unified Javascript syntax.
 
 ## Why to use an ORM?
 
-ORM stands for Object-relational mapping, which provides convenient ways to access database layer from any given programming language.
+ORM stands for Object-Relational Mapping, which provides convenient ways to access database layer from any given programming language.
 
 With Adonis, you will never have to write SQL queries to interact with a database. Also, when you switch between multiple SQL database clients, your code will remain the same.
 
@@ -39,27 +39,27 @@ const Env = use('Env')
 
 module.exports = {
 
-    connection: Env.get('DB_CONNECTION', 'sqlite'),
+  connection: Env.get('DB_CONNECTION', 'sqlite'),
 
-    // SQLITE
-    sqlite: {
-        client: 'sqlite3',
-        connection: {
-            filename: Helpers.storagePath('development.sqlite3')
-        },
-        debug: false
+  // SQLite
+  sqlite: {
+    client: 'sqlite3',
+    connection: {
+      filename: Helpers.storagePath('development.sqlite3')
     },
+    debug: false
+  },
 
-    // MYSQL
-    mysql: {
-        client: 'mysql',
-        connection: {
-            host: Env.get('MYSQL_HOST', 'localhost'),
-            user: Env.get('MYSQL_USER', 'root'),
-            password: Env.get('MYSQL_PASSWORD', ''),
-            database: Env.get('MYSQL_DATABASE', 'adonis')
-        }
+  // MySQL
+  mysql: {
+    client: 'mysql',
+    connection: {
+      host: Env.get('MYSQL_HOST', 'localhost'),
+      user: Env.get('MYSQL_USER', 'root'),
+      password: Env.get('MYSQL_PASSWORD', ''),
+      database: Env.get('MYSQL_DATABASE', 'adonis')
     }
+  }
 }
 ```
 
@@ -69,13 +69,13 @@ This is how database configuration file looks for a new application. In brief, t
 
 The first property that needs to be defined is `connection`. It accepts a string, which is a reference to a connection object within the same file.
 
-For Example
+For Example:
 
 ```javascript
 module.exports = {
-    connection: 'mysql',
+  connection: 'mysql',
 
-    mysql: {...}
+  mysql: { ... }
 }
 ```
 
@@ -85,7 +85,7 @@ Value defined next to the `connection` key will be used as the default database 
 
 Below are the ways you can define settings for different database clients.
 
-#### Mysql
+#### MySQL
 
 One of the following libraries needs to be installed for using the mysql adapter.
 
@@ -96,14 +96,14 @@ One of the following libraries needs to be installed for using the mysql adapter
 
 ```javascript
 mysql: {
-    client: 'mysql',
-    connection: {
-        host: '127.0.0.1',
-        port: 3306,
-        user: 'root',
-        password: '',
-        database: 'adonis'
-    }
+  client: 'mysql',
+  connection: {
+    host: '127.0.0.1',
+    port: 3306,
+    user: 'root',
+    password: '',
+    database: 'adonis'
+  }
 }
 ```
 
@@ -111,49 +111,49 @@ If required, you can also provide socket path to the MySQL connection. Giving so
 
 ```javascript
 mysql: {
-    client: 'mysql',
-    connection: {
-        socketPath: '/path/to/socket.sock',
-        user: 'root',
-        password: '',
-        database: 'adonis'
-    }
+  client: 'mysql',
+  connection: {
+    socketPath: '/path/to/socket.sock',
+    user: 'root',
+    password: '',
+    database: 'adonis'
+  }
 }
 ```
 
-#### Sqlite
+#### SQLite
 
-Sqlite3 binding needs to be installed for using the sqlite connection.
+SQLite binding needs to be installed for using the sqlite connection.
 
 [client:sqlite3](https://www.npmjs.com/package/sqlite3)
 
 ```javascript
 sqlite: {
-    client: 'sqlite3',
-    connection: {
-        filename: Helpers.storagePath('dev.sqlite')
+  client: 'sqlite3',
+  connection: {
+    filename: Helpers.storagePath('dev.sqlite')
   }
 }
 ```
 
-#### Postgres SQL
+#### PostgreSQL
 
-Postgres binding needs to be installed for using Postgres connection.
+PostgreSQL binding needs to be installed for using pg connection.
 
 [client:pg](https://www.npmjs.com/package/pg)
 
 
 ```javascript
 pg: {
-    client: 'pg',
-    connection: {
-        host: '127.0.0.1',
-        port: 5432,
-        user: '',
-        password: '',
-        database: 'adonis',
-        ssl: false
-    }
+  client: 'pg',
+  connection: {
+    host: '127.0.0.1',
+    port: 5432,
+    user: '',
+    password: '',
+    database: 'adonis',
+    ssl: false
+  }
 }
 ```
 
@@ -161,8 +161,8 @@ Or you can pass a connection string.
 
 ```javascript
 pg: {
-    client: 'pg',
-    connection: 'postgres://user:password@host:port/database?ssl=true'
+  client: 'pg',
+  connection: 'postgres://user:password@host:port/database?ssl=true'
 }
 ```
 
@@ -176,18 +176,18 @@ One of the following bindings needs to be installed for using Oracle DB.
 
 ```javascript
 oracle: {
-    client: 'oracle',
-    connection: {
-        host: '127.0.0.1',
-        port: 1521,
-        user: '',
-        password: '',
-        database: 'adonis'
-    }
+  client: 'oracle',
+  connection: {
+    host: '127.0.0.1',
+    port: 1521,
+    user: '',
+    password: '',
+    database: 'adonis'
+  }
 }
 ```
 
-#### Maria DB
+#### MariaDB
 
 MariaDB binding should be installed before using the mariadb connection.
 
@@ -195,14 +195,14 @@ MariaDB binding should be installed before using the mariadb connection.
 
 ```javascript
 maria: {
-    client: 'mariasql',
-    connection: {
-        host: '127.0.0.1',
-        port: 3306,
-        user: 'root',
-        password: '',
-        database: 'adonis'
-    }
+  client: 'mariasql',
+  connection: {
+    host: '127.0.0.1',
+    port: 3306,
+    user: 'root',
+    password: '',
+    database: 'adonis'
+  }
 }
 ```
 
@@ -214,16 +214,16 @@ Apart from configuring individual database clients, you can also make use of som
 
 All connections make use of pooling, which means once a connection has been created, it will be reused. It will improve the performance of your application.
 
-By default minimum of 2 and maximum of 10 connections will be spawned for MYSQL and Postgres clients. SQLite will always have one open connection.
+By default minimum of 2 and maximum of 10 connections will be spawned for MySQL and PostgreSQL clients. SQLite will always have one open connection.
 
 ```javascript
 module.exports = {
-    client: 'mysql',
-    connection: {...},
-    pool: {
-        min: 0,
-        max: 5
-    }
+  client: 'mysql',
+  connection: { ... },
+  pool: {
+      min: 0,
+      max: 5
+  }
 }
 ```
 
@@ -233,9 +233,9 @@ Connection timeout is set to `60000ms` to determine how long to wait before thro
 
 ```javascript
 module.exports = {
-    client: 'mysql',
-    connection: {...},
-    acquireConnectionTimeout: 60000
+  client: 'mysql',
+  connection: { ... },
+  acquireConnectionTimeout: 60000
 }
 ```
 
@@ -257,39 +257,39 @@ Database.from('users')
 Database.table('users').where('username', 'doe')
 ```
 
-What you have seen above is a query chain. Which means you can make use of multiple methods to make a query.Here is an example of a complete query.
+What you have seen above is a query chain. Which means you can make use of multiple methods to make a query. Here is an example of a complete query.
 
 ```javascript
 const users = yield Database
-    .table('users')
-    .where('age', 22)
-    .orderBy('id', 'desc')
+  .table('users')
+  .where('age', 22)
+  .orderBy('id', 'desc')
 ```
 
 Above query chain is equivalent to following SQL query.
 
 ```sql
-select * from `users` where `age` = 22 order by `id` desc
+SELECT * FROM `users` WHERE `age` = 22 ORDER BY `id` DESC;
 ```
 
 It is so easy to build up simple and complex queries using the query builder. The `yield` keyword will execute the query chain and will return the result back to assigned variable.
 
-You can learn more about [Query builder here.](query-builder)
+You can learn more about [Query Builder here](query-builder).
 
 ## Switching Database Connection
 
-Switching database connection is one of the most common requirement while building multi-tenant apps. Adonis makes it process easier and let you define different connections on runtime.
+Switching database connection is one of the most common requirement while building multi-tenant apps. AdonisJs makes it process easier and let you define different connections on runtime.
 
 Assuming you have defined following connections inside your config file.
 
 ```javascript
 module.exports = {
 
-    mysql: {...},
+  mysql: { ... },
 
-    reportsMysql: {...},
+  reportsMysql: { ... },
 
-    personnaMysql: {...}
+  personnaMysql: { ... }
 
 }
 ```
@@ -300,9 +300,9 @@ Now to switch between database connections you will have to make use of the `con
 
 ```javascript
 yield Database
-    .connection('personnaMysql')
-    .table('users')
-    .where('username', 'doe')
+  .connection('personnaMysql')
+  .table('users')
+  .where('username', 'doe')
 ```
 
 
@@ -323,9 +323,9 @@ You can debug globally for a given connection by setting up debug property on yo
 
 ```javascript
 mysql: {
-    client: 'mysql',
-    connection: {...},
-    debug: true
+  client: 'mysql',
+  connection: { ... },
+  debug: true
 }
 ```
 
@@ -354,10 +354,10 @@ The difference between the sql and query event is the output they produce. `sql`
 
 ```son
 {
-    method: 'select',
-    options: {},
-    bindings: [ 'doe' ],
-    sql: 'select * from `users` where `username` = ?'
+  method: 'select',
+  options: {},
+  bindings: [ 'doe' ],
+  sql: 'select * from `users` where `username` = ?'
 }
 ```
 
@@ -366,24 +366,24 @@ That's not all, you can also debug a single query by chaining the event listener
 
 ```javascript
 yield Database.on('sql', console.log)
-.table('users')
-.where('username', 'doe')
+  .table('users')
+  .where('username', 'doe')
 ```
 
 or
 
 ```javascript
 yield Database.on('query', console.log)
-.table('users')
-.where('username', 'doe')
+  .table('users')
+  .where('username', 'doe')
 ```
 
 or
 
 ```javascript
 yield Database.debug()
-.table('users')
-.where('username', 'doe')
+  .table('users')
+  .where('username', 'doe')
 ```
 
 Query event and debug method will have the same output, it is just that you can access the output of `query event`, however `debug` method will always write to the console.

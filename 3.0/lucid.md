@@ -16,9 +16,9 @@ This is an introductory guide to Lucid ORM. After reading this guide, you will k
 3. How to configure a Model to suit your needs.
 4. Conventional methods to read and manipulate data.
 
-Active Record is a pattern ( not a language or tool ). It helps you in reading and manipulating SQL data as objects and add domain logic to that data. 
+Active Record is a pattern (not a language or tool). It helps you in reading and manipulating SQL data as objects and add domain logic to that data. 
 
-Lucid is an effective implementation of active record. Which means you will never have to write plain SQL queries and all of your database operations will be handled inside Javascript.
+Lucid is an effective implementation of Active Record. Which means you will never have to write plain SQL queries and all of your database operations will be handled inside JavaScript.
 
 Following is the list of databases supported by Lucid.
 
@@ -26,7 +26,7 @@ Following is the list of databases supported by Lucid.
 2. MySQL
 3. MariaDB
 4. Oracle
-5. Sqlite
+5. SQLite
 
 ## Introduction
 
@@ -47,11 +47,11 @@ For example `users` table will have a `User` Model.
 **User (Lucid Model)**
 ```javascript
 class User extends Lucid {
-
+  // Your code
 }
 ```
 
-Models are simple `ES6` classes and by extending `Lucid`, they inherit some default behaviour and methods to manipulate data inside an SQL table.
+Models are simple `ES2015` classes and by extending `Lucid`, they inherit some default behaviour and methods to manipulate data inside an SQL table.
 
 While creating, reading, updating and deleting rows in a table you will execute methods on Model instance.
 
@@ -63,12 +63,12 @@ user.username = 'Jenny'
 user.email = 'Jenny@oscar.com'
 user.password = 'top-secret'
 
-yield user.save() // SQL INSERT
+yield user.save() // SQL Insert
 ```
 
 Above you created an instance of the User model. It is crucial to understand that a model instance always belongs to a single row, which means you cannot do.
 
-~~`const user = new User([{username: ''}, {username: ''}])`~~
+~~`const user = new User([{ username: '' }, { username: '' }])`~~
 
 ## Convention over Configuration
 
@@ -122,15 +122,15 @@ Database connections are defined inside `config/database.js` file. Lucid makes u
 ```javascript
 module.exports = {
  
-    connection: 'mysql',
+  connection: 'mysql',
  
-    mysql: {
-        ....
-    },
+  mysql: {
+    ....
+  },
  
-    reportsMysql: {
-        ...
-    }
+  reportsMysql: {
+    ...
+  }
 
 }
 ```
@@ -138,9 +138,9 @@ module.exports = {
 ```javascript
 class Report extends Mysql {
  
-    static get connection () {
-        return 'reportsMysql'
-    }
+  static get connection () {
+    return 'reportsMysql'
+  }
 
 }
 ```
@@ -156,9 +156,9 @@ Create timestamp defines the database field to be used for adding row creation t
 ```javascript
 class User extends Lucid {
   
-    static get createTimestamp () {
-        return 'created_at'
-    }
+  static get createTimestamp () {
+    return 'created_at'
+  }
 
 }
 ```
@@ -170,9 +170,9 @@ Every time you modify a row in a database table `updateTimestamp` will be update
 ```javascript
 class User extends Lucid {
 
-    static get updateTimestamp () {
-        return 'updated_at'
-    }
+  static get updateTimestamp () {
+    return 'updated_at'
+  }
 
 }
 ```
@@ -185,9 +185,9 @@ class User extends Lucid {
 
 class User extends Lucid {
 
-    static get deleteTimestamp () {
-        return null
-    }
+  static get deleteTimestamp () {
+    return null
+  }
 
 }
 
@@ -204,16 +204,16 @@ Date format specifies the format of date in which timestamps should be saved. In
 ```javascript
 class User extends Lucid {
 
-    static get dateFormat () {
-        return 'YYYY-MM-DD HH:mm:ss'
-    }
+  static get dateFormat () {
+    return 'YYYY-MM-DD HH:mm:ss'
+  }
 
 }
 ```
 
 ## CRUD
 
-Crud is a term used for Create, Read, Update and Delete records from a database table. Lucid models offer a handful of convenient methods to make this process easier.
+CRUD is a term used for Create, Read, Update and Delete records from a database table. Lucid models offer a handful of convenient methods to make this process easier.
 
 ### Defining models
 
@@ -238,7 +238,7 @@ Let's perform CRUD operations on a Post model which has an associated table call
 
 You can create `Post.js` file manually or use `ace` command to generate this file for you.
 
-```
+```bash
 ./ace make:model Post
 ```
 
@@ -246,6 +246,7 @@ You can create `Post.js` file manually or use `ace` command to generate this fil
 const Lucid = use('Lucid')
 
 class Post extends Lucid {
+  // Your code
 }
 ```
 
@@ -256,20 +257,20 @@ const post = new Post()
 post.title = 'Adonis 101'
 post.body  = 'Adonis 101 is an introductory guide for beginners.'
 
-yield post.save() // SQL INSERT
+yield post.save() // SQL Insert
 ```
 
-`save` method will persist the newly create record inside the database and will perform the following query.
+`save()` method will persist the newly create record inside the database and will perform the following query.
 
 ```sql
-insert into "posts" ("title", "body", "created_at", "updated_at") values ('Adonis 101', 'Adonis 101 is an introductory guide for beginners.', '2016-02-20 13:30:13', '2016-02-20 13:30:13')
+INSERT INTO "posts" ("title", "body", "created_at", "updated_at") VALUES ('Adonis 101', 'Adonis 101 is an introductory guide for beginners.', '2016-02-20 13:30:13', '2016-02-20 13:30:13');
 ```
 
 ### read
 
-Reading is an operation divided into two segments. First you want to query the posts and second is to read a single post. There are specific methods to achieve the desired results, but for now, we will focus on `findBy` method.
+Reading is an operation divided into two segments. First you want to query the posts and second is to read a single post. There are specific methods to achieve the desired results, but for now, we will focus on `findBy()` method.
 
-`findyBy` is a dynamic method used with an identifier and will return the first matching result as a model instance for a given where clause.
+`findyBy()` is a dynamic method used with an identifier and will return the first matching result as a model instance for a given where clause.
 
 ```javascript
 const post = yield Post.findBy('title','Adonis 101')
@@ -278,7 +279,7 @@ return post.toJSON()
 
 Above method will perform following SQL query.
 ```sql
-select * from "posts" where "title" = 'Adonis 101' limit 1
+SELECT * FROM "posts" WHERE "title" = 'Adonis 101' LIMIT 1
 ```
 
 ### update
@@ -289,32 +290,32 @@ The update operation is performed on an existing model instance. In general scen
 const post = yield Post.findBy('id', 1)
 post.body = 'Adding some new content'
 
-yield post.save() // SQL UPDATE
+yield post.save() // SQL Update
 ```
 
-`.save` method is smart enough to find out whether to create a new record or to update the existing one and in this scenario it will perform following SQL query.
+`save()` method is smart enough to find out whether to create a new record or to update the existing one and in this scenario it will perform following SQL query.
 
 ```sql
-update "posts" set "body" = 'Adding some new content', "updated_at" = '2016-02-20 13:54:46' where "id" = 1
+UPDATE "posts" SET "body" = 'Adding some new content', "updated_at" = '2016-02-20 13:54:46' WHERE "id" = 1;
 ```
 
 ### delete
 
 Delete operation is also performed on an existing model instance. If you have turned [softDeletes](#soft-deletes) on, then rows will not be deleted from SQL. However, the model instance will be considered deleted.
 
-```
+```javascript
 const post = yield Post.findBy('id', 1)
 yield post.delete()
 ```
 
 Above method will perform following SQL query.
-```
-delete from "posts" where "id" = 1
+```sql
+DELETE FROM "posts" WHERE "id" = 1;
 ```
 
 Also, from this point model instance will freeze for edits, which means you can still read data from existing model instance but will not be able to edit it anymore.
 
-```
+```javascript
 const post = yield Post.findById(1)
 yield post.delete()
 
@@ -331,7 +332,7 @@ Lucid internally makes use of [Database]() provider, which means all methods on 
 
 ### query()
 
-`query` method returns an instance of Database provider, which means you build your queries with the same ease as would do with Database provider.
+`query()` method returns an instance of Database provider, which means you build your queries with the same ease as would do with Database provider.
 
 ```javascript
 yield Post.query().where('title', 'Adonis 101').fetch()
@@ -340,7 +341,7 @@ yield Post.query().where('title', 'Adonis 101').fetch()
 Above method will output following SQL query.
 
 ```sql
-select * from "posts" where "title" = 'Adonis 101'
+SELECT * FROM "posts" WHERE "title" = 'Adonis 101'
 ```
 
 ### fetch()
@@ -358,13 +359,13 @@ Above query will return an array of data.
 
 ```
 [
-    {
-        id: 1,
-        title: 'Adonis 101',
-        body: 'Adonis 101 is an introductory guide for beginners.',
-        created_at: '2016-02-20 17:59:25',
-        updated_at: '2016-02-20 17:59:29'
-    } 
+  {
+    id: 1,
+    title: 'Adonis 101',
+    body: 'Adonis 101 is an introductory guide for beginners.',
+    created_at: '2016-02-20 17:59:25',
+    updated_at: '2016-02-20 17:59:29'
+  } 
 ]
 ```
 
@@ -378,25 +379,25 @@ console.log(posts.value())
 will output
 
 ```
-    [
-        Post {
-            attributes: {
-                id: 1,
-                title: 'Adonis 101',
-                body: 'Adonis 101 is an introductory guide for beginners.',
-                created_at: '2016-02-20 17:59:25',
-                updated_at: '2016-02-20 17:59:29'
-            },
-        original: {...}
-        }
-    ]
+[
+  Post {
+    attributes: {
+      id: 1,
+      title: 'Adonis 101',
+      body: 'Adonis 101 is an introductory guide for beginners.',
+      created_at: '2016-02-20 17:59:25',
+      updated_at: '2016-02-20 17:59:29'
+    },
+    original: { ... }
+  }
+]
 ```
 
 Later one is an array of model instances, which has its benefits. We will talk about them in a different guide.
 
 ### first()
 
-`first` is similar to fetch but it will always return the first matched result as a model instance.
+`first()` is similar to fetch but it will always return the first matched result as a model instance.
 
 ```javascript
 const post = yield Post.query().where('title', 'Adonis 101').first()
@@ -406,7 +407,7 @@ And above query will return a model instance if more than 1 row is found in the 
 
 ### findBy()
 
-`findBy` is a dynamic method used in conjunction with an attribute, for previously defined Post model we can do following.
+`findBy()` is a dynamic method used in conjunction with an attribute, for previously defined Post model we can do following.
 
 ```javascript
 yield Post.findBy('title', '...')
@@ -424,7 +425,7 @@ yield Post.query().where('id', '...').limit(1).fetch()
 
 ### find
 
-`find` is similar to `findBy` but works little different. findBy is a dynamic method which works with any table attribute, whereas `find` only works with the primary key of the table. For example:
+`find()` is similar to `findBy()` but works little different. findBy is a dynamic method which works with any table attribute, whereas `find()` only works with the primary key of the table. For example:
 
 ```javascript
 yield Post.find(1)
@@ -441,9 +442,9 @@ yield Post.findBy('id', 1)
 ```javascript
 class Post extends Lucid {
 
-    static get primaryKey () {
-        return 'postId'
-    }
+  static get primaryKey () {
+    return 'postId'
+  }
 
 }
 
@@ -452,14 +453,14 @@ yield Post.find(1)
 
 Above method will output following SQL query.
 
-```
-select * from "posts" where "postId" = 1 limit 1
+```sql
+SELECT * FROM "posts" WHERE "postId" = 1 LIMIT 1;
 ```
 
 
 ### findOrFail()
 
-`findOrFail` is similar to find but will throw a `ModelNotFoundException` if no records are found for a given primaryKey.
+`findOrFail()` is similar to find but will throw a `ModelNotFoundException` if no records are found for a given primaryKey.
 
 It can become handy if you want to handle errors instead of doing manually check on whether the query has any values or not.
 
@@ -475,7 +476,7 @@ try {
 
 ### pick <span>(rows)</span>
 
-`pick` method will return first `x` rows for a given model.
+`pick()` method will return first `x` rows for a given model.
 
 ```javascript
 yield Post.pick(2)
@@ -487,13 +488,13 @@ Above query is equivalent to the following query.
 yield Post.query().orderBy('id', 'asc').limit(2).fetch()
 ```
 
-You can see the difference and amount of characters you save by using `pick`.
+You can see the difference and amount of characters you save by using `pick()`.
 
 ### pickInverse
 
-`pickInverse` works same as `pick`. Instead, the query is executed with a `DESC` clause.
+`pickInverse()` works same as `pick()`. Instead, the query is executed with a `DESC` clause.
 
-```
+```javascript
 yield Post.pickInverse(3)
 ```
 
@@ -505,7 +506,7 @@ yield Post.query().orderBy('id', 'desc').limit(3).fetch()
 
 ### all
 
-`all` is a shortcut method to return all rows for a given model.
+`all()` is a shortcut method to return all rows for a given model.
 
 ```javascript
 const posts = yield Post.all()
@@ -514,7 +515,7 @@ const posts = yield Post.all()
 Above query is produce following SQL.
 
 ```sql
-select * from "posts"
+SELECT * FROM "posts";
 ```
 
 
@@ -523,7 +524,7 @@ select * from "posts"
 This section will clear some of your doubts for this guide.
 
 1. **How model instance is different from model?**
-Lucid models are ES6 classes, every static property defined in a model can be considered as settings for that model. Now when you create an instance, it always belongs to a single row of data inside your database. Now there are multiple ways of getting model instance but their purpose and result is always same.
+Lucid models are ES2015 classes, every static property defined in a model can be considered as settings for that model. Now when you create an instance, it always belongs to a single row of data inside your database. Now there are multiple ways of getting model instance but their purpose and result is always same.
 
     Also, you cannot perform bulk operations on a model instance. Which means any query whose behaviour can affect one or more rows will never be performed on a model instance. Why is it a big deal?
 
@@ -540,4 +541,4 @@ The best way to understand collections is to understand the effect of a query. W
     A collection is nothing but a fancy term for lodash implicit chain and it has some advantages.
     
     * You can filter or perform any lodash methods directly, without requiring lodash. Not of a big but still little better.
-    * Lucid does a lot of work behind the scenes when you call `toJSON` method on your collection. Without this method, it would not have been impossible to make Lucid.
+    * Lucid does a lot of work behind the scenes when you call `toJSON()` method on your collection. Without this method, it would not have been impossible to make Lucid.

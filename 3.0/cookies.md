@@ -3,10 +3,10 @@ title: Cookie
 permalink: cookies
 weight: 3
 categories:
-	- basics
+  - basics
 ---
 
-Cookies in Adonis are encrypted and signed. Which means any tampering to a cookie will make it invalid. 
+Cookies in AdonisJs are encrypted and signed. Which means any tampering to a cookie will make it invalid. 
 
 In order to make your cookie encrypted, make sure to define `APP_KEY` inside your `.env` file. Alternatively you can make use of `ace` to generate the key for you.
 
@@ -24,9 +24,9 @@ Returns the cookie value for a given key. Default value is returned when existin
 
 ```javascript
 Route.get('/', function * (request, response) {
-	const cardTotal = request.cookie('cartTotal')
-	// or
-	const cardTotal = request.cookie('cartTotal' 0)
+  const cardTotal = request.cookie('cartTotal')
+  // or
+  const cardTotal = request.cookie('cartTotal', 0)
 })
 ```
 
@@ -36,7 +36,7 @@ Returns all cookies as an object.
 
 ```javascript
 Route.get('/', function * (request, response) {
-	const cookies = request.cookies()
+  const cookies = request.cookies()
 })
 ```
 
@@ -48,8 +48,8 @@ You write cookies on the response object, since they are set when a request fini
 
 ```javascript
 Route.get('/', function * (request, response) {
-	response.cookie('cartValue', 210)
-	response.send('Done!')
+  response.cookie('cartValue', 210)
+  response.send('Done!')
 })
 ```
 
@@ -73,7 +73,7 @@ Removes existing cookie from response.
 
 ```javascript
 Route.get('/', function * (request, response) {
-	response.clearCookie('cartValue')
-	response.send('Cleared Cookie')
+  response.clearCookie('cartValue')
+  response.send('Cleared Cookie')
 })
 ```

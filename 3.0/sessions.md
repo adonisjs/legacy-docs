@@ -3,14 +3,14 @@ title: Sessions
 permalink: sessions
 weight: 4
 categories:
-	- basics
+  - basics
 ---
 
-Adonis has out of the box support session management. Adonis also has support for flash messages, which are only valid for the upcoming request.
+AdonisJs has out of the box support session management. AdonisJs also has support for flash messages, which are only valid for the upcoming request.
 
 ## Drivers
 
-Adonis ships with `cookie` and `file` driver, which can be configured inside `config/session.js` file.
+AdonisJs ships with `cookie` and `file` driver, which can be configured inside `config/session.js` file.
 
 ## Methods
 
@@ -23,9 +23,9 @@ Add a value to the session store.
 
 ```javascript
 Route.get('/user', function * (request, response) {
-	yield request.session.put('username', 'doe')
-	// or
-	yield request.session.put({username: 'doe'})
+  yield request.session.put('username', 'doe')
+  // or
+  yield request.session.put({username: 'doe'})
 })
 ```
 
@@ -35,9 +35,9 @@ Returns the session value for a given key.
 
 ```javascript
 Route.get('/user', function * (request, response) {
-	const username = yield request.session.get('username')
-	// or
-	const userId = yield request.session.get('userId', 123)
+  const username = yield request.session.get('username')
+  // or
+  const userId = yield request.session.get('userId', 123)
 })
 ```
 
@@ -73,8 +73,8 @@ In order to make use of flash messages, make sure to enable the `Flash` middlewa
 
 ```javascript
 const globalMiddleware = [
-	...,
-	'Adonis/Middleware/Flash'
+  ...,
+  'Adonis/Middleware/Flash'
 ]
 ```
 
@@ -85,13 +85,13 @@ Flash messages are extremely useful when you want to send the errors back on for
 ```javascript
 class UserContoller {
 
-	* signup (request, response) {
-		const validation = yield Validator.validate(rules, request.all())
-		if (validation.fails()) {
-			yield request.withAll().flash()
-			response.redirect('back')
-		}
-	}
+  * signup (request, response) {
+    const validation = yield Validator.validate(rules, request.all())
+    if (validation.fails()) {
+      yield request.withAll().flash()
+      response.redirect('back')
+    }
+  }
 
 }
 ```
@@ -100,11 +100,11 @@ class UserContoller {
 
 ```twig
 {{ form.open({method: 'UserController.signup'}) }}
-	
-	{{ form.text('email', old('email')) }}
-	{{ form.password('password', old('password')) }}
-	
-	{{ form.submit('Create Account') }}
+  
+  {{ form.text('email', old('email')) }}
+  {{ form.password('password', old('password')) }}
+  
+  {{ form.submit('Create Account') }}
 
 {{ form.close() }}
 ```
@@ -129,7 +129,7 @@ yield request.withOnly('email').flash()
 
 #### withOut(keys...)
 
-Flash all except defined keys
+Flash all except defined keys.
 
 ```javascript
 yield request.withOut('password').flash()
@@ -137,7 +137,7 @@ yield request.withOut('password').flash()
 
 #### with(values)
 
-Flash a custom object
+Flash a custom object.
 
 ```javascript
 yield request.with({error: 'Please fill in all details'}).flash()
@@ -149,14 +149,14 @@ Chainable method to send custom object with request data.
 
 ```javascript
 yield request
-	.withAll()
-	.andWith({error: 'Please fill in all details'})
-	.flash()
+  .withAll()
+  .andWith({error: 'Please fill in all details'})
+  .flash()
 ```
 
 ## Access Flash Values
 
-You can get access to flash values inside your views using the `old` helper.
+You can get access to flash values inside your views using the `old()` helper.
 
 ```twig
 {{ old('username') }}
@@ -168,6 +168,6 @@ Or you can make use of `flashMessages` global to fetch all values.
 
 ```twig
 {% for key, message in flashMessages %}
-	{{ message }}
+  {{ message }}
 {% endfor %}
 ```

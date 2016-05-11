@@ -3,10 +3,10 @@ title: File Uploads
 permalink: file-uploads
 weight: 7
 categories:
-	- basics
+  - basics
 ---
 
-Files are uploaded with care in Adonis. You can control the upload behaviour by configuring values inside `config/bodyParser.js`.
+Files are uploaded with care in AdonisJs. You can control the upload behaviour by configuring values inside `config/bodyParser.js`.
 
 ## Basic Usage
 
@@ -17,26 +17,26 @@ You can get the access to a file instance using the name of `input[type="file"]`
 
 class ProfileController {
 
-	* addAvatar (request, response) {
-		const images = ['jpg', 'png', 'gif']
+  * addAvatar (request, response) {
+    const images = ['jpg', 'png', 'gif']
 
-		const avatar = request.file('avatar')
+    const avatar = request.file('avatar')
 
-		if (images.indexOf(avatar.extension()) <= -1) {
-			response.send('Upload a valid image')
-			return
-		}
-		
-		yield avatar.move()
-		
-		if (!avatar.isMoved()) {
-			response.send(avatar.errors())
-			return
-		}
-		
-		response.send(`Uploaded to ${avatar.uploadPath()}`)
-		
-	}
+    if (images.indexOf(avatar.extension()) <= -1) {
+      response.send('Upload a valid image')
+      return
+    }
+    
+    yield avatar.move()
+    
+    if (!avatar.isMoved()) {
+      response.send(avatar.errors())
+      return
+    }
+    
+    response.send(`Uploaded to ${avatar.uploadPath()}`)
+    
+  }
 
 }
 ```
@@ -98,7 +98,7 @@ Returns a boolean indicating whether the file exists inside the tmp directory or
 
 ```javascript
 if (avatar.exists()) {
-	yield avatar.move()
+  yield avatar.move()
 }
 ```
 
@@ -120,7 +120,7 @@ Returns whether the file has been moved successfully or not.
 
 ```javascript
 if (avatar.isMoved()) {
-	// 
+  // Your code
 }
 ```
 
@@ -129,7 +129,7 @@ Returns errors occurred while moving the file.
 
 ```javascript
 if (!avatar.isMoved()) {
-	const errors = avatar.errors()
+  const errors = avatar.errors()
 }
 ```
 
@@ -139,8 +139,9 @@ Returns the complete path to the uploaded file.
 
 ```javascript
 yield avatar.move(Helpers.storagePath('uploads'))
+
 if (avatar.isMoved()) {
-	response.send(`Uploaded to ${avatar.uploadPath()}`)
+  response.send(`Uploaded to ${avatar.uploadPath()}`)
 }
 ```
 
@@ -150,7 +151,8 @@ Returns the name of the uploaded file.
 
 ```javascript
 yield avatar.move(Helpers.storagePath('uploads'), 'foo.jpg')
+
 if (avatar.isMoved()) {
-	response.send(`Uploaded as ${avatar.uploadName()}`)
+  response.send(`Uploaded as ${avatar.uploadName()}`)
 }
 ```

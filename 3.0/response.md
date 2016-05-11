@@ -3,10 +3,10 @@ title: Response
 permalink: response
 weight: 2
 categories:
-	- basics
+  - basics
 ---
 
-Response object is also a sugared layer on top of NodeJs HTTP response. It offers handful of expressive methods to make response for HTTP requests.
+Response object is also a sugared layer on top of Node.js HTTP response. It offers handful of expressive methods to make response for HTTP requests.
 
 ## Response Methods
 
@@ -17,7 +17,7 @@ Send method will end by request by responding the request with given data. You c
 ```javascript
 response.send('Hello world')
 // or
-response.send({name: 'doe'})
+response.send({ name: 'doe' })
 // or
 response.send(1)
 ```
@@ -33,10 +33,10 @@ response.status(201).send('Created')
 
 #### json(body)
 
-Creating a JSON response with correct `Content-type` header.
+Creating a JSON response with correct `Content-Type` header.
 
 ```javascript
-response.json({name: 'doe'})
+response.json({ name: 'doe' })
 ```
 
 
@@ -45,7 +45,7 @@ response.json({name: 'doe'})
 Creates a JSONP response. It will make use of `callback` defined as the query string or will fallback to `http.jsonpCallback` defined inside `config/app.js` file.
 
 ```javascript
-response.json({name: 'doe'})
+response.json({ name: 'doe' })
 ```
 
 
@@ -86,7 +86,7 @@ yield response.sendView('welcome')
 
 #### download(filePath)
 
-Stream a file for download
+Stream a file for download.
 
 ```javascript
 response.download(Helpers.storagePath('report.xls'))
@@ -124,9 +124,9 @@ Redirect to a define route.
 
 ```javascript
 Route
-	.get('/user/:id', '...')
-	.as('profile')
-	
+  .get('/user/:id', '...')
+  .as('profile')
+  
 response.route('profile', {id: 1})
 
 // redirects to /user/1
@@ -146,7 +146,7 @@ is more readable and descriptive than.
 response.status(401).send('Login First')
 ```
 
-Below is the list of all descriptive methods and their corresponding Http statuses.
+Below is the list of all descriptive methods and their corresponding HTTP statuses.
 
 | method                       | http response status |
 | ---------------------------- | -------------------- |
@@ -204,10 +204,10 @@ Same can be done inside `app/Listeners/Http.js`.
 
 ```javascript
 Http.onStart = function () {
-	const Response = use('Response')
-	
-	Response.macro('sendStatus', function (status) {
-		this.status(status).send(status)
-	})
+  const Response = use('Response')
+  
+  Response.macro('sendStatus', function (status) {
+    this.status(status).send(status)
+  })
 }
 ```
