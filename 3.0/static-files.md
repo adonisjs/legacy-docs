@@ -3,12 +3,12 @@ title: Static Files
 permalink: static-files
 weight: 8
 categories:
-	- basics
+  - basics
 ---
 
 Static resources are served by the core of the framework. Each HTTP request with `GET` and `HEAD` verb will be check against a static file inside your `public` directory.
 
-If that file does not exist, Adonis will start by resolving the route and goes on from there.
+If that file does not exist, AdonisJs will start by resolving the route and goes on from there.
 
 ## How it Works
 
@@ -28,9 +28,9 @@ Configuration of static resources is stored inside `config/app.js` file.
 
 ```javascript
 static: {
-	dotfiles: 'ignore',
-	etag: true,
-	extensions: false
+  dotfiles: 'ignore',
+  etag: true,
+  extensions: false
 }
 ```
 

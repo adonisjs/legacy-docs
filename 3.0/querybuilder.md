@@ -11,20 +11,20 @@ categories:
 
 # Query Builder
 
-Query builder provides a fluent syntax to write SQL queries in NodeJs.
+Query builder provides a fluent syntax to write SQL queries in Node.js.
 
 By the end of this guide you will know:
 
 1. How to create SQL queries using query builder.
 2. How to make use of aggregate methods to find records.
 3. How to define SQL query joins.
-4. How to insert,update and delete rows from database.[]()
+4. How to insert,update and delete rows from database.
 
 ## Introduction
 
 Writing SQL queries can be tedious in so many ways, even if you are good with SQL.
 
-Let's imagine you write all of your queries for MYSQL and after some time, your manager asks you to migrate everything to PostgreSQL.Now you will have to re-write/amend your MYSQL queries to make sure they work well with PostgreSQL.
+Let's imagine you write all of your queries for MySQL and after some time, your manager asks you to migrate everything to PostgreSQL. Now you will have to re-write/amend your MySQL queries to make sure they work well with PostgreSQL.
 
 Another issue can be of building queries incrementally, Let's say your application you have conditional blocks to make incremental queries.
 
@@ -32,6 +32,7 @@ Another issue can be of building queries incrementally, Let's say your applicati
 
 ```javascript
 const sql = 'SELECT * FROM `users`'
+
 if (username) {
   sql += ' WHERE `username` = ' + username
 }
@@ -40,6 +41,7 @@ if (username) {
 **With Query Builder**
 ```javascript
 const query = Database.table('users')
+
 if (username) {
  query.where('username', username)
 }
@@ -79,7 +81,7 @@ select * from `users` where `id` = 1
 
 **As object**
 ```
-yield Database.from('users').where({id: 1})
+yield Database.from('users').where({ id: 1 })
 
 // outputs
 select * from `users` where `id` = 1
@@ -115,13 +117,13 @@ You can also create SQL subqueries.
 
 ```javascript
 const subquery = Database
-    .from('accounts')
-    .where('account_name', 'somename')
-    .select('account_name')
+  .from('accounts')
+  .where('account_name', 'somename')
+  .select('account_name')
 
 const users = yield Database
-    .from('users')
-    .whereIn('id', subquery)
+  .from('users')
+  .whereIn('id', subquery)
 
 // outputs
 select * from `users` where `id` in (select `account_name` from `accounts` where `account_name` = 'somename')
@@ -129,7 +131,7 @@ select * from `users` where `id` in (select `account_name` from `accounts` where
 
 #### whereNot(~mixed~)
 
-`whereNot` has the same signature as `where`.
+`whereNot()` has the same signature as `where()`.
 
 ```javascript
 yield Database.from('users').whereNot('age', '>', 20)
@@ -140,7 +142,7 @@ select * from `users` where not `age` > 20
 
 
 #### whereIn(~mixed~)
-`whereIn` has same signature as `where`.
+`whereIn()` has same signature as `where()`.
 
 ```javascript
 yield Database.from('users').whereIn('id', [1,2,3])
@@ -151,7 +153,7 @@ select * from `users` where `id` in (1, 2, 3)
 
 
 #### whereNotIn(~mixed~)
-`whereNotIn` has same signature as `where`.
+`whereNotIn()` has same signature as `where()`.
 
 ```javascript
 yield Database.from('users').whereNotIn('id', [1,2,3])
@@ -182,7 +184,7 @@ select * from `users` where `deleted_at` is not null
 
 ```javascript
 yield Database.from('users').whereExists(function () {
-    this.from('accounts').where('users.id', 'accounts.user_id')
+  this.from('accounts').where('users.id', 'accounts.user_id')
 })
 
 // outputs
@@ -220,7 +222,7 @@ select * from `users` where `age` not between 18 and 32
 
 #### whereRaw(~mixed~)
 
-`whereRaw` method will let you write a raw SQL where clause.
+`whereRaw()` method will let you write a raw SQL where clause.
 
 ```
 yield Database.from('users').whereRaw('id = ?', [20])
@@ -257,7 +259,7 @@ select * from `users` inner join `accounts` on `users`.`id` = `accounts`.`user_i
 
 ### Other joins methods
 
-All the join methods have the same signature as `innerJoin` method.
+All the join methods have the same signature as `innerJoin()` method.
 - leftJoin
 - leftOuterJoin
 - rightJoin
@@ -298,7 +300,7 @@ select * from `users` order by `id` desc
 
 #### having(column, operator, value)
 
-`groupBy` clause is always required before making use of `having` method.
+`groupBy()` clause is always required before making use of `having()` method.
 
 ```
 yield Database.table('users').groupBy('age').having('age', '>', 18)
@@ -334,15 +336,15 @@ Database.from('users').insert(...)
 Database.insert(...).into('users')
 ```
 
-**PostgreSQL only**
+**PostgreSQL Only**
 
 For PostgreSQL, you will have to define the returning column explicitly, all other database clients will ignore this statement.
 
 ```javascript
 yield Database
-    .insert({username: 'virk'})
-    .into('users')
-    .returning('id')
+  .insert({ username: 'virk' })
+  .into('users')
+  .returning('id')
 ```
 
 
@@ -350,8 +352,8 @@ yield Database
 
 ```javascript
 yield Database
-    .insert({username: 'virk'})
-    .into('users')
+  .insert({ username: 'virk' })
+  .into('users')
 
 // outputs
 insert into `users` (`username`) values ('virk')
@@ -363,8 +365,8 @@ You can pass an array of objects for bulk inserts.
 
 ```javascript
 yield Database
-    .insert([{username: 'virk'}, {username: 'doe'}])
-    .into('users')
+  .insert([{ username: 'virk' }, { username: 'doe' }])
+  .into('users')
     
 // outputs
 insert into `users` (`username`) values ('virk'), ('doe')
@@ -376,9 +378,9 @@ All update operations will return the number of affected rows.
 
 ```javascript
 yield Database
-    .table('users')
-    .where('username', 'virk')
-    .update('lastname', 'Virk')
+  .table('users')
+  .where('username', 'virk')
+  .update('lastname', 'Virk')
     
 // outputs
 update `users` set `lastname` = 'Virk' where `username` = 'virk'
@@ -388,9 +390,9 @@ Or for multiple columns you can pass an object.
 
 ```javascript
 yield Database
-    .table('users')
-    .where('username', 'virk')
-    .update({lastname: 'Virk', firstname: 'Aman'})
+  .table('users')
+  .where('username', 'virk')
+  .update({ lastname: 'Virk', firstname: 'Aman' })
     
 // outputs
 update `users` set `firstname` = 'Aman', `lastname` = 'Virk' where `username` = 'virk'
@@ -402,13 +404,13 @@ Deletes operations will also return the number of affected rows.
 
 #### delete
 
-Also, you can make use of `del`, which is an alias for `delete` method.
+Also, you can make use of `del()`, which is an alias for `delete()` method.
 
 ```javascript
 yield Database
-    .table('users')
-    .where('username', 'virk')
-    .delete()
+  .table('users')
+  .where('username', 'virk')
+  .delete()
 
 // outputs
 delete from `users` where `username` = 'virk'
@@ -466,7 +468,7 @@ select count(`id`) as `id` from `users`
 
 #### countDistinct([column])
 
-`countDistinct` is same as count, but adds distinct expression.
+`countDistinct()` is same as count, but adds distinct expression.
 
 ```javascript
 const total = yield Database.from('users').countDistinct('id')
@@ -550,9 +552,9 @@ Increment will add the given value to the existing value.
 
 ```
 yield Database
-    .table('credits')
-    .where('id', 1)
-    .increment('balance', 10)
+  .table('credits')
+  .where('id', 1)
+  .increment('balance', 10)
     
 // outputs
 update `credits` set `balance` = `balance` + 10 where `id` = 1
@@ -565,9 +567,9 @@ Opposite of `increment`
 
 ```
 yield Database
-    .table('credits')
-    .where('id', 1)
-    .decrement('balance', 10)
+  .table('credits')
+  .where('id', 1)
+  .decrement('balance', 10)
     
 // outputs
 update `credits` set `balance` = `balance` - 10 where `id` = 1
@@ -590,7 +592,7 @@ select `id` from `users`
 
 #### first
 
-`first` method will return the first matching row.
+`first()` method will return the first matching row.
 
 ```javascript
 yield Database.from('users').first()
@@ -599,7 +601,7 @@ yield Database.from('users').first()
 select * from `users` limit 1
 
 // returns
-{...}
+{ ... }
 ```
 
 #### clone
@@ -608,9 +610,9 @@ It will clone the current query chain for re-usability.
 
 ```javascript
 const query = Database
-    .from('users')
-    .where('username', 'virk')
-    .clone()
+  .from('users')
+  .where('username', 'virk')
+  .clone()
 
 // later
 yield query
@@ -621,16 +623,16 @@ yield query
 Returns information for a given column.
 
 ```javascript
- const username = yield Database.table('users').columnInfo('username')
+const username = yield Database.table('users').columnInfo('username')
  
- // outputs
- PRAGMA table_info(users)
+// outputs
+PRAGMA table_info(users)
  
- // returns
+// returns
 {
-    type: 'varchar',
-    maxLength: '255',
-    nullable: true,
-    defaultValue: null
+  type: 'varchar',
+  maxLength: '255',
+  nullable: true,
+  defaultValue: null
 }
 ```

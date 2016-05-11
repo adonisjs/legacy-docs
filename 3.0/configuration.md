@@ -6,14 +6,14 @@ categories:
 - providers
 ---
 
-Adonis application configuration is managed via config files. Each config file is defined inside the `config` directory in the root of every application.
+AdonisJs application configuration is managed via config files. Each config file is defined inside the `config` directory in the root of every application.
 
-Make sure to export an object from your config files. For example-
+Make sure to export an object from your config files. For example:
 
 ##### config/app.js
 ```javascript
 module.exports = {
-	appKey: '...'
+  appKey: '...'
 }
 ```
 
@@ -30,8 +30,8 @@ Returns the value for a key inside the config file. It will return defaultValue 
 'use strict'
 
 const Config = use('Config')
-Config.get('database.connection')
 
+Config.get('database.connection')
 // or
 Config.get('database.connection', 'mysql')
 ```

@@ -7,7 +7,7 @@ categories:
 - getting-started
 ---
 
-Adonis is a Node.js MVC Framework. It encapsulates the boring parts of Web development and offers you a nice API to work with.
+AdonisJs is a Node.js MVC Framework. It encapsulates the boring parts of Web development and offers you a nice API to work with.
 
 Every web application needs following at a certain stage. 
 
@@ -17,13 +17,13 @@ Every web application needs following at a certain stage.
 4. Validate and Sanitise user inputs.
 5. Structured application layout.
 
-Adonis has all of this built right into the framework or can be added by using one of the official library/modules.
+AdonisJs has all of this built right into the framework or can be added by using one of the official library/modules.
 
-This guide is geared to give you an in-depth understanding of how AdonisJS works. If you are interested in seeing Adonis in action, check out this [VIDEO].
+This guide is geared to give you an in-depth understanding of how AdonisJS works. If you are interested in seeing AdonisJs in action, check out this [VIDEO].
 
 ## Simplest Example
 
-Adonis attempts to remove the big pieces of unmanageable code with simple readable API's. For example
+AdonisJs attempts to remove the big pieces of unmanageable code with simple readable API's. For example
 
 ```javascript
 const Route = use('Route')
@@ -38,9 +38,9 @@ Route.get('/', function * (request, response) {
 
 Don't worry, if you do not fully understand the above code, but you can see within 6 lines of code, you are able to fetch all users from a database and send them back as `JSON` response.
 
-1. Adonis removes the unnecessary callbacks from your code and introduces ES2015 Generators.
+1. AdonisJs removes the unnecessary callbacks from your code and introduces ES2015 Generators.
 2. It organizes everything into different/multiple directories so that you can keep your files short and sweet.
-3. Adonis does not add anything to the globals except the `use` and `make` function. Don't worry, we will learn about them soon.
+3. AdonisJs does not add anything to the globals except the `use` and `make` function. Don't worry, we will learn about them soon.
 
 ## MVC
 
@@ -120,7 +120,7 @@ const fs = use('fs')
 ```
 
 
-But it does a lot more than `require` and is specific to Adonis. 
+But it does a lot more than `require` and is specific to AdonisJs. 
 
 ### How use Works?
 

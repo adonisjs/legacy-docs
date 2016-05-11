@@ -1,12 +1,12 @@
-# Getting Started With Adonis
+# Getting Started With AdonisJs
 
-Everything you need to know about Adonis to create a working application. This guide is intended for beginners to make them comfortable with the framework.
+Everything you need to know about AdonisJs to create a working application. This guide is intended for beginners to make them comfortable with the framework.
 
-## What is Adonis?
+## What is AdonisJs?
 
-Adonis is a MVC framework for NodeJs. Which means it follows the patterns/conventions of MVC and help you in creating web applications with a set of battle tested tools.
+AdonisJs is a MVC framework for Node.js. Which means it follows the patterns/conventions of MVC and help you in creating web applications with a set of battle tested tools.
 
-Adonis creates an Eco system around your application, which makes it so easy for you to create modern web applications using the required tools like.
+AdonisJs creates an Eco system around your application, which makes it so easy for you to create modern web applications using the required tools like.
 
 1. Mailer.
 2. Authentication provider. 

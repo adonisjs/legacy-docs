@@ -7,7 +7,7 @@ categories:
 - first-steps
 ---
 
-Majority of the security features are baked right into Adonis with the help of a middleware called [shield](https://github.com/adonisjs/adonis-middleware). Shield protects your apps from common web/malware attacks.
+Majority of the security features are baked right into AdonisJs with the help of a middleware called [shield](https://github.com/adonisjs/adonis-middleware). Shield protects your apps from common web/malware attacks.
 
 ## Setup
 
@@ -19,13 +19,13 @@ Install the middleware if already not included
 npm i --save adonis-middleware
 ```
 
-Next we need to register the `AppMiddlewareProvider`. Which will bind all the middleware to the IoC container, later to be used inside the Http kernel file.
+Next we need to register the `AppMiddlewareProvider`. Which will bind all the middleware to the IoC Container, later to be used inside the HTTP kernel file.
 
 ##### bootstrap/app.js
 ```javascript
 const providers = [
-	...,
-	'adonis-middleware/providers/AppMiddlewareProvider'
+  ...,
+  'adonis-middleware/providers/AppMiddlewareProvider'
 ]
 ```
 
@@ -33,7 +33,7 @@ Finally you need to register the middleware inside the `app/Http/kernel.js` file
 
 ```javascript
 const globalMiddlewares = [
-	'Adonis/Middleware/Shield'
+  'Adonis/Middleware/Shield'
 ]
 ```
 
@@ -50,9 +50,9 @@ You can learn more about CSRF [here](https://www.owasp.org/index.php/Cross-Site_
 
 ```javascript
 csrf: {
-	enable: true,
-	methods: ['POST', 'PUT', 'DELETE'],
-	filterUris: ['/user/:id']
+  enable: true,
+  methods: ['POST', 'PUT', 'DELETE'],
+  filterUris: ['/user/:id']
 }
 ```
 
@@ -60,15 +60,15 @@ Key | Value | Description
 ------|-------|----------
 enable | Boolean | A boolean to turn on/off CSRF for entire application.
 methods | Array | HTTP verbs to be protected by CSRF. Consider adding all verbs which allows the end user to add or modify data.
-filterUris | Array | A list of Urls/Routes to ignore. You can pass actual routes definition or a regular expression to match.
+filterUris | Array | A list of URLs/Routes to ignore. You can pass actual routes definition or a regular expression to match.
 
 While validating the requests, middleware will look at the following areas to read the CSRF token.
 
 1. Request body or query string having `_csrf` field.
 2. Request header with following keys.
-	- **csrf-token**
-	- **x-csrf-token**
-	- **x-xsrf-token**
+  - **csrf-token**
+  - **x-csrf-token**
+  - **x-xsrf-token**
 
 ## Accessing CSRF Token
 
@@ -99,9 +99,9 @@ On validation failure an `EBADCSRFTOKEN` Exception is thrown and same can be han
 
 ```javascript
 Helpers.handleError = function * (error, request, response) {
-	if (error.code === 'EBADCSRFTOKEN') {
-		response.forbidden('You cannot access this resource.')
-	}
+  if (error.code === 'EBADCSRFTOKEN') {
+    response.forbidden('You cannot access this resource.')
+  }
 }
 ```
 
@@ -114,10 +114,10 @@ It is very important to be strict when allowing the execution of scripts from di
 ```javascript
 csp: {
   directives: {
-	  defaultSrc: ['self', 'http://getcdn.com'],
-	  scriptSrc: ['self', '@nonce'],
-	  styleSrc: ['http://getbootstrap.com'],
-	  imgSrc: ['http://dropbox.com']
+    defaultSrc: ['self', 'http://getcdn.com'],
+    scriptSrc: ['self', '@nonce'],
+    styleSrc: ['http://getbootstrap.com'],
+    imgSrc: ['http://dropbox.com']
   },
   reportOnly: false,
   setAllHeaders: false,
@@ -151,17 +151,17 @@ Above will create a meta tag with the required content inside it.
 
 #### CSP Nonce
 
-Inline script is a javascript code, which lives within the HTML page. Some 3rd party plugins can drop their Javascript to your webpages, which may not be something you are looking for.
+Inline Script is a javaScript code, which lives within the HTML page. Some 3rd party plugins can drop their JavaScript to your webpages, which may not be something you are looking for.
 
 Disabling `Inline Scripts` is not very helpful. So `nonce` is a way to identify inline scripts created by you vs dropped by unidentified resources.
 
 **config/shield.js**
 ```javascript
 csp: {
-	directives: {
-	  scriptSrc: ['self', '@nonce']
-	},
-	...
+  directives: {
+    scriptSrc: ['self', '@nonce']
+  },
+  ...
 }
 ```
 
@@ -189,11 +189,11 @@ xss: {
 
 #### No Sniff
 
-Majority of modern browsers will try to detect the `Content-type` of a request by sniffing its content. Which means a file ending in `.txt` can be executed as javascript file, if it contains javascript code. To disable this behaviour set `nosniff` to true.
+Majority of modern browsers will try to detect the `Content-Type` of a request by sniffing its content. Which means a file ending in `.txt` can be executed as javascript file, if it contains javascript code. To disable this behaviour set `nosniff` to true.
 
 ```javascript
 {
-	nosniff: true
+  nosniff: true
 }
 ```
 

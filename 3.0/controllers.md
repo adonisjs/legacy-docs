@@ -3,7 +3,7 @@ title: Controllers
 permalink: controllers
 weight: 5
 categories:
-	- basics
+  - basics
 ---
 
 Controllers represents **C** in MVC. They are the common point of interaction between your models and views. 
@@ -31,9 +31,9 @@ Above command will create `UserController.js` file inside the Controllers direct
 ```javascript
 class UserController {
 
-	* index (request, response) {
-		response.send('Hello world from controller!')		
-	}
+  * index (request, response) {
+    response.send('Hello world from controller!')   
+  }
 
 }
 
@@ -66,7 +66,7 @@ Route.get('/users', 'Admin/UserController.index')
 
 CRUD applications are built on the idea of **Creating, Reading, Updating and Deleting** records from a database table.
 
-Since these are very common operations, Adonis helps you in defining conventional routes and their Controller actions using a term called `resource.`
+Since these are very common operations, AdonisJs helps you in defining conventional routes and their Controller actions using a term called `resource`.
 
 #### resources(name, Controller)
 ```javascript
@@ -94,8 +94,8 @@ Route.resources('users', 'UserController')
 `except` will not register routes for the given actions.
 ```javascript
 Route
-	.resource('users', 'UserController')
-	.except('create', 'edit')
+  .resource('users', 'UserController')
+  .except('create', 'edit')
 ```
 
 Above definition will not register the route for `create` and `edit` actions.
@@ -106,8 +106,8 @@ Above definition will not register the route for `create` and `edit` actions.
 
 ```javascript
 Route
-	.resource('users', 'UserController')
-	.only('store', 'update', 'index')
+  .resource('users', 'UserController')
+  .only('store', 'update', 'index')
 ```
 
 ## Extending Resources
@@ -118,8 +118,8 @@ Apart from filtering, resources can also be extended to add more actions to them
 
 ```javascript
 Route
-	.resource('posts', 'PostController')
-	.addCollection('popular')
+  .resource('posts', 'PostController')
+  .addCollection('popular')
 ```
 
 Above will add a new route and action to your resource called `popular`.
