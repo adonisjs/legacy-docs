@@ -7,7 +7,7 @@ categories:
 - getting-started
 ---
 
-Adonis is a NodeJs MVC Framework. It encapsulates the boring parts of Web development and offers you a nice API to work with.
+Adonis is a Node.js MVC Framework. It encapsulates the boring parts of Web development and offers you a nice API to work with.
 
 Every web application needs following at a certain stage. 
 
@@ -19,7 +19,7 @@ Every web application needs following at a certain stage.
 
 Adonis has all of this built right into the framework or can be added by using one of the official library/modules.
 
-This guide is geared to give you an in-depth understanding of how AdonisJS works.If you are interested in seeing Adonis in action, check out this [VIDEO].
+This guide is geared to give you an in-depth understanding of how AdonisJS works. If you are interested in seeing Adonis in action, check out this [VIDEO].
 
 ## Simplest Example
 
@@ -31,13 +31,14 @@ const User = use('App/Model/User')
 
 Route.get('/', function * (request, response) {
     const users = yield User.all()
+
     response.json(users)
 })
 ```
 
 Don't worry, if you do not fully understand the above code, but you can see within 6 lines of code, you are able to fetch all users from a database and send them back as `JSON` response.
 
-1. Adonis removes the unnecessary callbacks from your code and introduces Es6 Generators.
+1. Adonis removes the unnecessary callbacks from your code and introduces ES2015 Generators.
 2. It organizes everything into different/multiple directories so that you can keep your files short and sweet.
 3. Adonis does not add anything to the globals except the `use` and `make` function. Don't worry, we will learn about them soon.
 
@@ -52,7 +53,7 @@ MVC stands for **Model**, **View** and **Controller**.
   <a href='https://500px.com/photo/152746175/mvc-flow-chart-by-virkofficials' alt='MVC Flow Chart by virkofficials on 500px.com'></a>
 </div>
 
-1. Model is the layer of data you retrieve/persist to the SQL databases like Mysql, Sqlite, PostgreSQL etc.
+1. Model is the layer of data you retrieve/persist to the SQL databases like MySQL, SQLite, PostgreSQL etc.
 2. Controller is a method which responds to a HTTP request, this is the place where you interact with your Model to fetch data and send it to your views.
 3. View is `.nunjucks` file, which contains the HTML layout of your web page. Instead of just plain HTML, views offer a dynamic data binding syntax.
 
@@ -64,6 +65,7 @@ MVC stands for **Model**, **View** and **Controller**.
 const Lucid = use('Lucid')
 
 class User extends Lucid {
+  // Your code
 }
 ```
 
@@ -77,7 +79,8 @@ class UserController {
  
   * show (request, response) {
       const user = yield User.find(1)
-      yield response.sendView('user', {user: user.toJSON()})
+
+      yield response.sendView('user', { user: user.toJSON() })
   }
 
 }
@@ -94,7 +97,7 @@ Email - {{ user.email }}
 
 Writing server applications requires a lot of work and needs to be organised within multiple files and directories to keep code maintainable and readable.
 
-IoC container is a box to store all the pieces of your application so that you can use them whenever you need them. When these pieces are stored inside the container, they are given a unique namespace.
+IoC Container is a box to store all the pieces of your application so that you can use them whenever you need them. When these pieces are stored inside the container, they are given a unique namespace.
 
 <div class='pixels-photo'>
   <p>
@@ -104,7 +107,7 @@ IoC container is a box to store all the pieces of your application so that you c
 </div>
 
 
-`use` keyword is a function added to the globals by the IoC container. It works same as the standard `require` function. Which means.
+`use` keyword is a function added to the globals by the IoC Container. It works same as the standard `require` function. Which means.
 
 ```javascript
 const fs = require('fs')
@@ -128,4 +131,4 @@ When you say `use('Route')`, following steps are being performed.
 2. Next, it will look for the resolved namespace inside the container.
 3. Finally, it will return the value bind to the container for the given namespace.
 
-A complete guide is the dedicated to the IoC container, as it is a very broad concept. Read about it [here](ioc-container). 
+A complete guide is the dedicated to the IoC Container, as it is a very broad concept. Read about it [here](ioc-container). 

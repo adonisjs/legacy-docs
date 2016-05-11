@@ -19,13 +19,13 @@ Adonis makes this process easier with the use of `.env` file to manage environme
 
 Following are some of the best practices to manage environment specific configuration.
 
-1. Never commit `.env` file to your version control. For example- never push this file to Github, Bitbucket etc.
+1. Never commit `.env` file to your version control. For example, never push this file to Github, Bitbucket etc.
 2. Create a different `.env` file on your server or automate the process of creating this file at the time of deployment.
-3. Store all sensitive key/value pairs inside this file. For example- **OAuth Keys, STMP Credentials** etc.
+3. Store all sensitive key/value pairs inside this file. For example, **OAuth Keys, STMP Credentials** etc.
 
 ## Loading Environment File
 
-Adonis automatically will load the `.env` file from the root of your project. Later you can make use of the [Env Provider](env-provider) to access the defined key/values pairs.
+Adonis will automatically load the `.env` file from the root of your project. Later you can make use of the [Env Provider](env-provider) to access the defined key/values pairs.
 
 You can also share your `.env` file between multiple projects from a global location, instead of defining it for every project.
 
@@ -43,7 +43,7 @@ There is a separate guide on [Security](security), make sure to read it carefull
 
 ## Scaffolding
 
-**Adonis Ace** is a command line utility to perform tasks from your terminal. It ships with plenty of commands to scaffold Controllers, Models, Middleware etc.
+**Adonis Ace** is a command line utility to perform tasks from your terminal. It ships with plenty of commands to scaffold Controllers, Models, Middlewares etc.
 
 ### Available Commands
 
@@ -84,7 +84,7 @@ In order to know more about a specific command, run the following.
 
 ## Fixing Ace File
 
-`ace` is an executable file in the root of your project. While creating a new project, Adonis will setup this file based on the OS and the path where NodeJs is installed. 
+`ace` is an executable file in the root of your project. While creating a new project, Adonis will setup this file based on the OS and the path where Node.js is installed. 
 
 When cloning the project repo, or moving between Windows and OSX, you may end up with a non-working `ace` file. In order to fix it, just run the below command.
 
@@ -94,5 +94,5 @@ adonis fix ace
 
 Behind the scenes, Adonis will perform following operations.
 
-1. Setup the correct path of NodeJs on the first line of `ace` file.
+1. Setup the correct path of Node.js on the first line of `ace` file.
 2. If you are on Windows, it will create a `ace.cmd` file, which will execute the `ace` file for you.

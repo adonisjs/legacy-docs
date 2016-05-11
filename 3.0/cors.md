@@ -6,7 +6,7 @@ categories:
 - first-steps
 ---
 
-Cross-Origin resource sharing is a way to allow HTTP requests from different domains. It is very common in AJAX requests where the browser will block all Cross domain requests if they are not enabled or allowed by the server. Read more about [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS).
+Cross-Origin Resource Sharing is a way to allow HTTP requests from different domains. It is very common in AJAX requests where the browser will block all cross-domain requests if they are not enabled or allowed by the server. Read more about [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS).
 
 In Adonis, CORS are handled by a middleware. Just make sure it is added to the list of global middleware.
 
@@ -14,8 +14,8 @@ In Adonis, CORS are handled by a middleware. Just make sure it is added to the l
 
 ```javascript
 const globalMiddleware = [
-    ...,
-    'Adonis/Middleware/Cors'
+  ...,
+  'Adonis/Middleware/Cors'
 ]
 ```
 
@@ -46,7 +46,7 @@ Origin can accept multiple values
 
 ```javascript
 origin: function (requestOrigin) {
-    return requestOrigin === 'foo'
+	return requestOrigin === 'foo'
 }
 ```
 
@@ -60,11 +60,12 @@ As origin, headers also accept multiple values
 
 1. To disable all headers set to `false`.
 2. To allow all headers defined inside `Access-Control-Request-Headers` set it to `true`.
-3. Allow a string of comma(,) separated custom headers. For example - Content-Type, Accepts.
+3. Allow a string of comma(,) separated custom headers. For example, Content-Type, Accepts.
 4. Finally, a callback function.
 
 ```javascript
 headers: function (requestedHeaders) {
+	// Your code
 }
 ```
 
@@ -74,7 +75,7 @@ Comma separated headers to expose as `Access-Control-Expose-Headers`.
 
 #### credentials (optional)
 
-Allow or disallow `Access-Control-Allow-Credentials` using a boolean value
+Allow or disallow `Access-Control-Allow-Credentials` using a boolean value.
 
 #### maxAge (optional)
 
