@@ -11,10 +11,10 @@ Installing Adonis is a fairly simple process and will take only a few minutes. I
 
 ## Requirements
 
-Adonis has no other dependencies other than NodeJs and Npm. We also recommend making use of [nvm](https://github.com/creationix/nvm) to install and manage NodeJs.
+Adonis has no other dependencies other than Node.js and npm. We also recommend making use of [nvm](https://github.com/creationix/nvm) to install and manage Node.js.
 
-1. [NodeJs](https://nodejs.org/en/) version `4.0` or greater.
-2. [Npm](https://www.npmjs.org/) version `3.0` or greater. 
+1. [Node.js](https://nodejs.org/en/) version `4.0` or greater.
+2. [npm](https://www.npmjs.org/) version `3.0` or greater. 
 
 ## Installing Adonis CLI
 
