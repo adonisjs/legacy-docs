@@ -302,7 +302,7 @@ Http.onStart = function () {
 Now you can use the above filter inside your views.
 
 ```twig
-{{ 1000 | currency '$' }}
+{{ 1000 | currency('$') }}
 
 {# return $1,000.00 #}
 ```
