@@ -674,7 +674,7 @@ Create a file upload button
 
 #### With Object
 ```twig
-form.select('countries', {ind: 'India', us: 'Usa'})
+{{ form.select('countries', {ind: 'India', us: 'Usa'}) }}
 ```
 
 ```html
@@ -687,7 +687,7 @@ form.select('countries', {ind: 'India', us: 'Usa'})
 #### Define selected option
 
 ```twig
-form.select('countries', {ind: 'India', us: 'Usa'}, 'ind')
+{{ form.select('countries', {ind: 'India', us: 'Usa'}, 'ind') }}
 ```
 
 ```html
@@ -700,7 +700,7 @@ form.select('countries', {ind: 'India', us: 'Usa'}, 'ind')
 #### Select multiple
 
 ```twig
-form.select('countries', {ind: 'India', us: 'Usa', uk: 'UK'}, ['ind', 'us'], null, {multiple: true})
+{{ form.select('countries', {ind: 'India', us: 'Usa', uk: 'UK'}, ['ind', 'us'], null, {multiple: true}) }}
 ```
 
 ```html
@@ -716,7 +716,7 @@ form.select('countries', {ind: 'India', us: 'Usa', uk: 'UK'}, ['ind', 'us'], nul
 Create a select box within a given range.
 
 ```twig
-form.selectRange('days', 1, 30)
+{{ form.selectRange('days', 1, 30) }}
 ```
 
 #### submit(value, name, attributes)
@@ -734,7 +734,7 @@ form.submit('Create Account', 'create')
 #### button(value, name, attributes)
 
 ```twig
-form.button('Create Account', 'create')
+{{ form.button('Create Account', 'create') }}
 ```
 
 **Outputs**
@@ -746,5 +746,5 @@ form.button('Create Account', 'create')
 #### resetButton(value, name, attributes)
 
 ```twig
-form.resetButton('Clear')
+{{ form.resetButton('Clear') }}
 ```
