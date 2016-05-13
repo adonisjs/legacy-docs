@@ -19,9 +19,9 @@ module.exports = {
 
 ## Read/Update Config
 
-You can easily read config values using the `Config` provider from anywhere inside your application.
+You can easily read config values using the `Config` provider anywhere inside your application.
 
-Also Config provider makes use of **dot notation**, which can you can reference nested keys using the dot seperator.
+Also Config provider makes use of **dot notation**, which means you can reference nested keys using the dot separator.
 
 ```javascript
 const Config = use('Config')

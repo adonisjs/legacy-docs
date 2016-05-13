@@ -10,7 +10,7 @@ AdonisJs has a solid View engine built on top of [nunjucks](http://mozilla.githu
 
 ## Creating A View
 
-Views are stored inside the `resources/views` directory. Each view file should end with `.nunjucks` extension.
+Views are stored inside the `resources/views` directory. Each view file should ends with `.nunjucks` extension.
 
 You can make use of `ace` in order to create a view file.
 
@@ -20,7 +20,7 @@ You can make use of `ace` in order to create a view file.
 ace make:view home
 ```
 
-Above command will create a view to the given path `resources/view/home.nujucks`. You are free to write plain HTML with the power of dynamic data binding.
+Above command will create a view to the given path `resources/view/home.nunjucks`. You are free to write plain HTML with the power of dynamic data binding.
 
 ## Basic Example
 
@@ -340,9 +340,7 @@ views: {
 
 Views are cached automatically by AdonisJs if you have not turned off caching. 
 
-In production it is a good practice to cache your views for better performance.
-
-Make use of `.env` file to control the caching behaviour.
+In production it is a good practice to cache your views for better performance. Make use of `.env` file to control the caching behaviour.
 
 ##### .env
 ```env
@@ -364,7 +362,7 @@ views: {
 
 You need to download packages for your favourite editor to have proper syntax highlighting for your `nunjucks` views.
 
-You can also `twig` highlighter, if you cannot find nunjucks support for your favourite editor.
+You can also use `twig` highlighter, if you cannot find nunjucks support for your favourite editor.
 
 1. [Atom](https://atom.io/packages/language-nunjucks).
 2. [Sublime Text( Via Twig )](https://packagecontrol.io/packages/PHP-Twig).
