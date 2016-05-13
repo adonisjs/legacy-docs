@@ -266,7 +266,7 @@ All values are auto escaped inside your views to keep them safe from HTML inject
 
 Which means if you will pass custom HTML inside a variable it will be escaped.
 
-```
+```twig
 {# title = <h1> Title </h1> #}
 
 {{ title }} {# outputs &lt;h1&gt; Title &lt;/h1&gt; #}
@@ -278,14 +278,66 @@ You need to make use of `safe` filter to mark HTML strings to be trusted.
 {{ title | safe }} {# outputs <h1> Title </h1> #}
 ```
 
+## Globals
+
+AdonisJs has bunch of pre-defined globals. Checkout [Defining Globals](views#defining-globals) to know how to define your own globals.
+
+#### linkTo
+
+Returns link to a given route
+
+```javascript
+Route
+	.get('/users', 'UserController.index')
+	.as('listUsers')
+```
+
+```twig
+{{ linkTo('listUsers', 'View All Users') }}
+{{ linkTo('listUsers', 'View All Users', {}, '_blank') }}
+
+{# returns #}
+<a href="/users"> View Profile </a>
+<a href="/users" target="_blank"> View Profile </a>
+```
+
+#### linkToAction
+
+Returns link for a given Route controller action.
+
+```twig
+{{ linkToAction('UserController.index', 'View All Users') }}
+{{ linkToAction('UserController.index', 'View All Users', {}, '_blank') }}
+
+{# returns #}
+<a href="/users"> View Profile </a>
+<a href="/users" target="_blank"> View Profile </a>
+```
+
+
 ## Filters
 
-Below is the list of all the available filters.
+Below is the list of all the available filters. Checkout [Defining Filters](views#defining-filters) for defining your own filters.
 
 #### abs
 
 ```twig
 {{ age | abs }}
+```
+
+
+#### action
+
+Returns url for a given action.
+
+```javascript
+Route
+	.put('user/:id', 'UserController.update')
+```
+
+```twig
+<form method="POST" action="{{ 'UserController.update' | action({id: 1}) }}">
+</form>
 ```
 
 #### batch
@@ -438,7 +490,7 @@ Returns the url for a given route.
 
 ```javascript
 Route
-	.post('/profile/:id', 'ProfileController.update')
+	.put('/profile/:id', 'ProfileController.update')
 	.as('updateProfile')
 ```
 
@@ -503,3 +555,119 @@ Converts value to a float.
 
 #### int
 Converts value to an integer.
+
+## Form Builder
+
+Form builder makes it so easy to create maintainable HTML forms using a special syntax without writing HTML tags.
+
+Each application of AdonisJs ships with `form`  global, which is accessible inside all the views.
+
+#### open
+
+```twig
+{{ form.open({action: 'UserController.update', params: {id: 1} }) }}
+
+{{ form.close() }}
+```
+
+##### outputs
+
+```html
+<form method="POST" action="/user/1?_method=PUT">
+	
+</form>
+```
+
+You can also bind routes and plain urls inside the `open` method.
+
+```twig
+{{ form.open({route: 'user.update'}, params: {id: 1} ) }}
+{{ form.open({url: '/user/1', method: 'PUT'}) }}
+```
+
+Both will have the same output as the above one.
+
+#### label(name, text, attributes)
+
+```twig
+{{ form.label('username', 'Enter Username') }}
+{{ form.label('username', 'Enter Username', {class: 'label-class'}) }}
+```
+
+##### Outputs
+
+```html
+<label name="username"> Enter Username </label>
+```
+
+#### text(name, value, attributes)
+
+```twig
+{{ form.text('username') }}
+{{ form.text('username', 'John', {class: 'input'}) }}
+```
+
+##### Outputs
+
+```html
+<input type="text" name="username" value="John" class="input" />
+```
+
+Just like text you can create all given input types.
+
+| Input type | method |
+|------------|--------|
+| password | form.password() |
+| email | form.email() |
+| color | form.color() |
+| date | form.date() |
+| url | form.url() |
+| search | form.search() |
+| hidden | form.hidden() |
+
+#### file(name, attributes)
+
+Create a file upload button
+
+```twig
+{{ form.file('avatar') }}
+```
+
+#### textarea(name, value, attributes)
+
+```twig
+{{ form.textarea('description') }}
+{{ form.textarea('description', value) }}
+{{ form.textarea('description', value, {class: 'big'}) }}
+```
+
+#### radio(name, value, checked, attributes)
+
+```twig
+{{ form.radio('gender', 'male') }}
+{{ form.radio('gender', 'female', true) }}
+```
+
+#### checkbox(name, value, checked, attributes)
+
+```twig
+{{ form.checkbox('terms', 'agree') }}
+{{ form.checkbox('terms', 'agree', true) }}
+```
+
+#### select(name, options, selected, emptyOption, attributes)
+
+```twig
+{{ form.select('country', ['India', 'US', 'UK'], null, 'Select Country') }}
+```
+
+##### Outputs
+
+```html
+<select name="country">
+  <option value="">Select Country</option>
+  <option value="India">India</option>
+  <option value="US">US</option>  
+  <option value="UK">UK</option>
+</select>
+```
