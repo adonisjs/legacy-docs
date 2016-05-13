@@ -1,6 +1,6 @@
 ---
 title: Database Setup
-description: Setting up database with Adonis
+description: Setting up database with AdonisJs
 permalink: database-setup
 weight: 0
 categories:
@@ -21,13 +21,13 @@ All of the above mentioned databases are fully supported and can be accessed usi
 
 ORM stands for Object-Relational Mapping, which provides convenient ways to access database layer from any given programming language.
 
-With Adonis, you will never have to write SQL queries to interact with a database. Also, when you switch between multiple SQL database clients, your code will remain the same.
+With AdonisJs, you will never have to write SQL queries to interact with a database. Also, when you switch between multiple SQL database clients, your code will remain the same.
 
 ## Configuration
 
 Configuring database is simple and controlled by a dedicated configuration file inside `config` directory.
 
-With every new installation of Adonis, you will have `config/database.js` file. By default it is configured to make use of `sqlite`, but you are free to use any supported database client.
+With every new installation of AdonisJs, you will have `config/database.js` file. By default it is configured to make use of `sqlite`, but you are free to use any supported database client.
 
 ##### config/database.js
 
@@ -57,7 +57,7 @@ module.exports = {
       host: Env.get('MYSQL_HOST', 'localhost'),
       user: Env.get('MYSQL_USER', 'root'),
       password: Env.get('MYSQL_PASSWORD', ''),
-      database: Env.get('MYSQL_DATABASE', 'adonis')
+      database: Env.get('MYSQL_DATABASE', 'AdonisJs')
     }
   }
 }
@@ -102,7 +102,7 @@ mysql: {
     port: 3306,
     user: 'root',
     password: '',
-    database: 'adonis'
+    database: 'AdonisJs'
   }
 }
 ```
@@ -116,7 +116,7 @@ mysql: {
     socketPath: '/path/to/socket.sock',
     user: 'root',
     password: '',
-    database: 'adonis'
+    database: 'AdonisJs'
   }
 }
 ```
@@ -151,7 +151,7 @@ pg: {
     port: 5432,
     user: '',
     password: '',
-    database: 'adonis',
+    database: 'AdonisJs',
     ssl: false
   }
 }
@@ -182,7 +182,7 @@ oracle: {
     port: 1521,
     user: '',
     password: '',
-    database: 'adonis'
+    database: 'AdonisJs'
   }
 }
 ```
@@ -201,7 +201,7 @@ maria: {
     port: 3306,
     user: 'root',
     password: '',
-    database: 'adonis'
+    database: 'AdonisJs'
   }
 }
 ```

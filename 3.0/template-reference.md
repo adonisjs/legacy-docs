@@ -157,7 +157,7 @@ Now you can make use of the above macro as.
 {% endcall %}
 ```
 
-##### Outputs
+**Outputs**
 
 ```html
 <div class="modal fade">
@@ -570,7 +570,7 @@ Each application of AdonisJs ships with `form`  global, which is accessible insi
 {{ form.close() }}
 ```
 
-##### outputs
+**Outputs**
 
 ```html
 <form method="POST" action="/user/1?_method=PUT">
@@ -594,7 +594,7 @@ Both will have the same output as the above one.
 {{ form.label('username', 'Enter Username', {class: 'label-class'}) }}
 ```
 
-##### Outputs
+**Outputs**
 
 ```html
 <label name="username"> Enter Username </label>
@@ -607,7 +607,7 @@ Both will have the same output as the above one.
 {{ form.text('username', 'John', {class: 'input'}) }}
 ```
 
-##### Outputs
+**Outputs**
 
 ```html
 <input type="text" name="username" value="John" class="input" />
@@ -661,7 +661,7 @@ Create a file upload button
 {{ form.select('country', ['India', 'US', 'UK'], null, 'Select Country') }}
 ```
 
-##### Outputs
+**Outputs**
 
 ```html
 <select name="country">
