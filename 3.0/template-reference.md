@@ -658,16 +658,93 @@ Create a file upload button
 #### select(name, options, selected, emptyOption, attributes)
 
 ```twig
-{{ form.select('country', ['India', 'US', 'UK'], null, 'Select Country') }}
+{{ form.select('countries', ['India', 'US', 'UK'], null, 'Select Country') }}
 ```
 
 **Outputs**
 
 ```html
-<select name="country">
+<select name="countries">
   <option value="">Select Country</option>
   <option value="India">India</option>
   <option value="US">US</option>  
   <option value="UK">UK</option>
 </select>
+```
+
+#### With Object
+```twig
+form.select('countries', {ind: 'India', us: 'Usa'})
+```
+
+```html
+<select name="countries">
+  <option value="ind">India</option>
+  <option value="us">US</option>  
+</select>
+```
+
+#### Define selected option
+
+```twig
+form.select('countries', {ind: 'India', us: 'Usa'}, 'ind')
+```
+
+```html
+<select name="countries">
+  <option value="ind" selected>India</option>
+  <option value="us">US</option>  
+</select>
+```
+
+#### Select multiple
+
+```twig
+form.select('countries', {ind: 'India', us: 'Usa', uk: 'UK'}, ['ind', 'us'], null, {multiple: true})
+```
+
+```html
+<select name="countries" multiple>
+  <option value="ind" selected>India</option>
+  <option value="us" selected>US</option>  
+  <option value="us">US</option>  
+</select>
+```
+
+#### selectRange(name, start, end, selected, emptyOption, attributes)
+
+Create a select box within a given range.
+
+```twig
+form.selectRange('days', 1, 30)
+```
+
+#### submit(value, name, attributes)
+
+```twig
+form.submit('Create Account', 'create')
+```
+
+**Outputs**
+
+```html
+<input type="submit" name="create" value="Create Account" />
+```
+
+#### button(value, name, attributes)
+
+```twig
+form.button('Create Account', 'create')
+```
+
+**Outputs**
+
+```html
+<button type="submit" name="create"> Create Account </button>
+```
+
+#### resetButton(value, name, attributes)
+
+```twig
+form.resetButton('Clear')
 ```
