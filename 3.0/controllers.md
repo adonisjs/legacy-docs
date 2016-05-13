@@ -1,9 +1,9 @@
 ---
 title: Controllers
 permalink: controllers
-weight: 5
+weight: 7
 categories:
-  - basics
+- basics
 ---
 
 Controllers represents **C** in MVC. They are the common point of interaction between your models and views. 

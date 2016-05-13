@@ -2,9 +2,9 @@
 title: Routing
 permalink: routing
 description: Creating Routes in AdonisJs.
-weight: 0
+weight: 2
 categories:
-    - basics
+- getting-started
 ---
 
 Routes are defined inside `app/Http/routes.js` file. It is a good practice to keep this file clean and move all required logic to different files/directories.
@@ -78,9 +78,9 @@ Route.get('/user/:id', function * (request, response) {
 })
 ```
 
-`:id` is the dynamic segment, which you can catch using the `request.param` method.
+`:id` is the dynamic segment. You can read the value of a parameter using the `request.param` method.
 
-You can also define optional route parameters by appending `?` to the parameter name.
+You are required to append `?` to the parameter name in order to mark it as optional.
 
 ```javascript
 Route.get('/user/:id?', function * (request, response) {
@@ -246,3 +246,12 @@ Form method spoofing makes it easier to define the verb as a query string.
 ```
 
 `_method` takes precedence over the actual HTTP verb, so in above case, AdonisJs will call the route action defined with PUT verb.
+
+You need to allow method spoofing inside the configuration file for it to work.
+
+##### config/app.js
+```javascript
+http: {
+  allowMethodSpoofing: true
+}
+```

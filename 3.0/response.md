@@ -1,9 +1,9 @@
 ---
 title: Response
 permalink: response
-weight: 2
+weight: 4
 categories:
-  - basics
+- getting-started
 ---
 
 Response object is also a sugared layer on top of Node.js HTTP response. It offers handful of expressive methods to make response for HTTP requests.

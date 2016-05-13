@@ -1,9 +1,9 @@
 ---
 title: Request
 permalink: request
-weight: 1
+weight: 3
 categories:
-  - basics
+- getting-started
 ---
 
 Request object is a sugared layer on top of Node.js HTTP request object. It makes it so easy to read information off the request, which is not fun when dealing with raw HTTP requests.

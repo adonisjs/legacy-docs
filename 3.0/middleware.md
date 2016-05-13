@@ -1,9 +1,9 @@
 ---
 title: Middleware
 permalink: middleware
-weight: 6
+weight: 8
 categories:
-  - basics
+- getting-started
 ---
 
 Middleware is a layer of classes executed before your Routes actions.

@@ -3,7 +3,7 @@ title: Config
 permalink: config
 weight: 1
 categories:
-- providers
+- getting-started
 ---
 
 AdonisJs application configuration is managed via config files. Each config file is defined inside the `config` directory in the root of every application.
@@ -19,7 +19,16 @@ module.exports = {
 
 ## Read/Update Config
 
-Config provider makes use of dot notation to read and update existing values.
+You can easily read config values using the `Config` provider from anywhere inside your application.
+
+Also Config provider makes use of **dot notation**, which can you can reference nested keys using the dot seperator.
+
+```javascript
+const Config = use('Config')
+
+Config.get('database.connection')
+// returns value of connection from database.js file.
+```
 
 
 #### get(key, [defaultValue])
@@ -39,7 +48,7 @@ Config.get('database.connection', 'mysql')
 
 #### set(key, value)
 
-Updates value of an existing key. It will define the value if the key does not exists already.
+Updates value of an existing key. It will instead define the value, if the key does not exists.
 
 ```javascript
 'use strict'

@@ -155,7 +155,7 @@ Inline Script is a javaScript code, which lives within the HTML page. Some 3rd p
 
 Disabling `Inline Scripts` is not very helpful. So `nonce` is a way to identify inline scripts created by you vs dropped by unidentified resources.
 
-**config/shield.js**
+##### config/shield.js
 ```javascript
 csp: {
   directives: {

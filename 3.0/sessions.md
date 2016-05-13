@@ -1,9 +1,9 @@
 ---
 title: Sessions
 permalink: sessions
-weight: 4
+weight: 6
 categories:
-  - basics
+- getting-started
 ---
 
 AdonisJs has out of the box support session management. AdonisJs also has support for flash messages, which are only valid for the upcoming request.

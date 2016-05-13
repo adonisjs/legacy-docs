@@ -1,9 +1,9 @@
 ---
 title: Cookie
 permalink: cookies
-weight: 3
+weight: 5
 categories:
-  - basics
+- getting-started
 ---
 
 Cookies in AdonisJs are encrypted and signed. Which means any tampering to a cookie will make it invalid. 

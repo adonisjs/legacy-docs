@@ -2,7 +2,7 @@
 title: Installation
 permalink: installation
 description: Installing & Creating AdonisJs Project
-weight: 1
+weight: 0
 categories:
     - getting-started
 ---
@@ -14,7 +14,7 @@ Installing AdonisJs is a fairly simple process and will take only a few minutes.
 AdonisJs has no other dependencies other than Node.js and npm. We also recommend making use of [nvm](https://github.com/creationix/nvm) to install and manage Node.js.
 
 1. [Node.js](https://nodejs.org/en/) version `4.0` or greater.
-2. [npm](https://www.npmjs.org/) version `3.0` or greater. 
+2. [npm](https://www.npmjs.org/) version `3.0` or greater.
 
 ## Installing Adonis-CLI
 
@@ -72,4 +72,4 @@ npm start
 npm run dev // to start the server with hot-reloading
 ```
 
-`npm run dev` will make use of [nodemon.io](http://nodemon.io/) to start the dev server with hot-reloading. 
+`npm run dev` will make use of [nodemon.io](http://nodemon.io/) to start the dev server with hot-reloading.
