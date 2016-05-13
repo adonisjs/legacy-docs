@@ -1,7 +1,7 @@
 ---
 title: Views
 permalink: views
-weight: 9
+weight: 7
 categories:
 - getting-started
 ---

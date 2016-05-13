@@ -1,12 +1,12 @@
 ---
 title: Controllers
 permalink: controllers
-weight: 7
+weight: 5
 categories:
-- basics
+- getting-started
 ---
 
-Controllers represents **C** in MVC. They are the common point of interaction between your models and views. 
+Controllers represents **C** in MVC architecture. They are the common point of interaction between your models and views. 
 
 In typical Web applications, you will begin by defining a controller method on your routes, make use of models to fetch data and send that data to views.
 

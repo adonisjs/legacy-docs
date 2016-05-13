@@ -1,7 +1,7 @@
 ---
 title: Middleware
 permalink: middleware
-weight: 8
+weight: 6
 categories:
 - getting-started
 ---

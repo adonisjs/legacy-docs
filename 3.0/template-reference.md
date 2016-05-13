@@ -1,7 +1,7 @@
 ---
 title: Template Reference
 permalink: template-reference
-weight: 10
+weight: 8
 categories:
 - getting-started
 ---

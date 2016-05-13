@@ -1,7 +1,7 @@
 ---
 title: Cookie
 permalink: cookies
-weight: 5
+weight: 9
 categories:
 - getting-started
 ---

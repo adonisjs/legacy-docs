@@ -1,7 +1,7 @@
 ---
 title: Sessions
 permalink: sessions
-weight: 6
+weight: 10
 categories:
 - getting-started
 ---
