@@ -33,27 +33,27 @@ You can also bind routes and plain urls inside the `open` method.
 
 Both will have the same output as the above one.
 
-## label(name, text, attributes)
+## label
 
 ```twig
 {{ form.label('username', 'Enter Username') }}
 {{ form.label('username', 'Enter Username', {class: 'label-class'}) }}
 ```
 
-**Outputs**
+##### Outputs
 
 ```html
 <label name="username"> Enter Username </label>
 ```
 
-## text(name, value, attributes)
+## text
 
 ```twig
 {{ form.text('username') }}
 {{ form.text('username', 'John', {class: 'input'}) }}
 ```
 
-**Outputs**
+##### Outputs
 
 ```html
 <input type="text" name="username" value="John" class="input" />
@@ -71,7 +71,7 @@ Just like text you can create all given input types.
 | search | form.search() |
 | hidden | form.hidden() |
 
-## file(name, attributes)
+## file
 
 Create a file upload button
 
@@ -79,7 +79,7 @@ Create a file upload button
 {{ form.file('avatar') }}
 ```
 
-## textarea(name, value, attributes)
+## textarea
 
 ```twig
 {{ form.textarea('description') }}
@@ -87,27 +87,27 @@ Create a file upload button
 {{ form.textarea('description', value, {class: 'big'}) }}
 ```
 
-## radio(name, value, checked, attributes)
+## radio
 
 ```twig
 {{ form.radio('gender', 'male') }}
 {{ form.radio('gender', 'female', true) }}
 ```
 
-## checkbox(name, value, checked, attributes)
+## checkbox
 
 ```twig
 {{ form.checkbox('terms', 'agree') }}
 {{ form.checkbox('terms', 'agree', true) }}
 ```
 
-## select(name, options, selected, emptyOption, attributes)
+## select
 
 ```twig
 {{ form.select('countries', ['India', 'US', 'UK'], null, 'Select Country') }}
 ```
 
-**Outputs**
+##### Outputs
 
 ```html
 <select name="countries">
@@ -157,7 +157,7 @@ Create a file upload button
 </select>
 ```
 
-## selectRange(name, start, end, selected, emptyOption, attributes)
+## selectRange
 
 Create a select box within a given range.
 
@@ -165,31 +165,31 @@ Create a select box within a given range.
 {{ form.selectRange('days', 1, 30) }}
 ```
 
-## submit(value, name, attributes)
+## submit
 
 ```twig
 {{ form.submit('Create Account', 'create') }}
 ```
 
-**Outputs**
+##### Outputs
 
 ```html
 <input type="submit" name="create" value="Create Account" />
 ```
 
-## button(value, name, attributes)
+## button
 
 ```twig
 {{ form.button('Create Account', 'create') }}
 ```
 
-**Outputs**
+##### Outputs
 
 ```html
 <button type="submit" name="create"> Create Account </button>
 ```
 
-## resetButton(value, name, attributes)
+## resetButton
 
 ```twig
 {{ form.resetButton('Clear') }}
