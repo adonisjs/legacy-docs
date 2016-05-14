@@ -10,7 +10,7 @@ AdonisJs has a solid View engine built on top of [nunjucks](http://mozilla.githu
 
 ## Creating A View
 
-Views are stored inside the `resources/views` directory. Each view file should ends with `.nunjucks` extension.
+Views are stored inside the `resources/views` directory. Each view file should end with `.nunjucks` extension.
 
 You can make use of `ace` in order to create a view file.
 

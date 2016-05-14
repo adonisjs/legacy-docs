@@ -6,9 +6,7 @@ categories:
 - getting-started
 ---
 
-Form builder makes it so easy to create maintainable HTML forms using a special syntax without writing HTML tags.
-
-Each application of AdonisJs ships with `form`  global, which is accessible inside all the views.
+Each application of AdonisJs ships with `form` global available to all of your views. It is an instance of Form builder to make it easier to create HTML forms by referencing Routes and Controller methods.
 
 ## open
 
