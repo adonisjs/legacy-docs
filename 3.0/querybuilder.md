@@ -1,34 +1,25 @@
 ---
-title: Database Query Builder
+title: Query Builder
 description: Adonis database query builder
 permalink: query-builder
 weight: 1
 categories:
-    - Database
+- Database
 ---
 
-{{TOC}}
+AdoniJs Query builder gives you a unified syntax to interact with SQL databases using Javascript methods. This guide explains and list all of the available methods. 
 
-# Query Builder
-
-Query builder provides a fluent syntax to write SQL queries in Node.js.
-
-By the end of this guide you will know:
-
-1. How to create SQL queries using query builder.
-2. How to make use of aggregate methods to find records.
-3. How to define SQL query joins.
-4. How to insert,update and delete rows from database.
+Checkout out [Database Setup](database-setup) to check list of supported databases and configuration options.
 
 ## Introduction
 
 Writing SQL queries can be tedious in so many ways, even if you are good with SQL.
 
-Let's imagine you write all of your queries for MySQL and after some time, your manager asks you to migrate everything to PostgreSQL. Now you will have to re-write/amend your MySQL queries to make sure they work well with PostgreSQL.
+Let's imagine you write all of your queries for MySQL and after some time your manager asks you to migrate everything to PostgreSQL. Now you will have to re-write/amend your MySQL queries to make sure they work well with PostgreSQL.
 
 Another issue can be of building queries incrementally, Let's say your application you have conditional blocks to make incremental queries.
 
-**Without Query Builder**
+##### Without Query Builder
 
 ```javascript
 const sql = 'SELECT * FROM `users`'
@@ -38,7 +29,7 @@ if (username) {
 }
 ```
 
-**With Query Builder**
+##### With Query Builder
 ```javascript
 const query = Database.table('users')
 
@@ -51,15 +42,14 @@ Hope you can note the difference. In this guide, you will learn the different wa
 
 ## Selects
 
-### select
+#### select
 
 select will define the fields to be selected for a given SELECT query.
 
 ```javascript
 yield Database.select('id', 'username').from('users')
 
-// outputs
-select `id`, `username` from `users`
+// Output - select `id`, `username` from `users`
 ```
 
 
@@ -71,47 +61,41 @@ There are a handful of methods to add where clause to a query chain.
 
 Below are the different ways to build a where clause.
 
-**As parameters**
 ```
 yield Database.from('users').where('id', 1)
 
-// outputs
-select * from `users` where `id` = 1
+// Output - select * from `users` where `id` = 1
 ```
 
-**As object**
+Or
+
 ```
 yield Database.from('users').where({ id: 1 })
 
-// outputs
-select * from `users` where `id` = 1
+// Output - select * from `users` where `id` = 1
 ```
 
-**As callback**
-
-Callback outputs a little different SQL query, and will group all where clauses inside a callback.
+You can also add a callback to the `where` clause. Callback outputs a little different SQL query, and will group all where clauses inside a callback.
 
 ```
 yield Database.from('users').where(function () {
   this.where('id', 1)
 })
 
-// outputs
-select * from `users` where (`id` = 1)
+// Output - select * from `users` where (`id` = 1)
 ```
 
-**Defining where operator**
+##### Defining where operator
 
-Above queries by default will use `=` operator, you can override by introducing a 3rd parameter.
+Above queries by default will use `=` operator, you can override it by introducing a 3rd parameter.
 
 ```javascript
 yield Database.from('users').where('age', '>', 20)
 
-// outputs
-select * from `users` where `age` > 20
+// Output - select * from `users` where `age` > 20
 ```
 
-**Sub Queries**
+##### Sub Queries
 
 You can also create SQL subqueries.
 
@@ -125,8 +109,9 @@ const users = yield Database
   .from('users')
   .whereIn('id', subquery)
 
-// outputs
+/* Output - 
 select * from `users` where `id` in (select `account_name` from `accounts` where `account_name` = 'somename')
+*/
 ```
 
 #### whereNot(~mixed~)
@@ -136,8 +121,7 @@ select * from `users` where `id` in (select `account_name` from `accounts` where
 ```javascript
 yield Database.from('users').whereNot('age', '>', 20)
 
-// outputs
-select * from `users` where not `age` > 20
+// Output - select * from `users` where not `age` > 20
 ```
 
 
@@ -147,8 +131,7 @@ select * from `users` where not `age` > 20
 ```javascript
 yield Database.from('users').whereIn('id', [1,2,3])
 
-// outputs
-select * from `users` where `id` in (1, 2, 3)
+// Output - select * from `users` where `id` in (1, 2, 3)
 ```
 
 
@@ -158,8 +141,7 @@ select * from `users` where `id` in (1, 2, 3)
 ```javascript
 yield Database.from('users').whereNotIn('id', [1,2,3])
 
-// outputs
-select * from `users` where `id` not in (1, 2, 3)
+// Output - select * from `users` where `id` not in (1, 2, 3)
 ```
 
 #### whereNull(~mixed~)
@@ -167,8 +149,7 @@ select * from `users` where `id` not in (1, 2, 3)
 ```javascript
 yield Database.from('users').whereNull('deleted_at')
 
-// outputs
-select * from `users` where `deleted_at` is null
+// Output - select * from `users` where `deleted_at` is null
 ```
 
 #### whereNotNull(~mixed~)
@@ -176,8 +157,7 @@ select * from `users` where `deleted_at` is null
 ```javascript
 yield Database.from('users').whereNotNull('deleted_at')
 
-// outputs
-select * from `users` where `deleted_at` is not null
+// Output - select * from `users` where `deleted_at` is not null
 ```
 
 #### whereExists(~mixed~)
@@ -187,8 +167,9 @@ yield Database.from('users').whereExists(function () {
   this.from('accounts').where('users.id', 'accounts.user_id')
 })
 
-// outputs
+/* Output - 
 select * from `users` where exists (select * from `accounts` where `users`.`id` = 'accounts.user_id')
+*/
 ```
 
 #### whereNotExists(~mixed~)
@@ -198,8 +179,9 @@ yield Database.from('users').whereNotExists(function () {
     this.from('accounts').where('users.id', 'accounts.user_id')
 })
 
-// outputs
+/* Output - 
 select * from `users` where not exists (select * from `accounts` where `users`.`id` = 'accounts.user_id')
+*/
 ```
 
 #### whereBetween(~mixed~)
@@ -207,8 +189,7 @@ select * from `users` where not exists (select * from `accounts` where `users`.`
 ```javascript
 yield Database.table('users').whereBetween('age',[18,32])
 
-// outputs
-select * from `users` where `age` between 18 and 32
+// Output - select * from `users` where `age` between 18 and 32
 ```
 
 #### whereNotBetween(~mixed~)
@@ -216,8 +197,7 @@ select * from `users` where `age` between 18 and 32
 ```javascript
 yield Database.table('users').whereNotBetween('age',[18,32])
 
-// outputs
-select * from `users` where `age` not between 18 and 32
+// Output - select * from `users` where `age` not between 18 and 32
 ```
 
 #### whereRaw(~mixed~)
@@ -227,8 +207,7 @@ select * from `users` where `age` not between 18 and 32
 ```
 yield Database.from('users').whereRaw('id = ?', [20])
 
-// outputs
-select * from `users` where id = 20
+// Output - select * from `users` where id = 20
 ```
 
 ## Joins
@@ -240,11 +219,10 @@ Just like `where clauses` they are a handful of join methods to write SQL joins.
 ```javascript
 yield Database.table('users').innerJoin('accounts', 'user.id', 'accounts.user_id')
 
-// outputs
-select * from `users` inner join `accounts` on `users`.`id` = `accounts`.`user_id`
+// Output - select * from `users` inner join `accounts` on `users`.`id` = `accounts`.`user_id`
 ```
 
-**As callback**
+You can also attach callback to the `innerJoin`.
 
 ```javascript
 yield Database.table('users').innerJoin('accounts', function () {
@@ -253,8 +231,9 @@ yield Database.table('users').innerJoin('accounts', function () {
     .orOn('users.id', 'accounts.owner_id')
 })
 
-// outputs
+/* Output - 
 select * from `users` inner join `accounts` on `users`.`id` = `accounts`.`user_id` or `users`.`id` = `accounts`.`owner_id`
+*/
 ```
 
 ### Other joins methods
@@ -276,8 +255,7 @@ All the join methods have the same signature as `innerJoin()` method.
 ```javascript
 yield Database.table('users').distinct('age')
 
-// outputs
-select distinct `age` from `users`
+// Output - select distinct `age` from `users`
 ```
 
 #### groupBy(...columns)
@@ -285,8 +263,7 @@ select distinct `age` from `users`
 ```javascript
 yield Database.table('users').groupBy('age')
 
-// outputs
-select * from `users` group by `age`
+// Output - select * from `users` group by `age`
 ```
 
 #### orderBy(column, [direction])
@@ -294,8 +271,7 @@ select * from `users` group by `age`
 ```javascript
 yield Database.table('users').orderBy('id', 'desc')
 
-// outputs
-select * from `users` order by `id` desc
+// Output - select * from `users` order by `id` desc
 ```
 
 #### having(column, operator, value)
@@ -305,8 +281,7 @@ select * from `users` order by `id` desc
 ```
 yield Database.table('users').groupBy('age').having('age', '>', 18)
 
-// outputs
-select * from `users` group by `age` having `age` > 18
+// Output - select * from `users` group by `age` having `age` > 18
 ```
 
 #### offset and limit(value)
@@ -316,8 +291,7 @@ setting offset to `0` will ignore the offset.
 ```javascript
 yield Database.table('users').offset(1).limit(10)
 
-// outputs
-select * from `users` limit 10 offset 1
+// Output - select * from `users` limit 10 offset 1
 ```
 
 ## Inserts
@@ -336,7 +310,7 @@ Database.from('users').insert(...)
 Database.insert(...).into('users')
 ```
 
-**PostgreSQL Only**
+##### PostgreSQL Only
 
 For PostgreSQL, you will have to define the returning column explicitly, all other database clients will ignore this statement.
 
@@ -348,18 +322,17 @@ yield Database
 ```
 
 
-### insert
+#### insert
 
 ```javascript
 yield Database
   .insert({ username: 'virk' })
   .into('users')
 
-// outputs
-insert into `users` (`username`) values ('virk')
+// Output - insert into `users` (`username`) values ('virk')
 ```
 
-### bulk inserts
+#### bulk inserts
 
 You can pass an array of objects for bulk inserts.
 
@@ -368,8 +341,7 @@ yield Database
   .insert([{ username: 'virk' }, { username: 'doe' }])
   .into('users')
     
-// outputs
-insert into `users` (`username`) values ('virk'), ('doe')
+// Output - insert into `users` (`username`) values ('virk'), ('doe')
 ```
 
 ## Updates
@@ -381,9 +353,8 @@ yield Database
   .table('users')
   .where('username', 'virk')
   .update('lastname', 'Virk')
-    
-// outputs
-update `users` set `lastname` = 'Virk' where `username` = 'virk'
+
+// Output - update `users` set `lastname` = 'Virk' where `username` = 'virk'
 ```
 
 Or for multiple columns you can pass an object.
@@ -394,8 +365,7 @@ yield Database
   .where('username', 'virk')
   .update({ lastname: 'Virk', firstname: 'Aman' })
     
-// outputs
-update `users` set `firstname` = 'Aman', `lastname` = 'Virk' where `username` = 'virk'
+// Output - update `users` set `firstname` = 'Aman', `lastname` = 'Virk' where `username` = 'virk'
 ```
 
 ## Deletes
@@ -412,8 +382,7 @@ yield Database
   .where('username', 'virk')
   .delete()
 
-// outputs
-delete from `users` where `username` = 'virk'
+// Output - delete from `users` where `username` = 'virk'
 ```
 
 
@@ -424,8 +393,7 @@ Truncate will remove all the rows from a database and will set auto increment id
 ```javascript
 yield Database.truncate('users')
 
-// outputs
-truncate `users`
+// Output - truncate `users`
 ```
 
 ## Aggregates
@@ -435,35 +403,29 @@ truncate `users`
 ```javascript
 const total = yield Database.from('users').count()
 
-// outputs
-select count(*) from `users`
+// Output - select count(*) from `users`
 
-// returns
-[ { 'count(*)': 1 } ]
+// Returns - [ { 'count(*)': 1 } ]
 ```
 
-**count a single column**
+Or
 
 ```javascript
 const total = yield Database.from('users').count('id')
 
-// outputs
-select count(`id`) from `users`
+// Output - select count(`id`) from `users`
 
-// returns
-[ { 'count(`id`)': 1 } ]
+// Returns - [ { 'count(`id`)': 1 } ]
 ```
 
-**count with as**
+Or
 
 ```javascript
 const total = yield Database.from('users').count('id as id')
 
-// outputs
-select count(`id`) as `id` from `users`
+// Output - select count(`id`) as `id` from `users`
 
-// returns
-[ { id: 1 } ]
+// Returns - [ { id: 1 } ]
 ```
 
 #### countDistinct([column])
@@ -473,11 +435,9 @@ select count(`id`) as `id` from `users`
 ```javascript
 const total = yield Database.from('users').countDistinct('id')
 
-// outputs
-select count(distinct `id`) from `users`
+// Output - select count(distinct `id`) from `users`
 
-// returns
-[ { 'count(distinct `id`)': 0 } ]
+// Returns - [ { 'count(distinct `id`)': 0 } ]
 ```
 
 #### min(column)
@@ -486,9 +446,10 @@ select count(distinct `id`) from `users`
 yield Database.from('users').min('age')
 yield Database.from('users').min('age as a')
 
-// outputs
+/* Output - 
 select min(`age`) from `users`
 select min(`age`) as a from `users`
+*/
 ```
 
 #### max(column)
@@ -497,9 +458,10 @@ select min(`age`) as a from `users`
 yield Database.from('users').max('age')
 yield Database.from('users').max('age as a')
 
-// outputs
+/* Output - 
 select max(`age`) from `users`
 select max(`age`) as a from `users`
+*/
 ```
 
 #### sum(column)
@@ -508,9 +470,10 @@ select max(`age`) as a from `users`
 yield Database.from('cart').sum('total')
 yield Database.from('cart').sum('total as t')
 
-// outputs
+/* Output - 
 select sum(`total`) from `cart`
 select sum(`total`) as t from `cart`
+*/
 ```
 
 #### sumDistinct(column)
@@ -519,9 +482,10 @@ select sum(`total`) as t from `cart`
 yield Database.from('cart').sumDistinct('total')
 yield Database.from('cart').sumDistinct('total as t')
 
-// outputs
+/* Output - 
 select sum(distinct `total`) from `cart`
 select sum(distinct `total`) as t from `cart`
+*/
 ```
 
 #### avg(column)
@@ -530,9 +494,10 @@ select sum(distinct `total`) as t from `cart`
 yield Database.from('users').avg('age')
 yield Database.from('users').avg('age as age')
 
-// outputs
+/* Output - 
 select avg(`age`) from `users`
 select avg(`age`) as age from `users`
+*/
 ```
 
 #### avgDistinct(column)
@@ -541,9 +506,10 @@ select avg(`age`) as age from `users`
 yield Database.from('users').avgDistinct('age')
 yield Database.from('users').avgDistinct('age as age')
 
-// outputs
+/* Output - 
 select avg(distinct `age`) from `users`
 select avg(distinct `age`) as age from `users`
+*/
 ```
 
 #### increment(column, amount)
@@ -556,8 +522,9 @@ yield Database
   .where('id', 1)
   .increment('balance', 10)
     
-// outputs
+/* Output - 
 update `credits` set `balance` = `balance` + 10 where `id` = 1
+*/
 ```
 
 
@@ -571,8 +538,9 @@ yield Database
   .where('id', 1)
   .decrement('balance', 10)
     
-// outputs
+/* Output - 
 update `credits` set `balance` = `balance` - 10 where `id` = 1
+*/
 ```
 
 
@@ -583,11 +551,9 @@ update `credits` set `balance` = `balance` - 10 where `id` = 1
 ```javascript
 const ids = yield Database.from('users').pluck('id')
 
-// outputs
-select `id` from `users`
+// Output - select `id` from `users`
 
-// returns
-[ 1, 2, 3, 4, 5, 6 ]
+// Returns - [ 1, 2, 3, 4, 5, 6 ]
 ```
 
 #### first
@@ -597,11 +563,7 @@ select `id` from `users`
 ```javascript
 yield Database.from('users').first()
 
-// outputs
-select * from `users` limit 1
-
-// returns
-{ ... }
+// Output - select * from `users` limit 1
 ```
 
 #### clone
@@ -625,14 +587,14 @@ Returns information for a given column.
 ```javascript
 const username = yield Database.table('users').columnInfo('username')
  
-// outputs
-PRAGMA table_info(users)
+// Output - PRAGMA table_info(users)
  
-// returns
+/* Returns - 
 {
   type: 'varchar',
   maxLength: '255',
   nullable: true,
   defaultValue: null
 }
+*/
 ```
