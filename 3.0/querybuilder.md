@@ -61,7 +61,7 @@ There are a handful of methods to add where clause to a query chain.
 
 Below are the different ways to build a where clause.
 
-```
+```javascript
 yield Database.from('users').where('id', 1)
 
 // Output - select * from `users` where `id` = 1
@@ -69,7 +69,7 @@ yield Database.from('users').where('id', 1)
 
 Or
 
-```
+```javascript
 yield Database.from('users').where({ id: 1 })
 
 // Output - select * from `users` where `id` = 1
@@ -77,7 +77,7 @@ yield Database.from('users').where({ id: 1 })
 
 You can also add a callback to the `where` clause. Callback outputs a little different SQL query, and will group all where clauses inside a callback.
 
-```
+```javascript
 yield Database.from('users').where(function () {
   this.where('id', 1)
 })
@@ -204,7 +204,7 @@ yield Database.table('users').whereNotBetween('age',[18,32])
 
 `whereRaw()` method will let you write a raw SQL where clause.
 
-```
+```javascript
 yield Database.from('users').whereRaw('id = ?', [20])
 
 // Output - select * from `users` where id = 20
@@ -278,7 +278,7 @@ yield Database.table('users').orderBy('id', 'desc')
 
 `groupBy()` clause is always required before making use of `having()` method.
 
-```
+```javascript
 yield Database.table('users').groupBy('age').having('age', '>', 18)
 
 // Output - select * from `users` group by `age` having `age` > 18
@@ -516,7 +516,7 @@ select avg(distinct `age`) as age from `users`
 
 Increment will add the given value to the existing value.
 
-```
+```javascript
 yield Database
   .table('credits')
   .where('id', 1)
@@ -532,7 +532,7 @@ update `credits` set `balance` = `balance` + 10 where `id` = 1
 
 Opposite of `increment`
 
-```
+```javascript
 yield Database
   .table('credits')
   .where('id', 1)
