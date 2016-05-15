@@ -7,7 +7,7 @@ categories:
 - Database
 ---
 
-AdonisJs officially supports SQL databases like MySQL, PostgreSQL, SQLite, etc. Below is the list of supported databases.
+AdonisJs officially supports the list of databases listed below. All of the supported databases can be accessed using unified Javascript syntax.
 
 1. PostgreSQL
 2. MySQL
@@ -15,13 +15,12 @@ AdonisJs officially supports SQL databases like MySQL, PostgreSQL, SQLite, etc. 
 4. Oracle
 5. SQLite
 
-All of the above mentioned databases are fully supported and can be accessed using unified Javascript syntax.
 
 ## Why to use an ORM?
 
 ORM stands for Object-Relational Mapping, which provides convenient ways to access database layer from any given programming language.
 
-With AdonisJs, you will never have to write SQL queries to interact with a database. Also, when you switch between multiple SQL database clients, your code will remain the same.
+With AdonisJs, you will never have to write SQL queries. Instead you call Javascript methods to interact with databases. Also, when you switch between multiple SQL database clients, your code will remain the same.
 
 ## Configuration
 
@@ -41,7 +40,6 @@ module.exports = {
 
   connection: Env.get('DB_CONNECTION', 'sqlite'),
 
-  // SQLite
   sqlite: {
     client: 'sqlite3',
     connection: {
@@ -50,7 +48,6 @@ module.exports = {
     debug: false
   },
 
-  // MySQL
   mysql: {
     client: 'mysql',
     connection: {
@@ -240,9 +237,36 @@ module.exports = {
 ```
 
 
-## Basic Usage
+## Basic Example
 
 Now as you know how to configure the database, let's check out how to make use of it to interact with a database.
+
+##### app/Http/routes.js
+
+```javascript
+Route.get('/users', 'UserController.index')
+```
+
+##### app/Http/UserController.js
+
+```javascript
+const Database = use('Database')
+
+class UserController {
+
+	* index (request, response) {		
+		const users = yield Database.select().from('users')
+		response.json(users)
+	}
+
+}
+
+module.exports = UserController
+```
+
+## Query Builder
+
+Query builder is a chain of Javascript methods, which can be used to make a SQL query. Let's explore different ways to select a table and add where clause to it.
 
 #### selecting table
 ```javascript
@@ -278,7 +302,7 @@ You can learn more about [Query Builder here](query-builder).
 
 ## Switching Database Connection
 
-Switching database connection is one of the most common requirement while building multi-tenant apps. AdonisJs makes it process easier and let you define different connections on runtime.
+Switching database connection is one of the most common requirement while building multi-tenant apps. AdonisJs makes this process easier and let you use different connections on runtime.
 
 Assuming you have defined following connections inside your config file.
 

@@ -8,7 +8,7 @@ categories:
 
 Each application of AdonisJs ships with `form` global available to all of your views. It is an instance of Form builder to make it easier to create HTML forms by referencing Routes and Controller methods.
 
-## open
+## open/close
 
 ```twig
 {{ form.open({action: 'UserController.update', params: {id: 1} }) }}
