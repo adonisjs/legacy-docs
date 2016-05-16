@@ -7,7 +7,7 @@ categories:
 - Database
 ---
 
-AdoniJs Query builder gives you a unified syntax to interact with SQL databases using Javascript methods. This guide explains and list all of the available methods. 
+AdonisJs Query builder gives you a unified syntax to interact with SQL databases using Javascript methods. This guide explains and list all of the available methods. 
 
 Checkout out [Database Setup](database-setup) to check list of supported databases and configuration options.
 
@@ -394,6 +394,83 @@ Truncate will remove all the rows from a database and will set auto increment id
 yield Database.truncate('users')
 
 // Output - truncate `users`
+```
+
+## Pagination
+
+Query builder provides a couple of convenient ways to paginate results from the database.
+
+#### forPage(page, [limit=20])
+
+```javascript
+yield Database
+    .from('users')
+    .forPage(1, 10)
+
+// outputs
+select * from `users` limit 10
+
+// returns
+[{username: 'virk'} ...]
+```
+
+#### paginate(page, [limit=20])
+
+Paginate works the same way as `perPage` but the difference is output returned by both of them.
+
+```javascript
+const results = yield Database
+    .from('users')
+    .paginate(2, 10)
+
+// Outputs
+select count(*) as `total` from `users`
+select * from `users` limit 10 offset 10
+
+// Returns
+{
+    total: 0,
+    currentPage: 2,
+    perPage: 10,
+    lastPage: 0,
+    data: [...]
+}
+```
+
+## Database Transactions
+
+Database transactions are safe operations, which are not reflected in the database until and unless you explicitly commit your changes.
+
+#### beginTransaction
+
+`beginTransaction` method will return the transaction object, which can be used to perform any queries.
+
+```javascript
+const trx = yield Database.beginTransaction()
+yield trx.insert({username: 'virk'}).into('users')
+
+trx.commit() // insert query will take place on commit
+trx.rollback() // will not insert anything
+```
+
+#### transaction(callback)
+
+Also, you can wrap your transactions inside a callback. The major difference is, you will not have to call `commit` or `rollback` inside a closure. If any of your queries inside a closure returns an error, the transaction will rollback automatically. Otherwise, it will commit.
+
+```javascript
+yield Database.transaction(function * (trx) {
+    yield trx.insert({username: 'virk'}).into('users')
+})
+```
+
+## Chunks
+
+`chunk` method will pull records in small chunks and will execute the closure until there are results. This method is helpful when you are planning to select thousands of records.
+
+```javascript
+yield Database.from('logs').chunk(200, function (logs) {
+    console.log(logs)
+})
 ```
 
 ## Aggregates
