@@ -7,7 +7,7 @@ categories:
 - Database
 ---
 
-AdonisJs officially supports the list of databases listed below. All of the supported databases can be accessed using unified Javascript syntax.
+AdonisJs provides a unified Javascript syntax to access SQL databases. Below is the list of databases supported by AdonisJs.
 
 1. PostgreSQL
 2. MySQL
@@ -77,6 +77,33 @@ module.exports = {
 ```
 
 Value defined next to the `connection` key will be used as the default database connection for your entire application.
+
+## Basic Example
+
+Now as you know how to configure the database, let's check out how to make use of it to interact with a database.
+
+##### app/Http/routes.js
+
+```javascript
+Route.get('/users', 'UserController.index')
+```
+
+##### app/Http/UserController.js
+
+```javascript
+const Database = use('Database')
+
+class UserController {
+
+	* index (request, response) {		
+		const users = yield Database.select().from('users')
+		response.json(users)
+	}
+
+}
+
+module.exports = UserController
+```
 
 ## Database Settings
 
@@ -215,12 +242,15 @@ By default minimum of 2 and maximum of 10 connections will be spawned for MySQL 
 
 ```javascript
 module.exports = {
-  client: 'mysql',
-  connection: { ... },
-  pool: {
-      min: 0,
-      max: 5
-  }
+	connection: 'mysql',
+	mysql: {
+	  client: 'mysql',
+	  connection: { ... },
+	  pool: {
+		  min: 0,
+		  max: 5
+	  }
+	}
 }
 ```
 
@@ -230,43 +260,18 @@ Connection timeout is set to `60000ms` to determine how long to wait before thro
 
 ```javascript
 module.exports = {
-  client: 'mysql',
-  connection: { ... },
-  acquireConnectionTimeout: 60000
-}
-```
-
-
-## Basic Example
-
-Now as you know how to configure the database, let's check out how to make use of it to interact with a database.
-
-##### app/Http/routes.js
-
-```javascript
-Route.get('/users', 'UserController.index')
-```
-
-##### app/Http/UserController.js
-
-```javascript
-const Database = use('Database')
-
-class UserController {
-
-	* index (request, response) {		
-		const users = yield Database.select().from('users')
-		response.json(users)
+	connection: 'mysql',
+	mysql: {
+	  client: 'mysql',
+	  connection: { ... },
+	  acquireConnectionTimeout: 60000
 	}
-
 }
-
-module.exports = UserController
 ```
 
 ## Query Builder
 
-Query builder is a chain of Javascript methods, which can be used to make a SQL query. Let's explore different ways to select a table and add where clause to it.
+Query builder is a chain of Javascript methods to build a SQL query. Let's explore different ways to select a table and add where clause to it.
 
 #### selecting table
 ```javascript
@@ -281,7 +286,7 @@ Database.from('users')
 Database.table('users').where('username', 'doe')
 ```
 
-What you have seen above is a query chain. Which means you can make use of multiple methods to make a query. Here is an example of a complete query.
+What you have seen above is a query chain. Which means you can make use of multiple methods to make a query.Here is an example of a complete query.
 
 ```javascript
 const users = yield Database

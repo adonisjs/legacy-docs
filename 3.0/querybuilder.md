@@ -7,7 +7,7 @@ categories:
 - Database
 ---
 
-AdonisJs Query builder gives you a unified syntax to interact with SQL databases using Javascript methods. This guide explains and list all of the available methods. 
+AdonisJs Query builder gives you a unified syntax to interact with SQL databases using Javascript methods. This guide is a reference to all the available methods on query builder.
 
 Checkout out [Database Setup](database-setup) to check list of supported databases and configuration options.
 
