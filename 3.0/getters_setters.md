@@ -27,11 +27,11 @@ const Lucid = use('Lucid')
 
 class Post extends Lucid {
 
-    getTitle (title) {
-        return title.replace(/^(.)|\s(.)/g, function($1) {
-            return $1.toUpperCase();
-        })
-    }
+  getTitle (title) {
+    return title.replace(/^(.)|\s(.)/g, function($1) {
+      return $1.toUpperCase();
+    })
+  }
 
 }
 ```
@@ -65,9 +65,9 @@ const Lucid = use('Lucid')
 
 class User extends Lucid {
 
- setAccess (access) {
-	 return access === 'admin' ? 1 : 0
- }
+  setAccess (access) {
+    return access === 'admin' ? 1 : 0
+  }
 
 }
 
