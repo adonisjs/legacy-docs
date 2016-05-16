@@ -34,8 +34,8 @@ const Hash = use('Hash')
 const User = exports = module.exports = {}
 
 User.encryptPassword = function * (next) {
-    this.password = yield Hash.make(this.password)
-    yield next
+  this.password = yield Hash.make(this.password)
+  yield next
 }
 ```
 
@@ -113,10 +113,10 @@ User.removeHook('validation')
 
 Hooks can abort database operations by throwing exceptions. After an exception is thrown all future operations will be canceled.
 
-```
+```javascript
 UserHook.validate = function * (next) {
-    if (!validated) {
-      throw new Error('Validation failed')
+    if (!this.username) {
+      throw new Error('Username is required')
     }
     yield next
 }
