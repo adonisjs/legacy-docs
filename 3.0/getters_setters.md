@@ -21,14 +21,16 @@ Which means a post title called **getting started with adonis** should be displa
 Above tricks are not maintainable. The best way is, to modify the title from its origin. In Lucid, we call them `getters`.
 
 ```javascript
+'use strict'
+
+const Lucid = use('Lucid')
+
 class Post extends Lucid {
 
     getTitle (title) {
-        return title
-            .toLowerCase()
-            .replace(/^(.)|\s(.)/g, function($1) {
-                return $1.toUpperCase();
-            })
+        return title.replace(/^(.)|\s(.)/g, function($1) {
+            return $1.toUpperCase();
+        })
     }
 
 }
@@ -57,10 +59,14 @@ Following are the traits of a getter method.
 Setters are opposite of getters, and they mutate the value when you set them on your model instance. For example
 
 ```javascript
+'use strict'
+
+const Lucid = use('Lucid')
+
 class User extends Lucid {
 
  setAccess (access) {
-     return access === 'admin' ? 1 : 0
+	 return access === 'admin' ? 1 : 0
  }
 
 }
@@ -97,6 +103,10 @@ Computed properties are like getters, but they are virtual values that do not ex
 You may want computed properties in many cases. For example calculating the full name of a given user using their first and last name.
 
 ```javascript
+'use strict'
+
+const Lucid = use('Lucid')
+
 class User extends Lucid {
 
   static get computed () {
@@ -112,4 +122,4 @@ class User extends Lucid {
 
 Now whenever you call `.toJSON` on a collection or a user instance, it will have the `fullname`.
 
-Computed properties have same traits as getters. However, you have to define the computed properties to be created inside an array.
+Computed properties have same traits as getters. Also, you have to explicitly define the computed properties and then create getters for them.
