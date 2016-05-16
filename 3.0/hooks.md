@@ -1,112 +1,102 @@
 ---
-title: Lucid lifecycle hooks
+title: Hooks
 description: Lifecycle hooks for lucid models.
 permalink: lucid-hooks
-weight: 2
+weight: 4
 categories:
-    - Database
-versions:
-    - 3.0
+- Database
 ---
 
-{{TOC}}
+Hooks are the actions you take before or after a certain database operation. All of your database hooks are stored inside the `app/Model/Hooks` directory.
 
-# LifeCycle Hooks
+There are plenty of use-cases for using Databases Hooks, and one of them is encrypting password before saving it to the database.
 
-Lifecycle hooks is an another step towards keeping your applications DRY. By the end of this guide, you will know
+## Basic Example
 
-1. How to define hooks for different events?
-2. For what all reasons you can use hooks?
+Let's start by creating a hook for encrypting a password. We are going to make use of an `ace` command as always.
 
-
-## Introduction
-
-Saving/updating of data models should not become part of your application domain. For example:-
-
-Every application requires a User model, which is likely going to have a password field, where you will encrypt password before saving the user. In your standard vanilla applications, you are more likely going to do something similar to following.
-
-1. Inside controller, encrypt the password and save it to the database. Now you manager says "I need a command to create users from backend". You will create an `ace` command and will encrypt the password there too.
-
-    This gives birth to **code smell**, as you are duplicating your encryption logic inside multiple files.
-
-2. Being smart you will extract the password encryption logic in a different file, but that will give birth to another problem. Now anyone reviewing your User model will have no idea how users passwords are getting encrypted until they check one of your controllers or extracted class.
-
-Lucid makes this entire process streamlined by introducing model hooks. Hooks are the actions you take before or after a database operation. Let's see how you can solve the password encryption problem using hooks.
-
-```javascript
-class User extends Lucid {
-
-    static boot () {
-        super.boot()
-        this.addHook('beforeCreate', 'UserHook.encryptPassword')
-    }
-
-}
+```bash
+./ace make:hook User --method=encryptPassword
+# on windows
+ace make:hook User --method=encryptPassword
 ```
 
-**UserHook**
+Above will output
+
+```bash
+create: app/Model/Hooks/User.js
+```
+
+##### app/Model/Hooks/User.js
 
 ```javascript
 const Hash = use('Hash')
-const UserHook = exports = module.exports = {}
+const User = exports = module.exports = {}
 
-UserHook.encryptPassword = function * (next) {
+User.encryptPassword = function * (next) {
     this.password = yield Hash.make(this.password)
     yield next
 }
 ```
 
-It cannot become simpler than this.
+Next you need to register the above method on your `User` model.
+
+##### app/Model/User.js
+```javascript
+class User extends Lucid {
+
+  static boot () {
+    super.boot()
+    this.addHook('beforeCreate', 'User.encryptPassword')
+  }
+
+}
+```
+
+`boot` method is called automatically once for every model. So this is best place to register a hook.
 
 ## Defining Hooks
 
-Hooks are stored inside `app/Model/Hooks` directory and are executed in sequence. To execute the next hook, you must `yield next` from the current hook. The flow is similar to HTTP middleware.
+Hooks are executed in the sequence they are registered. To execute the next hook, you must `yield next` from the current hook as you do within the HTTP Middleware.
 
-### Registering multiple hooks
+#### addHook(event, [name], action)
+
+```javascript
+static boot () {
+  super.boot()
+  this.addHook('beforeCreate', 'User.encryptPassword')
+}
+```
+
+Also you can create **named hooks** by giving them a unique name. Named hooks are helpful when you want to remove them at later stage.
+
+```javascript
+static boot () {
+  super.boot()
+  this.addHook('beforeCreate', 'encryptingPassword', 'User.encryptPassword')
+}
+```
+
+#### defineHooks(event, arrayOfActions)
 
 Multiple hooks are registered using `defineHooks` method and are executed in the same order as they are registered.
 
 ```javascript
 class User extends Lucid {
  
-    static boot () {
-        super.boot()
-        this.defineHooks(
-            'beforeCreate',
-            ['UserHooks.validate', 'UserHook.encryptPassword']
-        )
-            
-        this.defineHooks('afterCreate', 'UserHook.sendMail')
-        
-    }
+  static boot () {
+    super.boot()
+    this.defineHooks('beforeCreate', 'UserHooks.validate', 'UserHook.encryptPassword')        
+  }
 
 }
 ```
 
-
-### Adding a single hook
-
-**beforeCreate <span>(type, [name], method)</span>**
-
-To add a single hook, you can make of `addHook` method. Which pushes the new hook into hooks stack.
-
-```javascript
-
-class User extends Lucid {
-    static boot () {
-        this.addHook('beforeCreate', 'UserHook.encryptPassword')
-    }
-}
-
-```
-
-Each hook can get a reference to the current model instance using `this` and can perform asynchronous tasks as hooks methods are ES6 generators.
+Each hook will get a reference to the current model instance using `this` and can perform asynchronous tasks as hooks methods are ES2015 generators.
 
 ## Removing Hooks
 
 You can also remove a hook at any time. Hooks are removed by their name. Which means while registering a hook you will have to give it a unique name.
-
-**Registering named hook**
 
 ```javascript
 this.addHook('beforeCreate', 'validation', 'UserHook.validate')
