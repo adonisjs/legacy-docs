@@ -7,9 +7,7 @@ categories:
 - Database
 ---
 
-Active Record is a pattern (not a language or tool). It helps you in reading and manipulating SQL data as objects and add domain logic to that data. 
-
-Lucid is an effective implementation of Active Record. Which means you can manipulate SQL data as pure Javascript objects.
+Lucid is an effective implementation of Active Record. Active Record itself is a pattern (not a language or tool). It helps you in reading and manipulating SQL data as objects and add domain logic to that data.
  
 ## Introduction
 
