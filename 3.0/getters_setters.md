@@ -1,5 +1,5 @@
 ---
-title: Lucid getters and setters
+title: Getters And Setters
 description: getters,setters and computed properties in lucid ORM.
 permalink: lucid-getters-setters
 weight: 3
@@ -11,7 +11,7 @@ One of the important steps towards building data driven applications is to contr
 
 Let's talk about a Post model, where you are always going to have a post title. Now the best practice for showing titles is to capitalise them.
 
-Which means a post title called `getting started with adonis` should be displayed as `Getting Started With Adonis`. You would say it is easy to achieve it by using one of the naive techniques.
+Which means a post title called **getting started with adonis** should be displayed as **Getting Started With Adonis**. You would say it is easy to achieve it by using one of the naive techniques.
 
 1. Use CSS property `text-transform` to capitalise it. What if you also have a JSON API?
 2. Whenever you find an article, manually capitalise it, by modifying the property.
