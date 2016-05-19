@@ -78,7 +78,7 @@ const globalMiddleware = [
 ]
 ```
 
-Flash messages are extremely useful when you want to send the errors back on form submission. Let's take the example of user signup.
+Flash messages are extremely useful when you want to send inputs or errors back on form submission. Let's take the example of user signup.
 
 ##### app/Http/Controllers/UserController
 
