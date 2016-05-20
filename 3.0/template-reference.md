@@ -20,6 +20,12 @@ Tags are blocks which defines a logic operation inside your views. Below is the 
 {% endif %}
 ```
 
+```twig
+{% if not authUser %}
+  <p> You're not logged in! </p>
+{% endif %}
+```
+
 You can also perform `==` operation.
 
 ```twig
