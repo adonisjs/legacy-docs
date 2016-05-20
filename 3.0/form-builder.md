@@ -33,6 +33,10 @@ You can also bind routes and plain urls inside the `open` method.
 
 Both will have the same output as the above one.
 
+<div class=“note”>
+  <p><strong>Note:</strong> If you use `action` or `route` helper it will fetch the method directly from the router and you cannot change it.</p>
+</div>
+
 ## label
 
 ```twig
