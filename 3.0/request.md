@@ -307,7 +307,7 @@ const isPlain = request.is('html', 'plain')
 Returns the best matching response type for a given request.
 
 ```javascript
-const type = request.accept('json', 'html')
+const type = request.accepts('json', 'html')
 
 switch (type) {
   
