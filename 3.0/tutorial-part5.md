@@ -11,7 +11,7 @@ categories:
 
 In the [last tutorial](adonis-blog-part4) we displayed the list of blog posts by fetching them from the database. Now let's move one step ahead and add the functionality of creating posts.
 
-This time, we are going to explore a lot of exciting features of AdonisJs from the [Form Builder](form-builder) to the expressive [Validator](validator).
+This time, we are going to explore a lot of exciting features of AdonisJs from the Form Builder to the expressive [Validator](validator).
 
 ## Creating Routes and Views
 
@@ -60,7 +60,7 @@ create: resources/views/createPost.nunjucks
 
 ## Form Builder
 
-We will make use of [Form Builder](form-builder) to set up the form for creating a new post.
+We will make use of Form Builder to set up the form for creating a new post.
 
 ##### resources/views/createPost.njk
 

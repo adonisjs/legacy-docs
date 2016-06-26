@@ -9,7 +9,7 @@ categories:
 
 {{TOC}}
 
-Let's finish up this tutorial by making final changes to the entire flow. Intentionally it was a simple tutorial to make to feel comfortable with the framework. You can access all the available [Cookbooks](cookbooks) to learn more about AdonisJs.
+Let's finish up this tutorial by making final changes to the entire flow. Intentionally it was a simple tutorial to make to feel comfortable with the framework.
 
 ## Showing Individual Post
 

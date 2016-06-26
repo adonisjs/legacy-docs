@@ -100,17 +100,17 @@ Let's paste the below code snippet inside the factory file.
 ```javascript
 const Factory = use('Factory')
 
-Factory.blueprint('App/Model/Post', function (faker) {
+Factory.blueprint('App/Model/Post', function (fake) {
   return {
-    title: faker.lorem.sentence(),
-    content: faker.lorem.paragraphs()
+    title: fake.sentence(),
+    content: fake.paragraph()
   }
 })
 ```
 
 Factories let you define blueprints for your models. Each blueprint takes the model name as the first parameter and a callback as the second parameter.
 
-Callback get's access to the [faker](https://github.com/marak/faker.js) instance, which is used to generate random data.
+Callback get's access to the [chancejs](http://chancejs.com/) instance, which is used to generate random data.
 
 Next, we need to create a seed file, which will make use of above blueprint to create posts.
 
