@@ -1,32 +1,29 @@
 ---
-title: Lucid model relationships
-description: Relationships for Lucid models.
-permalink: lucid-relationships
-weight: 3
+title: Relationships
+permalink: relationships
+description: Database Models Relations In AdonisJs
+weight: 1
 categories:
-    - Database
+- models
 ---
 
 {{TOC}}
 
-# RelationShips
+Lucid has a fluent API to work with database relations. Simple to Complex database associations are supported out of the box without any extra efforts.
 
-This guide covers the model relationships in Lucid. By the end of this guide, you will know
-
-1. What are model relations?
-2. How to define relationships between two or more models.
-3. How to Eager/Lazy load relationships.
-4. How to fetch nested relations.
-
-## Introduction
+## Basic Example
 
 Relational databases are meant to define relations between two or more database tables. There are several benefits of defining relationships as they make common database operations a lot easier.
 
-Let's take the most common scenario of a User and Profile model. Where every user in your database can have a social profile. We call this as one to one relation.
+Let's take the most common scenario of a User and a Profile model. Where every user in your database can have a social profile. We call this a **one to one relationship**.
 
 To describe this relationship, you will have to add following to your User model.
 
 ```javascript
+'use strict'
+
+const Lucid = use('Lucid')
+
 class User extends Lucid {
 
     profile () {
@@ -43,9 +40,8 @@ const user = yield User.find(1)
 const userProfile = yield user.profile().fetch()
 ```
 
-## Types Of Relationships
 
-### hasOne
+## HasOne Relationship
 
 `hasOne` relationship defines a one to one relation between 2 models using a foreign key. Foreign Key is created using the singular name of a given model followed by `_id`. However, you are free to override it.
 
@@ -58,19 +54,19 @@ const userProfile = yield user.profile().fetch()
 
 In order to setup the relationship shown in the above figure, you need to define it inside your User model.
 
+#### hasOne(relatedModel, [primaryKey=id], [foreignKey=user_id])
 ```javascript
 class User extends Lucid {
     
     profile () {
-        return this.hasOne('App/Model/Profile', 'primaryKey', 'foreignKey')
+        return this.hasOne('App/Model/Profile')
     }
 
 }
 ```
 
-<--- NEEDS RECHECK --> Let's use our Profile and User models to check out different ways of interacting with `hasOne` relation.
 
-### belongsTo
+## BelongsTo Relationship
 
 `belongsTo` is the opposite of `hasOne` and always holds the foreign key. So the best way to remember it is with the foreignKey. Any database table that has the foreign key, it's Model will always have the `belongsTo` relation.
 
@@ -87,18 +83,19 @@ For example:
 
 Hope this makes sense. Continuing with our `User` `Profile` relationship, the Profile model will contain the `belongsTo` relation as it holds the foreignKey.
 
+#### belongsTo(relatedModel, [primaryKey=id], [foreignKey=user_id])
 ```javascript
 class Profile extends Lucid {
 
     user () {
-        return this.belongsTo('App/Model/User', 'primaryKey', 'foreignKey')
+        return this.belongsTo('App/Model/User')
     }
 
 }
 ```
 
 
-### hasMany
+## HasMany Relationship
 
 You will find yourself using `hasMany` quite often, as this is the most common relationship required by any application. Let's review some examples.
 
@@ -109,12 +106,13 @@ You will find yourself using `hasMany` quite often, as this is the most common r
 | Post | hasMany | Comment
 | Comment | belongsTo | Post
 
-`hasMany` makes it possible to have multiple related records in a different table, each holding the foreignKey, and if you remember, the model holding the foreign key always have `belongsTo` relationship.
+`hasMany` makes it possible to have multiple related records for a given row each holding the foreignKey.
 
 ![](https://i.imgsafe.org/f942a9b.jpg)
 
 Let's define the above Models and their relationships in Lucid
 
+#### hasMany(relatedModel, [primaryKey=id], [foreignKey=book_id])
 ```javascript
 class Book extends Lucid {
     
@@ -136,9 +134,9 @@ class Chapter extends Lucid {
 ```
 
 
-### belongsToMany
+## BelongsToMany Relationship
 
-There are situations where each side of the relationship can have many rows inside the database. Let's see some examples
+There are situations where each side of the relationship can have many related rows inside the database. Let's see some examples
 
 | Model | Relation | Related Model |
 | ------- | --------| ------- |
@@ -147,7 +145,7 @@ There are situations where each side of the relationship can have many rows insi
 | Post | belongsToMany | Categories |
 | Category | belongsToMany | Posts |
 
-Taking the example of Student and Course, where both models can have many related rows in the database. In other words, it is a many to many relationship. 
+Taking the example of Student and Course, where both models can have many related rows in the database. In other words, it is a **many to many relationship**.
 
 ![](https://i.imgsafe.org/d107fc7.jpg)
 
@@ -177,44 +175,63 @@ class Course extends Lucid {
 }
 ```
 
-`belongsToMany` accepts number of arguments to configure the table/fields for the relationship.
+`belongsToMany` accepts a number of arguments to configure the table/fields for the relationship.
 
-**pivotTable**
+| Parameter | Required | Default Value |
+|-----------|----------|---------------|
+| pivotTable | No | Pivot table is the singular form of each model name, order by name. For example: Course and Student model will have `course_student` as the pivot table name |
+| localKey | No | Reference to the model foreign key inside the pivot table.|
+| otherKey | No | Reference to the related model foreign key inside the pivot table.|
 
-A pivot table is the singular form of each model name, order by name. For example:
+## HasManyThrough Relationship
 
-Course and Student model will have `course_student` as the pivot table name.You can override it by passing a custom table to the relation definition.
+Another helpful relation type supported by Lucid is `hasManyThrough`. Where a given model is dependent on another model via 3rd model.
 
-```
-this.belongsToMany('Model', 'pivotTable')
-```
+![](http://i.imgbox.com/Bw9ZkdNr.jpg)
 
-**localKey**
+Taking the example of fetching **posts** for a given **country** is not possible since there is no direct relationship between countries and posts. But with the help of `User` model, we can set up an indirect relationship between countries and posts and that is called `hasManyThrough` relationship.
 
-Local key is the reference to the model foreign key inside the pivot table.
+```javascript
+class Country extends Lucid {
 
-```
-this.belongsToMany('Model', 'pivotTable', 'localKey')
-```
+    posts () {
+        return this.hasManyThrough('App/Model/Post', 'App/Model/User')
+    }
 
-**otherKey**
-
-Another key is the reference to the related model foreign key inside the pivot table.
-
-```
-this.belongsToMany('Model', 'pivotTable', 'localKey', 'otherKey')
+}
 ```
 
-## Retrieving Relationships
+Now in order to fetch posts for a given country, you need to call the `posts` method on the `Country` model.
 
-Relationships are fetched by calling the relation method on a given model. 
+```javascript
+const country = yield Country.findBy('name', 'India')
+const posts = yield country.posts().fetch()
+response.json(posts)
+```
+
+`hasManyThrough` accepts given options.
+
+| Parameter | Required | Default Value |
+|-----------|----------|---------------|
+| relatedModel | Yes | null|
+| throughModel | Yes | null|
+| primaryKey | No | Model primary key |
+| foreignKey | No | Model foreign key |
+| throughPrimaryKey | No | Related model primary key |
+| throughForeignKey | No | Related model foreign key|
+
+## Querying Relationships
+
+Query relationships are really simple and the most natural process with Lucid. Relationships are defined as methods on the Model class and fetched by calling those methods.
+
+#### Lazy Loading Relationships
 
 ```javascript
 class User extends Lucid {
-	
-	profile () {
-		return this.hasOne('App/Model/Profile')
-	}
+    
+    profile () {
+        return this.hasOne('App/Model/Profile')
+    }
 
 }
 ```
@@ -223,71 +240,260 @@ Now in order to fetch the profile for a given user, you can call the `profile` m
 
 ```javascript
 const user = yield User.find(1)
-const profile = user.profile().fetch()
+const profile = yield user.profile().fetch()
 ```
 
-### Adding Query Constraints
+#### Defining Query Constraints
 
-You can make use of any query builder methods while fetching related models.
+You can define query constraints while defining the relationships.
 
 ```javascript
+class User extends Lucid {
+
+    profile () {
+        return this.hasOne('App/Model/Profile').where('is_active', true)
+    }
+
+}
+```
+
+Now when you will fetch the related profile for a given user, it will only include the record where `is_active=true`.
+
+#### Runtime Query Constraints
+
+You can also define runtime query constraints, just by chaining the query builder methods.
+
+```javascript
+const user = yield User.find(1)
 const profile = user.profile().where('is_active', true).fetch()
 ```
 
-### Eager Loading
+#### Eager Loading
 
-So far what you have seen is called Lazy Loading, where relationships are resolved for each model instance and this arises the problem of `n*1` when trying to load relations for multiple rows.
-
-### What is Lazy Loading?
-
-Let's imagine you want to load profiles for all the users and using the lazy loading approach, you will do something like this.
+Lazy Loading can cause the problem of `n*1` when you want to fetch relations for multiple rows. Eager loading optimizes this process by reducing the number of **SQL** queries to two, no matter how big the results set is.
 
 ```javascript
-const cf = require('co-functional')
-const users = yield User.all()
-
-cf.each(function * (user) {
-	const profile = yield user.profile().fetch()
-}, users)
-```
-
-What's happening here is, we are making a query to the profiles table for each user.Which means if there are 100 users, we will make 100 queries to profiles table + 1 query to the users table.
-
-It's a NO NO. Let's review Eager loading now.
-
-### with
-
-Eager loading makes this process better by loading all the given profiles for all users in total of 2 queries.
-
-```javascript
-const users = yield User.query().with('profile').fetch()
-
+const user = yield User.with('profile').fetch()
 console.log(users.toJSON())
 ```
 
-`with` method will load the given relation by making a join query and returns it back as a nested property.
+Output
 
-Also you can load multiple and nested relations using `with` method.
-
-### Multiple relations
-
-```javascript
-const users = yield User.query().with('profile', 'friends').fetch()
+```json
+[
+    {
+        id: 1,
+        username: 'joe',
+        email: '...',
+        profile: {
+            id: 4,
+            avatar: '...'
+        }
+    }
+]
 ```
 
-### Nested relations
+Also, you can eager load multiple relations by passing multiple relations keys to the `with` method.
 
 ```javascript
-const users = yield User.query().with('friends.profile').fetch()
+const user = yield User.with('profile', 'friends').fetch()
 ```
 
-## Lazy Eager Loading
+That's not all, `with` can also load **nested** relations.
 
-You can also eager load relations for a given model instance.
+```javascript
+const user = yield User.with('friends.profile').fetch()
+```
+
+Above query will load all the friends for a given user and profile of each friend.
+
+In order to add runtime constraints to the **eagerly loaded** results, you can make use of the `scope` method.
+
+```javascript
+const user = yield User
+    .with('profile', 'friends')
+    .scope('profile', function (builder) {
+        builder.where('is_active', true)
+    })
+    .scope('friends', function(builder) {
+        builder.orderBy('rank', 'desc')
+    })
+    .fetch()
+```
+
+#### Lazy Eager Loading
+
+Lucid also supports eager loading on previously fetched instances.
+
+```javascript
+const user = yield User.find(1)
+yield user.related('profile').load()
+
+console.log(user.toJSON())
+```
+
+Output
+
+```json
+[
+    {
+        id: 1,
+        username: 'joe',
+        email: '...',
+        profile: {
+            id: 4,
+            avatar: '...'
+        }
+    }
+]
+```
+
+
+All conventions and concepts of eager loading are equally true with lazy-eager loading. That means you can load **multiple** and **nested** relations and can also make use of the `scope` method to add runtime query constraints.
+
+## Insert, Updates & Deletes
+
+Relationships can also be created, updated and deleted with ease. Each relationship type has slightly different methods to persist related data.
+
+#### save(modelInstance)
+
+`save` method can be used to create/update related model instance. It works with following relations.
+
+1. hasOne
+2. hasMany
+3. belongsToMany
+
+```javascript
+const user = yield User.find(1)
+const profile = new Profile()
+profile.name = '@cybernox'
+profile.avatar =  '...'
+
+yield user.profile().save(profile)
+```
+
+Above call to `save` method will automatically set the foreign key for the saved profile.
+
+#### create(values)
+
+`create` works the same way as `save`, but here you can pass an arbitrary object instead of passing an instance.
+
+```javascript
+const user = yield User.find(1)
+yield user.profile().create({name: '@cybernox', avatar: '...'})
+```
+
+
+#### saveMany(arrayOfInstances)
+
+Save multiple related records for a given model instance. `saveMany` works with following relation types.
+
+1. hasMany
+2. belongsToMany
+
+```javascript
+const user = yield User.find(1)
+
+const profile = new Profile({name: '@cybernox'})
+const anotherProfile = new Profile({name: '@jgwhite'})
+
+yield user.profile.saveMany([profile, anotherProfile])
+```
+
+#### createMany(arrayOfValues)
+
+`createMany` can also create multiple records for a given model instance, but this time, you can pass an array of objects, instead of instances.
+
+```javascript
+const user = yield User.find(1)
+const profiles = yield user
+    .profile()
+    .createMany([{name: '@cybernox'}, {name: 'jgwhite'}])
+```
+
+#### attach(rows, [pivotValues])
+
+`attach` only works with **belongsToMany** relationship. You can attach existing records to form a relationship.
 
 ```javascript
 const student = yield Student.find(1)
-yield student.related('courses').load()
+const coursesIds = yield Courses.ids()
 
-console.log(student.get('courses'))
+yield Student.courses().attach(coursesIds)
+```
+
+Also, you can pass an object to populate fields inside the **pivotTable**.
+
+```javascript
+yield Student.courses().attach(coursesIds, {enrollment_confirmed: false})
+```
+
+Or you can also define different pivotValues for each related row.
+
+```javascript
+const mathsId = yield Courses
+    .query()
+    .where('name', 'Maths')
+    .pluckId()
+
+const englishId = yield Courses
+    .query()
+    .where('name', 'English')
+    .pluckId()
+
+const enrollment = {}
+enrollment[mathsId] = {enrollment_confirmed: true}
+enrollment[englishId] = {enrollment_confirmed: false}
+
+yield Student.courses().attach(enrollment)
+```
+
+#### detach(rows)
+
+`detach` is the opposite of `attach` and will remove the relationships from **pivotTable**.
+
+<div class="note"><strong> Note: </strong> <code> detach </code> does not remove any existing rows, it will only remove the relationship from the pivot table. </div>
+
+```javascript
+const student = yield Student.find(1)
+const coursesIds = yield Courses.ids()
+
+yield Student.courses().detach(coursesIds)
+```
+
+#### sync(rows, [pivotValues])
+
+`sync` will remove all existing relations and will only add given relations. Think of it as calling `detach` and `attach` one after the other.
+
+```javascript
+const student = yield Student.find(1)
+const coursesIds = yield Courses.ids()
+
+yield Student.courses().sync(coursesIds)
+```
+
+`sync` also accepts **pivotValues** similar to the `attach` method.
+
+#### associate(modelInstance)
+
+`associate` is used with `belongsTo` relationship to associate an existing database row.
+
+```javascript
+const user = yield User.find(1)
+const profile = new Profile()
+profile.name = '@cybernox'
+
+profile.user().associate(user)
+yield profile.save()
+```
+
+#### dissociate
+
+`dissociate` is the opposite of `associate` and will remove the existing relationship
+
+```javascript
+const profile = yield Profile.find(1)
+
+profile.user().dissociate()
+yield profile.save()
 ```

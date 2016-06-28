@@ -1,14 +1,49 @@
 ---
 title: Controllers
 permalink: controllers
-weight: 5
+description: Creating and defining controllers in AdonisJs
+weight: 1
 categories:
-- getting-started
+- guides
 ---
 
-Controllers represents **C** in MVC architecture. They are the common point of interaction between your models and views. 
+{{TOC}}
 
-In typical Web applications, you will begin by defining a controller method on your routes, make use of models to fetch data and send that data to views.
+Controllers are attached to routes and are the common point of interaction between your models and views.
+
+In typical Web applications, you will begin by binding a controller method to your route, make use of models to fetch data and send that data to view to render HTML.
+
+## Basic Example
+
+You bind controller methods as a **String** to your route. AdonisJs will automatically resolve the appropriate model from this string.
+
+```javascript
+Route.get('/users', 'UsersController.index')
+```
+
+Next you need to create the controller method inside the controller class.
+
+```javascript
+
+const User = use('App/Model/User')
+
+class UsersController {
+
+  * index (request, response) {		
+    const users = yield User.all()
+    yield response.sendView('users', { users: users.toJSON() })
+  }
+
+}
+```
+
+And inside your `users.njk` view, you can run a **for** loop to show a list of all the users.
+
+```twig
+{%for user in users %}
+  <h2>{{ user.username }}</h2>
+{% endfor %}
+```
 
 ## Creating Controllers
 
@@ -75,21 +110,23 @@ const Route = use('Route')
 Route.resources('users', 'UserController')
 ```
 
+Above code will bind 7 routes automatically for you.
+
 | Url | Verb | Controller Method | Purpose |
 |-----|------|-------------------|---------| 
 | /users | GET | index | Show list of all users |
 | /users/create | GET | create | Display a form to create a new user. |
-| /users | POST | store | Create a new user |
-| /users/:id | GET | show | Display a user using the id |
+| /users | POST | store | Save user submitted via form to the database. |
+| /users/:id | GET | show | Display user details using the id |
 | /users/:id/edit | GET | edit | Display the form to edit the user. |
-| /users/:id | PUT/PATCH | update | Update details for a given user id |
+| /users/:id | PUT/PATCH | update | Update details for a given user with id. |
 | /users/:id | DELETE | destroy | Delete a given user with id. |
 
 ## Filtering Resources
 
 `resources` will create total of 7 routes. Depending upon the nature of your application, you might or might not require all routes.
 
-#### except(actions)
+#### except(...actions)
 
 `except` will not register routes for the given actions.
 ```javascript
@@ -100,7 +137,7 @@ Route
 
 Above definition will not register the route for `create` and `edit` actions.
 
-#### only(actions)
+#### only(...actions)
 
 `only` is the opposite of except.
 

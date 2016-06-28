@@ -1,18 +1,34 @@
 ---
 title: Response
 permalink: response
-weight: 4
+description: Sending response for HTTP requests.
+weight: 3
 categories:
-- getting-started
+- guides
 ---
 
-Response object is also a sugared layer on top of Node.js HTTP response. It offers handful of expressive methods to make response for HTTP requests.
+{{TOC}}
+
+The response object is also sent along with `request` object to your controllers and route closures. It offers a handful of expressive methods to make the response to HTTP requests.
+
+## Basic Example
+
+```javascript
+Route.get('/users', function * (request, response) {
+    const users = yield User.all()
+    response.status(200).json(users)
+    
+    // or
+    response.ok(users)
+})
+```
+
 
 ## Response Methods
 
 #### send(body)
 
-Send method will end by request by responding the request with given data. You can send different data types and Adonis knows how to parse them and set correct headers for them.
+Send method will end the request by sending the given data. You can send different data types and Adonis knows how to parse them and set correct headers for them.
 
 ```javascript
 response.send('Hello world')
@@ -45,13 +61,13 @@ response.json({ name: 'doe' })
 Creates a JSONP response. It will make use of `callback` defined as the query string or will fallback to `http.jsonpCallback` defined inside `config/app.js` file.
 
 ```javascript
-response.json({ name: 'doe' })
+response.jsonp({ name: 'doe' })
 ```
 
 
 #### vary(field)
 
-Adds vary header to response. Understanding the need of `Vary` is quite broad. Check this [link](https://www.fastly.com/blog/best-practices-for-using-the-vary-header) to learn more about it.
+Adds vary header to the response. Understanding the need of `Vary` is quite broad. Check this [link](https://www.fastly.com/blog/best-practices-for-using-the-vary-header) to learn more about it.
 
 ```javascript
 response.vary('Accept-Encoding')
@@ -78,7 +94,7 @@ response.removeHeader('Accept')
 
 #### sendView(path)
 
-Render a nunjucks view.
+Render and send a nunjucks view as a response.
 
 ```javascript
 yield response.sendView('welcome')
@@ -106,11 +122,13 @@ Set Location header for the response. You can also use the `back` keyword to set
 
 ```javascript
 response.location('/signup')
+// or
+response.location('back')
 ```
 
 #### redirect(url, [status=302])
 
-Finish the response by redirecting the request to the given url. 
+Finish the response by redirecting the request to the given URL. 
 
 ```javascript
 response.redirect('back')
@@ -120,7 +138,7 @@ response.redirect('/welcome', 301)
 
 #### route(route, data, status)
 
-Redirect to a define route.
+Redirect to a defined route.
 
 ```javascript
 Route

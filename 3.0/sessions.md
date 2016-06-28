@@ -1,16 +1,29 @@
 ---
 title: Sessions
 permalink: sessions
-weight: 10
+description: Creating and reading values from session store.
+weight: 5
 categories:
-- getting-started
+- guides
 ---
 
-AdonisJs has out of the box support session management. AdonisJs also has support for flash messages, which are only valid for the upcoming request.
+{{TOC}}
+
+AdonisJs has out of the box support for session management via cookies and flat files saved on the server. Also you can create sessions for a single request known as Flash messages.
+
+## Basic Example
+
+```javascript
+Route.get('/cart', function * (request, response) {
+	const cartItems = yield request.session.get('cartItems')
+	yield response.sendView('cart', {cartItems})
+})
+```
+
 
 ## Drivers
 
-AdonisJs ships with `cookie` and `file` driver, which can be configured inside `config/session.js` file.
+AdonisJs ships with `cookie` and a `file` driver, which can be configured inside `config/session.js` file.
 
 ## Methods
 
@@ -78,7 +91,7 @@ const globalMiddleware = [
 ]
 ```
 
-Flash messages are extremely useful when you want to send the errors back on form submission. Let's take the example of user signup.
+Flash messages are extremely useful when you want to send form inputs or errors back on form submission. Let's take the example of user signup.
 
 ##### app/Http/Controllers/UserController
 
@@ -88,7 +101,10 @@ class UserContoller {
   * signup (request, response) {
     const validation = yield Validator.validate(rules, request.all())
     if (validation.fails()) {
-      yield request.withAll().flash()
+      yield request
+	      .withAll()
+	      .andWith({errors: validation.messages()})
+	      .flash()
       response.redirect('back')
     }
   }
@@ -96,9 +112,16 @@ class UserContoller {
 }
 ```
 
-`request.withAll().flash()` will flash all the values submitted by the form back to the signup page. So you can set them back to the form fields, instead of asking the end-user to re-type everything.
+`withAll` will flash all the values submitted by the form back to the signup page. So you can set them back to the form fields, instead of asking the end-user to re-type everything.
+
+`andWith` is method to attach a custom object to the flash messages, here we are sending back the validation errors.
 
 ```twig
+
+{% for error in old('errors') %}
+	<li> {{ error.message }} </li>
+{% endfor %}
+
 {{ form.open({method: 'UserController.signup'}) }}
   
   {{ form.text('email', old('email')) }}

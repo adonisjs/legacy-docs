@@ -1,13 +1,17 @@
 ---
 title: Database Setup
-description: Setting up database with AdonisJs
 permalink: database-setup
+description: Configuring SQL databases in AdonisJs
 weight: 0
 categories:
-- Database
+- database
 ---
 
-AdonisJs provides a unified Javascript syntax to access SQL databases. Below is the list of databases supported by AdonisJs.
+{{TOC}}
+
+AdonisJs provides a unified Javascript API to access SQL databases. With AdonisJs, you will never have to write SQL queries, instead, you will call Javascript methods to interact with databases. Also, when you switch between multiple SQL database clients, your code will remain the same.
+
+Below is the list of databases supported by AdonisJs.
 
 1. PostgreSQL
 2. MySQL
@@ -16,17 +20,11 @@ AdonisJs provides a unified Javascript syntax to access SQL databases. Below is 
 5. SQLite
 
 
-## Why to use an ORM?
-
-ORM stands for Object-Relational Mapping, which provides convenient ways to access database layer from any given programming language.
-
-With AdonisJs, you will never have to write SQL queries. Instead you call Javascript methods to interact with databases. Also, when you switch between multiple SQL database clients, your code will remain the same.
-
 ## Configuration
 
 Configuring database is simple and controlled by a dedicated configuration file inside `config` directory.
 
-With every new installation of AdonisJs, you will have `config/database.js` file. By default it is configured to make use of `sqlite`, but you are free to use any supported database client.
+With every new installation of AdonisJs, you will have `config/database.js` file. By default it is configured to make use of `SQLite`, but you are free to use any supported database client.
 
 ##### config/database.js
 
@@ -95,10 +93,10 @@ const Database = use('Database')
 
 class UserController {
 
-	* index (request, response) {		
-		const users = yield Database.select().from('users')
-		response.json(users)
-	}
+    * index (request, response) {        
+        const users = yield Database.select().from('users')
+        response.json(users)
+    }
 
 }
 
@@ -111,7 +109,7 @@ Below are the ways you can define settings for different database clients.
 
 #### MySQL
 
-One of the following libraries needs to be installed for using the mysql adapter.
+One of the following libraries needs to be installed for using the MySQL adapter.
 
 [client: mysql](https://www.npmjs.com/package/mysql)
 
@@ -147,7 +145,7 @@ mysql: {
 
 #### SQLite
 
-SQLite binding needs to be installed for using the sqlite connection.
+SQLite binding needs to be installed for using the `sqlite` connection.
 
 [client:sqlite3](https://www.npmjs.com/package/sqlite3)
 
@@ -162,7 +160,7 @@ sqlite: {
 
 #### PostgreSQL
 
-PostgreSQL binding needs to be installed for using pg connection.
+PostgreSQL binding needs to be installed for using the `pg` connection.
 
 [client:pg](https://www.npmjs.com/package/pg)
 
@@ -213,7 +211,7 @@ oracle: {
 
 #### MariaDB
 
-MariaDB binding should be installed before using the mariadb connection.
+MariaDB binding should be installed before using the MariaDB connection.
 
 [client:mariasql](https://www.npmjs.com/package/mariasql)
 
@@ -242,15 +240,15 @@ By default minimum of 2 and maximum of 10 connections will be spawned for MySQL 
 
 ```javascript
 module.exports = {
-	connection: 'mysql',
-	mysql: {
-	  client: 'mysql',
-	  connection: { ... },
-	  pool: {
-		  min: 0,
-		  max: 5
-	  }
-	}
+    connection: 'mysql',
+    mysql: {
+      client: 'mysql',
+      connection: { ... },
+      pool: {
+          min: 0,
+          max: 5
+      }
+    }
 }
 ```
 
@@ -260,18 +258,18 @@ Connection timeout is set to `60000ms` to determine how long to wait before thro
 
 ```javascript
 module.exports = {
-	connection: 'mysql',
-	mysql: {
-	  client: 'mysql',
-	  connection: { ... },
-	  acquireConnectionTimeout: 60000
-	}
+    connection: 'mysql',
+    mysql: {
+      client: 'mysql',
+      connection: { ... },
+      acquireConnectionTimeout: 60000
+    }
 }
 ```
 
 ## Query Builder
 
-Query builder is a chain of Javascript methods to build a SQL query. Let's explore different ways to select a table and add where clause to it.
+Query builder is a chain of Javascript methods to build an SQL query. Let's explore different ways to select a table and add where clause to it.
 
 #### selecting table
 ```javascript
@@ -307,7 +305,7 @@ You can learn more about [Query Builder here](query-builder).
 
 ## Switching Database Connection
 
-Switching database connection is one of the most common requirement while building multi-tenant apps. AdonisJs makes this process easier and let you use different connections on runtime.
+Switching database connection is one of the most common requirement while building multi-tenant apps. AdonisJs makes this process easier and lets you use different connections on runtime.
 
 Assuming you have defined following connections inside your config file.
 

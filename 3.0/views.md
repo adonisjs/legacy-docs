@@ -1,30 +1,28 @@
 ---
 title: Views
 permalink: views
+description: Getting started with AdonisJs Views and Template engine
 weight: 7
 categories:
-- getting-started
+- guides
 ---
+
+{{TOC}}
 
 AdonisJs has a solid View engine built on top of [nunjucks](http://mozilla.github.io/nunjucks/templating.html). Everything from nunjucks is fully supported with some extra features specific to AdonisJs only.
 
-## Creating A View
-
-Views are stored inside the `resources/views` directory. Each view file should end with `.nunjucks` extension.
-
-You can make use of `ace` in order to create a view file.
+Views are stored inside the `resources/views` directory and each view file should end with `.njk` extension. To keep it simple, you can make use of `ace` to create views.
 
 ```bash
-./ace make:view home
+./ace make:view welcome
 # on windows
-ace make:view home
+ace make:view welcome
 ```
 
-Above command will create a view to the given path `resources/view/home.nunjucks`. You are free to write plain HTML with the power of dynamic data binding.
 
 ## Basic Example
 
-Let's create a **Route, Controller and a View** to understand the complete lifecycle of rendering dynamic HTML in AdonisJs.
+Let's create a **Route, Controller and a View** to understand the complete lifecycle of rendering views in AdonisJs.
 
 ##### app/Http/routes.js
 
@@ -56,7 +54,7 @@ class UserController {
 
 ## Referencing Views
 
-Views are referenced using the view file name. You are not required to enter the complete path or the extension of a view.
+Views are referenced using the view file name without the base path and the extension.
 
 Let's take the following examples:
 
@@ -67,11 +65,11 @@ Let's take the following examples:
 
 ## Templating
 
-Templating refers to dynamic data binding and logical processing of data inside your views.You are required to follow a special syntax to make all this work.
+Templating refers to dynamic data binding and logical processing of data inside your views. You are required to follow a special syntax to make all this work.
 
 #### Variables
 
-In order to output the value of variable you make use curly braces.
+In order to output the value of a variable, you make use of curly braces.
 
 ```twig
 {{ user }}
@@ -89,7 +87,7 @@ Conditionals are reference with a curly brace and a `%` sign.
 {% endif %}
 ```
 
-You are not only limited to a `if` condition. Views support `if, else, elseif`.
+You are not only limited to an `if` condition. Views support `if, else, elseif`.
 
 ```twig
 {% if hungry %}
@@ -103,7 +101,7 @@ You are not only limited to a `if` condition. Views support `if, else, elseif`.
 
 #### Filters
 
-Filters transforms inline data and are super helpful when you want to transform data for representation only.
+Filters transform inline data and are super helpful when you want to transform data for representation only.
 
 ```twig
 {# username = 'john' #}
@@ -112,7 +110,7 @@ Filters transforms inline data and are super helpful when you want to transform 
 {# output = John #}
 ```
 
-Here `capitalize` is a filter to capitalise the value of a given string.
+Here `capitalize` is a filter to capitalize the value of a given string.
 
 ## Inheritance
 
@@ -189,7 +187,7 @@ Below are the rules for extending templates.
 
 You can also include different templates instead of just extending them. Including a template is commonly done when you want to share a piece of code between different templates.
 
-Let's take an example of a chat application, where the markup for a chat message can be saved inside a different view.
+Let's take an example of a chat application, where the markup for a chat message that can be saved inside a different view.
 
 ##### resources/views/chat/message.nunjucks
 ```twig
@@ -199,7 +197,7 @@ Let's take an example of a chat application, where the markup for a chat message
 </div>
 ```
 
-In your index file you can just include the `message` view inside a loop.
+In your index file, you can just include the `message` view inside a loop.
 
 ##### resources/views/chat/index.nunjucks
 ```twig
@@ -210,7 +208,7 @@ In your index file you can just include the `message` view inside a loop.
 {% endfor %}
 ```
 
-<div class="note"> Included templates shares the scope of the parent template.</div>
+<div class="note"> <strong> Note: </strong> Included templates shares the scope of the parent template.</div>
 
 ## Macros & Imports
 
@@ -225,7 +223,7 @@ Let's create a button component.
 {% endmacro %}
 ```
 
-Can you can use this macro.
+Now you can use this macro.
 
 ##### resources/views/home.nunjucks
 ```twig
@@ -236,14 +234,14 @@ Can you can use this macro.
 
 ## Defining Globals
 
-Globals are available to all the views. AdonisJs ships with some pre-defined globals and some are defined by other modules/providers.
+Globals are available to all the views. AdonisJs ships with some predefined globals and some are defined by other modules/providers.
 
 Make use of `app/Listeners/Http.js` file to define your own globals.
 
 ##### app/Listeners/Http.js
 ```javascript
 Http.onStart = function () {
-	
+    
   const View = use('View')
   View.global('time', new Date().getTime())
 
@@ -273,7 +271,7 @@ class ViewUrl {
 module.exports = ViewUrl
 ```
 
-Now you can access the global `url` inside all of your views.
+Now you can access the global `URL` inside all of your views.
 
 ```twig
 {{ url }}
@@ -283,17 +281,17 @@ Now you can access the global `url` inside all of your views.
 
 ## Defining Filters
 
-AdonisJs ships with handful of filters documented [here](template-reference). You can also add your own filters, just like the way you added globals.
+AdonisJs ships with a handful of filters documented [here](templating#filters). You can also add your own filters, just like the way you added globals.
 
 ##### app/Listeners/Http.js
 ```javascript
 Http.onStart = function () {
     
   const View = use('View')
-  const accounting = use('accounting')
+  const accounting = use('accounting') // npm module
 
   View.filter('currency', function (amount, symbol) {
-	  return accounting.formatMoney(amount, {symbol})
+    return accounting.formatMoney(amount, {symbol})
   })
 
 }
@@ -340,7 +338,7 @@ views: {
 
 Views are cached automatically by AdonisJs if you have not turned off caching. 
 
-In production it is a good practice to cache your views for better performance. Make use of `.env` file to control the caching behaviour.
+In production, it is a good practice to cache your views for better performance. Make use of `.env` file to control the caching behavior.
 
 ##### .env
 ```env
@@ -360,12 +358,11 @@ views: {
 
 ## Syntax Highlighting
 
-You need to download packages for your favourite editor to have proper syntax highlighting for your `nunjucks` views.
+You need to download packages for your favorite editor to have proper syntax highlighting for your `nunjucks` views.
 
-You can also use `twig` highlighter, if you cannot find nunjucks support for your favourite editor.
+You can also use `twig` highlighter if you cannot find nunjucks support for your favorite editor.
 
 1. [Atom](https://atom.io/packages/language-nunjucks).
 2. [Sublime Text( Via Twig )](https://packagecontrol.io/packages/PHP-Twig).
 3. [Webstorm( Via Twig )](https://plugins.jetbrains.com/plugin/7303?pr=).
 4. [Brackets](https://github.com/axelboc/nunjucks-brackets/).
-

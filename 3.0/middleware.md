@@ -1,16 +1,19 @@
 ---
 title: Middleware
 permalink: middleware
-weight: 6
+description: HTTP middleware documentation for AdonisJs
+weight: 4
 categories:
-- getting-started
+- guides
 ---
+
+{{TOC}}
 
 Middleware is a layer of classes executed before your Routes actions.
 
-Middleware has more than a single use case. Official middleware shipped with Adonis are used for various reasons. For example-
+Middleware has more than a single use case. For example:
 
-The body Parser middleware is responsible for parsing request body and handle file uploads. Whereas the Auth middleware is used to authenticate request and throw `401` Exception whenever the request is not made by an authenticated user.
+The body Parser middleware is responsible for parsing request body and handle file uploads. Whereas the Auth middleware is used to authenticate the requests and throw `401` Exception whenever the request is not made by an authenticated user.
 
 Middleware has capabilities to:
 
@@ -18,11 +21,28 @@ Middleware has capabilities to:
 2. Respond to a given request, without reaching your route action.
 3. Or to deny requests by throwing errors.
 
+## Basic Example
+
+```javascript
+'use strict'
+
+class Logger {
+
+  * handle (request, response, next) {
+    console.log(`Received request on ${request.url()}`)
+    yield next
+  }
+
+}
+
+module.exports = Logger
+```
+
 ## Creating A Middleware
 
 Application middleware lives inside the `app/Http/Middleware` directory. Each middleware is a single dedicated Es6 class.
 
-By defining a class, we open the possibilities of Injecting dependencies into it. Also each middleware needs to have a `handle` method, which is called automatically by Adonis.
+By defining a class, we open the possibilities of Injecting dependencies into it. Also, each middleware needs to have a `handle` method, which is called automatically by the framework.
 
 Let's make use of ace to create a middleware.
 
@@ -44,16 +64,20 @@ class CountryDetector {
   }
 
 }
+
+module.exports = CountryDetector
 ```
 
-`handle` is a ES2015 generator method and receive `request` and `response` object just like your routes actions. 
+`handle` is an ES2015 generator method. It receives `request` and `response` object just like your routes actions.
 
-In addition a middleware also receives a `next` function, which is used to tell the middleware chain to move to the next layer. So whenever you want to pass the request to the next handler, make use of `yield next`.
+In addition, a middleware also receives a `next` function, which is used to tell the middleware chain to move to the next layer. So whenever you want to pass the request to the next handler, make use of `yield next`.
 
-Let's build upon our `CountryDetector` middleware to detect the visitor country based upon their ip address.
+Let's build upon our `CountryDetector` middleware to detect the visitor country based upon their IP address.
 
 ```javascript
 'use strict'
+
+const geoip = use('geoip-lite') // npm module
 
 class CountryDetector {
 
@@ -64,6 +88,8 @@ class CountryDetector {
   }
 
 }
+
+module.exports = CountryDetector
 ```
 
 ## Register Middleware
@@ -78,15 +104,15 @@ const globalMiddleware = [
 ]
 ```
 
-Now each request will have a property called `country` attached to it, since we are decorating the request object using the `CountryDetector` middleware.
+Now each request will have a property called `country` attached to it, as we are decorating the request object using the `CountryDetector` middleware.
 
 ## Global Middleware
 
-Global middleware are executed on every request. They follow the Queue approach, which means they are executed in the order they are registered inside an array.
+Global middleware is executed on every request. They follow the Queue approach, which means they are executed in the order they are registered inside an array.
 
 ## Named Middleware
 
-Named middleware are middleware registered with a name. These middleware are not called until we explicitly define them on our routes.
+Named middleware are middleware registered with a name. These middleware are not called until you explicitly define them on your routes.
 
 AdonisJs Auth middleware is a great example of named middleware. It is defined as 
 
@@ -103,4 +129,3 @@ Route
   .get('account/:id', 'AccountController.show')
   .middleware('auth')
 ```
-

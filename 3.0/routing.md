@@ -1,13 +1,19 @@
 ---
 title: Routing
 permalink: routing
-description: Creating Routes in AdonisJs.
-weight: 2
+description: Routes in AdonisJs
+weight: 0
 categories:
-- getting-started
+- guides
 ---
 
-Routes are defined inside `app/Http/routes.js` file. It is a good practice to keep this file clean and move all required logic to different files/directories.
+{{TOC}}
+
+Routes are defined inside `app/Http/routes.js` file and loaded automatically when you start the HTTP server. It is a good practice to keep this file clean and move all required logic to different files/directories.
+
+## Basic Example
+
+In real world, it is good practice to attach Controller methods to your routes. But for the most basic route, you can make use of a `Closure`.
 
 ```javascript
 // importing the route provider
@@ -46,7 +52,9 @@ Route.route('/', 'COPY', function * (request, response) {
 
 // or
 
-Route.route('/', ['COPY', 'MOVE'], ...)
+Route.route('/', ['COPY', 'MOVE'], function * (request, response) {
+  // Your code
+})
 ```
 
 ## Multiple HTTP Verbs
@@ -74,18 +82,18 @@ Route parameters are dynamic URL segments. Which means you can register a route 
 ```javascript
 Route.get('/user/:id', function * (request, response) {
   const userId = request.param('id')
-  response.send(`Profile for ${userId}`)
+  response.send(`Profile for user with id ${userId}`)
 })
 ```
 
-`:id` is the dynamic segment. You can read the value of a parameter using the `request.param` method.
+Now visiting http://localhost:3333/user/1 will return **Profile for user with id 1**. Here `:id` is a parameter and in order to get the value you make use of `request.param()` method.
 
-You are required to append `?` to the parameter name in order to mark it as optional.
+In order to make params optional, you need to append `?` to the param name.
 
 ```javascript
 Route.get('/user/:id?', function * (request, response) {
   const userId = request.param('id', 1)
-  response.send(`Profile for ${userId}`)
+  response.send(`Profile for user with id ${userId}`)
 })
 ```
 
@@ -106,7 +114,7 @@ const params = request.params()
 
 ## Route Formats
 
-In order to build data agnostic applications, it is very important to be explicit with your URLs. Route extensions is a step towards that goal.
+In order to build data agnostic applications, it is very important to be explicit with your URLs. Route formats is a step towards that goal.
 
 #### formats(values, [strict=false])
 
@@ -117,9 +125,6 @@ Route
   .get('/users', 'UserController.index')
   .formats(['json', 'xml'])
 ```
-
-
-Setting `strict=true` will only define the route with extensions.
 
 You can identify the format of a request inside your route action.
 
@@ -136,6 +141,8 @@ Route
   })
   .formats(['json'])
 ```
+
+Setting `strict=true` will not register the default route. It will only register the route will defined formats.
 
 ## Named Routes
 

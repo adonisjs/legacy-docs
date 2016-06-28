@@ -1,18 +1,32 @@
 ---
 title: Request
 permalink: request
-weight: 3
+description: Handling HTTP requests
+weight: 2
 categories:
-- getting-started
+- guides
 ---
 
-Request object is a sugared layer on top of Node.js HTTP request object. It makes it so easy to read information off the request, which is not fun when dealing with raw HTTP requests.
+{{TOC}}
+
+The request object is a sugared layer on top of [Node.js HTTP request object](https://nodejs.org/dist/latest-v6.x/docs/api/http.html#http_class_http_server). It makes it so easy to read information off the request, which is not fun when dealing with raw HTTP requests.
+
+`request` object is passed as the first argument to all Controller's methods and Route closures.
+
+## Basic Example
+
+```javascript
+Route.get('/posts', function * (request, response) {
+    request.url() // get url
+    request.all() // get request body and query string
+})
+```
 
 ## Request Methods
 
 #### input(key, [defaultValue])
 
-Returns the value from query strings and request body for a given key. If the value does not exists, the default value will be returned.
+Returns the value of query strings and request body for a given key. If the value does not exist, the default value will be returned.
 
 ```javascript
 const name = request.input('name')
@@ -29,7 +43,7 @@ const data = request.all()
 
 #### only(keys...)
 
-Similar to all, but returns an object with values of defined keys. `null` will become the value when original value for that key does not exists.
+Similar to all, but returns an object with values of defined keys. `null` will become the value when the original value for that key does not exist.
 
 ```javascript
 const data = request.only('name', 'email', 'age')
@@ -52,7 +66,7 @@ const data = request.except('_csrf', 'submit')
 
 #### get
 
-Returns an object for all query strings.
+Returns a serialized object of query string.
 
 ```javascript
 const data = request.get()
@@ -60,7 +74,7 @@ const data = request.get()
 
 #### post
 
-Returns request body.
+Returns a serialized object of request body.
 
 ```javascript
 const data = request.post()
@@ -68,7 +82,7 @@ const data = request.post()
 
 #### fresh
 
-Tells whether request is fresh or not by checking ETag and expires header.
+Tells whether the request is fresh or not by checking ETag and expires header.
 
 ```javascript
 request.fresh()
@@ -85,7 +99,7 @@ request.stale()
 
 #### ip
 
-Returns most trusted ip address for a given request. If you are application is behind a proxy server like Nginx, make sure to enable `http.trustProxy` inside the `config/app.js` file.
+Returns most trusted IP address for a given request. If you are application is behind a proxy server like Nginx, make sure to enable `http.trustProxy` inside the `config/app.js` file.
 
 ```javascript
 request.ip()
@@ -93,7 +107,7 @@ request.ip()
 
 #### ips
 
-Returns an array of ip addresses sorted from most to least trusted.
+Returns an array of IP addresses sorted from most to least trusted.
 
 ```javascript
 request.ips()
@@ -101,7 +115,7 @@ request.ips()
 
 #### secure
 
-Tells whether request is server over HTTPS or not.
+Tells whether the request is served over HTTPS or not.
 
 ```javascript
 request.secure()
@@ -109,7 +123,7 @@ request.secure()
 
 #### subdomains
 
-Returns an array of subdomains for a given url. For example, `api.example.org` will have the subdomain as `['api']`.
+Returns an array of subdomains for a given URL. For example, `api.example.org` will have the subdomain as `['api']`.
 
 ```javascript
 request.subdomains()
@@ -141,7 +155,7 @@ request.hostname()
 
 #### url
 
-Returns request current url. It will trim query string and hashes of the url.
+Returns request current URL. It will trim query string and hashes of the URL.
 
 ```javascript
 // url - http://foo.com/users?orderBy=desc&limit=10
@@ -153,7 +167,7 @@ request.url()
 
 #### originalUrl
 
-`originalUrl()` returns the untouched version of current url.
+`originalUrl()` returns the untouched version of current URL.
 
 ```javascript
 request.originalUrl()
@@ -196,7 +210,7 @@ request.format()
 
 #### match(keys...)
 
-Returns a boolean indicating whether the current request url matches any of the given patterns.
+Returns a boolean indicating whether the current request URL matches any of the given patterns.
 
 ```javascript
 // url - /user/1
@@ -208,7 +222,7 @@ request.match('/user/all', '/user/(.+)') // true
 
 #### hasBody
 
-Returns whether the request has body or not.
+Returns whether the request has the body or not.
 
 ```javascript
 request.hasBody()
@@ -292,11 +306,11 @@ const ids = yield User.createMany(users)
 
 ## Content Negotiation
 
-Content Negotiation is a mechanism defined to find the best response type for a given request. The end-user can define the best resource type based upon their requirements.
+Content Negotiation is a way to find the best response type for a given request. The end-user can make use of HTTP headers to define the best response they are expecting from the server.
 
 #### is(keys...)
 
-Returns whether a request is one of the given types.
+Returns whether a request is one of the given types. This method will parse the request `Content-type` header.
 
 ```javascript
 const isPlain = request.is('html', 'plain')
@@ -304,7 +318,7 @@ const isPlain = request.is('html', 'plain')
 
 #### accepts(keys...)
 
-Returns the best matching response type for a given request.
+`accepts` will header the `Accept` header to negotiate the best response type for a given HTTP request.
 
 ```javascript
 const type = request.accept('json', 'html')
@@ -323,7 +337,7 @@ switch (type) {
 
 ## Extending Request
 
-In order to extend request, you can define your own macros. The best time to define macros is after the app is booted.
+In order to extend request object, you can define your own macros. The best time to define macros is after the app is booted.
 
 Same can be done inside `app/Listeners/Http.js`.
 
@@ -337,4 +351,12 @@ Http.onStart = function () {
     return this.cookie('cartValue', 0)
   })
 }
+```
+
+and later you can make use of it.
+
+```javascript
+Route.get('/cart', function * (request, response) {
+  const cartValue = request.cartValue()
+})
 ```

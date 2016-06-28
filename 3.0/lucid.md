@@ -1,17 +1,19 @@
 ---
 title: Lucid
-description: Understanding Active record and Lucid
 permalink: lucid
-weight: 2
+description: AdonisJs Database Models
+weight: 0
 categories:
-- Database
+- models
 ---
+
+{{TOC}}
 
 Lucid is an effective implementation of Active Record. Active Record itself is a pattern (not a language or tool). It helps you in reading and manipulating SQL data as objects and add domain logic to that data.
  
 ## Introduction
 
-Lucid models are saved inside `app/Model` directory of your application. You can also make use of `ace` to make a model for you.
+Lucid models are saved inside `app/Model` directory of your application. You can also make use of `ace` to create a model for you.
 
 ```bash
 ./ace make:model User
@@ -42,11 +44,9 @@ class User extends Lucid {
 }
 ```
 
-Models are simple `ES2015` classes and by extending `Lucid`, they inherit some default behaviour and methods to manipulate data inside an SQL table.
+Models are simple `ES2015` classes and by extending `Lucid`, they inherit some default behavior and methods to manipulate data inside an SQL table.
 
-While creating, reading, updating and deleting rows in a table you will execute methods on Model instance.
-
-Model instance is a representation of a single row, whose data is stored inside an object. For example:
+While creating, reading, updating and deleting rows in a table you will execute methods on Model instance. Model instance is a representation of a single row, whose data is stored inside an object. For example:
 
 ```javascript
 const user = new User()
@@ -63,7 +63,7 @@ Above you created an instance of the User model. It is crucial to understand tha
 
 ## Convention over Configuration
 
-Models inherit a handful of properties from `Lucid` base class, which prevents you from re-writing the same code again and again. Only implement below methods if you want to change the default behaviour of a model.
+Models inherit a handful of properties from `Lucid` base class, which prevents you from re-writing the same code again and again. Only implement below methods if you want to change the default behavior of a model.
 
 #### table
 
@@ -89,7 +89,7 @@ class User extends Model {
 
 #### primaryKey
 
-Each model has a defined primary key, which defaults to `id`. Value for primary key is auto-populated by Lucid whenever you save a new model to the database. Also primary key is required to resolve model relations.
+Each model has a defined primary key, which defaults to `id`. Value for primary key is auto-populated by Lucid whenever you save a new model to the database. Also, the primary key is required to resolve model relations.
 
 To override default value you can define a different primary key.
  
@@ -170,7 +170,7 @@ class User extends Lucid {
 
 ##### deleteTimestamp
 
-`deleteTimestamp` behaves a little different from create and update timestamps. You should only return value from this method if you want to make use of soft deletes.
+`deleteTimestamp` behaves a little different from *create* and *update* timestamps. You should only return value from this method if you want to make use of soft deletes.
 
 ```javascript
 
@@ -206,7 +206,7 @@ class User extends Lucid {
 
 CRUD is a term used for Create, Read, Update and Delete records from a database table. Lucid models offer a handful of convenient methods to make this process easier.
 
-You store your models inside `app/Model` directory of your application. To organise large projects you can also create subdirectories inside this directory.
+You store your models inside `app/Model` directory of your application. To organize large projects you can also create subdirectories inside this directory.
 
 Let's perform CRUD operations on a Post model which has an associated table called `posts`.
 
@@ -256,7 +256,7 @@ INSERT INTO "posts" ("title", "body", "created_at", "updated_at") VALUES ('Adoni
 
 #### read
 
-Reading is an operation divided into two segments. First you want to fetch all the posts and second is to read a single post. There are specific methods to achieve the desired results, but for now, we will focus on `findBy()` method.
+Reading is an operation divided into two segments. First, you want to fetch all the posts and second is to read a single post. There are specific methods to achieve the desired results, but for now, we will focus on `findBy()` method.
 
 `findyBy()` is a dynamic method used with an identifier and will return the first matching result as a model instance for a given where clause.
 

@@ -7,6 +7,8 @@ categories:
 - getting-started
 ---
 
+{{TOC}}
+
 AdonisJs is a Node.js MVC Framework. It encapsulates the boring parts of Web development and offers you a nice API to work with.
 
 Every web application needs following at a certain stage. 
@@ -19,7 +21,9 @@ Every web application needs following at a certain stage.
 
 AdonisJs has all of this built right into the framework or can be added by using one of the official library/modules.
 
-This guide is geared to give you an in-depth understanding of how AdonisJS works. If you are interested in seeing AdonisJs in action, check out this [VIDEO].
+This guide is geared to give you an in-depth understanding of how AdonisJS works. Watch the below video, if you are interested in seeing how AdonisJs solves a practical problem.
+
+<iframe width="640" height="390" src="https://www.youtube.com/embed/4MB0_X1fm5k" frameborder="0" allowfullscreen></iframe>
 
 ## Simplest Example
 
@@ -31,7 +35,6 @@ const User = use('App/Model/User')
 
 Route.get('/', function * (request, response) {
     const users = yield User.all()
-
     response.json(users)
 })
 ```
@@ -40,7 +43,7 @@ Don't worry, if you do not fully understand the above code, but you can see with
 
 1. AdonisJs removes the unnecessary callbacks from your code and introduces ES2015 Generators.
 2. It organizes everything into different/multiple directories so that you can keep your files short and sweet.
-3. AdonisJs does not add anything to the globals except the `use` and `make` function. Don't worry, we will learn about them soon.
+3. It does not add anything to the globals except the `use` and `make` function. Don't worry, we will learn about them soon.
 
 ## MVC
 
@@ -54,8 +57,8 @@ MVC stands for **Model**, **View** and **Controller**.
 </div>
 
 1. Model is the layer of data you retrieve/persist to the SQL databases like MySQL, SQLite, PostgreSQL etc.
-2. Controller is a method which responds to a HTTP request, this is the place where you interact with your Model to fetch data and send it to your views.
-3. View is `.nunjucks` file, which contains the HTML layout of your web page. Instead of just plain HTML, views offer a dynamic data binding syntax.
+2. Controller is a method which responds to an HTTP request, this is the place where you interact with your Model to fetch data and send it to your views.
+3. View is `.njk` file, which contains the HTML layout of your web page. Instead of just plain HTML, views offer a dynamic data binding syntax.
 
 ##### Model
 
@@ -95,7 +98,7 @@ Email - {{ user.email }}
 
 ## IoC Container
 
-Writing server applications requires a lot of work and needs to be organised within multiple files and directories to keep code maintainable and readable.
+Writing server applications requires a lot of work and needs to be organized within multiple files and directories to keep code maintainable and readable.
 
 IoC Container is a box to store all the pieces of your application so that you can use them whenever you need them. When these pieces are stored inside the container, they are given a unique namespace.
 
@@ -131,4 +134,4 @@ When you say `use('Route')`, following steps are being performed.
 2. Next, it will look for the resolved namespace inside the container.
 3. Finally, it will return the value bind to the container for the given namespace.
 
-A complete guide is the dedicated to the IoC Container, as it is a very broad concept. Read about it [here](ioc-container). 
+A complete cookbook is dedicated to the IoC Container, as it is a very broad concept. Read about it [here](https://www.gitbook.com/book/adonisjs/journeyman-guide-to-ioc-container).

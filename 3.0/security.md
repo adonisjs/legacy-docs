@@ -1,35 +1,19 @@
 ---
 title: Security
 permalink: security
-description: Making NodeJs applications secure using AdonisJs.
-weight: 2
+description: Tools and settings to keep AdonisJs applications secure.
+weight: 10
 categories:
-- first-steps
+- guides
 ---
 
-Majority of the security features are baked right into AdonisJs with the help of a middleware called [shield](https://github.com/adonisjs/adonis-middleware). Shield protects your apps from common web/malware attacks.
+{{TOC}}
+
+The majority of the security features are baked right into AdonisJs with the help of a middleware called [shield](https://github.com/adonisjs/adonis-middleware). Shield protects your apps from common web/malware attacks.
 
 ## Setup
 
-Every application has `shield` middleware pre-configured, but it's always nice to understand how the setup process works.
-
-Install the middleware if already not included
-
-```bash
-npm i --save adonis-middleware
-```
-
-Next we need to register the `AppMiddlewareProvider`. Which will bind all the middleware to the IoC Container, later to be used inside the HTTP kernel file.
-
-##### bootstrap/app.js
-```javascript
-const providers = [
-  ...,
-  'adonis-middleware/providers/AppMiddlewareProvider'
-]
-```
-
-Finally you need to register the middleware inside the `app/Http/kernel.js` file.
+Every application has `shield` middleware pre-configured, and all you need is to make sure it is registered as a **Global middleware** inside the `app/Http/kernel.js` file.
 
 ```javascript
 const globalMiddlewares = [
@@ -46,7 +30,7 @@ The configuration for shield is defined inside `config/shield.js` file. Each con
 
 CSRF Protection is the first step towards keeping your application secure from unidentified requests. It helps you in making sure that actions like `create`, `read` and `delete` are taken by right people from right place.
 
-You can learn more about CSRF [here](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)).
+You can learn more about CSRF [here](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF).
 
 ```javascript
 csrf: {
@@ -58,8 +42,8 @@ csrf: {
 
 Key | Value | Description
 ------|-------|----------
-enable | Boolean | A boolean to turn on/off CSRF for entire application.
-methods | Array | HTTP verbs to be protected by CSRF. Consider adding all verbs which allows the end user to add or modify data.
+enable | Boolean | A boolean to turn on/off CSRF for the entire application.
+methods | Array | HTTP verbs to be protected by CSRF. Consider adding all verbs which allow the end user to add or modify data.
 filterUris | Array | A list of URLs/Routes to ignore. You can pass actual routes definition or a regular expression to match.
 
 While validating the requests, middleware will look at the following areas to read the CSRF token.
@@ -95,10 +79,10 @@ request.csrfToken()
 
 ## Handling CSRF Errors
 
-On validation failure an `EBADCSRFTOKEN` Exception is thrown and same can be handled within the `app/Listeners/Http.js` file.
+On validation failure, an `EBADCSRFTOKEN` Exception is thrown and same can be handled within the `app/Listeners/Http.js` file.
 
 ```javascript
-Helpers.handleError = function * (error, request, response) {
+Http.handleError = function * (error, request, response) {
   if (error.code === 'EBADCSRFTOKEN') {
     response.forbidden('You cannot access this resource.')
   }
@@ -128,8 +112,8 @@ csp: {
 | Key | Value | Description |
 |-----|-------|-------------|
 | directives | Object | Directives helps you in defining policies to be applied on different resource types. You can get list of all directives from http://content-security-policy.com.|
-| reportOnly | Boolean | It will not stop the execution of your page, instead will return a humble warning that some rules are violated.|
-| setAllHeaders | Boolean | Shield sets different http headers for different browsers. To disable this behaviour, you can this value to true and all headers will be set.|
+| reportOnly | Boolean | It will not stop the execution of your page, instead, will return a humble warning that some rules are violated.|
+| setAllHeaders | Boolean | Shield sets different HTTP headers for different browsers. To disable this behavior, you can this value to true and all headers will be set.|
 | disableAndroid | Boolean | Android is buggy with CSP, you can disable it for android in case you face any troubles.|
 
 Learn more about CSP [Browsers Support](http://caniuse.com/#feat=contentsecuritypolicy).
@@ -151,7 +135,7 @@ Above will create a meta tag with the required content inside it.
 
 #### CSP Nonce
 
-Inline Script is a javaScript code, which lives within the HTML page. Some 3rd party plugins can drop their JavaScript to your webpages, which may not be something you are looking for.
+Inline Script is a javaScript code, which lives within the HTML page. Some 3rd party plugins can drop their JavaScript to your web pages, which may not be something you are looking for.
 
 Disabling `Inline Scripts` is not very helpful. So `nonce` is a way to identify inline scripts created by you vs dropped by unidentified resources.
 
@@ -174,7 +158,7 @@ And then you can make use of another view helper to get access to a unique ident
 
 ## Malware Protection
 
-Malware protection helps in protecting your website from **XSS** attacks, unwanted iframe embeds, content type sniffing and stopping IE from executing unwanted scripts in context of your webpage.
+Malware protection helps in protecting your website from **XSS** attacks, unwanted iframe embeds, content type sniffing and stopping IE from executing unwanted scripts in the context of your web page.
 
 #### XSS
 
@@ -189,7 +173,7 @@ xss: {
 
 #### No Sniff
 
-Majority of modern browsers will try to detect the `Content-Type` of a request by sniffing its content. Which means a file ending in `.txt` can be executed as javascript file, if it contains javascript code. To disable this behaviour set `nosniff` to true.
+The majority of modern browsers will try to detect the `Content-Type` of a request by sniffing its content. Which means a file ending in `.txt` can be executed as javascript file, if it contains javascript code. To disable this behavior set `nosniff` to true.
 
 ```javascript
 {
@@ -199,7 +183,7 @@ Majority of modern browsers will try to detect the `Content-Type` of a request b
 
 #### No Open
 
-This setting will stop IE from executing unknown script in context of your website.
+This setting will stop IE from executing unknown script in the context of your website.
 
 ```javascript
 {

@@ -1,14 +1,19 @@
 ---
 title: CORS
 permalink: cors
-weight: 1
+description: Cross-Origin resource sharing for AdonisJs.
+weight: 11
 categories:
-- first-steps
+- guides
 ---
 
-Cross-Origin Resource Sharing is a way to allow HTTP requests from different domains. It is very common in AJAX requests where the browser will block all cross-domain requests if they are not enabled or allowed by the server. Read more about [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS).
+{{TOC}}
 
-In AdonisJs, CORS are handled by a middleware. Just make sure it is added to the list of global middleware.
+Cross-Origin Resource Sharing is a way to allow incoming HTTP requests from different domains. It is very common in AJAX requests where the browser will block all cross-domain requests if they are not allowed by the server. Read more about [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS).
+
+## Setup
+
+In AdonisJs, **CORS** is handled by a middleware. Just make sure it is added to the list of Global middleware.
 
 ##### app/Http/kernel.js
 

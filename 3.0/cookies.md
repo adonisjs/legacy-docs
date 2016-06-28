@@ -1,32 +1,49 @@
 ---
-title: Cookie
+title: Cookies
 permalink: cookies
-weight: 9
+description: Creating and reading values of HTTP Cookies in AdonisJs
+weight: 6
 categories:
-- getting-started
+- guides
 ---
 
-Cookies in AdonisJs are encrypted and signed. Which means any tampering to a cookie will make it invalid. 
+{{TOC}}
 
-In order to make your cookie encrypted, make sure to define `APP_KEY` inside your `.env` file. Alternatively you can make use of `ace` to generate the key for you.
+You can easily create and set cookies using the `request` and `response` object sent along with every HTTP request.
+
+Cookies in AdonisJs are encrypted and signed. Which means any tampering to a cookie will make it invalid.
+
+<div class="note">
+<strong> Note </strong> In order to make your cookie encrypted, make sure to define <code>APP_KEY</code> inside your <code>.env</code> file. Alternatively you can make use of <code>ace</code> to generate the key for you.</div>
 
 ```bash
 ./ace generate:key
 ```
 
-## Reading Cookies
-
-Cookies are read from the request object passed with every route action.
-
-#### cookie(key, [defaultValue])
-
-Returns the cookie value for a given key. Default value is returned when existing value does not exists.
+## Basic Example
 
 ```javascript
 Route.get('/', function * (request, response) {
-  const cardTotal = request.cookie('cartTotal')
+  const pageViews = request.cookie('pageViews') // reading
+  pageViews++
+  response.cookie('pageViews', pageViews) // writing
+})
+```
+
+
+## Reading Cookies
+
+Cookies are read from the request object passed to every route action.
+
+#### cookie(key, [defaultValue])
+
+Returns the cookie value for a given key. The default value is returned when the existing value does not exist.
+
+```javascript
+Route.get('/', function * (request, response) {
+  const cartTotal = request.cookie('cartTotal')
   // or
-  const cardTotal = request.cookie('cartTotal', 0)
+  const cartTotal = request.cookie('cartTotal', 0)
 })
 ```
 
@@ -42,13 +59,17 @@ Route.get('/', function * (request, response) {
 
 ## Creating/Deleting Cookies
 
-You write cookies on the response object, since they are set when a request finishes.
+You write cookies on the response object since they are set when a request finishes.
 
 #### cookie(key, value, [options])
 
 ```javascript
 Route.get('/', function * (request, response) {
   response.cookie('cartValue', 210)
+  // or
+  response.cookie('cartValue', 210, {
+    httpOnly: true
+  })
   response.send('Done!')
 })
 ```
@@ -69,11 +90,11 @@ Options are defined as an object.
 
 #### clearCookie(key)
 
-Removes existing cookie from response.
+Removes existing cookie from the response.
 
 ```javascript
-Route.get('/', function * (request, response) {
+Route.get('/checkout', function * (request, response) {
   response.clearCookie('cartValue')
-  response.send('Cleared Cookie')
+  response.send('Order Confirmed')
 })
 ```
