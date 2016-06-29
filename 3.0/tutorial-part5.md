@@ -55,7 +55,7 @@ Finally, we need to create the view using `ace`.
 Output
 
 ```bash
-create: resources/views/createPost.nunjucks
+create: resources/views/createPost.njk
 ```
 
 ## Form Builder
@@ -88,7 +88,7 @@ We will make use of Form Builder to set up the form for creating a new post.
 {% endblock %}
 ```
 
-Quite a lot to cover here. Form builder provides some convenient methods to create HTML forms. 
+Quite a lot to cover here. Form builder provides some convenient methods to create HTML forms.
 
 1. `form.open` creates the form tag. Here we make use of `action` property to define the controller method for handling the POST request. Form `action` and the `method` will be filled automatically for you.
 2. All of the forms are protected by [CSRF]() protection. So we need to set the `csrfField` to make sure we are able to submit forms without any restrictions.
@@ -205,4 +205,3 @@ Let's refresh the page and try to create a new post with empty title and content
 ![](http://i.imgbox.com/eT6SW1EF.png)
 
 Wow, this is fun. We have got a working form with super easy validation and in-place error handling.
-
