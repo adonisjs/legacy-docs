@@ -73,7 +73,7 @@ class UserController {
         const userData = request.all()
         const validation = yield Validator.validate(userData, User.rules)
         
-        if (validations.fails()) {
+        if (validation.fails()) {
             response.json(validation.messages())
             return
         }
