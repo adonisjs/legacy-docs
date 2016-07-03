@@ -25,10 +25,10 @@ Factory.blueprint('App/Model/User', (fake) => {
 
   return {
     username: fake.username(),
-    email: fake.email(),
-    password: fake.password(),
-    firstName: fake.first(),
-    lastName: fake.last()
+    email: faker.email(),
+    password: faker.password(),
+    firstName: faker.first(),
+    lastName: faker.last()
   }
 
 })
@@ -189,7 +189,7 @@ Returns a random username.
 ```javascript
 Factory.blueprint('App/Model/User', (fake) => {
     return {
-        username: fake.username()
+        username: faker.username()
     }
 })
 ```
@@ -201,7 +201,7 @@ Returns a random password.
 ```javascript
 Factory.blueprint('App/Model/User', (fake) => {
     return {
-        password: fake.password()
+        password: faker.password()
     }
 })
 ```

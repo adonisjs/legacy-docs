@@ -30,7 +30,7 @@ The configuration for shield is defined inside `config/shield.js` file. Each con
 
 CSRF Protection is the first step towards keeping your application secure from unidentified requests. It helps you in making sure that actions like `create`, `read` and `delete` are taken by right people from right place.
 
-You can learn more about CSRF [here](https://www.owasp.org/index.php/Cross-Site_Request_Forgery).
+You can learn more about CSRF [here](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF).
 
 ```javascript
 csrf: {
@@ -125,9 +125,9 @@ Learn more about CSP [Browsers Support](http://caniuse.com/#feat=contentsecurity
 ```twig
 {{ cspMeta }}
 
-{#
+{# 
   returns
-  <meta http-equiv="Content-Security-Policy" content="xxx">
+  <meta http-equiv="Content-Security-Policy" content="xxx"> 
 #}
 ```
 

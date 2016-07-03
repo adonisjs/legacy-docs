@@ -149,7 +149,7 @@ class UserController {
             return
         }
         
-        response.unauthorized('Invalid credentails')
+        response.unathorized('Invalid credentails')
     }
 
 }
@@ -168,7 +168,7 @@ Above method will a log in a user using their email address and password. Let's 
         return
     }
     
-    response.unauthorized('You must login to view your profile')
+    response.unathorized('You must login to view your profile')
     
 }
 ```

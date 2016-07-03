@@ -9,17 +9,17 @@ categories:
 
 {{TOC}}
 
-The response object is also sent along with `request` object to your controllers and route closures. It offers a handful of expressive methods to make the response to HTTP requests.
+The response object is also a sugared layer on top of [Node.js HTTP response object](https://nodejs.org/api/http.html#http_class_http_serverresponse) sent along with `request` object to your controllers and route closures. It offers a handful of expressive methods to make the response to HTTP requests.
 
 ## Basic Example
 
 ```javascript
 Route.get('/users', function * (request, response) {
-    const users = yield User.all()
-    response.status(200).json(users)
-    
-    // or
-    response.ok(users)
+  const users = yield User.all()
+
+  response.status(200).json(users)
+  // or
+  response.ok(users)
 })
 ```
 
@@ -28,7 +28,7 @@ Route.get('/users', function * (request, response) {
 
 #### send(body)
 
-Send method will end the request by sending the given data. You can send different data types and Adonis knows how to parse them and set correct headers for them.
+Send method will end the request by sending the given data. You can send different data types and AdonisJs knows how to parse them and set correct headers for them.
 
 ```javascript
 response.send('Hello world')
@@ -164,7 +164,7 @@ is more readable and descriptive than.
 response.status(401).send('Login First')
 ```
 
-Below is the list of all descriptive methods and their corresponding HTTP statuses.
+Below is the list of all descriptive methods and their corresponding HTTP statuses. Also you can checkout https://httpstatuses.com/ to learn more about HTTP status codes.
 
 | method                       | http response status |
 | ---------------------------- | -------------------- |

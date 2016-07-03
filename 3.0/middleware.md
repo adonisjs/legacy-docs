@@ -9,11 +9,9 @@ categories:
 
 {{TOC}}
 
-Middleware is a layer of classes executed before your Routes actions.
+HTTP Middleware is a layer of methods executed before your Routes actions. They have more than a single use case. For example:
 
-Middleware has more than a single use case. For example:
-
-The body Parser middleware is responsible for parsing request body and handle file uploads. Whereas the Auth middleware is used to authenticate the requests and throw `401` Exception whenever the request is not made by an authenticated user.
+The **body parser** middleware is responsible for parsing request body. Whereas the Auth middleware is used to authenticate the requests and throw `401` Exception whenever the request is not made by an authenticated user.
 
 Middleware has capabilities to:
 
@@ -40,9 +38,9 @@ module.exports = Logger
 
 ## Creating A Middleware
 
-Application middleware lives inside the `app/Http/Middleware` directory. Each middleware is a single dedicated Es6 class.
+Application middleware lives inside the `app/Http/Middleware` directory. Each middleware is a single dedicated **ES2015** Class.
 
-By defining a class, we open the possibilities of Injecting dependencies into it. Also, each middleware needs to have a `handle` method, which is called automatically by the framework.
+By defining a Class, we open the possibilities of Injecting dependencies into it. Also, each middleware needs to have a `handle` method, which is called automatically by the framework.
 
 Let's make use of ace to create a middleware.
 
@@ -68,9 +66,7 @@ class CountryDetector {
 module.exports = CountryDetector
 ```
 
-`handle` is an ES2015 generator method. It receives `request` and `response` object just like your routes actions.
-
-In addition, a middleware also receives a `next` function, which is used to tell the middleware chain to move to the next layer. So whenever you want to pass the request to the next handler, make use of `yield next`.
+`handle` is an ES2015 generator method. It receives `request` and `response` object just like your routes actions. In addition, a middleware also receives a `next` function, which is used to tell the middleware chain to move to the next layer. So whenever you want to pass the request to the next handler, make use of `yield next`.
 
 Let's build upon our `CountryDetector` middleware to detect the visitor country based upon their IP address.
 
@@ -108,7 +104,7 @@ Now each request will have a property called `country` attached to it, as we are
 
 ## Global Middleware
 
-Global middleware is executed on every request. They follow the Queue approach, which means they are executed in the order they are registered inside an array.
+Global middleware are executed on every request. They follow the Queue approach, which means they are executed in the order they are defined in an array.
 
 ## Named Middleware
 

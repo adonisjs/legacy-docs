@@ -9,7 +9,7 @@ categories:
 
 {{TOC}}
 
-AdonisJs has out of the box support for session management via cookies and flat files saved on the server. Also you can create sessions for a single request known as Flash messages.
+AdonisJs has out of the box support for session management via **cookies** and **flat files** saved on the server. Also you can create sessions for a single request known as Flash messages.
 
 ## Basic Example
 
