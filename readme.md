@@ -7,7 +7,7 @@
 
 AdonisJS docs is the official repository for technical documentation of AdonisJS framework.
 
-You can find this documentation on http://adonisjs.com/docs/2.0/installation.
+You can find this documentation on http://www.adonisjs.com/docs.
 
 In order to contribute to it, follow below steps.
 
