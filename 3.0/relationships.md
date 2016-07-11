@@ -274,7 +274,7 @@ Lazy Loading can cause the problem of `n*1` when you want to fetch relations for
 
 ```javascript
 const user = yield User.with('profile').fetch()
-console.log(users.toJSON())
+console.log(user.toJSON())
 ```
 
 Output
