@@ -26,6 +26,7 @@ This guide is geared to give you an in-depth understanding of how AdonisJS works
 <div class="embed-responsive embed-responsive-16by9">
     <iframe width="640" height="390" src="https://www.youtube.com/embed/4MB0_X1fm5k" frameborder="0" allowfullscreen></iframe>
 </div>
+
 ## Simplest Example
 
 AdonisJs attempts to remove the big pieces of unmanageable code with simple readable API's. For example

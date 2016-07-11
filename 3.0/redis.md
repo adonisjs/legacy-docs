@@ -150,7 +150,7 @@ Redis.subscribe('music', function (track, channel) {
 `listener` can also be a reference to a module inside `app/Listeners` directory.
 
 ```javascript
-Redis.subscribe('music', 'Music.newTrack')
+Redis.subscribe('music', 'App/Listeners/Music.newTrack')
 ```
 
 ##### app/Listeners/Music.js
@@ -206,8 +206,6 @@ Redis.punsubscribe('h?llo')
 Transactions are really helpful when you want to perform bulk operations at a given point of time. Let's review an example of adding users to a list.
 
 ```javascript
-'use strict'
-
 'use strict'
 
 const User = use('App/Model/User')
