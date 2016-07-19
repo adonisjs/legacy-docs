@@ -273,7 +273,7 @@ const profile = user.profile().where('is_active', true).fetch()
 Lazy Loading can cause the problem of `n*1` when you want to fetch relations for multiple rows. Eager loading optimizes this process by reducing the number of **SQL** queries to two, no matter how big the results set is.
 
 ```javascript
-const user = yield User.with('profile').fetch()
+const users = yield User.with('profile').fetch()
 console.log(users.toJSON())
 ```
 
