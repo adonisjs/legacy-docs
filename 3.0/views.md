@@ -45,7 +45,7 @@ class UserController {
 }
 ```
 
-##### resources/views/greet.nunjucks
+##### resources/views/greet.njk
 
 ```twig
 <h2> Hello {{ user }} </h2>
@@ -60,8 +60,8 @@ Let's take the following examples:
 
 | Path | Referenced As |
 |------|---------------|
-| resources/views/home.nunjucks | response.sendView('home')
-| resources/views/user/list.nunjucks | response.sendView('user.list')
+| resources/views/home.njk | response.sendView('home')
+| resources/views/user/list.njk | response.sendView('user.list')
 
 ## Templating
 
@@ -118,7 +118,7 @@ Inheritance means extending a base template and overriding its individual pieces
 
 Let's take the example of a master and a child view.
 
-##### resources/views/master.nunjucks
+##### resources/views/master.njk
 ```twig
 <html>
   <body>
@@ -145,7 +145,7 @@ Let's take the example of a master and a child view.
 
 Now you can extend this view inside any other view.
 
-##### resources/views/home.nunjucks
+##### resources/views/home.njk
 ```twig
 {% extends 'master' %}
 
@@ -189,7 +189,7 @@ You can also include different templates instead of just extending them. Includi
 
 Let's take an example of a chat application, where the markup for a chat message that can be saved inside a different view.
 
-##### resources/views/chat/message.nunjucks
+##### resources/views/chat/message.njk
 ```twig
 <div class="chat__message">
   <h2> {{ message.from }} </h2>
@@ -199,7 +199,7 @@ Let's take an example of a chat application, where the markup for a chat message
 
 In your index file, you can just include the `message` view inside a loop.
 
-##### resources/views/chat/index.nunjucks
+##### resources/views/chat/index.njk
 ```twig
 {% for message in messages %}
 
@@ -216,7 +216,7 @@ Your views are not only limited to `include` and `extends`. Macros help you in d
 
 Let's create a button component.
 
-##### resources/views/macros/button.nunjucks
+##### resources/views/macros/button.njk
 ```twig
 {% macro button(value, style='default') %}
   <button type="button" class="button {{style}}"> {{ value }} </button>
@@ -225,7 +225,7 @@ Let's create a button component.
 
 Now you can use this macro.
 
-##### resources/views/home.nunjucks
+##### resources/views/home.njk
 ```twig
 {% from 'macros.button' import button %}
 
@@ -264,6 +264,8 @@ class ViewUrl {
 
   * handle (request, response, next) {
     View.global('url', request.url())
+
+    yield next;
   } 
 
 }
