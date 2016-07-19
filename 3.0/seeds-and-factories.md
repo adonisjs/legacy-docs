@@ -115,7 +115,7 @@ yield User.posts().create(post)
 `each` is a generator friendly method to loop over created instances of a model. It is helpful when you want to save relationship for every created instance.
 
 ```javascript
-const users = Factory.model('App/Model/User').create(5)
+const users = yield Factory.model('App/Model/User').create(5)
 
 users.each(function * (user) {
     const post = Factory.model('App/Model/Post').make()
