@@ -460,7 +460,22 @@ try {
 }
 ```
 
+#### findOrCreate
 
+`findOrCreate` will try to find a row with the given attributes and if nothing is found, it will create a new row and returns it back.
+
+```javascript
+const whereAttrs = {
+  title: 'Adonis 101'
+}
+
+const values = {
+  title: 'Adonis 101',
+  body: 'Adonis 101 is a new guide to learn Adonis...'
+}
+
+yield Post.findOrCreate(whereAttrs, values)
+```
 
 #### pick(rows)
 
@@ -505,3 +520,79 @@ Above query is produce following SQL.
 ```sql
 SELECT * FROM "posts";
 ```
+
+#### ids
+
+Returns an array of `primaryKeys` for a given model.
+
+```javascript
+const ids = yield Post.ids()
+
+// returns
+// [1, 2, 3, 4, 5, ...]
+```
+
+Also, you can grab `ids` for query builder chain
+
+```javascript
+const ids = yield Post.query().where('status', 'published').ids()
+```
+
+#### pair
+
+`pair` returns a key/value pair of 2 fields. It can be very handy to populate HTML dropdowns.
+
+```javascript
+const countries = yield Country.pair('iso', 'name')
+
+// returns
+// {ind: 'India', uk: 'United Kingdom', ...}
+```
+
+Just like **ids**, `pair` can also be used with a query builder chain
+
+```javascript
+const asianCountries = yield Country.query().where('inAsia', true).pair('iso', 'name')
+```
+
+## Scope Methods
+
+Scope methods are custom chainable query methods that you can define on Lucid Models. There are helpful in keeping your code expressive and DRY.
+
+```javascript
+'use strict'
+
+const Lucid = use('Lucid')
+
+class User extends Lucid {
+  
+  static scopeActive (buider) {
+    builder.where('status', 'active')
+  } 
+
+}
+```
+
+Above we defined a static `scopeActive` method, which receives the query builder instance that can be used to add clauses or modify query.
+
+Now you can use this method when making queries of the `User` model.
+
+```javascript
+yield User.query().active().fetch()
+```
+
+executes following SQL query
+
+```sql
+select * from `users` WHERE `status` = ?
+```
+
+#### Some Rules
+
+All scope methods start with the keyword `scope` followed the method name you want to call when running your queries.
+
+| Scope Method | Usage with query builder |
+|--------------|-------------------------|
+| scopeActive | active |
+| scopeLatest | latest |
+| scopeCollaborators | collaborators|
