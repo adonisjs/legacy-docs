@@ -555,9 +555,9 @@ Just like **ids**, `pair` can also be used with a query builder chain
 const asianCountries = yield Country.query().where('inAsia', true).pair('iso', 'name')
 ```
 
-## Scope Methods
+## Query Scopes
 
-Scope methods are custom chainable query methods that you can define on Lucid Models. There are helpful in keeping your code expressive and DRY.
+Query scopes are custom chainable query methods that you can define on Lucid Models. There are helpful in keeping your code expressive and DRY.
 
 ```javascript
 'use strict'
@@ -589,9 +589,9 @@ select * from `users` WHERE `status` = ?
 
 #### Some Rules
 
-All scope methods start with the keyword `scope` followed the method name you want to call when running your queries.
+All query scope methods start with the keyword `scope` followed by the method name you want to call when running your queries.
 
-| Scope Method | Usage with query builder |
+| Query scope method | Usage with query builder |
 |--------------|-------------------------|
 | scopeActive | active |
 | scopeLatest | latest |
