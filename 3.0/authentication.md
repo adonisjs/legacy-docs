@@ -459,12 +459,12 @@ Inside your views, you can make use of a global.
 {{ currentUser }}
 ```
 
-When making use of stateless authenticators like **jwt**, **api**, etc. Currently authenticated request will have a `user` property.
+When making use of stateless authenticators like **jwt**, **api**, etc. Currently authenticated request will have a `authUser` property.
 
 ```javascript
-request.auth  // authenticated user instance
+request.authUser  // authenticated user instance
 ```
 
 <div class="note">
-    <strong>Note: </strong> <code>request.auth</code> is only available when you make use of named middleware called <code>auth</code>.
+    <strong>Note: </strong> <code>request.authUser</code> is only available when you make use of named middleware called <code>auth</code>.
 </div>
