@@ -59,7 +59,7 @@ module.exports = {
 
 ## Setup
 
-Every new application comes with a pre-configured Authentication provider. In case, if you are upgrading an old project, follow the below steps to configure it from scratch. 
+Every new application comes with a pre-configured Authentication provider. In case, if you are upgrading an old project, follow the below steps to configure it from scratch.
 
 ```bash
 npm i --save adonis-auth
@@ -138,17 +138,17 @@ Route.post('/login', 'UserController.login')
 
 ```javascript
 class UserController {
-    
+
     * login (request, response) {
         const email = request.input('email')
         const password = request.input('password')
         const login = yield request.auth.attempt(email, password)
-    
+
         if (login) {
             response.send('Logged In Successfully')
             return
         }
-        
+
         response.unauthorized('Invalid credentails')
     }
 
@@ -162,14 +162,14 @@ Above method will a log in a user using their email address and password. Let's 
 ```javascript
 * profile (request, response) {
     const user = yield request.auth.getUser()
-    
+
     if (user) {
         response.ok(user)
         return
     }
-    
+
     response.unauthorized('You must login to view your profile')
-    
+
 }
 ```
 
@@ -223,7 +223,11 @@ yield request.auth.check()
 Validate user credentials to see if they are valid. `validate` method does not perform a login.
 
 ```javascript
-const isValid = yield request.auth.validate(uid, password)
+try {
+  yield request.auth.validate(uid, password)
+} catch (e) {
+  // throw PasswordMisMatchException
+}
 ```
 
 ## Basic Auth
@@ -405,7 +409,7 @@ Route
     .middleware('auth')
 ```
 
-## Defining Different Authenticator 
+## Defining Different Authenticator
 
 You can also define different authenticator to your auth middleware key.
 
@@ -419,7 +423,7 @@ This one will make use of `basic` authenticator defined inside your `config/auth
 
 ## Multiple Authenticators
 
-It is a very common practice to make use of multiple authenticators when trying to authenticate a user. 
+It is a very common practice to make use of multiple authenticators when trying to authenticate a user.
 
 **For example**: Creating REST API with the support of Basic Auth and JWT.
 
