@@ -110,7 +110,7 @@ Global middleware are executed on every request. They follow the Queue approach,
 
 Named middleware are middleware registered with a name. These middleware are not called until you explicitly define them on your routes.
 
-AdonisJs Auth middleware is a great example of named middleware. It is defined as 
+AdonisJs Auth middleware is a great example of named middleware. It is defined as
 
 ```javascript
 const namedMiddleware = {
@@ -124,4 +124,10 @@ and can be used on routes as
 Route
   .get('account/:id', 'AccountController.show')
   .middleware('auth')
+
+// or
+
+Route.group('auth-routes', () => {
+  Route.get('account/:id', 'AccountController.show')
+}).middleware('auth')
 ```
