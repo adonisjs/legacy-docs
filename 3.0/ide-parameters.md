@@ -2,7 +2,7 @@
 title: IDE Configuration
 permalink: ide-parameters
 description: Configuration for using an IDE With AdonisJs
-weight: 0
+weight: 1
 categories:
 - general-topics
 ---
