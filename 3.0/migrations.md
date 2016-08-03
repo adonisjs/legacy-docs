@@ -93,11 +93,11 @@ Below is the list of ace commands specific to migrations only.
 
 | Command | Options | Purpose |
 |---------|---------|---------|
-migration:run | none | Run all pending migrations by executing `up` method of all schema files. |
+| migration:run | none | Run all pending migrations by executing `up` method of all schema files. |
 | migration:rollback | batch  | Rollback migrations to a given batch or default to last batch.|
-| migration:refresh | none | Refresh migrations by dropping and re-running all migrations
-| migration:reset | none | Rollback to the initial state.
-| migration:status | none | Check the current status of migrations.
+| migration:refresh | none | Refresh migrations by dropping and re-running all migrations |
+| migration:reset | none | Rollback to the initial state. |
+| migration:status | none | Check the current status of migrations. |
 
 
 ## Interacting With Tables
