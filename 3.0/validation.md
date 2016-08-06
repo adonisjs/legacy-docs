@@ -145,6 +145,62 @@ Also
 Validator.sanitizor.slug('hello world') // hello-world
 ```
 
+## Custom Rules
+
+Custom rules are added by [adonis-validation-provider](https://npmjs.org/package/adonis-validation-provider), wherease they are not part of Indicative
+
+#### unique()
+
+Makes sure a given value is unique in a given database table.
+
+```javascript
+'use strict'
+
+class UserModel {
+
+  static rules () {
+    return {
+      email: 'unique:users,email'
+    }
+  }
+
+}
+```
+
+When trying to update a given user, you would never want to run unique validation on the same users email. For example:
+
+A user with id has email of **foo@bar.com**, when trying to update the user profile, you would want the unique validation to fail only if email **foo@bar.com** is taken by someone else not the same user.
+
+For the given scanerio you can also extra field/value to be ignore when trying to update the user.
+
+```javascript
+'use strict'
+
+class UserModel {
+
+  static rules (userId) {
+    return {
+      email: `unique:users,email,id,${userId}`
+    }
+  }
+
+}
+```
+
+Now inside your controller you can say
+
+```javascript
+class UserController {
+
+  * update (request, response) {
+    const userId = request.param('id')
+    const rules = UserModel.rules(userId)
+    yield Validator.validate(request.all(), rules)
+  }
+
+}
+```
+
 ## Extending Validator
 
 You can also extend Validator to add your own rules. The `extend` API is same as the [Indicative's API](http://indicative.adonisjs.com/#indicative-extending).
