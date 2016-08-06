@@ -151,6 +151,10 @@ Custom rules are added by [adonis-validation-provider](https://npmjs.org/package
 
 #### unique()
 
+<div class="note">
+  <strong>Note:</strong> make sure you are using validator version <strong>3.0.2</strong> or greater while making use of <code>unique</code> rule.
+</div>
+
 Makes sure a given value is unique in a given database table.
 
 ```javascript
