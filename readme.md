@@ -1,11 +1,11 @@
-# AdonisJS Docs
+# AdonisJs Docs
 
 [![Gitter](https://img.shields.io/badge/+%20GITTER-JOIN%20CHAT%20%E2%86%92-1DCE73.svg?style=flat-square)](https://gitter.im/adonisjs/adonis-framework)
 [![Trello](https://img.shields.io/badge/TRELLO-%E2%86%92-89609E.svg?style=flat-square)](https://trello.com/b/yzpqCgdl/adonis-for-humans)
 
-> :pray: This repository contains the documentation of the AdonisJS framework.
+> :pray: This repository contains the documentation of the AdonisJs framework.
 
-AdonisJS docs is the official repository for technical documentation of AdonisJS framework.
+AdonisJs docs is the official repository for technical documentation of AdonisJs framework.
 
 You can find this documentation on http://www.adonisjs.com/docs.
 
