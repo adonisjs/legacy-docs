@@ -154,7 +154,7 @@ request.hostname()
 
 #### url
 
-Returns request current URL. It will trim query string and hashes of the URL.
+Returns request current URL. It will trim query string.
 
 ```javascript
 // url - http://foo.com/users?orderBy=desc&limit=10
