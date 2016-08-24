@@ -22,6 +22,8 @@ Cookies in AdonisJs are encrypted and signed. Which means any tampering to a coo
 
 ## Basic Example
 
+Here is the most basic example of reading/writing cookies.
+
 ```javascript
 Route.get('/', function * (request, response) {
   const pageViews = request.cookie('pageViews') // reading

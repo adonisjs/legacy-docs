@@ -1,3 +1,0 @@
-# Seeds
-
-Coming Soon

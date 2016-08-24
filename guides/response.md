@@ -23,7 +23,6 @@ Route.get('/users', function * (request, response) {
 })
 ```
 
-
 ## Response Methods
 
 #### send(body)
@@ -211,6 +210,33 @@ Below is the list of all descriptive methods and their corresponding HTTP status
 | gatewayTimeout               | 504                  |
 | httpVersionNotSupported      | 505                  |
 
+## Response Properties
+
+#### finished
+
+Returns whether or not a response has been finished. After this your application should not use the response object for anything.
+
+```javascript
+response.finished
+```
+
+#### headersSent
+
+Tells whether or not response headers have been sent. Adding new headers after they have been sent will result in **Exception**.
+
+```javascript
+response.headersSent
+```
+
+#### isPending
+
+A combination of `finished` and `headersSent` to ensure that `response` object is safe to perform any operations.
+
+```javascript
+if (response.isPending) {
+  // safe to perform operations
+}
+```
 
 ## Extending Response
 

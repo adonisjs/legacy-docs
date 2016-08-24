@@ -411,6 +411,20 @@ yield Post.query().where('body', '...').limit(1).fetch()
 yield Post.query().where('id', '...').limit(1).fetch()
 ```
 
+#### findByOrFail
+
+`findByOrFail()` is similar to **findBy** but will throw a `ModelNotFoundException` if no records are found for a given key.
+
+It can become handy if you want to handle errors instead of doing manually check on whether the query response has any values or not.
+
+```javascript
+try {
+  yield Post.findByOrFail('title', 'life of pie')
+} catch (e) {
+  response.send('Unable to find post with title life of pie')
+}
+```
+
 #### find
 
 `find()` is similar to `findBy()` but works little different. findBy is a dynamic method which works with any table attribute, whereas `find()` only works with the primary key of the table. For example:
@@ -475,6 +489,18 @@ const values = {
 }
 
 yield Post.findOrCreate(whereAttrs, values)
+```
+
+#### paginate(page, [limit=20])
+
+`paginate` over the rows. The output is similar to the query builder [paginate](query-builder#paginate-page-limit-20-)
+
+```javascript
+const page = request.input('page')
+const posts = yield Post.paginate(page)
+
+// or
+const posts = yield Post.query().where('published', true).paginate(page)
 ```
 
 #### pick(rows)
@@ -596,3 +622,112 @@ All query scope methods start with the keyword `scope` followed by the method na
 | scopeActive | active |
 | scopeLatest | latest |
 | scopeCollaborators | collaborators|
+
+
+## Transactions
+
+Your models can make use of database transaction to perform **all or nothing** operations.
+
+```javascript
+const trx = yield Database.beginTransaction()
+
+// USER
+const user = new User()
+user.username = 'foo'
+user.email = 'foo@bar.com'
+user.useTransaction(trx) // using transaction
+const userSaved = yield user.save()
+
+// PROFILE
+const profile = new Profile()
+profile.name = '@foo'
+profile.avatar = 'http://gravatar.com/@foo'
+profile.useTransaction(trx) // using transaction
+const profileSaved = yield user.profile.save(profile)
+
+if (userSaved && profileSaved) {
+  trx.commit()
+} else {
+  trx.rollback()
+}
+```
+
+Method `useTransaction` is available for all the given operations.
+
+1. save
+2. delete
+3. restore
+
+## Extending Models
+
+Unfortunately, Javascript does not comes with all the goodness of extending classes. There is a good support for `extends` keyword but that is only limited to a single class. 
+
+Lucid models, makes it easier to enhance/add properties to your models. You can call them **mixins** or **triats**. We prefer using the word **triats**. Traits helps you in enhancing your models by attaching properties/methods to it.
+
+```javascript
+const Slugify = use('Some-Slugify-Service')
+
+class Post extends Lucid {
+  
+  static boot () {
+    super.boot()
+    this.use(Slugify)
+  }
+
+}
+```
+
+#### There are some rules
+
+Ofcourse there needs to be some rules for writing traits for Lucid.
+
+1. Triat should have a method called `register`. Which will receive the class as the only parameter.
+2. Make sure to add methods/properties to the `prototype` of the class.
+
+#### Example Trait
+
+```javascript
+const Slugify = exports = module.exports = {}
+
+Slugify.register = function (model) {
+  model.prototype.findBySlug = function (value) {
+    return model.findBy('slug', value)
+  }
+  model.addHook('beforeCreate', Slugify.createSlug)
+}
+
+Slugify.createSlug = function * (next) {
+  this.slug = slug(this.title) // making slug from title
+}
+```
+
+Now inside your model you can `use` it.
+
+```javascript
+const Slugify = use('App/Services/Slugify')
+
+class Post extends Lucid {
+  
+  static boot () {
+    super.boot()
+    this.use(Slugify)
+  }
+
+}
+```
+
+Also you can register it inside a static property called `traits`.
+
+```javascript
+class Post extends Lucid {
+
+  static get traits () {
+    return [
+      'App/Services/Slugify'
+    ]
+  }
+
+}
+```
+
+Also like any other part of your application, you can pass a `namespace` instead of the actual Object.

@@ -9,9 +9,15 @@ categories:
 
 {{TOC}}
 
-AdonisJs has out of the box support for session management via **cookies** and **flat files** saved on the server. Also you can create sessions for a single request known as Flash messages.
+AdonisJs has out of the box support for session management via **cookie**, **file** and **redis** drivers. Also you can create sessions for a single request known as Flash messages.
+
+<div class="note">
+  <strong>Note</strong> Make sure to install [adonis-redis](https://www.npmjs.com/package/adonis-redis) before using the **redis**driver.
+</div>
 
 ## Basic Example
+
+Here is the most basic example of reading/writing values to the session store.
 
 ```javascript
 Route.get('/cart', function * (request, response) {
@@ -20,10 +26,21 @@ Route.get('/cart', function * (request, response) {
 })
 ```
 
+```javascript
+Route.patch('/cart/:id', function * (request, response) {
+  const cartItems = SomeCartService.fetch()
+  yield request.session.put('cartItems', cartItems)
+  yield response.send('Done')
+})
+```
 
 ## Drivers
 
-AdonisJs ships with `cookie` and a `file` driver, which can be configured inside `config/session.js` file.
+Here is the list of available drivers. You can update `config/session.js` file to use one of the following drivers.
+
+1. file
+2. cookie
+3. redis
 
 ## Methods
 
@@ -78,6 +95,14 @@ Pulls and removes the value for a given key. Think of it as calling `get` and `f
 const username = yield request.session.pull('username')
 ```
 
+#### flush()
+
+Remove all key/value pairs from the session store for the current session.
+
+```javascript
+yield request.session.flush()
+```
+
 ## Flash Messages
 
 In order to make use of flash messages, make sure to enable the `Flash` middleware by adding the below line to the list of global middleware.
@@ -100,6 +125,7 @@ class UserContoller {
 
   * signup (request, response) {
     const validation = yield Validator.validate(request.all(), rules)
+
     if (validation.fails()) {
       yield request
 	      .withAll()
@@ -107,14 +133,14 @@ class UserContoller {
 	      .flash()
       response.redirect('back')
     }
-  }
 
+  }
 }
 ```
 
-`withAll` will flash all the values submitted by the form back to the signup page. So you can set them back to the form fields, instead of asking the end-user to re-type everything.
+1. `withAll` will flash all the values submitted by the form back to the signup page. So you can set them back to the form fields, instead of asking the end-user to re-type everything.
 
-`andWith` is method to attach a custom object to the flash messages, here we are sending back the validation errors.
+2. `andWith` is method to attach a custom object to the flash messages, here we are sending back the validation errors.
 
 ```twig
 

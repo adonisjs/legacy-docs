@@ -151,7 +151,7 @@ Route
 
 Apart from filtering, resources can also be extended to add more actions to them.
 
-#### addCollection(route, [verbs=GET])
+#### addCollection(route, [verbs=GET], [closure])
 
 ```javascript
 Route
@@ -173,7 +173,20 @@ Route
   .addCollection('guest', ['POST'])
 ```
 
-#### addMember(route, [verbs=GET))
+Not only you are limited to defining simple collections, taking a step further can unlock more feature of defining custom controller actions or binding middleware.
+
+```javascript
+Route
+  .resource('posts', 'PostController')
+  .addCollection('comments', ['GET'], (collection) => {
+    collection.bindAction('showComments').as('post.comments.show')
+  })
+  .addCollection('comments', ['POST'], (collection) => {
+    collection.bindAction('storeComments').as('post.comments.store')
+  })
+```
+
+#### addMember(route, [verbs=GET), [closure])
 
 `addMember` requires an Id to work.
 
@@ -182,6 +195,10 @@ Route
   .resource('posts', 'PostController')
   .addMember('comments')
 ```
+
+<div class="note">
+  Members can also be extended same as the **collections**.
+</div>
 
 Above will add comments route to the posts resource.
 
