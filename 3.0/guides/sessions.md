@@ -99,7 +99,7 @@ Flash messages are extremely useful when you want to send form inputs or errors 
 class UserContoller {
 
   * signup (request, response) {
-    const validation = yield Validator.validate(rules, request.all())
+    const validation = yield Validator.validate(request.all(), rules)
     if (validation.fails()) {
       yield request
 	      .withAll()
