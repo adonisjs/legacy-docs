@@ -39,7 +39,7 @@ if (Env.get('NODE_ENV') === 'development') {
 AdonisJs will automatically load the `.env` file from the root of your project. In case you don't want to keep your file inside your project, you can define the `ENV_PATH` to the server start script.
 
 ```bash
-npm start -- --ENV_PATH=/etc/config/.env
+ENV_PATH=/etc/config/.env npm start
 ```
 
 ## Using Global Environment Variables
