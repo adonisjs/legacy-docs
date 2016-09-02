@@ -187,7 +187,7 @@ class Course extends Lucid {
 
 Another helpful relation type supported by Lucid is `hasManyThrough`. Where a given model is dependent on another model via 3rd model.
 
-![](http://i.imgbox.com/Bw9ZkdNr.jpg)
+![](https://drscdn.500px.org/photo/170719255/m%3D900/aa14f974b4117ea6440d646ef0422851)
 
 Taking the example of fetching **posts** for a given **country** is not possible since there is no direct relationship between countries and posts. But with the help of `User` model, we can set up an indirect relationship between countries and posts and that is called `hasManyThrough` relationship.
 
