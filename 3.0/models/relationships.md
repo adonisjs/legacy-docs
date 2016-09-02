@@ -50,7 +50,7 @@ const userProfile = yield user.profile().fetch()
 | User | user_id |
 | Seller | seller_id
 
-![](https://i.imgsafe.org/0f13857.jpg)
+![](https://drscdn.500px.org/photo/170718667/m%3D900/67c45120722edada78923b774f69abcb)
 
 In order to setup the relationship shown in the above figure, you need to define it inside your User model.
 
@@ -108,7 +108,7 @@ You will find yourself using `hasMany` quite often, as this is the most common r
 
 `hasMany` makes it possible to have multiple related records for a given row each holding the foreignKey.
 
-![](https://i.imgsafe.org/f942a9b.jpg)
+![](https://drscdn.500px.org/photo/170718667/m%3D900/67c45120722edada78923b774f69abcb)
 
 Let's define the above Models and their relationships in Lucid
 
@@ -147,7 +147,7 @@ There are situations where each side of the relationship can have many related r
 
 Taking the example of Student and Course, where both models can have many related rows in the database. In other words, it is a **many to many relationship**.
 
-![](https://i.imgsafe.org/d107fc7.jpg)
+![](https://drscdn.500px.org/photo/170718665/m%3D900/52a45474504ea6b6e0d69ab71dc7af6d)
 
 Looking at the above figure, you will notice, there is a 3rd table called `course_student`. Since each model on both the ends has many relationships, they themselves cannot hold the foreign key.
 
