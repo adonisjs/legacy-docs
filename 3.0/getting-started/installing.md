@@ -68,7 +68,7 @@ info adonis:framework serving app on localhost:3333
 
 By default, AdonisJs will use port `3333` to start the server, which is configurable. Now open [http://localhost:3333](http://localhost:3333) to see the welcome page.
 
-![](http://i.imgbox.com/xAYvmnBq.png)
+![](http://res.cloudinary.com/adonisjs/image/upload/v1472841298/WelcomePage_qkpjiw.png)
 
 ## Manual Installation
 

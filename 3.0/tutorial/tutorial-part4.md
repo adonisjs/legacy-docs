@@ -179,4 +179,4 @@ Add some margin/padding to the post div.
 
 This is how it looks now.
 
-![](http://i.imgbox.com/9bcfrHmB.png)
+![](http://res.cloudinary.com/adonisjs/image/upload/v1472841292/posts-list_wkpogd.png)

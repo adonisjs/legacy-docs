@@ -12,8 +12,7 @@ categories:
 To use AdonisJs with Webstorm or Visual Studio Code you can use the following configuration  
 ## Webstorm
 
-![alt](https://cloud.githubusercontent.com/assets/5158380/17119282/f4faefee-5292-11e6-8af9-3a009c7a411a.png
-)
+![alt](http://res.cloudinary.com/adonisjs/image/upload/v1472841273/webstorm_p2otce.png)
 
 ## Visual Studio Code
 

@@ -51,12 +51,7 @@ Don't worry, if you do not fully understand the above code, but you can see with
 
 MVC stands for **Model**, **View** and **Controller**.
 
-<div class='pixels-photo'>
-  <p>
-    <img src='https://drscdn.500px.org/photo/152746175/m%3D900/9972f8c30c163f019a50ba15b8a70f9b' alt='MVC Flow Chart by virkofficials on 500px.com'>
-  </p>
-  <a href='https://500px.com/photo/152746175/mvc-flow-chart-by-virkofficials' alt='MVC Flow Chart by virkofficials on 500px.com'></a>
-</div>
+![](http://res.cloudinary.com/adonisjs/image/upload/v1472842310/MVC-Flow-Chart_ccz2zb.jpg)
 
 1. Model is the layer of data you retrieve/persist to the SQL databases like MySQL, SQLite, PostgreSQL etc.
 2. Controller is a method which responds to an HTTP request, this is the place where you interact with your Model to fetch data and send it to your views.
@@ -104,12 +99,7 @@ Writing server applications requires a lot of work and needs to be organized wit
 
 IoC Container is a box to store all the pieces of your application so that you can use them whenever you need them. When these pieces are stored inside the container, they are given a unique namespace.
 
-<div class='pixels-photo'>
-  <p>
-    <img src='https://drscdn.500px.org/photo/152747515/m%3D900/7ea4b04b936b129499d35a800aea6848' alt='Ioc container by virkofficials on 500px.com'>
-  </p>
-  <a href='https://500px.com/photo/152747515/ioc-container-by-virkofficials' alt='Ioc container by virkofficials on 500px.com'></a>
-</div>
+![](http://res.cloudinary.com/adonisjs/image/upload/v1472842329/Ioc-container_bq7die.jpg)
 
 
 `use` keyword is a function added to the globals by the IoC Container. It works same as the standard `require` function. Which means.

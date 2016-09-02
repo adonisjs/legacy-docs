@@ -161,7 +161,7 @@ body {
 
 Now refresh the browser to see the home page.
 
-![](http://i.imgbox.com/nMHYFqS7.png)
+![](http://res.cloudinary.com/adonisjs/image/upload/v1472841283/home-page_uab9il.png)
 
 `extends` is a special keyword you can use to extend different views. Here is a complete guide on [Views](views).
 

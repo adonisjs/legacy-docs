@@ -96,7 +96,7 @@ Quite a lot to cover here. Form builder provides some convenient methods to crea
 
 Visit [http://localhost:3333/post/create](http://localhost:3333/post/create) and you will see a nice looking form to create the posts.
 
-![](http://i.imgbox.com/xPEspZi9.png)
+![](http://res.cloudinary.com/adonisjs/image/upload/v1472841279/create-posts_xgghpo.png)
 
 ## Validating Form Inputs
 
@@ -202,6 +202,6 @@ Notice carefully, we are making use of the `old` method to fetch the **title** a
 
 Let's refresh the page and try to create a new post with empty title and content.
 
-![](http://i.imgbox.com/eT6SW1EF.png)
+![](http://res.cloudinary.com/adonisjs/image/upload/v1472841283/validation-failed_dz2d79.png)
 
 Wow, this is fun. We have got a working form with super easy validation and in-place error handling.

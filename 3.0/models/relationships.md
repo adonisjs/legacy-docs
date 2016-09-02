@@ -50,7 +50,7 @@ const userProfile = yield user.profile().fetch()
 | User | user_id |
 | Seller | seller_id
 
-![](https://drscdn.500px.org/photo/170718667/m%3D900/67c45120722edada78923b774f69abcb)
+![](http://res.cloudinary.com/adonisjs/image/upload/v1472841270/has-one_zfrkve.jpg)
 
 In order to setup the relationship shown in the above figure, you need to define it inside your User model.
 
@@ -108,7 +108,7 @@ You will find yourself using `hasMany` quite often, as this is the most common r
 
 `hasMany` makes it possible to have multiple related records for a given row each holding the foreignKey.
 
-![](https://drscdn.500px.org/photo/170718667/m%3D900/67c45120722edada78923b774f69abcb)
+![](http://res.cloudinary.com/adonisjs/image/upload/v1472841272/has-many_p91i9i.jpg)
 
 Let's define the above Models and their relationships in Lucid
 
@@ -147,7 +147,7 @@ There are situations where each side of the relationship can have many related r
 
 Taking the example of Student and Course, where both models can have many related rows in the database. In other words, it is a **many to many relationship**.
 
-![](https://drscdn.500px.org/photo/170718665/m%3D900/52a45474504ea6b6e0d69ab71dc7af6d)
+![](http://res.cloudinary.com/adonisjs/image/upload/v1472841273/belongsto-many_ymawpb.jpg)
 
 Looking at the above figure, you will notice, there is a 3rd table called `course_student`. Since each model on both the ends has many relationships, they themselves cannot hold the foreign key.
 
@@ -187,7 +187,7 @@ class Course extends Lucid {
 
 Another helpful relation type supported by Lucid is `hasManyThrough`. Where a given model is dependent on another model via 3rd model.
 
-![](https://drscdn.500px.org/photo/170719255/m%3D900/aa14f974b4117ea6440d646ef0422851)
+![](http://res.cloudinary.com/adonisjs/image/upload/v1472841274/has-many-through_vux5jm.jpg)
 
 Taking the example of fetching **posts** for a given **country** is not possible since there is no direct relationship between countries and posts. But with the help of `User` model, we can set up an indirect relationship between countries and posts and that is called `hasManyThrough` relationship.
 

@@ -81,7 +81,7 @@ We are not done yet. Let's open the `home.njk` view and add the link to the indi
 
 Now refresh the browser and click on the individual posts to view a specific post.
 
-![](http://i.imgbox.com/z52WwfmM.png)
+![](http://res.cloudinary.com/adonisjs/image/upload/v1472841295/individual-post_anaymc.png)
 
 ## Link To Add A New Post
 
@@ -104,7 +104,7 @@ Paste the below code snippet just before the `posts-wrapper` div.
 
 Now, we have a shiny big button linked to the post create route.
 
-![](http://i.imgbox.com/RqMkJilV.png)
+![](http://res.cloudinary.com/adonisjs/image/upload/v1472841278/add-new-post_d1pm4c.png)
 
 ## Ordering Posts
 
