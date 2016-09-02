@@ -1,0 +1,43 @@
+:toc:
+:linkattrs:
+= Configuration
+
+The first step towards removing the spaghetti code is to find a dedicated place for storing application configuration. AdonisJs makes use of the `config` directory for same. Every new project created using `adonis-cli` comes with a bunch of pre-configured config files. Also, you are free to create your application config files inside the same directory.
+
+== The Config Provider
+To keep it straightforward and DRY, AdonisJs has an inbuilt *Config Provider* which autoloads all the configuration files (ending with .js) at the time of booting the server which means you have access to values from all the files in the `config` directory.
+
+Do make sure not to manually require config files inside your app and instead take advantage of the Config provider.
+
+.Wrong
+[source, javascript]
+----
+const app = require('./config/app.js')
+console.log(app.appKey)
+----
+
+.Right
+[source, javascript]
+----
+const Config = use('Config')
+console.log(Config.get('app.appKey'))
+----
+
+== Reading/Writing Values
+Reading/writing values is a fairly simple task with the help of the *Config provider*. Also, you can make use of *dot notation* to get/set values.
+
+==== get(key, [defaultValue])
+`get` method is used to read values. Also it accepts an optional `defaultValue`, which is returned when the actual value is `undefined` or `null`.
+[source, javascript]
+----
+const Config = use('Config')
+Config.get('database.host', 'localhost')
+----
+
+==== set(key, value)
+`set` method will update the existing value with the new value. Also it will create the key/value pair if it does not exists.
+[source, javascript]
+----
+const Config = use('Config')
+Config.set('database.host', '127.0.0.1')
+----

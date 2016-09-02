@@ -1,0 +1,128 @@
+:toc:
+:linkattrs:
+= Directory Structure
+
+Directory structure may feel overwhelming at first since there are a handful of pre-configured directories. Gradually you will understand the benefit of dividing the logical entities into multiple directories since it keeps your code maintainable and easy to search.
+
+[source, bash]
+----
+├── app
+│   ├── Commands
+│   ├── Http
+│   ├── Listeners
+│   ├── Model
+├── bootstrap
+├── config
+├── database
+│   ├── migrations
+│   └── seeds
+├── providers
+├── public
+├── resources
+│   └── views
+├── storage
+----
+
+== The (app) Directory
+
+NOTE: Make sure to learn more about link:/dependency-injection[Dependency injection] and link:/ioc-container[Ioc Container] to understanding the concept of Autoloading.
+
+`app` directory is the home for your code and is autoloaded under the namespace `App`. If you will open `package.json` file, you will find the following piece of code inside it.
+
+[source, json]
+----
+{
+  "autoload": {
+    "App": "./app"
+  }
+}
+----
+
+You are free to change the namespace from `App` to anything you want. Of course, sticking to the default makes it easier for others to understand the code flow.
+
+Also, the `app` directory has nested directories for different purposes. All directories inside the `app` directory are capitalized since AdonisJs follows the principles of Namespacing. Unfortunately, Javascript or Node.js has no conventions on namespacing, so we borrow the standards/best practices from other programming languages like Php.
+
+|====
+| Directory | Purpose
+| Commands | This directory is dedicated for storing Ace commands. Ideally, a single file represents an individual command.
+| Http | As the name conveys, `Http` directory is dedicated to entities related to an HTTP server, like: *Controllers*, *Middleware*, and *Routes*.
+| Listeners | Listeners directory makes it easier to organize your event listeners since inline closures on events are not maintainable and neither testable. Also feel free to create listeners for *Redis Pub/Sub* inside this directory.
+| Model | Model directory has your Lucid models. Also, there is a *Hooks* directory inside this directory to store Model hooks.
+|====
+
+== The (bootstrap) Directory
+
+The `bootstrap` directory is there to join the pieces of your application for HTTP server and ace commands. There are a few files that you need to work with inside this directory.
+
+|====
+| File | Purpose
+| app.js | This file is used to register service providers/commands and setup aliases for frequently used namespaces.
+| events.js | You can use this file to register listeners for specifics events. Like `Listeners` directory, you can also use this file to register listeners for *Redis Pub/Sub*.
+| extend.js | This file is used to extend the core/3rd party service providers.
+|====
+
+TIP: To keep future upgrades easy and simple it is recommended you should not modify `bootstrap/http.js` and `bootstrap/kernel.js` file.
+
+== The (config) Directory
+The `config` directory is used to define configuration for your application. AdonisJs itself ships with a bunch of config files, but you are also free to create your config files.
+
+In order, you read the configuration settings from any file you are supposed to make use of the `Config` provider and do not require files manually in your code.
+
+.Wrong
+[source, javascript]
+----
+const app = require('./config/app.js')
+console.log(app.appKey)
+----
+
+.Right
+[source, javascript]
+----
+const Config = use('Config')
+console.log(Config.get('app.appKey'))
+----
+
+== The (database) Directory
+All database related files are stored inside the `database` directory. Since `SQLite` is a file based database, the SQLite file will be stored in this directory too.
+
+|====
+| Directory/File | Purpose
+| migrations | This directory has all the migrations you have created using the `make:migration` command. Learn more about migrations link:/migrations[here].
+| seeds | Seeds are used to prefill database with dummy data. They are helpful in setting up an initial state of your application.
+| factory.js | Factories are used to generate fake data for Lucid models or database tables. You will find yourself using factories a lot when writing tests. `factory.js` is the place you define blueprints for the dummy data.
+|====
+
+== The (providers) Directory
+If you ever feel a need for writing your providers, this is the place to keep them in. It is advisable to publish reusable providers on *npm*.
+
+Ideally, there are no strict rules of creating providers, just make sure to read the link:/service-providers[service providers] documentation to understand how to build your providers. Service providers inside the `providers` directory are registered by defining an absolute path inside the `app.js` file.
+
+[source, javascript]
+.bootstrap/app.js
+----
+const path = require('path')
+
+const providers = [
+  path.join(__dirname, '../providers/MyAwesomeProvider')
+]
+----
+
+== The (public) Directory
+As the name suggests the `public` directory is used to serve static assets over HTTP. The path `/public` is not required when referencing files from this directory. For example:
+
+.public/style.css
+[source, html]
+----
+<link rel="stylesheet" href="/style.css" />
+----
+
+== The (resources) Directory
+The `resources` directory is there to store presentational files for your application. Nunjucks `views` are also stored in this directory, and you are free to create additional directories for storing *Sass*/*Less* or any frontend build related files.
+
+|====
+| Directory | Purpose
+| views | Nunjucks views are stored inside this directory. Feel free to create additional directories inside `views` for creating *partials* or *layouts*.
+|====
+
+== The (storage) Directory
+Application logs and sessions are stored inside `storage` directory. Think of it as a temporary storage for your application. Also, this directory is added to the `.gitignore`, so that your development related logs/sessions are not committed to version control providers like Github or Bitbucket.

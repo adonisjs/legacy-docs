@@ -1,0 +1,7 @@
+:toc:
+:linkattrs:
+= Routing
+
+HTTP routes open the gateway for outside world to interact with your application using URL's. AdonisJs router will map urls to actions and will invoke them once a certain URL is called by a user.
+
+All routes are defined inside `app/Http/routes.js` file which is autoloaded at the time of starting the HTTP Server.

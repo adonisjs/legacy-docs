@@ -1,0 +1,116 @@
+:toc:
+:linkattrs:
+= Insallation
+
+Installing AdonisJs is a relatively straightforward process and will only take a few minutes. Feel free to link:https://github.com/adonisjs/adonis-framework/issues[file an issue, window="_blank"] if you ever face any problems during the installation process.
+
+== Installing Node.js & Npm
+Being a Node.js framework, AdonisJs has a core dependency on Node.js. Make sure the installed version of link:https://nodejs.org/en/[Node.js, window="_blank"] is *4.0* or greater.
+
+link:https://www.npmjs.org/[Npm, window="_blank"] is a package manager for Node.js. During the development process, you will find yourself using `npm install` a lot. Hence all dependencies are pulled from npm only.
+
+NOTE: In October 2016 `v6.x.x` of Node.js will be under LTS and also the newer versions of AdonisJs will be targeted towards Node.js v6.0 or greater. So it is recommended to use one of the latest releases of Node.js.
+The existing version of the framework will be compatible with Node.js 4.0 or greater.
+
+=== Downloading
+You can download the installer for your OS from link:https://nodejs.org/en/download[Node.js downloads page, window="_blank"], or should make use of link:https://github.com/creationix/nvm#install-script[Nvm, window="_blank"]. Nvm is a command line tool to install and use multiple versions of Node.js on a single machine.
+
+=== Verifying Installation
+Once you are done with the download process, make sure to verify the installed version of Node.js and npm.
+
+[source, bash]
+----
+node -v
+# >= v4.0.0
+----
+
+and for npm
+
+[source, bash]
+----
+npm -v
+# >= 3.0.0
+----
+
+== Installing Adonis-CLI
+Adonis-CLI is a command line tool to install stable and dev releases of AdonisJs with all required dependencies. It is an link:https://www.npmjs.com/package/adonis-cli[npm package, window="_blank"] and needs to be installed globally.
+
+[source, bash]
+----
+npm i -g adonis-cli
+----
+
+Run the following command to verify the installation of `adonis-cli`. Sometimes you may have to open a new terminal tab to get it working.
+
+[source, bash]
+----
+adonis --help
+----
+
+.Output
+[source, bash]
+----
+Commands
+------------
+adonis new
+adonis fix
+----
+
+
+== Creating New Project
+Once the `adonis-cli` has been installed, you can make use of the `adonis` global from your command line. Let's use it to create a new project.
+
+[source, bash]
+----
+adonis new yardstick
+----
+
+.Output
+[source, bash]
+----
+Cloning into 'yardstick'...
+cleaning project
+setting up app key
+Fixing ace file
+installing dependencies may take a while
+installing dependencies...
+----
+
+`new` command will create a project called *yardstick* with pre-defined directory structure and will also install all the required dependencies from npm.
+
+NOTE: If `new` command fails in the middle, make sure to `cd` into the newly created project and manually run `npm install`.
+
+== Serving The App
+You are all set to see your brand new project. Run the below commands to start a development server.
+
+[source, bash]
+----
+cd yardstick
+npm run dev
+----
+
+.Output
+[source, bash]
+----
+[nodemon] starting `node --harmony_proxies server.js`
+info adonis:framework serving app on http://localhost:3333
+----
+
+By default, AdonisJs will use port `3333` to start the server, which is configurable via `.env` file. Now open http://localhost:3333 to see the welcome page.
+
+image:http://i.imgbox.com/xAYvmnBq.png[Welcome page]
+
+== Manual Installation
+If for any reasons you are not using xref:_installing_adonis_cli[Adonis CLI] ( which you should ), you have to perform following steps to clone the repo from GitHub and manually install dependencies.
+
+[source, bash]
+----
+git clone --dissociate https://github.com/adonisjs/adonis-app yardstick
+cd yardstick
+----
+
+.Installing dependencies
+[source, bash]
+----
+npm install
+----
