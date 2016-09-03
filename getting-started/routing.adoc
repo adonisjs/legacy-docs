@@ -4,4 +4,16 @@
 
 HTTP routes open the gateway for outside world to interact with your application using URL's. AdonisJs router maps URL's to actions and will invoke them once a certain URL is called by the end-user.
 
-All routes are defined inside `app/Http/routes.js` file which is autoloaded at the time of starting the HTTP Server.
+All routes are defined inside `app/Http/routes.js` file which is autoloaded at the time of starting the HTTP Server. Let's start with a basic example
+
+== Basic Example
+.app/Http/routes.js
+[source, javascript]
+----
+const Route = use('Route')
+
+Route.get('/', function * (request, response) {
+  response.send('This is the home page')
+})
+----
+
