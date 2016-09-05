@@ -42,6 +42,7 @@ You are free to change the namespace from `App` to anything you want. Of course,
 
 Also, the `app` directory has nested directories for different purposes. All directories inside the `app` directory are capitalized since AdonisJs follows the principles of Namespacing. Unfortunately, Javascript or Node.js has no conventions on namespacing, so we borrow the standards/best practices from other programming languages like Php.
 
+[options="header"]
 |====
 | Directory | Purpose
 | Commands | This directory is dedicated for storing Ace commands. Ideally, a single file represents an individual command.
@@ -54,6 +55,7 @@ Also, the `app` directory has nested directories for different purposes. All dir
 
 The `bootstrap` directory is there to join the pieces of your application for HTTP server and ace commands. There are a few files that you need to work with inside this directory.
 
+[options="header"]
 |====
 | File | Purpose
 | app.js | This file is used to register service providers/commands and setup aliases for frequently used namespaces.
@@ -85,6 +87,7 @@ console.log(Config.get('app.appKey'))
 == The (database) Directory
 All database related files are stored inside the `database` directory. Since `SQLite` is a file based database, the SQLite file will be stored in this directory too.
 
+[options="header"]
 |====
 | Directory/File | Purpose
 | migrations | This directory has all the migrations you have created using the `make:migration` command. Learn more about migrations link:/migrations[here].
@@ -119,6 +122,7 @@ As the name suggests the `public` directory is used to serve static assets over 
 == The (resources) Directory
 The `resources` directory is there to store presentational files for your application. Nunjucks `views` are also stored in this directory, and you are free to create additional directories for storing *Sass*/*Less* or any frontend build related files.
 
+[options="header"]
 |====
 | Directory | Purpose
 | views | Nunjucks views are stored inside this directory. Feel free to create additional directories inside `views` for creating *partials* or *layouts*.
