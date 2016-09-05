@@ -1,0 +1,53 @@
+---
+title: Contribution Guide
+---
+
+== Contribution Guide
+
+:toc:
+
+All Open Source projects are maintained and backed by a *vibrant community* of users and collaborators.
+
+We are friendly and discuss every topics and issues on given channels.
+
+1. https://github.com/adonisjs[Github Repositories] - Share bugs on dedicated repository of AdonisJs. Try to help us with the exact issue and requirement to reproduce that issue.
+2. https://gitter.im/adonisjs/adonis-framework[Gitter] - Ask questions or discuss common topics with us here. Feel free to jump in and share your views.
+3. https://trello.com/b/yzpqCgdl/adonis-for-humans[Trello] - The Roadmap of AdonisJs. We try to keep it updated with the plans and features that are about to come into AdonisJs.
+4. https://twitter.com/adonisframework[Twitter] - The official Twitter account to stay up-to-date with the progress we make each day.
+
+=== Bug Reports
+
+Always try to be descriptive when submitting an issues. You should provide enough context and information to reproduce the issue.
+
+1. Share the version of the framework you are on. AdonisJs is a combination of several sub-modules and you can find the versions of those sub-modules inside your project `package.json` file.
+2. Share a code snippet if possible instead of saying `X` is not working.
+3. Create a failing test and send a pull request to let us work on it quickly.
+4. Provide us a sample repository with the code to reproduce the issue.
+
+=== Coding Style
+
+JavaScript has handful of linters to keep your coding style consistent. We make use of http://standardjs.com[JavaScript Standard Style]. It is a non-configurable module which makes it so easy to stick to a consistent style while developing.
+
+Each module of AdonisJs installs the *Standard Style Linter* as a development dependency. So before submitting your PR make sure to lint your code.
+
+[source, bash]
+----
+npm run lint
+----
+
+=== Git Flow
+
+We make use of https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow[Git Flow] to work on new features and manage releases. +
+Below are the rules we follow every day.
+
+1. When you start working, think of a feature or problem you are trying to fix.
+2. Fork the repository you are planning to work on.
+3. Create a new feature branch from *develop branch*.
+4. Work on it until you feel comfortable to create a pull request.
+5. End this feature and push to your forked repository
+6. Create a pull request of your feature to AdonisJs repository *develop branch*.
+7. If all is good we will merge the changes and thank you for you contribution.
+
+=== Commitizen
+
+We make us of https://commitizen.github.io/cz-cli[Commitizen] to follow a naming convention of our commit.
