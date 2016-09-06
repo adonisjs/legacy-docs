@@ -1,0 +1,116 @@
+:toc:
+:linkattrs:
+= Controllers
+
+Controllers are attached to routes and are the common point of interaction between your models and views.
+
+In typical web applications, you will begin by binding a controller method to a route, make use of models to fetch data and send that data to the view to render HTML.
+
+== How Controllers Work?
+
+[pretty-list]
+* Controllers are defined inside `app/Http/Controllers` directory. To keep your code maintainable, you are free to create nested directories inside the *Controllers* directory.
+
+* Make use of `make:controller` command to create a new controller.
++
+[source, bash]
+----
+./ace make:controller Home
+# or
+./ace make:controller User --resource
+
+# create: app/Http/Controllers/HomeController.js
+----
++
+`--resource` flag will create a controller with predefined link:routing#_resourceful_routes[resourceful] methods.
+
+* Controllers are defined as ES2015 classes, which makes it easier to test them since you can inject runtime dependencies to the constructor and mock them(if required) during tests.
+
+* Controllers methods are referenced as a *String* to the routes.
+
++
+[source, javascript]
+----
+Route.get('/users', 'UserController.index')
+----
+
++
+The first part before the *dot(.)* is a reference to the controller file that is *UserController* and the second part is the controller method.
+
+== Basic Example
+Let's take a basic example of rendering all the users using the route, controller, model, and view.
+
+.Route
+[source, javascript]
+----
+Route.get('/users', 'UsersController.index')
+----
+
+.Controller
+[source, javascript]
+----
+const User = use('App/Model/User')
+
+class UsersController {
+
+  * index (request, response) {
+    const users = yield User.all()
+    yield response.sendView('users', { users: users.toJSON() })
+  }
+
+}
+----
+
+.View
+
+[source, twig]
+----
+{% for user in users %}
+  <h2>{{ user.username }}</h2>
+{% endfor %}
+----
+
+== Dependency Injection
+Since controllers are ES2015 classes, you can easily inject dependencies to the constructor, instead of manually requiring them. The benefit of injecting dependencies is that you can mock them at the time of testing.
+
+TIP: Mocking dependencies is very subjective and is not always required. Still, AdonisJs does not limit you if you want to mock dependencies.
+
+=== Defining Controller
+[source, javascript]
+----
+class UserController {
+
+  static get inject () {
+    return ['App/Model/User'] <1>
+  }
+
+  constructor (User) { <2>
+    this.User = User
+  }
+
+  * index () {
+    const users = yield this.User.all()
+  }
+
+}
+----
+
+<1> Getter `inject` returns an array of namespaces to be injected to the constructor. They are passed in the order they are defined.
+<2> Class `constructor` will receive the injections as parameters.
+
+=== Writing Test
+
+NOTE: Below test example is written to give you an idea on how to mock dependencies and may not be the best way of writing tests.
+
+[source, javascript]
+----
+const UserController = use('App/Http/Controllers/User')
+
+class FakeUser {
+  static * all () {
+    return {} // dummy users
+  }
+}
+
+const user = new UserController(FakeUser)
+----
