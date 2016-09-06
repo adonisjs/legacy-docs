@@ -9,7 +9,7 @@ permalink: adonisjs-at-a-glance
 
 AdonisJs is a https://nodejs.org[Node.js] Framework with pre-configured answers to all of your questions. It encapsulates the boring parts of Web development and offers you a nice and clean API to work with.
 
-Every web application needs the same functionalities at a certain stage. AdonisJs has all of this built right into the framework or can be added by using one of the official library.
+Every web application needs the same functionalities at a certain stage. AdonisJs has all of this built right into the framework or can be added by using one of the official libraries.
 
 1. Powerful https://en.wikipedia.org/wiki/Object-relational_mapping[ORM] to make secure SQL queries.
 2. API & Session based Authentication System.
@@ -19,7 +19,7 @@ Every web application needs the same functionalities at a certain stage. AdonisJ
 
 === Conventions Over Configuration
 
-This software paradigm is the core of AdonisJs. We attempt to *decrease the time you loose* when taking decisions by following well-kown convention through popular Framework like Rails, Django or Laravel without losing any flexibility. For example, if there you have a User model the corresponding table in the database should be named `users` by default (of course you can change this by overiding a property on your model).
+This software paradigm is the core of AdonisJs. We attempt to *decrease the time you loose* when taking decisions by following well-known convention through popular Framework like Rails, Django or Laravel without losing any flexibility. For example, if you have a User model the corresponding table in the database should be named `users` by default (of course you can change this by overriding a property on your model).
 
 You can learn more about this paradigm on https://en.wikipedia.org/wiki/Convention_over_configuration[the wikipedia page].
 
