@@ -1,5 +1,6 @@
 ---
 title: Release Notes
+permalink: release-notes
 ---
 
 == Release Notes

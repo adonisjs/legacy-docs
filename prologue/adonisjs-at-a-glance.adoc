@@ -1,5 +1,6 @@
 ---
 title: AdonisJs at a Glance
+permalink: adonisjs-at-a-glance
 ---
 
 == AdonisJs at a Glance
