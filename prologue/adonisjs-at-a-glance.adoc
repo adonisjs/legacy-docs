@@ -13,7 +13,7 @@ Every web application needs the same functionalities at a certain stage. AdonisJ
 
 1. Powerful https://en.wikipedia.org/wiki/Object-relational_mapping[ORM] to make secure SQL queries.
 2. API & Session based Authentication System.
-3. Easy way to send emails via SMTP or Web Service (Mailgun, Sparkpost, Mandrill, ...)
+3. Easy way to send emails via SMTP or Web Service (Mailgun, Mandrill, ...)
 4. Validate & Sanitise every user's inputs.
 5. Simple application layout.
 
