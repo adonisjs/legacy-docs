@@ -330,7 +330,7 @@ this.info('Just letting you know')
 #### warn(message)
 
 ```javascript
-this.info('Wait! something seems fishy')
+this.warn('Wait! something seems fishy')
 ```
 
 #### completed(action, message)
