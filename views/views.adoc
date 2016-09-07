@@ -1,0 +1,363 @@
+:toc:
+:linkattrs:
+= Views
+
+AdonisJs has a solid View engine built on top of link:http://mozilla.github.io/nunjucks/templating.html[nunjucks, window="_blank"]. Everything from nunjucks is fully supported with some extra features unique to AdonisJs only.
+
+== How Views Work?
+
+[pretty-list]
+* Views are stored inside `resources/views`.
+* They all should have an extension of `.njk`.
+* To create a view, you can make use of a generator command
++
+[source, bash]
+----
+./ace make:view welcome
+
+# create: resources/views/welcome.njk
+----
+* You are free to create multiple directories to manage *layouts* and *partials*.
+* You can cache views in production by setting *CACHE_VIEWS=true* inside `.env` file.
+
+== Basic Example
+Let's take a basic example of rendering a view by registering a route and controller.
+
+.Route
+[source, javascript]
+----
+const Route = use('Route')
+Route.get('/greet/:user', 'UserController.greet')
+----
+
+.Controller
+[source, javascript]
+----
+class UserController {
+
+  * greet (request, response) {
+    const user = request.param('user')
+    yield response.sendView('greet',  { user })
+  }
+
+}
+----
+
+.View
+[source, twig]
+----
+<h2> Hello {{ user }} </h2>
+----
+
+== Rendering Views
+Views can be rendered using the `response` object or with the help of the `View` provider directly.
+
+NOTE: It is recommended to use `response.sendView` wherever you have access to the response object.
+
+==== make(templatePath, data)
+[source, javascript]
+----
+const View = use('View')
+const compiledHtml = yield View.make('welcome')
+----
+
+==== makeString(templateString, data)
+[source, javascript]
+----
+const View = use('View')
+const compiledHtml = View.makeString('<h2> Hello {{ username }} </h2>', {username: 'virk'})
+----
+
+Templates are referenced without the *.njk* extension to the `make` or `sendView` function. Also, you can take advantage of the dot-notation for referencing nested views.
+
+[options="header"]
+|====
+| Path | Referenced As
+| resources/views/home.njk  | response.sendView('home')
+| resources/views/user/list.njk | response.sendView('user.list')
+|====
+
+== Templating
+Templating refers to dynamic data binding and logical processing of data inside your views. You are required to follow a special syntax to make all this work.
+
+=== Variables
+To output the value of a variable, you make use of curly braces.
+
+[source, twig]
+----
+{{ user }}
+{{ user.firstname }}
+{{ user['firstname'] }}
+----
+
+=== Conditionals
+Conditionals are reference with a curly brace and a `%` sign.
+
+[source, twig]
+----
+{% if user.age %}
+  You are {{ user.age }} years old.
+{% endif %}
+----
+
+You are not only limited to an if condition. Views support `if`, `else`, `elseif`.
+
+[source, twig]
+----
+{% if hungry %}
+  I am hungry
+{% elif tired %}
+  I am tired
+{% else %}
+  I am good!
+{% endif %}
+----
+
+=== Filters
+Filters transform inline data and are super helpful when you want to transform data for representation only.
+
+[source, twig]
+----
+{# username = 'john' #}
+{{ username | capitalize }}
+
+{# output = John #}
+----
+
+Here `capitalize` is a filter to capitalize the value of a given string. Here is the list of all the available link:templating#_filters[filters].
+
+== Inheritance
+Inheritance means extending a base template and overriding its individual pieces. Think of it as inheriting a Javascript Class.
+
+Let's take the example of a master and a child view.
+
+.resources/views/master.njk
+[source, twig]
+----
+<html>
+  <body>
+
+    <header class="header">
+      {% block header %}
+        Common Header
+      {% endblock %}
+    </header>
+
+    <section class="sidebar">
+      {% block sidebar %}
+        Common Sidebar
+      {% end block %}
+    </section>
+
+    <section class="content">
+      {% block content %}{% endblock %}
+    </section>
+
+  </body>
+</html>
+----
+
+.resources/views/home.njk
+[source, twig]
+----
+{% extends 'master' %}
+
+{% block content %}
+  Here comes the content of the home page.
+{% endblock %}
+----
+
+.Output
+[source, html]
+----
+<html>
+  <body>
+
+    <header class="header">
+      Common Header
+    </header>
+
+    <section class="sidebar">
+      Common Sidebar
+    </section>
+
+    <section class="content">
+      Here comes the content of the home page.
+    </section>
+
+  </body>
+</html>
+----
+
+Here is the list of rules for extending templates
+
+1. You must create a block using the *{% block <name> %}* tag.
+2. Each block must have a unique name.
+3. After extending a view, you cannot place anything outside the block tags.
+
+== Includes
+You can also include different templates instead of just extending them. You start by creating partials of reusable markup.
+
+Let's take an example of a chat application, where the markup for a chat message can be saved inside a different view.
+
+.resources/views/chat/message.njk
+[source, twig]
+----
+<div class="chat__message">
+  <h2> {{ message.from }} </h2>
+  <p> {{ message.body }} </p>
+</div>
+----
+
+Now in your index file, you can include the message template inside a loop.
+
+.resources/views/chat/index.njk
+[source, twig]
+----
+{% for message in messages %}
+  {% include 'message' %}
+{% endfor %}
+----
+
+NOTE: Included templates shares the scope of the parent block.
+
+== Macros & Imports
+Macros makes it so easy to create re-usable components. The difference between a *partial* and a *macro* is, you can pass arguments to the *macros* which makes them reusable out of the box.
+
+Let's take an example of creating a button component, which will adhere to bootstrap CSS classes.
+
+.resource/views/macros/button.njk
+[source, twig]
+----
+{% macro button(value, style='default') %}
+  <button type="button" class="button btn-{{style}}"> {{ value }} </button>
+{% endmacro %}
+----
+
+Now we can use the macro by importing it
+
+.resources/views/home.njk
+[source, twig]
+----
+{% from 'macros.button' import button %}
+{{ button('Create User', 'primary') }}
+----
+
+== Working With Globals
+Views globals are available to all the templates. AdonisJs ships with some predefined globals and some are defined by other modules/providers.
+
+=== Registering App Specific Globals
+The best place to register application specific globals is to make use of the `start` event listener.
+
+.app/Listeners/Http.js
+[source, javascript]
+----
+Http.onStart = function () {
+  const View = use('View')
+  View.global('time', function () {
+    return new Date().getTime()
+  })
+}
+----
+
+=== Via Provider
+If you are writing a module/addon for AdonisJs, you can register a view global inside the `boot` method of your service provider.
+
+[source, javascript]
+----
+const ServiceProvider = require('adonis-fold').ServiceProvider
+
+class MyServiceProvider extends ServiceProvider {
+
+  boot () {
+    const View = use('Adonis/Src/View')
+    View.global('time', function () {
+      return new Date().getTime()
+    })
+  }
+
+  * register () {
+    // register bindings
+  }
+
+}
+----
+
+Now you can make use of the above defined global inside your views.
+
+[source, twig]
+----
+{{ time() }}
+----
+
+== Working With Filters
+Just like globals, you can also set filters. The job of the filters is to take an input and transform its value based on the requirements. Here is the list of all inbuilt link:templating#_filters[filters].
+
+TIP: Filters can be registered by listening to `Http.start` event or inside the provider `boot` similar to the way xref:_working_with_globals[globals] are registered.
+
+.Registering A Filter
+[source, javascript]
+----
+const View = use('Adonis/Src/View')
+const accounting = use('accounting') // npm module
+
+View.filter('currency', function (amount, symbol) {
+  return accounting.formatMoney(amount, {symbol})
+})
+----
+
+.Using Filter
+[source, twig]
+----
+{{ 1000 | currency('$') }}
+
+{# returns $1,000.00 #}
+----
+
+== Injecting Providers
+You can also use service providers or any binding from the IoC container inside your views. Let's take an example of fetching users right from the views.
+
+[source, twig]
+----
+{% set User = use('App/Model/User') %}
+{% yield users = User.all() %}
+
+{% for user in users.toJSON()   %}
+  {{ user.username }}
+{% endfor %}
+----
+
+NOTE: Injecting providers can open *security holes* especially when you expose your views to be edited by the outside world. Think of a scenario, where the user editing the view/template injects the user model and drop all users. *Make sure to turn off the injectServices flag if you do want this feature*
+
+.config/app.js
+[source, javascript]
+----
+views: {
+  injectServices: false
+}
+----
+
+== Caching
+Views caching is controlled via `config/app.js` file. Make sure to disable cache during development and enable it when running your app in production.
+
+.config/app.js
+[source, javascript]
+----
+view: {
+  cache: Env.get('CACHE_VIEWS', true)
+}
+----
+
+.(.env)
+----
+CACHE_VIEWS=true
+----
+
+== Syntax Highlighting
+You need to download packages for your favorite editor to have proper syntax highlighting for your *nunjucks* views.
+You can also use *twig* highlighter if you cannot find nunjucks support for your favorite editor.
+
+* link:https://atom.io/packages/language-nunjucks[Atom, window="_blank"].
+* link:https://packagecontrol.io/packages/PHP-Twig[Sublime Text( Via Twig ), window="_blank"].
+* link:https://plugins.jetbrains.com/plugin/7303?[Webstorm( Via Twig ), window="_blank"].
+* link:https://github.com/axelboc/nunjucks-brackets/[Brackets, window="_blank"].

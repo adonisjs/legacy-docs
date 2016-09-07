@@ -1,0 +1,291 @@
+:toc:
+:linkattrs:
+
+= Form Builder
+
+Form builds make it easier to create quick and maintainable HTML forms. Think of a situation where to set the form action to registered route and when route definition gets changed you have to come back to the views making sure your form action points to the right URL.
+
+Form builder gives you the API to bind routes and controllers directly to your forms, making it easier to make changes at one place and same gets reflected within your views.
+
+== Basic Example
+Let's take an example of creating a new user form using the form builder.
+
+.Route
+[source, javascript]
+----
+Route.post('/users', 'UserController.store')
+----
+
+.View
+[source, twig]
+----
+{{ form.open({action: 'UserController.store'}) }}
+
+  {{ csrfField }}
+
+  <div class="field">
+    {{ form.label('username', 'Choose a username') }}
+    {{ form.text('username') }}
+  </div>
+
+  <div class="field">
+    {{ form.label('email', 'Enter email address') }}
+    {{ form.text('email') }}
+  </div>
+
+  <div class="field">
+    {{ form.label('password', 'Choose a strong password') }}
+    {{ form.password('password') }}
+  </div>
+
+  <div class="button">
+    {{ form.submit('Register') }}
+  </div>
+
+{{ form.close() }}
+----
+
+`form.open` lets you bind the route controller action, which means if later you will change the route URL from `/users` to something else, you will not have to make changes inside your view since it is bound to the controller.
+
+== Open/Close Forms
+The `form.open` method can setup form *action* and *method* using one of the following properties.
+
+action::
+Fetch form action and method using the controller method.
++
+[source, twig]
+----
+{{ form.open({action: 'UserController.update'}) }}
+{{ form.close() }}
+----
+
+route::
+Fetch form action and method using the route name.
++
+[source, twig]
+----
+{{ form.open({route: 'users.store'}) }}
+{{ form.close() }}
+----
+
+url::
+Manually define a custom url and form method.
++
+[source, twig]
+----
+{{ form.open({url: '/users', method: 'POST'}) }}
+{{ form.close() }}
+----
+
+params::
+Passing route parameters as an object. *action* and *route* properties will use the parameters to form the correct URL
++
+[source, twig]
+----
+{{ form.open({ action: 'UserController.update', params: {id: 1} }) }}
+{{ form.close() }}
+----
+
+== Uploading Files
+To upload files using the form builder, you are required to set `files` property to true on the `open` method.
+
+[source, twig]
+----
+{{ form.open({ action: 'UserController.store', files: true }) }}
+
+  <div class="field">
+    {{ form.file('avatar') }}
+  </div>
+
+{{ form.close() }}
+----
+
+== Form Builder Methods
+Here is the list of all the available methods available on form builder instance.
+
+==== label
+[source, twig]
+----
+{{ form.label('username', 'Enter Username') }}
+{{ form.label('username', 'Enter Username', {class: 'label-class'}) }}
+----
+
+.Output
+[source, html]
+----
+<label name="username"> Enter Username </label>
+----
+
+==== text
+[source, twig]
+----
+{{ form.text('username') }}
+{{ form.text('username', 'John', {class: 'input'}) }}
+----
+
+.Output
+[source, html]
+----
+<input type="text" name="username" value="John" class="input" />
+----
+
+Just like `text` you can create input fields for all given types.
+
+[options="header"]
+
+|====
+| Input type | Method
+| password | form.password()
+| email | form.email()
+| color | form.color()
+| date | form.date()
+| url | form.url()
+| search | form.search()
+| hidden | form.hidden()
+|====
+
+
+==== file
+Create a file upload button
+
+[source, twig]
+----
+{{ form.file('avatar') }}
+----
+
+==== textarea
+[source, twig]
+----
+{{ form.textarea('description') }}
+{{ form.textarea('description', value) }}
+{{ form.textarea('description', value, {class: 'big'}) }}
+----
+
+==== radio
+[source, twig]
+----
+{{ form.radio('gender', 'male') }}
+{{ form.radio('gender', 'female', true) }}
+----
+
+==== checkbox
+[source, twig]
+----
+{{ form.checkbox('terms', 'agree') }}
+{{ form.checkbox('terms', 'agree', true) }}
+----
+
+==== select
+[source, twig]
+----
+{{ form.select('countries', ['India', 'US', 'UK'], null, 'Select Country') }}
+----
+
+.Output
+[source, html]
+----
+<select name="countries">
+  <option value="">Select Country</option>
+  <option value="India">India</option>
+  <option value="US">US</option>
+  <option value="UK">UK</option>
+</select>
+----
+
+Also, you can pass an object of key/value pairs in place of the plain array.
+
+[source, twig]
+----
+{{ form.select('countries', {ind: 'India', us: 'Usa'}) }}
+----
+
+.Output
+[source, html]
+----
+<select name="countries">
+  <option value="ind">India</option>
+  <option value="us">US</option>
+</select>
+----
+
+You can also define *selected* options for a select box.
+
+[source, twig]
+----
+{{ form.select(
+    'countries',
+    {ind: 'India', us: 'Usa', uk: 'UK'},
+    ['ind', 'us'],
+    'Select Country',
+    {multiple: true}
+  )
+}}
+----
+
+.Output
+
+[source, html]
+----
+<select name="countries" multiple>
+  <option value="">Select Country</option>
+  <option value="ind" selected>India</option>
+  <option value="us" selected>US</option>
+  <option value="us">US</option>
+</select>
+----
+
+==== selectRange
+Create a select box with multiple options inside the given range.
+
+[source, twig]
+----
+{{ form.selectRange('days', 1, 30) }}
+----
+
+.Output
+
+[source, html]
+----
+<select name="days">
+  <option value="1">1</option>
+  <option value="2">3</option>
+  <option value="3">3</option>
+  ...
+</select>
+----
+
+==== submit
+[source, twig]
+----
+{{ form.submit('Create Account', 'create') }}
+----
+
+.Output
+[source, html]
+----
+<input type="submit" name="create" value="Create Account" />
+----
+
+==== button
+[source, twig]
+----
+{{ form.button('Create Account', 'create') }}
+----
+
+.Output
+[source, html]
+----
+<button type="submit" name="create"> Create Account </button>
+----
+
+==== resetButton
+[source, twig]
+----
+{{ form.resetButton('Clear') }}
+----
+
+.Output
+[source, html]
+----
+<button type="reset" name="Clear"> Clear </button>
+----
