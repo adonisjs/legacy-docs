@@ -1,0 +1,131 @@
+:toc:
+:linkattrs:
+
+= Introduction
+
+Keeping web applications secure is one of the most important things. AdonisJs comes with a bunch of security and data sanitization layers to keep your web apps away from common attacks.
+
+NOTE: If you find any security bug, make sure to share it on virk@adonisjs.com. Please do not create a GitHub issue, since it may impact the applications running in production. We will disclose the issue after pushing the patch for the bug.
+
+== SQL Injection
+SQL injection is one of the most common web attacks, where the end user will make use of the inputs and will pass the SQL query instead of the *username*, *email*, etc.
+
+Lucid models and database query builder will make sure to run prepared statements which in turn saves you from SQL injection. Whereas your application may have requirement of running `raw` SQL queries, instead of using the query builder method, so it is recommended to take advantage of the `raw` method and pass bindings as parameters.
+
+.Not Recommended
+[source, javascript]
+----
+const username = request.param('username')
+const users = yield Database
+  .table('users')
+  .where(Database.raw(`username = ${username}`))
+----
+
+.Correct Way
+----
+const username = request.param('username')
+const users = yield Database
+  .table('users')
+  .where(Database.raw('username = ?', [username]))
+----
+
+==== CheckList
+[pretty-list]
+* Make use of link:database[database] or link:lucid[lucid] to perform database operations and never run direct SQL queries.
+* Make sure to sanitize user data using link:validator#_sanitization[sanitizer] to keep your database secure.
+* Always run *prepared statements* statements by passing query values as an array to the `raw` method.
+
+
+== Session Security
+Sessions can leak important information if not handled with care. AdonisJs will encrypt and sign all the cookies using the `APP_KEY` defined in `.env` file. Make sure to keep `APP_KEY` secret and never share it with anyone and never push it to version control systems like Github.
+
+=== Session Config
+Session configuration is saved inside `config/session.js` file you can configure options as per your requirements and make sure to give notice to following key/value pairs.
+
+==== Important Settings
+[pretty-list]
+* Make sure `httpOnly` is set to true. Keeping it to *false* will make it accessible using Javascript via `document.cookie`.
+* Also `sameSite` property makes sure that your session cookie is not visible/accessible from different domains.
+
+== Forms & Views
+To keep the development cycle simple and productive, AdonisJs ships with some features that you may want to consider before releasing your website to the public.
+
+=== Form Method Spoofing
+HTML forms are only capable of making *GET* and *POST* requests, which means you cannot make use of all HTTP verbs to perform RESTful operations. To make this easy AdonisJs let you define the HTTP method as a query string inside the URL which is known as *Form method spoofing*.
+
+.Route
+[source, javascript]
+----
+Route.put('/users/:id', 'UserController.update')
+----
+
+.View
+[source, html]
+----
+<form action="/users/1?_method=PUT" method="POST">
+</form>
+----
+
+Setting `_method=PUT` will convert the HTTP method to `PUT` instead of `POST`. This makes it so easier to make use of any HTTP verb by simply spoofing it. Here are a couple of things you should be aware of.
+
+==== CheckList
+[pretty-list]
+* AdonisJs will only spoof methods when actual HTTP method is `POST` which means making a `GET` request with *_method* will have no effect.
+* You can turn off the form spoofing by setting `allowMethodSpoofing=false` inside `config/app.js`.
++
+[source, javascript]
+----
+http: {
+  allowMethodSpoofing: false
+}
+----
+
+=== Injecting IoC Container Bindings To Views
+AdonisJs makes it simple for you to `use` IoC container bindings within your views which means you can access *Lucid models* from your views to fetch data from the database. Learn more about link:views#_injecting_providers[injecting providers]
+
+This feature can open some serious security holes if your views are editable by the outside world. For example, You are creating a CMS using AdonisJs and want your users to create reusable view partials. The end user can fetch the *User Model* inside their partial and can delete all the users.
+
+==== CheckList
+[pretty-list]
+* Make sure to set `injectServices=false` inside `config/app.js` file.
++
+[source, javascript]
+----
+views: {
+  injectServices: false
+}
+----
+* If making use of service injection, make sure your views are not editable by the outside world.
+
+== File Uploads
+Attackers often try to upload malicious files to the server and later execute those uploaded files to gain access to the server or perform some destructive actions.
+
+Not only files are uploaded to acquire the server access, often you will find people trying to upload huge files so that your server stays busy in uploading files and start throwing *TIMEOUT* errors for other requests.
+
+To handle this bit, AdonisJs let you define the *maximum upload size* to be processed by the server which means any file greater than the specified size will be denied without processing and keeps your server in a healthy state.
+
+==== CheckList
+[pretty-list]
+* Make sure to set `maxSize` inside `config/bodyParser.js` file.
++
+[source, javascript]
+----
+uploads: {
+  maxSize: '2mb'
+}
+----
+* Never store uploaded files inside the `public` directory, since files in `public` directory can be accessed directly.
+* Always rename files before uploading.
+* Never share the actual location of the file with the end users. Instead, try to save the file reference inside the database with a *unique id* and setup a route to server the file using the `id`.
++
+.Example
+[source, javascript]
+----
+const Helpers = use('Helpers')
+
+Route.get('/download/:fileId', function * (request, response) {
+  const fileId = request.param('fileId')
+  const file = yield Files.findorFail(fileId)
+  response.download(Helpers.storagePath('uploads/${file.path}'))
+})
+----

@@ -1,0 +1,296 @@
+:toc:
+:linkattrs:
+
+= Data Sanitization
+
+AdonisJs automatically attempts to keep your websites safe by preventing SQL injection, escaping HTML inside views and limiting the size of file uploads. Still, there are instances, where you are required to sanitize user inputs before using consuming them manually.
+
+== Setup
+AdonisJs ships with a handy data sanitizer to filter malicious data from user input. Sanitizer is part of the `adonis-validation-provider` module.
+
+==== Install
+[source, bash]
+----
+npm i --save adonis-validation-provider
+----
+
+==== Register Provider
+Providers are registered inside `bootstrap/app.js` file. Once they are registered, you can access them anywhere inside your application.
+
+.bootstrap/app.js
+[source, javascript]
+----
+const providers = [
+  ...,
+  'adonis-validation-provider/providers/ValidatorProvider'
+]
+----
+
+==== Validator Alias
+Let's create an alias for the validator namespace which makes it easier to import Validator with a smaller name.
+
+.bootstrap/app.js
+[source, javascript]
+----
+const aliases = {
+  Validator: 'Adonis/Addons/Validator'
+}
+----
+
+== Basic Example
+Sanitizing data is so simple you just need to define rules for sanitization and pass the data along with the defined rules.
+
+[source, javascript]
+----
+const Validator = use('Validator')
+
+/**
+ * Defining sanitization rules
+ */
+const sanitizationRules = {
+  email: 'normalize_email',
+  about_me: 'escape'
+}
+
+Route.post('/', function * (request, response) {
+  const user = request.only('email', 'about_me')
+  const sanitizedUser = Validator.sanitize(user, sanitizationRules)
+})
+----
+
+It is that simple! You start by setting an object of rules, and it will make sure return the clean data. Also, you can take advantage of the rules directly by calling them as functions.
+
+[source, javascript]
+----
+const Validator = use('Validator')
+
+const escapedEmail = Validator.sanitizor.normalizeEmail('bar.sneaky+foo@googlemail.com')
+// returns - barsneaky@gmail.com
+----
+
+== Available Filters
+Below is the list of all the available filters.
+
+==== blacklist(input, keywords)
+Removes defined words from the input string.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.blacklist('This is the worst show', ['worst'])
+
+// Via Schema
+{
+  comment: 'blacklist:worst'
+}
+----
+
+==== escape(value)
+Escapes html entities.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.escape('<div> Hello World </div>')
+
+// Via Schema
+{
+  comment: 'escape'
+}
+----
+
+==== normalizeEmail(value)
+Normalizes email by removing unccessary characters.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.normalizeEmail('bar.sneaky+foo@gmail.com')
+
+// Via Schema
+{
+  email: 'normalize_email'
+}
+----
+
+==== toBoolean(value)
+Converts value to a boolean. *0* , *false*, *null*, *undefined*, *''* will return false and everything else will return true.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.toBoolean('false')
+
+// Via Schema
+{
+  isAdmin: 'to_boolean'
+}
+----
+
+==== toFloat(value)
+Converts value to float and returns `NaN` if unable to convert.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.toFloat('32.55')
+
+// Via Schema
+{
+  marks: 'to_float'
+}
+----
+
+==== toInt(value)
+Converts value to integer and returns `NaN` if unable to convert.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.toInt('32')
+
+// Via Schema
+{
+  age: 'to_int'
+}
+----
+
+==== toDate(value)
+Converts value to date object and returns `null` if unable to convert.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.toDate('2010-22-10')
+
+// Via Schema
+{
+  age: 'to_date'
+}
+----
+
+==== stripLinks(value)
+Strips `<a></a>` tags from a given string. If input is not a string, actual value will be returned.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.stripLinks('<a href="http://adonisjs.com"> Adonisjs </a>')
+
+// Via Schema
+{
+  bio: 'strip_links'
+}
+----
+
+==== stripTags(value)
+Strips HTML tags from a given string. If the input is not a string, the actual value will be returned.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.stripTags('<p> Hello </p>')
+
+// Via Schema
+{
+  tweet: 'strip_tags'
+}
+----
+
+==== plural(value)
+Converts a given value to plural. Which means *person* will be converted to *people*.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.plural('child')
+
+// Via Schema
+{
+  november14: 'plural'
+}
+----
+
+==== singular(value)
+Converts a given value to singular. Which means *people* will be converted to *person*.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.plural('children')
+
+// Via Schema
+{
+  november14: 'singular'
+}
+----
+
+==== camelCase(value)
+Converts a given to camelcase. Which means `users-controller` will become `UsersController`.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.camelCase('users-controller')
+
+// Via Schema
+{
+  fileName: 'camel_case'
+}
+----
+
+==== capitalize(value)
+Capitalize a given string.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.capitalize('doe')
+
+// Via Schema
+{
+  fullName: 'capitalize'
+}
+----
+
+==== decapitalize(value)
+Decapitalize a given string.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.decapitalize('Bar')
+
+// Via Schema
+{
+  username: 'decapitalize'
+}
+----
+
+==== title(value)
+Converts a value to title case. Which means `hello-world` will become `Hello World`
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.title('hello-world')
+
+// Via Schema
+{
+  title: 'title'
+}
+----
+
+==== slug(value)
+Converts a value to url friendly slug.
+
+[source, javascript]
+----
+// Directly
+Validator.sanitizor.slug('Learn AdonisJs In 30 Minutes')
+
+// Via Schema
+{
+  title: 'slug'
+}
+----

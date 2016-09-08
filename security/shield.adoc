@@ -1,0 +1,130 @@
+:toc:
+:linkattrs:
+
+= Shield Middleware
+
+Apart from link:cors[Cors] and link:csrf-protection[CSRF], AdonisJs also prevents your web applications from other malware attacks like *XSS*, *Content Sniffing*, *Script Injection*, etc. Every new application is pre-configured to make use of the `shield` middleware which keeps your websites secure.
+
+NOTE: There is no silver bullet to secure your websites completely. AdonisJs as a framework gives you handful of ways to prevent common web attacks.
+
+== Setup & Config
+Make sure *shield* middleware is added to the list of global middleware inside `app/Http/kernel.js` file.
+
+.app/Http/kernel.js
+[source, javascript]
+----
+const globalMiddlewares = [
+  ...,
+  'Adonis/Middleware/Shield'
+]
+----
+
+The configuration file for shield is available inside `config/shield.js` file. You are free to configure it as per your needs.
+
+== Content Security Policy
+
+Content Security Policy(CSP) helps you in defining the trusted sources for loading and executing *scripts*, *styles*, *fonts* and various other resources.
+
+It is a good practice to be strict when allowing the execution of scripts from different sources. You must read this interesting article by link:http://www.html5rocks.com/en/tutorials/security/content-security-policy[HTML5 rocks, window="_blank"].
+
+=== Configuration
+`csp` block inside the shield configuration file defines the rule for content security policy.
+
+[source, javascript]
+----
+csp: {
+  directives: {
+    defaultSrc: ['self', 'http://getcdn.com'],
+    scriptSrc: ['self', '@nonce'],
+    styleSrc: ['http://getbootstrap.com'],
+    imgSrc: ['http://dropbox.com']
+  },
+  reportOnly: false,
+  setAllHeaders: false,
+  disableAndroid: true
+}
+----
+
+[options="header"]
+|====
+| Key | Value | Description
+| directives | Object  | Directives helps you in defining policies to be applied on different resource types. You can get the list of all directives from link:http://content-security-policy.com[http://content-security-policy.com, window="_blank"].
+| reportOnly | Boolean | It will not stop the execution of your page, instead, will return a warning that some rules are violated.
+| setAllHeaders | Boolean | Shield sets different HTTP headers for different browsers. To disable this behavior, you can this value to true, and all headers will be set.
+| disableAndroid | Boolean | Android is buggy with CSP you can disable it for Android in case you face any troubles.
+|====
+
+=== Browser Support
+Almost all modern browsers widely support CSP, but here is the most accurate link:http://caniuse.com/#feat=contentsecuritypolicy[list, window="_blank"] of supported browsers.
+
+=== CSP Policy Via Meta Tags
+The `shield` middleware automatically sets the required HTTP headers for CSP to work but also gives you a view helper to set the meta tag.
+
+[source, twig]
+----
+{{ cspMeta }}
+----
+
+.Output
+[source, html]
+----
+<meta http-equiv="Content-Security-Policy" content="xxx">
+----
+
+=== CSP Nonce
+Script tags with inline javascript code are automatically trusted and executed by the browser. To stop this behavior, you must only allow the trusted inline script blocks by adding `@nonce` to the`scriptSrc` array.
+
+[source, javscript]
+----
+csp: {
+  directives: {
+    scriptSrc: ['self', '@nonce']
+  },
+  ...
+}
+----
+
+Now you have to tell the browser that your selected inline script blocks should be executed, and that selection is made with the help of a view global.
+
+[source, twig]
+----
+<script nonce="{{ cspNonce }}">
+  // Your JS code
+</script>
+----
+
+== Malware Protection
+Malware protection helps in protecting your website from *XSS* attacks, unwanted *iframe embeds*, *content-type sniffing* and stopping IE from executing unsolicited scripts in the context of your web page.
+
+=== XSS
+Make use of the below defined configuration to enable/disable XSS protection. It is done by setting `X-XSS-Protection=1; mode=block`
+
+[source, javscript]
+----
+xss: {
+  enabled: true,
+  enableOnOldIE: false
+}
+----
+
+=== No Sniff
+The majority of modern browsers will try to detect the *Content-Type* of a request by sniffing its content. Which means a file ending in *.txt* can be executed as javascript file, if it contains javascript code. To disable this behavior set `nosniff=false`.
+
+Below setting will set the value of `X-Content-Type-Options` header to *nosniff*.
+
+[source, javascript]
+----
+{
+  nosniff: true
+}
+----
+
+=== No Open
+This setting will stop IE from executing unknown script in the context of your website. Below setting with set the value of `X-Download-Options` to *noopen*.
+
+[source, javascript]
+----
+{
+  noopen: true
+}
+----

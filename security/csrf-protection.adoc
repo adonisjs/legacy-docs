@@ -1,0 +1,84 @@
+:toc:
+:linkattrs:
+
+= CSRF Protection
+
+Cross-site request forgery(CSRF) allows an attacker to perform actions on behalf of another user without their knowledge or permission.
+
+AdonisJs protects your application from CSRF attacks by denying unidentified requests. HTTP requests with *POST*, *PUT* and *DELETE* methods are checked to make sure that these requests are invoked by right people from right place. You can learn more about CSRF link:https://www.owasp.org/index.php/Cross-Site_Request_Forgery[here, window="_blank"]
+
+== How It Works?
+
+1. AdonisJs will create a *CSRF session* for each user visiting your website.
+2. Next, a *CSRF token* get generated for the previously created session. For security reasons, the token will be re-generated on every page refresh.
++
+Generated token can be accessed inside views as `csrfToken` or `csrfField`, so that you can pass this token when submitting HTML forms.
+3. Also, the same token is set to a cookie with key `XSRF-TOKEN`. Frontend Frameworks like *AngularJs* automatically reads this cookie and send it along with each Ajax request.
+4. Finally, when a *POST*, *PUT* or *DELETE* requests comes, the middleware will verify the token with the secret to make sure it is valid. It will try to access the token from following sources.
+  * `_csrf` field on the request body.
+  * Will also try to access *csrf-token*, *x-csrf-token* or *x-xsrf-token* headers.
+
+
+== Config
+The configuration for CSRF is saved inside `config/shield.js` file.
+
+[source, javascript]
+----
+csrf: {
+  enable: true,
+  methods: ['POST', 'PUT', 'DELETE'],
+  filterUris: ['/user/:id']
+}
+----
+
+[options="header"]
+|====
+| Key | Value | Description
+| enable  | Boolean | A boolean to turn on/off CSRF for the entire application.
+| methods | Array | HTTP verbs to be protected by CSRF. Consider adding all verbs which allow the end user to add or modify data.
+| filterUris | Array | A list of URLs/Routes to ignore. You can pass actual routes definition or a regular expression to match.
+|====
+
+== Accessing CSRF Token
+To send the token along with each request, you need access to it. There are a few ways to get access to the CSRF token.
+
+==== csrfField
+[source, twig]
+----
+{{ csrfField }}
+----
+
+.Output
+[source, html]
+----
+<input type="hidden" name="_csrf" value="xxxxxx" />
+----
+
+==== csrfToken
+[source, twig]
+----
+{{ csrfToken }}
+----
+
+You can also access the token inside your controllers and route actions as follows.
+
+[source, javascript]
+----
+request.csrfToken()
+----
+
+== Handling CSRF Errors
+On validation failure, a named Exception called *EBADCSRFTOKEN* is thrown, and same can be handled within the `app/Listeners/Http.js` file.
+
+.app/Listeners/Http.js
+[source, javascript]
+----
+Http.handleError = function * (error, request, response) {
+  if (error.code === 'EBADCSRFTOKEN') {
+    response.forbidden('You cannot access this resource.')
+    return
+  }
+
+  // handle other errors
+}
+----

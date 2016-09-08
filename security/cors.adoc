@@ -1,0 +1,82 @@
+:toc:
+:linkattrs:
+
+= CORS
+
+Cross-Origin Resource Sharing(CORS) is a way to allow incoming HTTP requests from different domains. It is very common in AJAX applications where the browser will block all cross-domain requests if the server does not authorize them. Read more about CORS link:https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS[here, window="_blank"].
+
+== How It Works?
+AJAX Requests from different domains needs to be authorized before they perform desired actions. Browsers first make a *preflight* request with *OPTIONS* as the HTTP method to the server granting permission. The server can allow the request by returning *200 OK* and specifying the domains to be allowed via *Access-Control-Allow-Origin* header.
+
+AdonisJs ships with a *CORS* middleware to handle this flow for you via a configuration file.
+
+== Setup
+For CORS rules to work properly make sure that `Adonis/Middleware/Cors` is registered as a global middleware inside `app/Http/kernel.js` file.
+
+.app/Http/kernel.js
+[source, javascript]
+----
+const globalMiddleware = [
+  ...,
+  'Adonis/Middleware/Cors'
+]
+----
+
+== Config
+You can manage the CORS rules by editing the `config/cors.js` configuration file.
+
+.config/cors.js
+[source, javascript]
+----
+module.exports = {
+  origin: false,
+  methods: 'GET, PUT, POST',
+  headers: true,
+  exposeHeaders: false,
+  credentials: false,
+  maxAge: 90
+}
+----
+
+==== origin
+Origin accepts multiple values.
+
+1. To disallow all CORS requests, set it `false`
+2. To allow the same origin requests, set it to `true`.
+3. You can define comma(,) separated origins.
+4. Setting the value to a wildcard *, will allow all origins.
+5. Finally, you can attach a callback and return one of the above values
++
+[source, javascript]
+----
+origin: function (requestOrigin) {
+  return requestOrigin === 'foo'
+}
+----
+
+==== methods
+Http methods/verbs to allow. Make sure it is a comma-separated value of one of the multiple methods.
+
+==== headers
+As origin, *headers* also accept multiple values
+
+1. To disable all headers set to false.
+2. To allow all headers defined inside Access-Control-Request-Headers set it to true.
+3. Allow a string of comma(,) separated custom headers. For example, Content-Type, Accepts.
+4. Finally, a callback function.
++
+[source, javascript]
+----
+headers: function (requestedHeaders) {
+  // Your code
+}
+----
+
+==== exposeHeaders(optional)
+Comma separated headers to expose via *Access-Control-Expose-Headers* header.
+
+==== credentials(optional)
+Allow or disallow credentials exchanged by setting *Access-Control-Allow-Credentials* header to a boolean value.
+
+==== maxAge(optional)
+Sets *Access-Control-Allow-Max-Age* header to defined value.
