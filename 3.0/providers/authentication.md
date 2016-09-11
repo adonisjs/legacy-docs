@@ -385,6 +385,7 @@ Revoke all tokens except the given ones.
 const user = yield User.find(1)
 yield request.auth.revokeExcept(user, [token])
 ```
+**Note**: To make API calls your token header name should be `authorization`. Also you need to prefix header value with `Bearer `. For example: `authorization: Bearer API_TOKEN;`
 
 ## Auth Middleware
 
