@@ -131,3 +131,42 @@ Route.group('auth-routes', () => {
   Route.get('account/:id', 'AccountController.show')
 }).middleware('auth')
 ```
+
+## Middleware Parameters
+
+Middleware also comes with the added bonus of accepting parameters. You can pass a comma-seperated string for each parameter you wish to use in your middleware class.
+
+##### app/Http/routes.js
+```javascript
+const Route = use('Route')
+
+Route
+  .get('/', 'DefaultController.index')
+  .middleware('country:US,AU')
+```
+
+##### app/Http/Middleware/CountryDetector.js
+```javascript
+'use strict'
+
+const geoip = use('geoip-lite') // npm module
+
+class CountryDetector {
+
+  * handle (request, response, next, unitedStates, australia) {
+    const ip = request.ip()
+    request.country = geoip.lookup(ip).country
+
+    if(request.country == unitedStates || request.country == australia) {
+      response.forbidden('Sorry, we do not support your country yet.')
+      return
+    }
+
+    yield next
+  }
+
+}
+
+module.exports = CountryDetector
+```
+Now each request will have a property called `country` attached to it, but only requests originating outside the United States and Australia will be accepted.
