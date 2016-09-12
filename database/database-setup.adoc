@@ -1,0 +1,291 @@
+:toc:
+:linkattrs:
+= Database Setup
+
+AdonisJs has out of the box for SQL databases and offers a unified Javascript API to interact with databases. Below is the list of supported databases.
+
+== Supported Databases
+[support-list]
+* PostgreSQL
+* SQLite
+* MySQL
+* MariaDB
+* Oracle
+* MSSQL
+
+== Configuration
+Every AdonisJs application ships with the pre-configured support for link:query-build[Query builder] and link:lucid[Lucid Orm] all you have to do is tweak the configuration as per your needs.
+
+By default configuration is set to make use of SQLite as the database under development, which can be changed using the `config/database.js` file.
+
+.config/database.js
+[source, javascript]
+----
+module.exports = {
+  connection: Env.get('DB_CONNECTION', 'sqlite'), <1>
+
+  sqlite: {
+    ....
+  }, <2>
+
+  mysql: {
+    ....
+  }
+}
+----
+
+<1> `connection` property defines the default connection to be used for making SQL queries.
+<2> Individual connection config is set next to the connection name. You are free to create multiple config blocks.
+
+== Basic Example
+Let's start playing the Database provider to by selecting all users from the `users` table.
+
+.Route
+[source, javascript]
+----
+Route.get('/users', 'UsersController.index')
+----
+
+.Controller
+[source, javascript]
+----
+'use strict'
+
+const Database = use('Database')
+
+class UsersController {
+
+  * index (request, response) {
+    const users = yield Database.select('*').from('users')
+    response.json(users)
+  }
+
+}
+----
+
+TIP: The query builder syntax is fluent which means you can chain methods to build a complete SQL query. Also, you will not have to change a line of code when you switch between multiple databases.
+
+== Database Drivers & Their Settings
+Since AdonisJs supports all popular SQL databases, you have to install their equivalent drivers from npm and configure them as defined below.
+
+=== MySQL
+Available Driver(s)::
+link:https://www.npmjs.com/package/mysql[mysql] +
+link:https://www.npmjs.com/package/mysql2[mysql2]
+
+Configuration::
++
+
+[source, javascript]
+----
+mysql: {
+  client: 'mysql',
+  connection: {
+    host: '127.0.0.1',
+    port: 3306,
+    user: 'root',
+    password: '',
+    database: 'adonis'
+  }
+}
+----
+
+Also, you can define a socket path to building the MySQL connection. Giving the socket path will ignore the host and port options.
+
+[source, javascript]
+----
+mysql: {
+  client: 'mysql',
+  connection: {
+    socketPath: '/path/to/socket.sock',
+    user: 'root',
+    password: '',
+    database: 'adonis'
+  }
+}
+----
+
+=== SQLite
+Available Driver(s)::
+link:https://www.npmjs.com/package/sqlite3[sqlite3]
+
+Configuration::
++
+
+[source, javascript]
+----
+sqlite: {
+  client: 'sqlite3',
+  connection: {
+    filename: Helpers.storagePath('development.sqlite')
+  }
+}
+----
+
+=== PostgreSQL
+Available Driver(s)::
+link:https://www.npmjs.com/package/pg[pg]
+
+Configuration::
++
+
+[source, javascript]
+----
+pg: {
+  client: 'pg',
+  connection: {
+    host: '127.0.0.1',
+    port: 5432,
+    user: '',
+    password: '',
+    database: 'adonis',
+    ssl: false
+  }
+}
+----
+
+Also, you can pass a connection string
+
+[source, javascript]
+----
+pg: {
+  client: 'pg',
+  connection: 'postgres://user:password@host:port/database?ssl=true'
+}
+----
+
+=== Oracle
+Available Driver(s)::
+link:https://www.npmjs.com/package/oracle[oracle] +
+link:https://www.npmjs.com/package/strong-oracle[strong-oracle]
+
+Configuration::
++
+
+[source, javascript]
+----
+oracle: {
+  client: 'oracle',
+  connection: {
+    host: '127.0.0.1',
+    port: 1521,
+    user: '',
+    password: '',
+    database: 'adonis'
+  }
+}
+----
+
+=== MariaDB
+
+Available Driver(s)::
+link:https://www.npmjs.com/package/mariasql[mariasql]
+
+Configuration::
++
+
+[source, javascript]
+----
+maria: {
+  client: 'mariasql',
+  connection: {
+    host: '127.0.0.1',
+    port: 3306,
+    user: 'root',
+    password: '',
+    database: 'adonis'
+  }
+}
+----
+
+=== MSSQL
+Available Driver(s)::
+link:https://www.npmjs.com/package/mssql[mssql]
+
+Configuration::
++
+
+[source, javascript]
+----
+mssql: {
+  client: 'mssql',
+  connection: {
+    host: '127.0.0.1',
+    port: 3306,
+    user: 'root',
+    password: '',
+    database: 'adonis'
+  }
+}
+----
+
+== Debugging
+Debugging database queries are handy to check database response time or to make sure that the query builder performs the correct query. Let's go through a handful of different debugging strategies.
+
+=== Globally
+The easiest way to globally debug queries is to set the `debug` flag on the configuration block.
+
+.config/database.js
+[source, javascript]
+----
+mysql: {
+  client: 'mysql',
+  connection: {},
+  debug: true <1>
+}
+----
+
+Also, you can turn debugging on within your code by listening for the `query` or `sql` events on the Database provider. The best place to register a listener is under `app/Listeners/Http.js` file.
+
+.app/Listeners/Http.js
+[source, javascript]
+----
+Http.onStart = function () {
+  Database.on('query', console.log)
+  Database.on('sql', console.log)
+}
+----
+
+The only difference between `query` and the `sql` event is the output.
+
+SQL event output::
++
+
+[source, mysql]
+----
++ 1.38 ms : select * from `users` where `username` = 'doe'
+----
+
+Query event output::
++
+
+[source, javascript]
+----
+{
+  method: 'select',
+  options: {},
+  bindings: [ 'doe' ],
+  sql: 'select * from `users` where `username` = ?'
+}
+----
+
+=== Individual Query
+Also, you can debug a single query by chaining the event listener when running the query.
+
+[source, javascript]
+----
+yield Database
+  .on('sql', console.log)
+  .table('users')
+  .where('username', 'doe')
+----
+
+Or
+
+[source, javascript]
+----
+yield Database
+  .debug()
+  .table('users')
+  .where('username', 'doe')
+----

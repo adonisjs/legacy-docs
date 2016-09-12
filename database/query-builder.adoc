@@ -1,0 +1,253 @@
+:toc:
+:linkattrs:
+
+= Query Builder
+
+AdonisJs Query builder gives you a unified syntax to interact with SQL databases using Javascript methods. This guide is a reference to all the available methods on query builder.
+
+Checkout link:database-setup[Database Setup] guide to check the list of *supported databases*, *configuration options* and *debugging queries*.
+
+== Introduction
+Writing SQL queries can be tedious in so many ways, even if you are good with SQL. Let's imagine you write all of your queries for MySQL and after some time your manager asks you to migrate everything to PostgreSQL. Now you will have to re-write/amend your MySQL queries to make sure they work well with PostgreSQL.
+
+Another issue can be of building incremental queries with conditional blocks.
+
+.Without Query Builder
+[source, javascript]
+----
+const sql = 'SELECT * FROM `users`'
+
+if (username) {
+  sql += ' WHERE `username` = ' + username
+}
+----
+
+.With Query Builder
+[source, javascript]
+----
+const query = Database.table('users')
+
+if (username) {
+  query.where('username', username)
+}
+----
+
+== Basic Example
+Let's review a basic example of working with the query builder by chaining different methods.
+
+[source, javascript]
+----
+const Database = use('Database')
+
+class UserController {
+
+  * index (request, response) {
+    const john = yield Database
+      .table('users')
+      .where('username', 'john')
+      .limit(1)
+
+    response.json(john)
+  }
+
+}
+----
+
+== Selects
+The `select` method will define the fields to be selected for a given *SELECT* query.
+
+[source, javascript]
+----
+yield Database.select('id', 'username').from('users')
+// or
+yield Database.select('*').from('users')
+----
+
+.SQL Output
+[source, sql]
+----
+select `id`, `username` from `users`
+select * from `users`
+----
+
+== Where Clauses
+Query builder offers a bunch of dynamic methods to add *where* clauses. Also it supports sub-queries by passing a `closure` instead of the actual value.
+
+NOTE: Passing `undefined` to the where clause will cause an error during SQL compilation. Make sure that dynamic values are not undefined before passing them.
+
+==== where(mixed)
+
+[source, javascript]
+----
+const users = yield Database.from('users').where('id', 1)
+// Or
+const users = yield Database.from('users').where({ id: 1 })
+----
+
+Also you can define the comparison operator to the where clause.
+
+[source, javascript]
+----
+const adults = yield Database.from('users').where('age', '>', 18)
+----
+
+You can also add a callback to the *where* clause. Callback outputs a little different SQL query, and will group all where clauses inside a callback.
+
+.Passing Closure
+[source, javascript]
+----
+yield Database.from('users').where(function () {
+  this.where('id', 1)
+})
+----
+
+[source, sql]
+----
+select * from `users` where (`id` = 1)
+----
+
+.SubQueries
+[source, javascript]
+----
+const subquery = Database
+  .from('accounts')
+  .where('account_name', 'somename')
+  .select('account_name')
+
+const users = yield Database
+  .from('users')
+  .whereIn('id', subquery)
+----
+
+[source, sql]
+----
+select * from `users` where `id` in (select `account_name` from `accounts` where `account_name` = 'somename')
+----
+
+==== whereNot(mixed)
+[source, javascript]
+----
+const kids = yield Database.from('users').whereNot('age', '>', 15)
+// or
+const users = yield Database.from('users').whereNot({username: 'foo'})
+----
+
+==== whereIn(mixed)
+[source, javascript]
+----
+yield Database.from('users').whereIn('id', [1,2,3])
+----
+
+==== whereNotIn(mixed)
+[source, javascript]
+----
+yield Database.from('users').whereNotIn('id', [1,2,3])
+----
+
+==== whereNull(mixed)
+[source, javascript]
+----
+yield Database.from('users').whereNull('deleted_at')
+----
+
+==== whereNotNull(mixed)
+[source, javascript]
+----
+yield Database.from('users').whereNotNull('created_at')
+----
+
+==== whereExists(mixed)
+[source, javascript]
+----
+yield Database.from('users').whereExists(function () {
+  this.from('accounts').where('users.id', 'accounts.user_id')
+})
+----
+
+==== whereNotExists(mixed)
+[source, javascript]
+----
+yield Database.from('users').whereNotExists(function () {
+  this.from('accounts').where('users.id', 'accounts.user_id')
+})
+----
+
+==== whereBetween(mixed)
+[source, javascript]
+----
+yield Database.table('users').whereBetween('age',[18,32])
+----
+
+==== whereNotBetween(mixed)
+[source, javascript]
+----
+yield Database.table('users').whereNotBetween('age',[45,60])
+----
+
+==== whereRaw(mixed)
+Convenience helper for .where(Database.raw(query))
+
+[source, javascript]
+----
+yield Database.from('users').whereRaw('id = ?', [20])
+----
+
+== Joins
+
+==== innerJoin(column, mixed)
+
+[source, javascript]
+----
+yield Database
+  .table('users')
+  .innerJoin('accounts', 'user.id', 'accounts.user_id')
+----
+
+Also you can pass a closure to construct the join.
+
+[source, javascript]
+----
+yield Database.table('users').innerJoin('accounts', function () {
+  this
+    .on('users.id', 'accounts.user_id')
+    .orOn('users.id', 'accounts.owner_id')
+})
+----
+
+Other Joins Methods::
+|====
+| leftJoin
+| leftOuterJoin
+| rightJoin
+| rightOuterJoin
+| outerJoin
+| fullOuterJoin
+| crossJoin
+| joinRaw
+|====
+
+== Ordering and Limits
+
+==== distinct(...columns)
+[source, javascript]
+----
+yield Database.table('users').distinct('age')
+----
+
+==== groupBy(...columns)
+[source, javascript]
+----
+yield Database.table('users').groupBy('age')
+----
+
+==== groupByRaw(...columns)
+[source, javascript]
+----
+yield Database.table('users').groupByRaw('age, status')
+----
+
+==== orderBy(column, [direction=asc])
+[source, javascript]
+----
+yield Database.table('users').orderBy('id', 'desc')
+----
