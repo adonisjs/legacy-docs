@@ -71,9 +71,9 @@ select * from `users`
 ----
 
 == Where Clauses
-Query builder offers a bunch of dynamic methods to add *where* clauses. Also it supports sub-queries by passing a `closure` instead of the actual value.
+Query builder offers a bunch of dynamic methods to add *where* clauses. Also, it supports sub-queries by passing a `closure` instead of the actual value.
 
-NOTE: Passing `undefined` to the where clause will cause an error during SQL compilation. Make sure that dynamic values are not undefined before passing them.
+NOTE: Passing `undefined` to the where clause will cause an error during SQL compilation. Make sure that dynamic values are not `undefined` before passing them.
 
 ==== where(mixed)
 
@@ -84,7 +84,7 @@ const users = yield Database.from('users').where('id', 1)
 const users = yield Database.from('users').where({ id: 1 })
 ----
 
-Also you can define the comparison operator to the where clause.
+Also, you can define the comparison operator to the where clause.
 
 [source, javascript]
 ----
@@ -203,7 +203,7 @@ yield Database
   .innerJoin('accounts', 'user.id', 'accounts.user_id')
 ----
 
-Also you can pass a closure to construct the join.
+Also, you can pass a closure to construct the join.
 
 [source, javascript]
 ----
@@ -250,4 +250,298 @@ yield Database.table('users').groupByRaw('age, status')
 [source, javascript]
 ----
 yield Database.table('users').orderBy('id', 'desc')
+----
+
+==== orderByRaw(column, [direction=asc])
+[source, javascript]
+----
+yield Database.table('users').orderBy('col NULLS LAST DESC')
+----
+
+==== having(column, operator, value)
+NOTE: `groupBy()` clause is always required before making use of `having()` method.
+
+[source, javascript]
+----
+yield Database.table('users').groupBy('age').having('age', '>', 18)
+----
+
+==== offset/limit(value)
+[source, javascript]
+----
+yield Database.table('users').offset(11).limit(10)
+----
+
+== Inserts
+Insert operation will return the `id` of the inserted row. In the case of bulk inserts, the `id` of the first record will be returned, and it is more of a limitation with MYSQL itself. link:http://dev.mysql.com/doc/refman/5.6/en/information-functions.html#function_last-insert-id[LAST_INSERT_ID].
+
+==== insert(values)
+[source, javascript]
+----
+const userId = yield Database
+  .table('users')
+  .insert({username: 'foo', ...})
+
+// BULK INSERT
+const firstUserId = yield Database
+  .from('users')
+  .insert([{username: 'foo'}, {username: 'bar'}])
+----
+
+==== into(tableName)
+Method `into` is more readable than `table/from` when insert rows to the database.
+
+[source, javascript]
+----
+const userId = yield Database
+  .insert({username: 'foo', ...})
+  .into('users')
+----
+
+=== PostgreSQL Only
+For PostgreSQL, you will have to define the returning column explicitly. All other database clients will ignore this statement.
+
+[source, javascript]
+----
+const userId = yield Database
+  .insert({ username: 'virk' })
+  .into('users')
+  .returning('id')
+----
+
+== Updates
+All update operations will return the number of affected rows.
+
+[source, javascript]
+----
+const affectedRows = yield Database
+  .table('users')
+  .where('username', 'tutlage')
+  .update('lastname', 'Virk')
+----
+
+Pass an object for multiple columns.
+
+[source, javascript]
+----
+const affectedRows = yield Database
+  .table('users')
+  .where('username', 'tutlage')
+  .update({ lastname: 'Virk', firstname: 'Aman' })
+----
+
+== Deletes
+Delete operations will also return the number of affected rows.
+
+==== delete
+Also, you can make use of `del()`, since `delete` is a reserved keyword in Javascript.
+
+[source, javascript]
+----
+const affectedRows = yield Database
+  .table('users')
+  .where('username', 'tutlage')
+  .delete()
+----
+
+==== truncate
+Truncate will remove all the rows from a database and will set auto increment id back to *0*.
+
+[source, javascript]
+----
+yield Database.truncate('users')
+----
+
+== Pagination
+Query builder provides a handful of convenient ways to paginate results from the database.
+
+==== forPage(page, [limit=20])
+[source, javascript]
+----
+const users = yield Database
+  .from('users')
+  .forPage(1, 10)
+----
+
+==== paginate(page, [limit=20])
+[source, javascript]
+----
+const results = yield Database
+  .from('users')
+  .paginate(2, 10)
+----
+
+NOTE: The output of the `paginate` method is different from the `forPage` method.
+
+.Output
+[source, javascript]
+----
+{
+  total: 0,
+  currentPage: 2,
+  perPage: 10,
+  lastPage: 0,
+  data: [{...}]
+}
+----
+
+== Database Transactions
+Database transactions are safe operations, which are not reflected in the database until and unless you explicitly commit your changes.
+
+==== beginTransaction
+The `beginTransaction` method will return the transaction object, which can be used to perform any queries.
+
+[source, javascript]
+----
+const trx = yield Database.beginTransaction()
+yield trx.insert({username: 'virk'}).into('users')
+
+trx.commit() // insert query will take place on commit
+trx.rollback() // will not insert anything
+----
+
+==== transaction
+Also, you can wrap your transactions inside a *callback*. The major difference is, you will not have to call `commit or `rollback` manually if any of your queries throws an error, the transaction will rollback automatically. Otherwise, it will commit.
+
+[source, javascript]
+----
+yield Database.transaction(function * (trx) {
+  yield trx.insert({username: 'virk'}).into('users')
+})
+----
+
+== Chunks
+The `chunk` method will pull records in small chunks and will execute the closure until there are results. This method is helpful when you are planning to select thousands of records.
+
+[source, javascript]
+----
+yield Database.from('logs').chunk(200, function (logs) {
+  console.log(logs)
+})
+----
+
+== Aggregates
+
+==== count([column])
+[source, javascript]
+----
+const total = yield Database.from('users').count()
+
+// COUNT A COLUMN
+const total = yield Database.from('users').count('id')
+
+// COUNT COLUMN AS NAME
+const total = yield Database.from('users').count('id as id')
+----
+
+==== countDistinct
+The `countDistinct` is same as count, but adds distinct expression.
+
+[source, javascript]
+----
+const total = yield Database.from('users').countDistinct('id')
+----
+
+==== min(column)
+
+[source, javascript]
+----
+yield Database.from('users').min('age')
+yield Database.from('users').min('age as a')
+----
+
+==== max(column)
+
+[source, javascript]
+----
+yield Database.from('users').max('age')
+yield Database.from('users').max('age as a')
+----
+
+==== sum(column)
+[source, javascript]
+----
+yield Database.from('cart').sum('total')
+yield Database.from('cart').sum('total as t')
+----
+
+==== sumDistinct(column)
+[source, javascript]
+----
+yield Database.from('cart').sumDistinct('total')
+yield Database.from('cart').sumDistinct('total as t')
+----
+
+==== avg(column)
+[source, javascript]
+----
+yield Database.from('users').avg('age')
+yield Database.from('users').avg('age as age')
+----
+
+==== avgDistinct(column)
+[source, javascript]
+----
+yield Database.from('users').avgDistinct('age')
+yield Database.from('users').avgDistinct('age as age')
+----
+
+==== increment(column, amount)
+Increment the column existing value by *1*.
+
+[source, javascript]
+----
+yield Database
+  .table('credits')
+  .where('id', 1)
+  .increment('balance', 10)
+----
+
+==== decrement(column, amount)
+Opposite of `increment`.
+
+[source, javascript]
+----
+yield Database
+  .table('credits')
+  .where('id', 1)
+  .decrement('balance', 10)
+----
+
+== Helpers
+
+==== pluck(column)
+[source, javascript]
+----
+const ids = yield Database.from('users').pluck('id')
+----
+
+==== first
+The `first` method will add a *limit 1* clause to the query.
+
+[source, javascript]
+----
+yield Database.from('users').first()
+----
+
+==== clone
+Clone the current query chain for re-usability.
+
+[source, javascript]
+----
+const query = Database
+  .from('users')
+  .where('username', 'virk')
+  .clone()
+
+// later
+yield query
+----
+
+==== columnInfo([columnName])
+Returns information for a given column.
+
+[source, javascript]
+----
+const username = yield Database.table('users').columnInfo('username')
 ----
