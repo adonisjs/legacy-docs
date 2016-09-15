@@ -280,19 +280,15 @@ module.exports = PostMark
 
 Above is a pretty standard way to send emails using node mailer. We just wrap it inside a class to make sure it works well with AdonisJs. Let's extend the mail provider and add this driver.
 
-##### app/Listeners/Http.js
+##### bootstrap/extend.js
 
 ```javascript
 const Ioc = use('adonis-fold').Ioc
 
-Http.onStart = function () {
-
-    Ioc.extend('Mail', 'postmark', function (app) {
-        const Config = app.use('Adonis/Src/Config')
-        return new PostMark(Config)
-    })
-
-}
+Ioc.extend('Adonis/Addons/Mail', 'postmark', function (app) {
+  const Config = app.use('Adonis/Src/Config')
+  return new PostMark(Config)
+})
 ```
 
 Now you can make use of the **postmark** driver, just like any other inbuilt driver.
