@@ -1,0 +1,471 @@
+:toc:
+:linkattrs:
+= Authentication
+
+Every Web application deals with User Management and Authentication at some stage. AdonisJs Authentication provider is a fully featured system to authenticate HTTP requests using multiple authenticators. Using authenticators, you can build traditional *session based* login systems to secure *REST API's*.
+
+== Authenticators
+Each authenticator is a combination of serializers and an authentication scheme.
+
+=== Schemes
+[support-list]
+* Sessions (session)
+* Basic Auth (basic)
+* JWT (jwt)
+* Personal API Tokens (api)
+
+=== Serializers
+[support-list]
+* Lucid
+* Database
+
+== About Authentication
+[pretty-list]
+
+1. Authentication is divided into two broad categories of *Stateful authentication* and *Stateless authentication*.
+2. Session based authentication is considered *Stateful Authentication*, since once logged in the user can navigate to different areas of the application without resending the credentials.
+3. *Stateless Authentication* requires the end-user to send the credentials on each HTTP request which is very common with REST API's.
+4. AdonisJs provides required tooling & helpers to manage both types of authentication with ease.
+
+== Config
+Configuration for authentication is saved inside `config/auth.js` file. By default, it makes use of the `session` authenticator to authenticate requests.
+
+[source, javascript]
+----
+module.exports = {
+  authenticator: 'session',
+  session: {
+    serializer: 'Lucid',
+    scheme: 'session',
+    model: 'App/Model/User',
+    uid: 'email',
+    password: 'password'
+  }
+}
+----
+
+[options="header"]
+|====
+| Key | Values | Description
+| serializer | Lucid, Database | Serializer to be used for fetching the user from the database.
+| scheme | session, basic, jwt, api | Scheme to be used for fetching and authenticating user credentials.
+| uid | Database field name | Database field to be used as unique identifier for a given user.
+| password | Database field name | Field to be used for verifying user password
+| model | Model Namespace *(Lucid Only)* | Applicable only when using Lucid serializer. Given model will be used for querying the database.
+| table | Database table name *(Database Only)* | Applicable only when using Database serializer.
+|====
+
+== Migrations & Models
+Authentication provider can generate required migrations for you using an *ace command*. Just make sure following command is added to the list of commands.
+
+.bootstrap/app.js
+[source, javascript]
+----
+const commands = [
+  ...,
+  'Adonis/Commands/Auth:Setup'
+]
+----
+
+.Running Setup Command
+[source, bash]
+----
+./ace auth:setup
+----
+
+.Output
+[source, bash]
+----
+create: app/Model/User.js
+create: database/migrations/1463212428511_User.js
+create: app/Model/Token.js
+create: database/migrations/1463212428512_Token.js
+----
+
+== Basic Example
+Let's start with a basic example of creating a simple app to *login* and displaying the profile of a logged in user.
+
+.app/Http/routes.js
+[source, javascript]
+----
+'use strict'
+
+const Route = use('Route')
+
+Route.get('/profile', 'UserController.profile')
+Route.post('/login', 'UserController.login')
+----
+
+.app/Http/Controllers/UserController.js
+[source, javascript]
+----
+'use strict'
+
+class UserController {
+
+  * login (request, response) {
+    const email = request.input('email')
+    const password = request.input('password')
+    const login = yield request.auth.attempt(email, password) <1>
+
+    if (login) {
+      response.send('Logged In Successfully')
+      return
+    }
+
+    response.unauthorized('Invalid credentails')
+  }
+
+}
+----
+
+<1> Once *authentication provider* is configured, you can make use of the `auth` property on the `request` instance to authenticate a user or check the authentication status.
+
+Let's write another method to show the profile of a user only if they are logged in.
+
+.Showing User Profile
+[source, javascript]
+----
+* profile (request, response) {
+  const user = yield request.auth.getUser()
+  if (user) {
+    response.ok(user)
+    return
+  }
+  response.unauthorized('You must login to view your profile')
+}
+----
+
+== Session Based Authentication
+Below is the list of methods you can use on `session` authenticator.
+
+==== attempt(uid, password)
+Attempt to log in a user using the uid and password. It will throw an error if unable to find the user or if password mismatch.
+
+[source, javascript]
+----
+try {
+  yield request.auth.attempt(uid, password)
+} catch (e) {
+  yield response.with({error: e.message}).flash()
+  response.redirect('back')
+}
+----
+
+==== login(user)
+Login a user using the user model instance.
+
+[source, javascript]
+----
+const user = yield User.find(1)
+try {
+  yield request.auth.login(user)
+  response.redirect('/dashboard')
+} catch (e) {
+  yield response.with({error: e.message}).flash()
+  response.redirect('back')
+}
+----
+
+==== loginViaId(id)
+Login user using the id. A database lookup will be performed to make sure that the user does exist otherwise an exception will be raised.
+
+[source, javascript]
+----
+try {
+  yield request.auth.loginViaId(1)
+  response.redirect('/dashboard')
+} catch (e) {
+  yield response.with({error: e.message}).flash()
+  response.redirect('back')
+}
+----
+
+==== logout
+Logout an existing logged in user.
+
+[source, javascript]
+----
+yield request.auth.logout()
+----
+
+==== check
+Check to see if a user is logged in or not.
+
+[source, javascript]
+----
+const isLoggedIn = yield request.auth.check()
+if (!isLoggedIn) {
+  response.redirect('/login')
+}
+----
+
+==== validate(uid, password)
+Validate user credentials to see if they are valid. This method will never set any session/cookie.
+
+[source, javascript]
+----
+try {
+  yield request.auth.validate(uid, password)
+} catch (e) {
+  yield response.with({error: e.message}).flash()
+  response.redirect('back')
+}
+----
+
+== Basic Auth
+Below is the list of methods available for *basic auth* authenticator.
+
+NOTE: Basic auth credentials are base64 encoded and sent as the *Authorization* header. Example: `Authorization=username:password`
+
+==== check
+Check to see if basic auth credentials are present in the `Authorization` header.
+
+[source, javascript]
+----
+const isLoggedIn = yield request.auth.check()
+if (!isLoggedIn) {
+  response.redirect('/login')
+}
+----
+
+==== validate(uid, password)
+Validate user credentials to see if they are valid or not.
+
+[source, javascript]
+----
+try {
+  yield request.auth.validate(uid, password)
+} catch (e) {
+  response.unauthorized({error: e.message})
+}
+----
+
+== JWT
+JWT authenticators require a couple of extra attributes to the configuration block.
+
+NOTE: JWT token is sent as the *Authorization* header. Example: `Authorization=Bearer JWT_TOKEN`
+
+.config/auth.js
+[source, javascript]
+----
+{
+  authenticator: 'jwt',
+  jwt: {
+    serializer: 'Lucid',
+    scheme: 'jwt',
+    model: 'App/Model/User',
+    secret: Config.get('app.appKey'),
+    options: {
+      // Options to be used while generating token
+    }
+  }
+}
+----
+
+.Additional Options
+
+[options="header"]
+|====
+| Key | Available Values | Default Value | Description
+| algorithm | HS256, HS384 | HS256 | Algorithm to be used for generating token
+| expiresIn | valid time in seconds or link:https://github.com/rauchg/ms.js[ms string] | null |  When to expire the token
+| notBefore | valid time in seconds or link:https://github.com/rauchg/ms.js[ms string] | null | Till when at least to keep the token valid
+| audience |  String | null  | A value to be checked against the `aud`
+| issuer |  Array or String | null | Value to be used for `iss`.
+| subject | String | null | A value to be checked against the `sub`.
+|====
+
+==== check
+Works same as others
+
+[source, javascript]
+----
+const isLoggedIn = yield request.auth.check()
+if (!isLoggedIn) {
+  response.unauthorized({error: 'Your must be loggedin to access this resource.'})
+}
+----
+
+==== generate(user)
+Generates a JWT token for a given user.
+
+[source, javascript]
+----
+const user = yield User.find(1)
+const token = yield request.auth.generate(user)
+----
+
+== API Tokens
+Personal API tokens are like the password for a given account. The majority of Web applications offers API-based authentication so that their customers can generate these tokens for developers without sharing their actual Login details.
+
+NOTE: API token is sent as the *Authorization* header. Example: `Authorization=Bearer API_TOKEN`
+
+[pretty-list]
+1. API tokens are saved to the database corresponding to a given user.
+2. You can set expiry for a token or set it `null` for never expiring tokens.
+3. You can revoke a single/all tokens for a given user.
+
+.config/auth.js
+[source, javascript]
+----
+authenticator: 'api',
+api: {
+  serializer: 'Lucid',
+  scheme: 'api',
+  model: 'App/Model/Token',
+  expiry: '30d'
+}
+----
+
+=== Setting Up Token/User Relationship
+The `Token` Model needs to have a relationship with the `User` model to save tokens with ease. Make sure to define the relationship between both the models as defined below.
+
+TIP: Make use of `auth:setup` command to generate the models/migrations and set relationships for you.
+
+.app/Model/Token.js
+[source, javascript]
+----
+'use strict'
+const Lucid = use('Lucid')
+
+class Token extends Lucid {
+  user () {
+    return this.belongsTo('App/Model/User')
+  }
+}
+
+module.exports = Token
+----
+
+.app/Model/User.js
+[source, javascript]
+----
+'use strict'
+const Lucid = use('Lucid')
+
+class User extends Lucid {
+  apiTokens () {
+    return this.hasMany('App/Model/Token')
+  }
+}
+
+module.exports = User
+----
+
+=== Methods
+Below is the list of available methods to be used with the `api` authenticator.
+
+==== check
+Works same as others
+
+[source, javascript]
+----
+const isLoggedIn = yield request.auth.check()
+----
+
+==== generate(user, [expiry])
+Generate an API token for a given user and save it to the database.
+
+[source, javascript]
+----
+const user = yield User.find(1)
+const token = yield request.auth.generate(user)
+----
+
+==== revoke(user, tokens=Array)
+Revoke/Delete given tokens for a given user.
+
+[source, javascript]
+----
+const user = yield User.find(1)
+yield request.auth.revoke(user, [token])
+----
+
+==== revokeAll(user)
+Revoke/Delete all tokens for a given user.
+
+[source, javascript]
+----
+const user = yield User.find(1)
+yield request.auth.revokeAll(user)
+----
+
+==== revokeExcept(user, tokens=Array)
+Revoke all tokens except the given ones.
+
+[source, javascript]
+----
+const user = yield User.find(1)
+yield request.auth.revokeExcept(user, [token])
+----
+
+== Securing Routes
+So far you have been authenticating users manually, which can lead to duplicate code in multiple controllers. AdonisJs Auth Middleware can automatically authenticate the routes and makes sure to deny the requests when the end-user is not logged in.
+
+Make sure the *Auth Middleware* is registered as a named middleware inside `app/Http/kernel.js` file.
+
+.app/Http/kernel.js
+[source, javascript]
+----
+const namedMiddleware = {
+  auth: 'Adonis/Middleware/Auth'
+}
+----
+
+Now you are all set to take advantage of the `auth` middleware on your routes.
+
+.app/Http/routes.js
+[source, javascript]
+----
+Route
+  .get('/user/profile', 'UserController.profile')
+  .middleware('auth')
+----
+
+Also, you can define a different authenticator by passing arguments to the auth middleware at runtime.
+
+[source, javascript]
+----
+Route
+  .get('/user/profile', 'UserController.profile')
+  .middleware('auth:basic')
+----
+
+== Switching Between Authenticators
+You can also switch between different authenticators using the `authenticator` method.
+
+[source, javascript]
+----
+const jwt = request.auth.authenticator('jwt')
+const basicAuth = request.auth.authenticator('basic')
+const api = request.auth.authenticator('api')
+
+yield jwt.check()
+yield basicAuth.check()
+yield api.check()
+----
+
+== Helpers
+Helpers makes it easier to retrieve the currently logged in user during an HTTP request.
+
+=== Session Based
+You can access the `currentUser` property on the request object and as a global inside your views when the end-user is logged in via `session` authenticator.
+
+[source, javascript]
+----
+request.currentUser // logged in user
+----
+
+[source, twig]
+----
+{{ currentUser }}
+----
+
+=== All Other Authenticators
+All other authenticators like *JWT*, *Basic Auth* and *API Token* will have access to the currently logged in user as `authUser` property on the request object.
+
+[source, javascript]
+----
+request.authUser // authenticated user instance
+----

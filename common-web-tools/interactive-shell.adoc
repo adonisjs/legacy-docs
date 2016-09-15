@@ -1,0 +1,399 @@
+:toc:
+:linkattrs:
+= Interactive Shell Aka Ace
+
+Ace is a powerful command line tool crafted for AdonisJs. So far you have been using lots of ace commands to generate *controllers*, *models*, run *migrations*, etc. In this guide, we will learn about the internals of Ace and how to create commands.
+
+== About Ace
+[pretty-list]
+
+1. `ace` is an executable file inside the root of your application.
+2. Each command is specific to a single project, for reusable commands, you must bundle them as an npm package.
+3. Commands have access to all the applications components like *Models*, *Routes*, etc. That makes it so easy to create useful commands.
+4. Project specific commands are stored inside `app/Commands` directory.
+5. You must register your commands inside `bootstrap/app.js` file before using them.
+
+== Creating Your First Command
+We are going to create a command to pull random quotes of *Paul Graham* using link:http://gophergala.github.io/wisdom[Wisdom API] and display it on the terminal.
+
+.Creating A New Command
+[source, bash]
+----
+./ace make:command Quote
+----
+
+.Installing Got
+link:https://npmjs.org/package/got[Got] is an npm module to make HTTP requests within your Javascript code.
+
+[source, bash]
+----
+npm i --save got
+----
+
+.app/Commands/Quote.js
+[source, javascript]
+----
+'use strict'
+
+const Command = use('Command')
+const got = use('got')
+
+class Quote extends Command { <1>
+
+  get signature () {
+    return 'quote'
+  } <2>
+
+  get description () {
+    return 'Display a random quote from Paul Graham.'
+  } <3>
+
+  * handle (args, options) {
+    const response = yield got('https://wisdomapi.herokuapp.com/v1/author/paulg/random')
+    const quote = JSON.parse(response.body)
+
+    this.log('\n')
+    this.log(`${this.colors.gray(quote.author.name)} - ${this.colors.cyan(quote.author.company)}`)
+    this.log(`${quote.content}`)
+  } <4>
+
+}
+
+module.exports = Quote
+----
+
+<1> Each command should be inherited from the base `Command` class.
+<2> The signature is used to define the command name and its expectations. Learn more about Signature xref:[here].
+<3> Description is displayed on the help screen. It is a good place to tell the end user about the command.
+<4> The `handle` is the body of your command and called automatically by Ace when the command gets executed.
+
+Next, we need to register this command to the list of commands.
+
+.bootstrap/app.js
+[source, javascript]
+----
+const commands = [
+  'App/Commands/Quote',
+  ...
+]
+----
+
+If all went through, you would be able to see your command listed on the help screen of Ace.
+
+[source, bash]
+----
+./ace --help
+----
+
+.Output
+[source, bash]
+----
+quote               Display a random quote from Paul Graham
+....
+----
+
+Let's execute this command to fetch an inspirational quote and display it on the terminal.
+
+[source, bash]
+----
+./ace quote
+----
+
+image:http://res.cloudinary.com/adonisjs/image/upload/v1473771404/Screen_Shot_2016-09-13_at_6.25.37_PM_hvd2hv.png[]
+
+== Command Signature
+Command Signature defines the command name with required/optional arguments or options.
+
+==== Command With Only The Name
+[source, javascript]
+----
+get signature () {
+  return 'make:controller'
+}
+----
+
+=== Arguments
+
+==== Command With Required Argument(s)
+Curly braces surround arguments. A single command can have as many arguments as it wants.
+
+[source, javascript]
+----
+get signature () {
+  return 'make:controller {name}'
+}
+----
+
+==== Optional Argument(s)
+Append `?` to the argument, name to make it optional. Just like your route parameters.
+
+[source, javascript]
+----
+get signature () {
+  return 'make:controller {name?}'
+}
+----
+
+==== Argument Description
+Also, you set a description for an argument separating it with a colon `(:)`.
+
+[source, javascript]
+----
+get signature () {
+  return 'make:controller {name:Name of the controller}'
+}
+----
+
+=== Options
+Options are defined by appending `--` to the start of the option name.
+
+==== Command With Required Option(s)
+[source, javascript]
+----
+get signature () {
+  return 'make:controller {name} {--resource}'
+}
+----
+
+==== Optional Option(s)
+Just like arguments, you can also make options optional by appending a `?`.
+
+[source, javascript]
+----
+get signature () {
+  return 'make:controller {name} {--resource?}'
+}
+----
+
+==== Options With Aliases
+Often options need aliases like *-h* for `--help`. You can define multiple aliases for a given option separated by a comma.
+
+[source, javascript]
+----
+get signature () {
+  return 'make:controller {name} {-r,--resource?}'
+}
+----
+
+==== Options That Accepts Values
+At times options want values to perform certain operations, and same can get achieved by making use of `@value` identifier.
+
+[source, javascript]
+----
+get signature () {
+  return 'make:controller {name} {--template=@value}'
+}
+----
+
+== Interactive Inputs
+AdonisJs makes it so simple to create interactive commands by prompting the user to give information as they go.
+
+==== ask(question, [defaultValue])
+The `ask` method will accept textual input. Optionally you can define `defaultValue` which will be returned when no input has been passed.
+
+[source, javascript]
+----
+const projectName = yield this
+  .ask('Enter project name', 'yardstick')
+  .print()
+----
+
+image:http://res.cloudinary.com/adonisjs/image/upload/v1473783322/ask_blwh1x.gif[]
+
+==== choice(question, choices, [defaultChoice])
+Display a list of choices to be used for selection. Only one of the listed options can be selected.
+
+[source, javascript]
+----
+const dailyMeal = yield this
+  .choice('Choose a free daily meal', ['BreakFast', 'Lunch', 'Dinner'], 'BreakFast')
+  .print()
+----
+
+image:http://res.cloudinary.com/adonisjs/image/upload/v1473783461/choice_ijyxqz.gif[]
+
+==== multiple(question, choices, [defaultChoices])
+Display a list of multiple choices with an optional array of pre-selected values. Unlike `choice` you can select multiple values.
+
+[source, javascript]
+----
+yield this.multiple('You know?', ['Javascript', 'Elm', 'Haskell', 'Ruby']).print()
+
+// OR
+const langs = yield this
+  .multiple('You know?', {
+    js: 'Javascript',
+    elm: 'Elm',
+    hsk: 'Haskell',
+    ruby: 'Ruby'
+  }).print()
+----
+
+image:http://res.cloudinary.com/adonisjs/image/upload/v1473783814/multiple_arn7og.gif[]
+
+==== anticipate(question, choices, [defaultChoice])
+Shows a list of actions with the keyboard shortcuts. It is helpful when you want the user to anticipate on something.
+
+[source, javascript]
+----
+const action = yield this
+  .anticipate('Conflict in file.js?', [
+    {key: 'y', name: 'Delete it'},
+    {key: 'a', name: 'Overwrite it'},
+    {key: 'i', name: 'Ignore it'}
+  ])
+  .print()
+----
+
+image:http://res.cloudinary.com/adonisjs/image/upload/v1473783820/anticipate_xmstmk.gif[]
+
+==== secure(question, [defaultValue])
+Ask for a secure input like a *password* or some *secret token*. The input value will be show as `\*\*****`.
+
+[source, javascript]
+----
+const password = yield this
+  .secure('What is your password?')
+  .print()
+----
+
+image:http://res.cloudinary.com/adonisjs/image/upload/v1473783809/secure_ddk3w3.gif[]
+
+==== confirm(question, [defaultValue])
+Ask for a yes/no question.
+
+[source, javascript]
+----
+const deleteFiles = yield this
+  .confirm('Are you sure you want to delete selected files?')
+  .print()
+----
+
+image:http://res.cloudinary.com/adonisjs/image/upload/v1473783814/confirm_dsoxix.gif[]
+
+== Validating Inputs
+It is extremely useful to validate input when accepting the values from interactive questions. All prompt questions can be validated by chaining the `validate` method and returning `true` from the callback will be considered as successful validation.
+
+[source, javascript]
+----
+yield this
+  .ask('Enter coupon code')
+  .validate(function (input) {
+    return input === 'adonisjs' ? true : 'Enter a valid coupon code'
+  })
+  .print()
+----
+
+== ANSI Output
+link:https://en.wikipedia.org/wiki/ANSI_escape_code[Ansi Escape Codes] are used to output colored text to the terminal using a sequence of multiple characters. For example: To output a green color `Hello World` to the terminal you need to log following.
+
+[source, javascript]
+----
+console.log('\033[32m Hello World')
+----
+
+It is so hard to remember these codes and unpleasant to write them. Also, you will have to deal with different *shell types* to get the right output. AdonisJs commands can make this easy with the help of the following methods.
+
+==== error(message)
+[source, javascript]
+----
+this.error('Sorry, something went wrong')
+----
+
+==== success(message)
+[source, javascript]
+----
+this.success('All done!')
+----
+
+==== info(message)
+[source, javascript]
+----
+this.info('Just letting you know')
+----
+
+==== warn(message)
+[source, javascript]
+----
+this.warn('Wait! something seems fishy')
+----
+
+==== completed(action, message)
+Will output a structured message for a completed action. Where action name will be in green color.
+
+[source, javascript]
+----
+this.completed('create', 'Created the controller file')
+----
+
+.Output
+[source, bash]
+----
+create: Created the controller file
+----
+
+==== failed(action, message)
+[source, javascript]
+----
+this.failed('create', 'Sorry controller file already exists')
+----
+
+.Output
+[source, bash]
+----
+create: Sorry controller file already exists
+----
+
+==== table(head, body)
+[source, javascript]
+----
+this.table(['username', 'age'], [{'virk': 26}, {nikk: 25}])
+
+// or
+this.table(
+  ['key', 'value'],
+  {username: 'foo', age: 22, email: 'foo@bar.com'}
+)
+----
+
+== Icons & Colors
+Additionally, you can output icons and add color to your console messages inside your command `handle` method.
+
+[source, javascript]
+----
+const Command = use('Command')
+
+class Greet extends Command {
+  * handle () {
+    const successIcon = this.icon('success')
+    console.log(`${successIcon} That went great`)
+  }
+}
+
+module.exports = Greet
+----
+
+.Output
+[source, bash]
+----
+✔ That went great
+----
+
+=== Icons List
+[options="header"]
+|====
+| Icon | Name
+| ℹ | info
+| ✔ | success
+| ⚠ | warn
+| ✖ | error
+|====
+
+=== Colors
+Under the hood, Ace makes use of link:https://www.npmjs.com/package/colors[colors, window="_blank"] an npm module. You can access all the available methods on *colors* using the property colors.
+
+[source, javascript]
+----
+this.colors.green('This is all green')
+this.colors.red.underline('I like cake and pies')
+----
