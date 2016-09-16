@@ -17,7 +17,7 @@ Cookies in AdonisJs are encrypted and signed. Which means any tampering to a coo
 <strong> Note </strong> In order to make your cookie encrypted, make sure to define <code>APP_KEY</code> inside your <code>.env</code> file. Alternatively you can make use of <code>ace</code> to generate the key for you.</div>
 
 ```bash
-./ace generate:key
+./ace key:generate
 ```
 
 ## Basic Example
