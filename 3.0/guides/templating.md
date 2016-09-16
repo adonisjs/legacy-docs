@@ -307,8 +307,8 @@ Route
 {{ linkTo('listUsers', 'View All Users', {}, '_blank') }}
 
 {# returns #}
-<a href="/users"> View Profile </a>
-<a href="/users" target="_blank"> View Profile </a>
+<a href="/users"> View All Users </a>
+<a href="/users" target="_blank"> View All Users </a>
 ```
 
 #### linkToAction
