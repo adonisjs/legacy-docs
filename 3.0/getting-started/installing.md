@@ -85,10 +85,11 @@ npm install
 
 ## Starting Server
 
-AdonisJs makes use of [nodemon.io](http://nodemon.io/) to start the development server with hot-reloading.
+AdonisJs makes use of [nodemon](http://nodemon.io/) to automatically restart the server in development.
+
 
 ```bash
-npm run dev // to start the server with hot-reloading
+npm run dev # while developing: start the server with auto restart
 # or
-npm start // without hot-reloading
+npm start # in production
 ```
