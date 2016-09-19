@@ -323,7 +323,7 @@ Route
   })
 ----
 
-=== addMember(route, [verbs=GET], [callback])
+==== addMember(route, [verbs=GET], [callback])
 The `addMember` method has the same signature as xref:_addcollection_route_verbs_get_callback[addCollection], but instead it adds the member for a specific item inside the resource.
 
 [source, javascript]
