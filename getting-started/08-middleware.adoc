@@ -12,9 +12,9 @@ HTTP Middleware is a layer of methods executed before your Routes actions. They 
 
 The *body parser* middleware is responsible for parsing the request body. Whereas the *Auth* middleware is used to authenticate the requests and throw *401 Exception* if the user is not authenticated.
 
-[pretty-list]
-Middleware can:-
+Middleware can:
 
+[pretty-list]
 1. Decorate request object and add values to it.
 2. Respond to a given request, without reaching your route action.
 3. Or to deny requests by throwing errors.
