@@ -8,31 +8,33 @@ categories:
 
 toc::[]
 
-AdonisJs is a https://nodejs.org[Node.js] Framework with pre-configured answers to all of your questions. It encapsulates the boring parts of Web development and offers you a nice and clean API to work with.
+AdonisJs is a link:https://nodejs.org[Node.js, window="_blank"] MVC framework to write the web application with less code. We focus on writing elegant code and being one of the most stable frameworks in the Node community. Unlike other frameworks, AdonisJs comes with a bunch of battle tested modules to make your development experience enjoyable.
 
-Every web application needs the same functionalities at a certain stage. AdonisJs has all of this built right into the framework or can be added by using one of the official libraries.
+Below is the list of core features:
 
+[pretty-list]
 1. Powerful https://en.wikipedia.org/wiki/Object-relational_mapping[ORM] to make secure SQL queries.
 2. API & Session based Authentication System.
-3. Easy way to send emails via SMTP or Web Service (Mailgun, Mandrill, ...)
+3. Easy way to send emails via SMTP or Web Service (Mailgun, Mandrill, etc.)
 4. Validate & Sanitise every user's inputs.
-5. Simple application layout.
+5. Strong emphasis on security.
+6. Extendable application layout.
 
-=== Conventions Over Configuration
+== Conventions Over Configuration
 
 This software paradigm is the core of AdonisJs. We attempt to *decrease the time you loose* when taking decisions by following well-known convention through popular Framework like Rails, Django or Laravel without losing any flexibility. For example, if you have a User model the corresponding table in the database should be named `users` by default (of course you can change this by overriding a property on your model).
 
-You can learn more about this paradigm on https://en.wikipedia.org/wiki/Convention_over_configuration[the wikipedia page].
+You can learn more about this paradigm on https://en.wikipedia.org/wiki/Convention_over_configuration[the Wikipedia page].
 
-=== Simplest Example
+== Simplest Example
 
-As we said, AdonisJs attempts to remove the big pieces of unmanageable code with *simple readable API*.
+As we said, AdonisJs attempts to remove the big pieces of unmanageable code with *simple, readable API*.
 
 1. AdonisJs removes the unnecessary callbacks from your code and introduces https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators[ES2015 Generators].
-2. It organises everything into different directories so that you can easily know where are your files.
+2. It organizes everything into different directories so that you can quickly know where are your files.
 3. It does not add anything to the globals except the `use` and `make` function that you will learn about them soon.
 
-If we tell you that within 6 lines of code you are able to fetch all users from database and send them back as `JSON` response could you believe us?
+If we tell you that within six lines of code you can fetch all users from the database and send them back as `JSON` response could you believe us?
 
 [source, javascript]
 ----
@@ -40,9 +42,21 @@ const Route = use('Route')
 const User = use ('App/Model/User')
 
 Route.get('/', function * (request, response) {
-    const users = yield User.all()
-    response.json(users)
+  const users = yield User.all()
+  response.json(users)
 })
 ----
 
-Hopefully this quick overview has intrigant you and don't worry if you do not fully understand the code above the Getting Started chapter is for you!
+Hopefully, this quick overview has intriguing you and don't worry if you do not fully understand the code above the Getting Started chapter is for you!
+
+== Where To Start
+Learning a new framework can be overwhelming at first. Since AdonisJs ships with a bunch of pre-configured modules/addons, you will always feel right at home without spending time in researching for the best modules.
+
+To start your development journey, we recommend you to read to start by reading following topics:
+
+* link:routing[Routing]
+* link:request[Request]
+* link:response[Response]
+* link:views[Views] and link:controllers[Controllers]
+
+Also make sure to follow the link:installation[Installation] guide to setup the essentials.
