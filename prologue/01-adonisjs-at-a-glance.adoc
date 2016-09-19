@@ -4,7 +4,7 @@ categories:
 - prologue
 ---
 
-== AdonisJs at a Glance
+= AdonisJs at a Glance
 
 toc::[]
 

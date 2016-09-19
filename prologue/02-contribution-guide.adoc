@@ -4,7 +4,7 @@ categories:
 - prologue
 ---
 
-== Contribution Guide
+= Contribution Guide
 
 toc::[]
 

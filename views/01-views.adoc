@@ -1,7 +1,7 @@
 ---
 permalink: views
 categories:
-- getting-started
+- views
 ---
 
 = Views
