@@ -1,0 +1,86 @@
+:toc:
+:linkattrs:
+= Cookies
+
+Reading/Writing cookies in AdonisJs is a breeze. You make use of link:request[request] and link:response[response] instances passed to all the controller methods and route closures to work with cookies.
+
+NOTE: To keep your cookies encrypted make sure to define `APP_KEY` inside the *.env* file. Alternatively, you can make use of `./ace generate:key` command to generate the key for you.
+
+
+== Basic Example
+Let's take a basic example of tracking page views for a given user by storing the count inside cookies.
+
+[source, javascript]
+----
+Route.get('/', function * (request, response) {
+  const pageViews = request.cookie('pageViews', 0) // reading
+  pageViews++
+  response.cookie('pageViews', pageViews) // writing
+})
+----
+
+== Reading Cookies
+Cookies are read using the *request instance*.
+
+==== cookie(key, [defaultValue])
+Returns the cookie value for a given key. The default value is returned when the existing value is `null` or `undefined`.
+
+[source, javascript]
+----
+Route.get('/', function * (request, response) {
+  const cartTotal = request.cookie('cartTotal')
+  // or
+  const cartTotal = request.cookie('cartTotal', 0)
+})
+----
+
+==== cookies
+Get all cookies back as an object.
+
+[source, javascript]
+----
+Route.get('/', function * (request, response) {
+  const cookies = request.cookies()
+})
+----
+
+== Writing/Deleting Cookies
+To create/delete cookies you have to make use of the *response instance*.
+
+==== cookie(key, value, [options])
+
+[source, javascript]
+----
+Route.get('/', function * (request, response) {
+  response.cookie('cartValue', 210)
+
+  // or
+  response.cookie('cartValue', 210, {
+    httpOnly: true
+  })
+})
+----
+
+.Options
+[options="header"]
+|====
+| Property | type | description
+| path | String | Cookie path.
+| expires | Date | Absolute expiration date for the cookie. Must be a valid *Date object*.
+| maxAge | String | Relative max age of the cookie from when the client receives it *(in seconds)*.
+| domain | String | Domain for the cookie.
+| secure | Boolean | Marks the cookie to be used with HTTPS only.
+| httpOnly | Boolean | Flags the cookie to be accessible only by the web server. Cannot be accessed using `document.cookie`.
+| firstPartyOnly | Boolean | Defines cookie to be used by the same domain only.
+|====
+
+==== clearCookie(key)
+Removes the existing cookie.
+
+[source, javascript]
+----
+Route.get('/checkout', function * (request, response) {
+  response.clearCookie('cartValue')
+  response.send('Order Confirmed')
+})
+----
