@@ -1,7 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: seeds-and-factories
+categories:
+- database
+---
 
 = Seeds And Factories
+
+toc::[]
 
 As link:migrations[Migrations] helps you in automating the process of setting up database schema. Database *Seeds & Factories* helps in seeding the database with dummy data. Dummy data can be used while running tests or setting up the initial state of an application.
 

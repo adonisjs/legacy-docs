@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: config
+categories:
+- getting-started
+---
+
 = Configuration
+
+toc::[]
 
 The first step towards removing the spaghetti code is to find a dedicated place for storing application configuration. AdonisJs makes use of the `config` directory for same. Every new project created using `adonis-cli` comes with a bunch of pre-configured config files. Also, you are free to create your application config files inside the same directory.
 

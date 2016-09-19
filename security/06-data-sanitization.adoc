@@ -1,7 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: data-sanitization
+categories:
+- security
+---
 
 = Data Sanitization
+
+toc::[]
 
 AdonisJs automatically attempts to keep your websites safe by preventing SQL injection, escaping HTML inside views and limiting the size of file uploads. Still, there are instances, where you are required to sanitize user inputs before using consuming them manually.
 

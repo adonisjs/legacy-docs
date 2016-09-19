@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: routing
+categories:
+- getting-started
+---
+
 = Routing
+
+toc::[]
 
 HTTP routes open the gateway for outside world to interact with your application using URLs. AdonisJs router maps URL's to actions and will invoke them once the end-user calls a certain URL.
 

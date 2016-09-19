@@ -1,7 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: query-builder
+categories:
+- database
+---
 
 = Query Builder
+
+toc::[]
 
 AdonisJs Query builder gives you a unified syntax to interact with SQL databases using Javascript methods. This guide is a reference to all the available methods on query builder.
 

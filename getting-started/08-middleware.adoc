@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: middleware
+categories:
+- getting-started
+---
+
 = Middleware
+
+toc::[]
 
 HTTP Middleware is a layer of methods executed before your Routes actions. They have more than a single use case. For example:
 

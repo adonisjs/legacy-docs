@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: sessions
+categories:
+- web-development-tools
+---
+
 = Sessions
+
+toc::[]
 
 AdonisJs has out of the box support for saving long-lived sessions to a single request only sessions called *Flash Messages*. Also, you can choose between one of the available drivers to save the session data.
 

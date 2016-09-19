@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: authentication
+categories:
+- web-development-tools
+---
+
 = Authentication
+
+toc::[]
 
 Every Web application deals with User Management and Authentication at some stage. AdonisJs Authentication provider is a fully featured system to authenticate HTTP requests using multiple authenticators. Using authenticators, you can build traditional *session based* login systems to secure *REST API's*.
 

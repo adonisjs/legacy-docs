@@ -1,11 +1,12 @@
 ---
-title: Contribution Guide
-permalink: contribution-guide
+permalink: contributing
+categories:
+- prologue
 ---
 
 == Contribution Guide
 
-:toc:
+toc::[]
 
 All Open Source projects are maintained and backed by a *vibrant community* of users and collaborators.
 

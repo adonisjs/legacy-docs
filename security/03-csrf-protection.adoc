@@ -1,7 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: csrf-protection
+categories:
+- security
+---
 
 = CSRF Protection
+
+toc::[]
 
 Cross-site request forgery(CSRF) allows an attacker to perform actions on behalf of another user without their knowledge or permission.
 

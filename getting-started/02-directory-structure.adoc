@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: directory-structure
+categories:
+- getting-started
+---
+
 = Directory Structure
+
+toc::[]
 
 Directory structure may feel overwhelming at first since there are a handful of pre-configured directories. Gradually you will understand the benefit of dividing the logical entities into multiple directories since it keeps your code maintainable and easy to search.
 

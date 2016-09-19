@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: database-setup
+categories:
+- database
+---
+
 = Database Setup
+
+toc::[]
 
 AdonisJs has out of the box for SQL databases and offers a unified Javascript API to interact with databases. Below is the list of supported databases.
 

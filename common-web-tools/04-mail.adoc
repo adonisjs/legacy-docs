@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: mail
+categories:
+- web-development-tools
+---
+
 = Mail
+
+toc::[]
 
 Sending email is a common task for web applications. AdonisJs official *Mail Provider* makes it so easy and intuitive to send emails using one of the available drivers.
 

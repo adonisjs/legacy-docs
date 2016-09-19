@@ -1,7 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: security-introduction
+categories:
+- security
+---
 
 = Introduction
+
+toc::[]
 
 Keeping web applications secure is one of the most important things. AdonisJs comes with a bunch of security and data sanitization layers to keep your web apps away from common attacks.
 

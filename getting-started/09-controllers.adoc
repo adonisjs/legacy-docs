@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: controllers
+categories:
+- getting-started
+---
+
 = Controllers
+
+toc::[]
 
 Controllers are attached to routes and are the common point of interaction between your models and views.
 

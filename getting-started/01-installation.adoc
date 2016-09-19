@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: installation
+categories:
+- getting-started
+---
+
 = Insallation
+
+toc::[]
 
 Installing AdonisJs is a relatively straightforward process and will only take a few minutes. Feel free to link:https://github.com/adonisjs/adonis-framework/issues[file an issue, window="_blank"] if you ever face any problems during the installation process.
 

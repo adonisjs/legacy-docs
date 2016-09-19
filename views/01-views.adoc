@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: views
+categories:
+- getting-started
+---
+
 = Views
+
+toc::[]
 
 AdonisJs has a solid View engine built on top of link:http://mozilla.github.io/nunjucks/templating.html[nunjucks, window="_blank"]. Everything from nunjucks is fully supported with some extra features unique to AdonisJs only.
 

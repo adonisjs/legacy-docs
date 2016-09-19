@@ -1,8 +1,15 @@
-:toc:
-:linkattrs:
+---
+permalink: env
+categories:
+- getting-started
+---
+
 = Environment Variables
 
-We all write applications in a development environment and deploy them in the production environment on our servers. Now it is not only the terms or operating systems which get changed in development or production environment, instead quite a few other things get changed. For example:
+toc::[]
+
+We all write applications in a development environment and deploy them in the production environment on our servers. Now it is not only the terms or operating systems which get changed in development or production environment, instead quite a few other
+things get changed. For example:
 
 1. In the development environment, you will use your personal email to send emails, whereas in production you may use the company email. Same holds true for 3rd party services API keys.
 2. During development, you may not want to cache the views, whereas in production views caching is required for performance.

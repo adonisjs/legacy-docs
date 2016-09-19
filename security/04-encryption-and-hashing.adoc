@@ -1,7 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: encryption-hashing
+categories:
+- security
+---
 
 = Encryption & Hashing
+
+toc::[]
 
 Data ships with a couple of providers for hashing values and encrypting data. Hashing values are different from encryption since hashed values cannot be decrypted once encrypted that is not the case with encryption.
 

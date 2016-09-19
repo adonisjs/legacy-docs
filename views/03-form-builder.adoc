@@ -1,7 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: form-builder
+categories:
+- getting-started
+---
 
 = Form Builder
+
+toc::[]
 
 Form builds make it easier to create quick and maintainable HTML forms. Think of a situation where to set the form action to registered route and when route definition gets changed you have to come back to the views making sure your form action points to the right URL.
 

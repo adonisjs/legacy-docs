@@ -1,7 +1,13 @@
-:toc:
-:linkattrs:
+---
+permalink: response
+categories:
+- getting-started
+---
 
 = Response
+
+toc::[]
+
 To finish an HTTP request, you must explicitly end the response. AdonisJs *Response* class instance makes it easier for you render nunjucks views or send formatted JSON for building RESTful API's.
 
 == Basic Example

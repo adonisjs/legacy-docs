@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: interactive-shell
+categories:
+- web-development-tools
+---
+
 = Interactive Shell Aka Ace
+
+toc::[]
 
 Ace is a powerful command line tool crafted for AdonisJs. So far you have been using lots of ace commands to generate *controllers*, *models*, run *migrations*, etc. In this guide, we will learn about the internals of Ace and how to create commands.
 

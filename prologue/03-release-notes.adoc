@@ -1,12 +1,11 @@
 ---
-title: Release Notes
 permalink: release-notes
+categories:
+- prologue
 ---
 
 == Release Notes
 
-:toc:
+toc::[]
 
 === AdonisJs 3.1
-
-...

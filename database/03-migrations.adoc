@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: migrations
+categories:
+- database
+---
+
 = Migrations
+
+toc::[]
 
 Database Migrations is a process of creating, altering and dropping database tables from code, instead of writing SQL queries. AdonisJs has out of the box support for database migrations so that you can set up your database tables within the application codebase.
 

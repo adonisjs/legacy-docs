@@ -1,7 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: templating
+categories:
+- getting-started
+---
 
 = Nunjucks Templates
+
+toc::[]
 
 This is a reference guide for AdonisJs template engine, covering topics on available *tags*, *filters*, and *methods* to be used inside your views. Read the views guide to understanding how views work in AdonisJs.
 

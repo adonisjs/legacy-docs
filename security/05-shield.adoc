@@ -1,7 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: shield
+categories:
+- security
+---
 
 = Shield Middleware
+
+toc::[]
 
 Apart from link:cors[Cors] and link:csrf-protection[CSRF], AdonisJs also prevents your web applications from other malware attacks like *XSS*, *Content Sniffing*, *Script Injection*, etc. Every new application is pre-configured to make use of the `shield` middleware which keeps your websites secure.
 

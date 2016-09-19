@@ -1,7 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: request
+categories:
+- getting-started
+---
 
 = Request
+
+toc::[]
 
 AdonisJs makes it super easy to access HTTP request information. All controller methods and route closures receive an instance of the `Request` class, which is a sugared layer on top of link:https://nodejs.org/dist/latest-v6.x/docs/api/http.html#http_class_http_server[Node.js HTTP request, window="_blank"].
 

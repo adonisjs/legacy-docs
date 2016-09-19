@@ -1,7 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: cors
+categories:
+- security
+---
 
 = CORS
+
+toc::[]
 
 Cross-Origin Resource Sharing(CORS) is a way to allow incoming HTTP requests from different domains. It is very common in AJAX applications where the browser will block all cross-domain requests if the server does not authorize them. Read more about CORS link:https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS[here, window="_blank"].
 

@@ -1,6 +1,12 @@
-:toc:
-:linkattrs:
+---
+permalink: cookies
+categories:
+- web-development-tools
+---
+
 = Cookies
+
+toc::[]
 
 Reading/Writing cookies in AdonisJs is a breeze. You make use of link:request[request] and link:response[response] instances passed to all the controller methods and route closures to work with cookies.
 

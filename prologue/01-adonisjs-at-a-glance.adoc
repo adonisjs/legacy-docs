@@ -1,11 +1,12 @@
 ---
-title: AdonisJs at a Glance
-permalink: adonisjs-at-a-glance
+permalink: adonisjs-introduction
+categories:
+- prologue
 ---
 
 == AdonisJs at a Glance
 
-:toc:
+toc::[]
 
 AdonisJs is a https://nodejs.org[Node.js] Framework with pre-configured answers to all of your questions. It encapsulates the boring parts of Web development and offers you a nice and clean API to work with.
 
@@ -28,7 +29,7 @@ You can learn more about this paradigm on https://en.wikipedia.org/wiki/Conventi
 As we said, AdonisJs attempts to remove the big pieces of unmanageable code with *simple readable API*.
 
 1. AdonisJs removes the unnecessary callbacks from your code and introduces https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators[ES2015 Generators].
-2. It organises everything into different directories so that you can easily know where are your files. 
+2. It organises everything into different directories so that you can easily know where are your files.
 3. It does not add anything to the globals except the `use` and `make` function that you will learn about them soon.
 
 If we tell you that within 6 lines of code you are able to fetch all users from database and send them back as `JSON` response could you believe us?

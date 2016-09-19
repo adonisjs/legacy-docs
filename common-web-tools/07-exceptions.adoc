@@ -1,0 +1,130 @@
+---
+permalink: error-and-exceptions
+categories:
+- web-development-tools
+---
+
+= Error & Exceptions Handling
+
+toc::[]
+
+AdonisJs takes an additional step towards handling and throwing exceptions by making sure exceptions throwing by the core of the framework are more descriptive and helpful for debugging. Also it offers additional tools & practices to strcuture well designed exception messages.
+
+== Why Are Exceptions Important?
+Exceptions do not get the care they deserve. Majority of programmers thinks of exceptions a way of terminating the process as something bad happened. Even worse exception messages do not share much context on how to fix the problem and leaves it to the end-user to figure out the root cause.
+
+With AdonisJs we tag all exceptions with a unique *Error code* and you can refer the documentation of the given error code to understand the root cause of the exception.
+
+Not only that, we also offer you a nice npm package called link:https://npmjs.org/package/node-exceptions[node-exceptions, window="_blank"] to setup application specific exception classes to throw personal and meaningful exceptions.
+
+== Error Codes
+Below is the list of error codes thrown by the core of AdonisJs. You can reference them to understand the context of the exception.
+
+All exceptions are divided into multiple categories like *General*, *Database*, *Redis*, etc.
+
+=== General
+General exceptions are raised from any part of the framework.
+
+[options="header"]
+|====
+| Error Code | Description
+| E_MISSING_APPKEY | App key is used to encrypted cookies or any other sensitive value. This exception is raised when `appKey` is not defined inside `config/app.js` file which refers to a value inside `.env` file.
+
+You can make use of an ace command to generate the app key for you. `./ace key:generate`.
+
+| E_MALFORMED_JSON | This exception is raised when a function is expecting the parameter to be a valid `JSON` string but unable to call `JSON.parse` method on it.
+
+| E_MISSING_PARAMETER | The most often raised exception when a parameter expected by a method is not being passed or is `undefined`.
+
+| E_INVALID_PARAMETER | This exception is raised when the parameter value is not of valid type. For example: A method expect `age` to be *Number* but instead a *String* with passed.
+
+| E_MISSING_CONFIG | When configuration for a given key is missing. The exception is generally raised by *Service providers* when they are trying to access configuration and unable to find it inside the `config` directory.
+
+| E_UNDEFINED_METHOD | This exception is raised when client is trying to access a non-existing method.
+|====
+
+=== Encryption Provider
+Below is the list of exceptions only raised by the link:encryption[Encryption provider].
+
+[options="header"]
+|====
+| Error Code | Description
+| E_INVALID_ENCRPYTION_CIPHER | This exception is raised when a unsupported cipher is used to encrypt/decrypt a value.
+| E_INVALID_ENCRYPTION_PAYLOAD | This exception is raised when the payload passed to the `encrypt` method is not readable.
+| E_INVALID_ENCRYPTION_MAC | This exception is raised when an unsupported encryption mac is defined to encrypt/decrypt a value.
+|====
+
+=== Form Builder & Route Provider
+Below is the list of all the exceptions only raised by the link:form-buider[Form builder] or the link:routing[Route provider].
+
+[options="header"]
+|====
+| Error Code | Description
+| E_MISSING_ROUTE | This exception is raised when you are trying to reference a non-existing *Route* inside your views. The most common place is inside the builder.
+| E_MISSING_ROUTE_ACTION | Exception is raised by the link:form-builder[Form builder] when an unregistered controller/route action is passed to the `open` method.
+|====
+
+=== Event Provider
+
+[options="header"]
+|====
+| Error Code | Description
+| E_MISSING_NAMED_EVENT | The link:events[Event] provider will raise this exception when you are trying to remove an unregistered named listener.
+|====
+
+=== Session Provider
+
+[options="header"]
+|====
+| Error Code | Description
+| E_INVALID_SESSION_DRIVER | Exception is raised when the session driver defined inside the `config/session.js` file does not exists.
+|====
+
+=== Middleware Provider
+
+[options="header"]
+|====
+| Error Code | Description
+| E_MISSING_NAMED_MIDDLEWARE | This exception is raised when an unregistered named middleware is referenced on the routes.
+|====
+
+=== Database Provider
+
+[options="header"]
+|====
+| Error Code | Description
+| E_MISSING_MODEL_FACTORY | This exception is raised when you try to access an unregistered model factory. Make sure to define model factories/blueprints inside `database/factory.js` file.
+| E_MISSING_DATABASE_FACTORY | This exception is raised when you try to access an unregistered database factory. Make sure to define model factories/blueprints inside `database/factory.js` file.
+| E_MISSING_DATABASE_ROW | This exception is raised by Lucid model methods like *findOrFail* and *findByOrFail* when unable to find a record with the given value.
+| E_INVALID_MODEL_STATE | This exception is raised when you are trying to save an empty model or trying to update a delete model instance.
+| E_UNSAVED_MODEL_INSTANCE | This exception is raised when you are trying to save a relationship on a model which itself is unsaved.
+| E_INVALID_RELATION_INSTANCE | This exception is raised when you pass an invalid model instance to the relationship `save` method.
+| E_INVALID_RELATION_METHOD | This exception is raised when you call an *undefined* method on a relationship instance. For example: *HasOne* relationship does not have a `paginate` method.
+| E_MISSING_DATABASE_RELATION | This exception is raised when you are trying to access a relationship which was never defined.
+| E_LOCK_ON_MIGRATIONS | This exception is raised when you are parallely trying to execute migrations more than once.
+| E_INVALID_SCHEMA_FILE | This exception is raised when the *schema* files inside `database/migrations` folder are not exporting an *ES2015* class.
+| E_UNSAFE_ENVIRONMENT | This exception is raised when you are trying to execute unsafe operations in production environment. For example: Running migrations in production.
+| E_INVALID_MODEL_TRAIT | This exception is raised when a model trait does not have a `register` method on it.
+|====
+
+=== Mail Provider
+
+[options="header"]
+|====
+| Error Code | Description
+| E_INVALID_MAIL_DRIVER | This exception is raised when you are trying to access an unregistered mail driver.
+| E_INVALID_MAIL_VIEW | This exception is raised when you are trying to call the `Mail.send` method without a valid view.
+|====
+
+=== IoC Container
+[options="header"]
+|====
+| Error Code | Description
+| E_INVALID_IOC_MANAGER | This exception is raised when you are trying to register a manager to the IoC container without the `extend` method.
+| E_INVALID_MAKE_STRING | This exception is raised when a string passed to `Ioc.makeFunc` is incorrect. Strings needs to have *dot(.)* seperated class and function name. For example: `Ioc.makeFunc('UserController.store')`
+|====
+
+== Throwing Exceptions
+It is recommended to throw contextual exception, since it makes it easier for the end user to act upon them. AdonisJs makes use of link:https://npmjs.org/package/node-exceptions[node-exception, window="_blank"] an npm module to strcuture exceptions. You can learn more about it via it's documentation.
+
+== Catching Exception
