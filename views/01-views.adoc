@@ -97,7 +97,7 @@ To output the value of a variable, you make use of curly braces.
 ----
 
 === Conditionals
-Conditionals are reference with a curly brace and a `%` sign.
+Conditionals are referenced with a curly brace and a `%` sign.
 
 [source, twig]
 ----
@@ -355,6 +355,7 @@ view: {
 ----
 
 .(.env)
+[source, bash]
 ----
 CACHE_VIEWS=true
 ----

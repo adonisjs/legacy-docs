@@ -209,9 +209,9 @@ Factory.blueprint('App/Model/User', (fake) => {
 ----
 
 == Password Hashing
-link:authentication[Authentication] provider makes use of link:hashing[Hash] provider when verifying the user password. Make sure you are hashing your passwords before saving them to the database.
+link:authentication[Authentication] provider makes use of link:encryption-and-hashing[Hash] provider when verifying the user password. Make sure you are hashing your passwords before saving them to the database.
 
-The best place to hash the password is inside a Model `beforeCreate` hook. You can learn about hooks link:database-hooks[here].
+The best place to hash the password is inside a Model `beforeCreate` hook. You can learn about hooks link:lucid-hooks[here].
 
 .Generating A Hook
 [source, bash]

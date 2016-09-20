@@ -27,6 +27,14 @@ Event.on('user.registered', 'User.registered')
 
 3. The `app/Listeners` directory is dedicated for storing Event listeners.
 4. When binding listeners to the events, you are not required to enter the entire namespace. For example A listener stored as `app/Listeners/User.js` will be referenced as `User.<method>`.
+5. Make use of `make:listener` command to create a new event listener.
++
+[source, bash]
+----
+./ace make:listener User
+
+# create: app/Listeners/User.js
+----
 
 == Configuration
 The configuration for Events provider is stored inside `config/events.js` file. Under the hood AdonisJs makes use of link:https://github.com/asyncly/EventEmitter2[EventEmitter 2, window="_blank"] and implements all the available configuration options.

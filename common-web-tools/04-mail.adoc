@@ -315,7 +315,7 @@ You can also add new drivers to the *Mail provider* by extending it and here are
 1. AdonisJs internally uses link:https://github.com/nodemailer/nodemailer[nodemailer, window="_blank"] to send emails. You can also wrap an existing nodemailer transport to a driver.
 2. Your driver must have a `send` method.
 
-Let's make use of link:https://github.com/killmenot/nodemailer-postmark-transport[nodemailer postmark transport] to create a new driver and register it via IoC container.
+Let's make use of link:https://github.com/killmenot/nodemailer-postmark-transport[nodemailer postmark transport, window="_blank"] to create a new driver and register it via IoC container.
 
 === Writing Driver
 

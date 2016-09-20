@@ -10,7 +10,7 @@ toc::[]
 
 AdonisJs has out of the box support for saving long-lived sessions to a single request only sessions called *Flash Messages*. Also, you can choose between one of the available drivers to save the session data.
 
-NOTE: To keep your session cookie encrypted, make sure to define `APP_KEY` inside the *.env* file. Alternatively, you can make use of `./ace generate:key` command to generate the key for you.
+NOTE: To keep your session cookie encrypted, make sure to define `APP_KEY` inside the *.env* file. Alternatively, you can make use of `./ace key:generate` command to generate the key for you.
 
 == Drivers
 Below is the list of available drivers.

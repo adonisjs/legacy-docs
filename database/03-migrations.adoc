@@ -12,7 +12,7 @@ Database Migrations is a process of creating, altering and dropping database tab
 
 == Introduction
 
-.Naive Way
+=== Naive Way
 The *naive* approach of database management is to create the SQL database tables manually. Which work, but it is not great as it requires a lot of manual re-work.
 
 Let's take an example of a standard procedure of creating database tables.
@@ -23,7 +23,7 @@ Let's take an example of a standard procedure of creating database tables.
 4. You cannot run automated tests on TravisCI(or similar) as you need access to the server to create the database tables.
 5. Finally, when deploying the app in production, you need to make a remote connection to your server database to create those tables manually.
 
-.Migrations
+=== Migrations
 With migrations *SQL schema* is part of your code base which means once your co-workers will check out the code from a git client, they will get the database schema with it, and any progressive changes made by them are available to you.
 
 == About Migrations

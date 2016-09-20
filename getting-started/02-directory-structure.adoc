@@ -31,9 +31,9 @@ Directory structure may feel overwhelming at first since there are a handful of 
 
 == The (app) Directory
 
-NOTE: Make sure to learn more about link:/dependency-injection[Dependency injection] and link:/ioc-container[Ioc Container] to understanding the concept of Autoloading.
+NOTE: Make sure to learn more about link:dependency-injection[Dependency injection] and link:ioc-container[Ioc Container] to understand the concept of Autoloading.
 
-`app` directory is the home for your code and is autoloaded under the namespace `App`. If you will open `package.json` file, you will find the following piece of code inside it.
+The `app` directory is the home for your code and is autoloaded under the namespace `App`. If you will open `package.json` file, you will find the following piece of code inside it.
 
 [source, json]
 ----
@@ -96,7 +96,7 @@ All database related files are stored inside the `database` directory. Since `SQ
 [options="header"]
 |====
 | Directory/File | Purpose
-| migrations | This directory has all the migrations you have created using the `make:migration` command. Learn more about migrations link:/migrations[here].
+| migrations | This directory has all the migrations you have created using the `make:migration` command. Learn more about migrations link:migrations[here].
 | seeds | Seeds are used to prefill database with dummy data. They are helpful in setting up an initial state of your application.
 | factory.js | Factories are used to generate fake data for Lucid models or database tables. You will find yourself using factories a lot when writing tests. `factory.js` is the place you define blueprints for the dummy data.
 |====
@@ -104,7 +104,7 @@ All database related files are stored inside the `database` directory. Since `SQ
 == The (providers) Directory
 If you ever feel a need for writing your providers, this is the place to keep them in. It is advisable to publish reusable providers on *npm*.
 
-Ideally, there are no strict rules of creating providers, just make sure to read the link:/service-providers[service providers] documentation to understand how to build your providers. Service providers inside the `providers` directory are registered by defining an absolute path inside the `app.js` file.
+Ideally, there are no strict rules of creating providers, just make sure to read the link:service-providers[service providers] documentation to understand how to build your providers. Service providers inside the `providers` directory are registered by defining an absolute path inside the `app.js` file.
 
 [source, javascript]
 .bootstrap/app.js

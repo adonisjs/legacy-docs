@@ -8,7 +8,7 @@ categories:
 
 toc::[]
 
-AdonisJs takes an additional step towards handling and throwing exceptions by making sure exceptions throwing by the core of the framework are more descriptive and helpful for debugging. Also, it offers additional tools & practices to structure well-designed exception messages.
+AdonisJs takes an additional step towards handling and throwing exceptions by making sure exceptions thrown by the core of the framework are more descriptive and helpful for debugging. Also, it offers additional tools & practices to structure well-designed exception messages.
 
 == Why Are Exceptions Important?
 Exceptions do not get the care they deserve. The majority of programmers thinks of exceptions a way of terminating the process as something bad happened. Even worse exception messages do not share much context on how to fix the problem and leaves it to the end-user to figure out the cause.
@@ -44,7 +44,7 @@ You can make use of an ace command to generate the app key for you. `./ace key:g
 |====
 
 === Encryption Provider
-Below is the list of exceptions only raised by the link:encryption[Encryption provider].
+Below is the list of exceptions only raised by the link:encryption-and-hashing[Encryption provider].
 
 [options="header"]
 |====
@@ -55,7 +55,7 @@ Below is the list of exceptions only raised by the link:encryption[Encryption pr
 |====
 
 === Form Builder & Route Provider
-Below is the list of all the exceptions only raised by the link:form-buider[Form builder] or the link:routing[Route provider].
+Below is the list of all the exceptions only raised by the link:form-builder[Form builder] or the link:routing[Route provider].
 
 [options="header"]
 |====

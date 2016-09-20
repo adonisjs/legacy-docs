@@ -13,7 +13,7 @@ AdonisJs is a link:https://nodejs.org[Node.js, window="_blank"] MVC framework to
 Below is the list of core features:
 
 [pretty-list]
-1. Powerful https://en.wikipedia.org/wiki/Object-relational_mapping[ORM] to make secure SQL queries.
+1. Powerful link:https://en.wikipedia.org/wiki/Object-relational_mapping[ORM, window="_blank"] to make secure SQL queries.
 2. API & Session based Authentication System.
 3. Easy way to send emails via SMTP or Web Service (Mailgun, Mandrill, etc.)
 4. Validate & Sanitise every user's inputs.
@@ -24,13 +24,13 @@ Below is the list of core features:
 
 This software paradigm is the core of AdonisJs. We attempt to *decrease the time you loose* when taking decisions by following well-known convention through popular Framework like Rails, Django or Laravel without losing any flexibility. For example, if you have a User model the corresponding table in the database should be named `users` by default (of course you can change this by overriding a property on your model).
 
-You can learn more about this paradigm on https://en.wikipedia.org/wiki/Convention_over_configuration[the Wikipedia page].
+You can learn more about this paradigm on link:https://en.wikipedia.org/wiki/Convention_over_configuration[the Wikipedia page, window="_blank"].
 
 == Simplest Example
 
 As we said, AdonisJs attempts to remove the big pieces of unmanageable code with *simple, readable API*.
 
-1. AdonisJs removes the unnecessary callbacks from your code and introduces https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators[ES2015 Generators].
+1. AdonisJs removes the unnecessary callbacks from your code and introduces link:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators[ES2015 Generators, window="_blank"].
 2. It organizes everything into different directories so that you can quickly know where are your files.
 3. It does not add anything to the globals except the `use` and `make` function that you will learn about them soon.
 
@@ -52,7 +52,7 @@ Hopefully, this quick overview has intriguing you and don't worry if you do not 
 == Where To Start
 Learning a new framework can be overwhelming at first. Since AdonisJs ships with a bunch of pre-configured modules/addons, you will always feel right at home without spending time in researching for the best modules.
 
-To start your development journey, we recommend you to read to start by reading following topics:
+To start your development journey, we recommend you to start by reading following topics:
 
 * link:routing[Routing]
 * link:request[Request]

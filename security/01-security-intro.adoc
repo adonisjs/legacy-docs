@@ -27,6 +27,7 @@ const users = yield Database
 ----
 
 .Correct Way
+[source, javascript]
 ----
 const username = request.param('username')
 const users = yield Database
@@ -37,7 +38,7 @@ const users = yield Database
 ==== CheckList
 [pretty-list]
 * Make use of link:database[database] or link:lucid[lucid] to perform database operations and never run direct SQL queries.
-* Make sure to sanitize user data using link:validator#_sanitization[sanitizer] to keep your database secure.
+* Make sure to sanitize user data using link:validator#_sanitize_data_rules[sanitizer] to keep your database secure.
 * Always run *prepared statements* statements by passing query values as an array to the `raw` method.
 
 
@@ -49,7 +50,7 @@ Session configuration is saved inside `config/session.js` file you can configure
 
 ==== Important Settings
 [pretty-list]
-* Make sure `httpOnly` is set to true. Keeping it to *false* will make it accessible using Javascript via `document.cookie`.
+* Make sure `httpOnly` is set to *true*. Keeping it to *false* will make it accessible using Javascript via `document.cookie`.
 * Also `sameSite` property makes sure that your session cookie is not visible/accessible from different domains.
 
 == Forms & Views
@@ -123,6 +124,7 @@ uploads: {
 * Always rename files before uploading.
 * Never share the actual location of the file with the end users. Instead, try to save the file reference inside the database with a *unique id* and setup a route to server the file using the `id`.
 +
+
 .Example
 [source, javascript]
 ----

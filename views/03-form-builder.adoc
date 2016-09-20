@@ -8,7 +8,7 @@ categories:
 
 toc::[]
 
-Form builds make it easier to create quick and maintainable HTML forms. Think of a situation where to set the form action to registered route and when route definition gets changed you have to come back to the views making sure your form action points to the right URL.
+Form builds make it easier to create quick and maintainable HTML forms. Think of a situation where you set the form action to a registered route and when route definition gets changed you have to come back to the views making sure your form action points to the right URL.
 
 Form builder gives you the API to bind routes and controllers directly to your forms, making it easier to make changes at one place and same gets reflected within your views.
 

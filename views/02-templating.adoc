@@ -8,7 +8,7 @@ categories:
 
 toc::[]
 
-This is a reference guide for AdonisJs template engine, covering topics on available *tags*, *filters*, and *methods* to be used inside your views. Read the views guide to understanding how views work in AdonisJs.
+This is a reference guide for AdonisJs template engine, covering topics on available *tags*, *filters*, and *methods* to be used inside your views. Read the link:views[views guide] to understanding how views work in AdonisJs.
 
 == Tags
 Tags are blocks which define logic operations inside your views. Below is the list of available tags and their usages.

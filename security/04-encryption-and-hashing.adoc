@@ -1,5 +1,5 @@
 ---
-permalink: encryption-hashing
+permalink: encryption-and-hashing
 categories:
 - security
 ---

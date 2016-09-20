@@ -20,7 +20,7 @@ Ace is a powerful command line tool crafted for AdonisJs. So far you have been u
 5. You must register your commands inside `bootstrap/app.js` file before using them.
 
 == Creating Your First Command
-We are going to create a command to pull random quotes of *Paul Graham* using link:http://gophergala.github.io/wisdom[Wisdom API] and display it on the terminal.
+We are going to create a command to pull random quotes of *Paul Graham* using link:http://gophergala.github.io/wisdom[Wisdom API, window="_blank"] and display it on the terminal.
 
 .Creating A New Command
 [source, bash]
@@ -28,9 +28,7 @@ We are going to create a command to pull random quotes of *Paul Graham* using li
 ./ace make:command Quote
 ----
 
-.Installing Got
-link:https://npmjs.org/package/got[Got] is an npm module to make HTTP requests within your Javascript code.
-
+.Installing Got (npm module to make HTTP requests)
 [source, bash]
 ----
 npm i --save got
@@ -69,7 +67,7 @@ module.exports = Quote
 ----
 
 <1> Each command should be inherited from the base `Command` class.
-<2> The signature is used to define the command name and its expectations. Learn more about Signature xref:[here].
+<2> The signature is used to define the command name and its expectations. Learn more about Signature xref:_command_signature[here].
 <3> Description is displayed on the help screen. It is a good place to tell the end user about the command.
 <4> The `handle` is the body of your command and called automatically by Ace when the command gets executed.
 
@@ -119,6 +117,7 @@ get signature () {
 ----
 
 === Arguments
+Commands can recieve named arguments.
 
 ==== Command With Required Argument(s)
 Curly braces surround arguments. A single command can have as many arguments as it wants.

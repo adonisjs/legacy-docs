@@ -302,6 +302,30 @@ const user = yield User.find(1)
 const token = yield request.auth.generate(user)
 ----
 
+==== validate(uid, password)
+Validate user credentials to see if they are valid or not.
+
+[source, javascript]
+----
+try {
+  yield request.auth.validate(uid, password)
+} catch (e) {
+  response.unauthorized({error: e.message})
+}
+----
+
+==== attempt(uid, password)
+Validates the user credentials and generates a JWT token if they valid.
+
+[source, javascript]
+----
+try {
+  const token = yield request.auth.attempt(uid, password)
+} catch (e) {
+  response.unauthorized({error: e.message})
+}
+----
+
 == API Tokens
 Personal API tokens are like the password for a given account. The majority of Web applications offers API-based authentication so that their customers can generate these tokens for developers without sharing their actual Login details.
 
