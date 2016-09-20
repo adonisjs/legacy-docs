@@ -1,0 +1,148 @@
+---
+permalink: helpers
+categories:
+- web-development-tools
+---
+
+= Helpers
+
+toc::[]
+
+The Helpers Provider gives a handful of convenient methods to get *absolute paths* to certain directories of your application. It is helpful for the 3rd party *Service providers* since relying on relative paths is not very useful.
+
+== Basic Example
+Anywhere inside your application, you can make use of Helper's provider to get paths to different directories.
+
+[source, javascript]
+----
+const Helpers = use('Helpers')
+const storagePath = Helpers.storagePath()
+----
+
+== Helper Methods
+Below is the list of available methods on the Helpers provider.
+
+==== basePath
+Returns path to the application root.
+
+[source, javasript]
+----
+Helpers.basePath()
+----
+
+==== appPath
+Returns path to the app directory.
+
+[source, javascript]
+----
+Helpers.appPath()
+----
+
+==== publicPath([toFile])
+Returns path to the public directory or path to a file inside the directory.
+
+[source, javascript]
+----
+const publicPath = Helpers.publicPath()
+// or
+const cssFile = Helpers.publicPath('style.css')
+----
+
+==== configPath([toFile])
+Returns path to the config directory or path to a file inside the directory.
+
+NOTE: It is recommended to make use of the link:config[Config Provider] to read the values from the config files.
+
+[source, javascript]
+----
+const configPath = Helpers.configPath()
+// or
+const appConfig = Helpers.configPath('app.js')
+----
+
+==== storagePath([toFile])
+Returns path to the storage directory or path to a file inside the directory.
+
+[source, javascript]
+----
+const storagePath = Helpers.storagePath()
+// or
+const logs = Helpers.storagePath('logs.json')
+----
+
+==== resourcesPath([toFile])
+Returns path to the resources directory or path to a file inside the directory.
+
+[source, javascript]
+----
+const resourcesPath = Helpers.resourcesPath()
+// or
+const appSass = Helpers.resourcesPath('assets/sass/app.scss')
+----
+
+==== migrationsPath([toFile])
+Returns path to the migrations directory or path to a file inside the directory.
+
+[source, javascript]
+----
+const migrationsPath = Helpers.migrationsPath()
+// or
+const UserSchema = Helpers.migrationsPath('UserSchema.js')
+----
+
+==== seedsPath([toFile])
+Returns path to the seeds directory or path to a file inside the directory.
+
+[source, javascript]
+----
+const seedsPath = Helpers.seedsPath()
+// or
+const DatabaseSeed = Helpers.seedsPath('Database.js')
+----
+
+==== databasePath([toFile])
+Returns path to the database directory or path to a file inside the directory.
+
+[source, javascript]
+----
+const databasePath = Helpers.databasePath()
+// or
+const factoryFile = Helpers.databasePath('factory.js')
+----
+
+==== viewsPath([toFile])
+Returns path to the views directory or path to a file inside the directory.
+
+[source, javascript]
+----
+const viewsPath = Helpers.viewsPath()
+// or
+const welcomeView = Helpers.viewsPath('welcome.njk')
+----
+
+==== appNameSpace
+Returns the namespace mapped to the `app` directory inside `package.json` file.
+
+[source, javascript]
+----
+const namespace = Helpers.appNameSpace()
+const UserController = use(`${namespace}/Http/Controllers/UserController`)
+----
+
+==== makeNameSpace(directory, toFile)
+Returns complete namespace for a file inside a given directory.
+
+[source, javascript]
+----
+const httpListener = Helpers.makeNameSpace('Listeners', 'Http')
+
+// returns App/Listeners/Http.js
+----
+
+==== isAceCommand
+Returns whether the process was started as the ace command or not.
+
+[source, javascript]
+----
+Helpers.isAceCommand()
+----

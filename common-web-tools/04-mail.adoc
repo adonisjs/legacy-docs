@@ -79,7 +79,7 @@ Route.post('/users', 'UsersController.store')
 const Mail = use('Mail')
 const User = use('App/Model/User')
 
-class UsersCotnroller {
+class UsersController {
 
   * store (request, response) {
     const user = yield User.create(userDetails) <1>

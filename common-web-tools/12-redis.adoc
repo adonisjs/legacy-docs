@@ -1,0 +1,341 @@
+---
+permalink: redis
+categories:
+- web-development-tools
+---
+
+= Redis
+
+toc::[]
+
+AdonisJs makes it so simple to work with link:http://redis.io/[redis, window="_blank"]. Internally it makes use of link:https://github.com/luin/ioredis[ioredis, window="_blank"] but the API is slightly different to keep your code maintainable and readable.
+
+== Features
+
+[pretty-list]
+1. Support for multiple redis connections.
+2. Connect to redis cluster.
+3. Support for sentinel and transactions.
+4. Extensive support for Pub/Sub.
+5. ES2015 Generators friendly.
+
+== Setup
+Redis provider is not shipped with the base installation of AdonisJs, which means you are required to install and set it up manually.
+
+.Installing From Npm
+[source, bash]
+----
+npm i --save adonis-redis
+----
+
+.bootstrap/app.js
+[source, javascript]
+----
+const providers = [
+  ...,
+  'adonis-redis/providers/RedisFactoryProvider',
+  'adonis-redis/providers/RedisProvider'
+]
+----
+
+.bootstrap/app.js
+[source, javascript]
+----
+const aliases = {
+  Redis: 'Adonis/Addons/Redis'
+}
+----
+
+== Config
+Also, a configuration file needs to be saved as config/redis.js. You can download the sample configuration from link:https://raw.githubusercontent.com/adonisjs/adonis-redis/develop/examples/redis.js[github] or run the below bash command to save the file automatically.
+
+.Download using wget
+[source, bash]
+----
+wget https://raw.githubusercontent.com/adonisjs/adonis-redis/develop/examples/redis.js -O config/redis.js
+----
+
+== Basic Example
+Once everything is configured, you are good to make use of Redis inside your AdonisJs applications. Let's start with a basic example of caching users inside redis.
+
+NOTE: Below example may not be the best way to cache users but does give you some idea on how to use the redis provider.
+
+.app/Http/Controllers/UserController.js
+[source, javascript]
+----
+'use strict'
+
+const Redis = use('Redis')
+const User = use('App/Model/User')
+
+class UserController {
+
+  * index (request, response) {
+    const cachedUsers = yield Redis.get('users')
+    if (cachedUsers) {
+      response.json(JSON.parse(cachedUsers))
+      return
+    }
+
+    const users = yield User.all()
+    yield Redis.set('users', JSON.stringify(users))
+    response.json(users)
+  }
+
+}
+
+module.exports = UserController
+----
+
+== Redis Commands
+All link:http://redis.io/commands[redis, window="_blank"] commands are supported as javascript functions. For example:
+
+[source, javascript]
+----
+'use strict'
+
+const Redis = use('Redis')
+const user = {
+  username: 'foo',
+  email: 'foo@bar.com'
+}
+
+yield Redis.hmset('users', user.username, JSON.stringify(user))
+const user = yield Redis.hmget('users', user.username) // returns stringified JSON
+----
+
+== Pub/Sub
+Redis has built-in support for Pub/Sub to share messages on same or across multiple servers. AdonisJs offers a clean API to subscribe and publish messages without any extra efforts.
+
+It is recommended to create a new file inside the *bootstrap* directory to register subscribers.
+
+.bootstrap/redis.js
+[source, javascript]
+----
+'use strict'
+
+const Redis = use('Redis')
+
+Redis.subscribe('music', function * (track) {
+  console.log('received track', track)
+})
+----
+
+Next, you need to require this file inside `bootstrap/http.js` file to make sure it is loaded when booting the HTTP server just after the `require('./events')` statement.
+
+.bootstrap/http.js
+[source, javascript]
+----
+require('./redis')
+----
+
+Now anywhere inside your application, you can publish to the music channel and the registered listener will be called.
+
+.app/Http/routes.js
+[source, javascript]
+----
+'use strict'
+
+const Route = use('Route')
+const Redis = use('Redis')
+
+Route.get('/music/store', function * (request, response) {
+  Redis.publish('music', request.all())
+})
+----
+
+== Pub/Sub Methods
+Below is the list of pub/sub methods exposed by the Redis Provider.
+
+==== subscribe(channel, listener)
+[source, javascript]
+----
+Redis.subscribe('music', function * (track, channel) {
+  console.log(track)
+})
+----
+
+Also, the `listener` can be a reference to a module inside `app/Listeners` directory.
+
+[source, javascript]
+----
+Redis.subscribe('music', 'Music.newTrack')
+----
+
+.app/Listeners/Music.js
+[source, javascript]
+----
+'use strict'
+
+const Music = exports = module.exports = {}
+
+Music.newTrack = function * (track, channel) {
+  console.log(track)
+}
+----
+
+==== psubscribe(pattern, listener)
+The `psubscribe` method will subscribe to a pattern, and matching messages will be sent to the listener.
+
+[source, javascript]
+----
+Redis.psubscribe('h?llo', function * (message, channel, pattern) {
+})
+
+Redis.publish('hello')
+Redis.publish('hallo')
+----
+
+==== publish
+Publish message to a given channel.
+
+[source, javascript]
+----
+Redis.publish('music', {id: 1, title: 'Love me like you do', artist: 'Ellie goulding'})
+----
+
+==== unsubscribe(channel, [callback])
+Unsubscribe from a given channel.
+
+[source, javascript]
+----
+Redis.unsubscribe('music')
+----
+
+==== punsubscribe(pattern, [callback])
+Unsubscribe from a given pattern.
+
+[source, javascript]
+----
+Redis.punsubscribe('h?llo')
+----
+
+== Transactions
+Transactions are helpful when you want to perform bulk operations at a given point of time. Let's review an example of adding users to a list.
+
+[source, javascript]
+----
+'use strict'
+
+const User = use('App/Model/User')
+const Redis = use('Redis')
+
+class UserController {
+
+  * index (request, response) {
+    const users = yield User.all()
+
+    // Creating a transaction
+    const multi = Redis.multi()
+    users.each((user) => {
+      multi.lpush('users-list', JSON.stringify(user))
+    })
+    yield multi.exec()
+
+    response.json(users)
+  }
+
+}
+
+module.exports = UserController
+----
+
+==== multi
+Creates a new transaction to call multiple commands and execute them together.
+
+[source, javascript]
+----
+const multi = Redis.multi()
+multi
+  .set('foo', 'bar')
+  .set('bar', 'baz')
+
+const response = yield multi.exec()
+// [[null, 'OK'], [null, 'OK']]
+----
+
+== Pipelines
+Pipelines are quite similar to transactions, but they do not guarantee that all commands will be executed in a transaction. Pipelines are helpful in sending a batch of commands to save network round trips.
+
+==== pipeline
+[source, javascript]
+----
+const pipeline = Redis.pipeline()
+pipeline
+  .set('foo', 'bar')
+  .set('bar', 'baz')
+
+const response = yield pipeline.exec()
+// [[null, 'OK'], [null, 'OK']]
+----
+
+== Multiple Connections
+You can define the configuration for multiple connections inside the `config/redis.js` file, and you can use those connections by calling the `connection` method.
+
+.config/redis.js
+[source, javascript]
+----
+module.exports = {
+  connection: 'local',
+
+  local: {
+    ...
+  },
+
+  secondary: {
+    host: 'myhost.com',
+    port: 6379
+  }
+
+}
+----
+
+==== connection(name)
+Switch to a different connection.
+
+[source, javascript]
+----
+yield Redis.connection('secondary').get('users')
+----
+
+==== quit([name])
+AdonisJs creates a connection pool to re-use the established connnection. Make use of the `quit` method to close a single/all redis connections.
+
+[source, javascript]
+----
+const response = yield Redis.quit('secondary')
+// or
+const response = yield Redis.quit() // close all connections
+----
+
+== LifeCycle Events
+You can register a listener for lifecycle events in the same way you will do for xref:_pub_sub_methods[Pub/Sub].
+
+.bootstrap/redis.js
+[source, javascript]
+----
+'use strict'
+
+const Redis = use('Redis')
+Redis.on('connect', function () {
+})
+
+Redis.on('error', function (error) {
+})
+----
+
+Below is the list of events emitted by the Redis provider.
+
+[options="header"]
+|====
+Event | Description
+| connect | emits when a connection is established to the Redis server.
+| ready | emits when `CLUSTER INFO` reporting the cluster is able to receive commands (if *enableReadyCheck=true*) or immediately after `connect` event (if *enableReadyCheck=false*).
+| error | emits when an error occurs while connecting with a property of `lastNodeError` representing the last node error received. This event is emitted silently (only emitting if there's at least one listener).
+| close | emits when an established Redis server connection has closed.
+| reconnecting | emits after `close` when a reconnection will be made. The argument of the event is the time (in ms) before reconnecting.
+| end | emits after `close` when no more reconnections will be made.
+| +node | emits when a new node is connected.
+| -node | emits when a node is disconnected.
+| node error | emits when an error occurs when connecting to a node
+|====

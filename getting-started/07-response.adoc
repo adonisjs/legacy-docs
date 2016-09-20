@@ -10,6 +10,8 @@ toc::[]
 
 To finish an HTTP request, you must explicitly end the response. AdonisJs *Response* class instance makes it easier for you render nunjucks views or send formatted JSON for building RESTful API's.
 
+TIP: You can access Node.js raw *response object* as `response.response`.
+
 == Basic Example
 Response instance is passed along `request` instance to all the controllers and route closures, and same is used to render views or make JSON response
 
@@ -224,8 +226,9 @@ Below is the list of all descriptive methods and their corresponding HTTP status
 Quite often you have the requirement of extending the `Response` prototype by attaching new methods. Same can be done by defining a macro on the Response class.
 
 ==== Application Specific
-If your macros are specific to your application only, then make use of the `app/Http/Listeners.js` file to listen for the *start* event and add a custom macro.
+If your macros are specific to your application only, then make use of the `app/Listeners/Http.js` file to listen for the *start* event and add a custom macro.
 
+.app/Listeners/Http.js
 [source, javascript]
 ----
 Http.onStart = function () {

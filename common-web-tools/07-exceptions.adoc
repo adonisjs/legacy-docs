@@ -8,14 +8,14 @@ categories:
 
 toc::[]
 
-AdonisJs takes an additional step towards handling and throwing exceptions by making sure exceptions throwing by the core of the framework are more descriptive and helpful for debugging. Also it offers additional tools & practices to strcuture well designed exception messages.
+AdonisJs takes an additional step towards handling and throwing exceptions by making sure exceptions throwing by the core of the framework are more descriptive and helpful for debugging. Also, it offers additional tools & practices to structure well-designed exception messages.
 
 == Why Are Exceptions Important?
-Exceptions do not get the care they deserve. Majority of programmers thinks of exceptions a way of terminating the process as something bad happened. Even worse exception messages do not share much context on how to fix the problem and leaves it to the end-user to figure out the root cause.
+Exceptions do not get the care they deserve. The majority of programmers thinks of exceptions a way of terminating the process as something bad happened. Even worse exception messages do not share much context on how to fix the problem and leaves it to the end-user to figure out the cause.
 
-With AdonisJs we tag all exceptions with a unique *Error code* and you can refer the documentation of the given error code to understand the root cause of the exception.
+With AdonisJs we tag all exceptions with a unique *Error code* and you can refer the documentation of the given error code to understand the cause of the exception.
 
-Not only that, we also offer you a nice npm package called link:https://npmjs.org/package/node-exceptions[node-exceptions, window="_blank"] to setup application specific exception classes to throw personal and meaningful exceptions.
+Not only that, but we also offer you a nice npm package called link:https://npmjs.org/package/node-exceptions[node-exceptions, window="_blank"] to setup application specific exception classes to throw personal and meaningful exceptions.
 
 == Error Codes
 Below is the list of error codes thrown by the core of AdonisJs. You can reference them to understand the context of the exception.
@@ -36,11 +36,11 @@ You can make use of an ace command to generate the app key for you. `./ace key:g
 
 | E_MISSING_PARAMETER | The most often raised exception when a parameter expected by a method is not being passed or is `undefined`.
 
-| E_INVALID_PARAMETER | This exception is raised when the parameter value is not of valid type. For example: A method expect `age` to be *Number* but instead a *String* with passed.
+| E_INVALID_PARAMETER | This exception is raised when the parameter value is not of correct type. For example, A method expects `age` to be *Number* but instead a *String* with passed.
 
-| E_MISSING_CONFIG | When configuration for a given key is missing. The exception is generally raised by *Service providers* when they are trying to access configuration and unable to find it inside the `config` directory.
+| E_MISSING_CONFIG | When configuration for a given key is missing. The exception is raised by *Service providers* when they are trying to access configuration and unable to find it inside the `config` directory.
 
-| E_UNDEFINED_METHOD | This exception is raised when client is trying to access a non-existing method.
+| E_UNDEFINED_METHOD | This exception is raised when a client is trying to access a non-existing method.
 |====
 
 === Encryption Provider
@@ -99,11 +99,11 @@ Below is the list of all the exceptions only raised by the link:form-buider[Form
 | E_INVALID_MODEL_STATE | This exception is raised when you are trying to save an empty model or trying to update a delete model instance.
 | E_UNSAVED_MODEL_INSTANCE | This exception is raised when you are trying to save a relationship on a model which itself is unsaved.
 | E_INVALID_RELATION_INSTANCE | This exception is raised when you pass an invalid model instance to the relationship `save` method.
-| E_INVALID_RELATION_METHOD | This exception is raised when you call an *undefined* method on a relationship instance. For example: *HasOne* relationship does not have a `paginate` method.
+| E_INVALID_RELATION_METHOD | This exception is raised when you call an *undefined* method on a relationship instance. For example *HasOne* relationship does not have a `paginate` method.
 | E_MISSING_DATABASE_RELATION | This exception is raised when you are trying to access a relationship which was never defined.
-| E_LOCK_ON_MIGRATIONS | This exception is raised when you are parallely trying to execute migrations more than once.
+| E_LOCK_ON_MIGRATIONS | This exception is raised when you are parallelly trying to execute migrations more than once.
 | E_INVALID_SCHEMA_FILE | This exception is raised when the *schema* files inside `database/migrations` folder are not exporting an *ES2015* class.
-| E_UNSAFE_ENVIRONMENT | This exception is raised when you are trying to execute unsafe operations in production environment. For example: Running migrations in production.
+| E_UNSAFE_ENVIRONMENT | This exception is raised when you are trying to execute unsafe operations in the production environment. For example: Running migrations in production.
 | E_INVALID_MODEL_TRAIT | This exception is raised when a model trait does not have a `register` method on it.
 |====
 
@@ -125,6 +125,31 @@ Below is the list of all the exceptions only raised by the link:form-buider[Form
 |====
 
 == Throwing Exceptions
-It is recommended to throw contextual exception, since it makes it easier for the end user to act upon them. AdonisJs makes use of link:https://npmjs.org/package/node-exceptions[node-exception, window="_blank"] an npm module to strcuture exceptions. You can learn more about it via it's documentation.
+It is recommended to throw a contextual exception since it makes it easier for the end user to act upon them. AdonisJs makes use of link:https://npmjs.org/package/node-exceptions[node-exception, window="_blank"] an npm module to structure exceptions. You can learn more about it via its documentation.
 
 == Catching Exception
+Exceptions can be caught by wrapping your code inside a `try/catch` block, or you can handle them globally by listening to the `error` event.
+
+.app/Listeners/Http.js
+[source, javascript]
+----
+Http.handleError = function * (error, request, response) {
+  if (error.name === 'ModelNotFoundException') { <1>
+    yield response.status(404).sendView('404')
+    return
+  }
+
+  if (error.name === 'PasswordMisMatch') { <2>
+    response.status(400).send('Invalid credentials')
+    return
+  }
+
+  response.status(error.status).send(error.message) <3>
+}
+----
+
+With the help of custom exceptions, it is so easy to catch them with their *name* and return a personalized response for each exception type.
+
+<1> Handling *ModelNotFoundException* exception thrown by Lucid model `findOrFail` method and returning a *404* view.
+<2> Handling *PasswordMisMatch* exception thrown by link:authentication#_attempt_uid_password[authentication provider] and return a *400* status.
+<3> Generic exception handling for all other exceptions.
