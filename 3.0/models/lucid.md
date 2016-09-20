@@ -71,9 +71,9 @@ The table name is the plural underscore representation of your model class name.
 
 | Model | table |
 |--------|--------|
-User | users
-Person | people
-PostComment | post_comments
+| User | users |
+| Person | people |
+| PostComment | post_comments |
 
 You can modify the table name by overriding the `table` property in the model class.
 
