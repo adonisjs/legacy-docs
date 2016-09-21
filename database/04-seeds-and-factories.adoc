@@ -20,7 +20,7 @@ As link:migrations[Migrations] helps you in automating the process of setting up
 == About Factories
 [pretty-list]
 1. Factories helps you in defining model blueprints using fake data.
-2. Each blueprint *callback* receives an instance of link:http://chancejs.com[chancejs] to generate random/fake data.
+2. Each blueprint *callback* receives an instance of link:http://chancejs.com[chancejs, window="_blank"] to generate random/fake data.
 3. Factories can be used inside the seed file using the `use('Factory')` provider.
 4. You can also use factories when writing automated tests.
 

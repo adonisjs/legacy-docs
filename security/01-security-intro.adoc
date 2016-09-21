@@ -37,7 +37,7 @@ const users = yield Database
 
 ==== CheckList
 [pretty-list]
-* Make use of link:database[database] or link:lucid[lucid] to perform database operations and never run direct SQL queries.
+* Make use of link:query-builer[database provider] or link:lucid[lucid] to perform database operations and never run direct SQL queries.
 * Make sure to sanitize user data using link:validator#_sanitize_data_rules[sanitizer] to keep your database secure.
 * Always run *prepared statements* statements by passing query values as an array to the `raw` method.
 

@@ -157,5 +157,5 @@ Now refresh the browser and you will see all the newly created posts. At last, w
 }
 ----
 
-.Posts List Preview
+=== Posts List Preview
 image:http://res.cloudinary.com/adonisjs/image/upload/v1472841292/posts-list_wkpogd.png[]

@@ -104,7 +104,7 @@ Malware protection helps in protecting your website from *XSS* attacks, unwanted
 === XSS
 Make use of the below defined configuration to enable/disable XSS protection. It is done by setting `X-XSS-Protection=1; mode=block`
 
-[source, javscript]
+[source, javascript]
 ----
 xss: {
   enabled: true,

@@ -160,7 +160,7 @@ body {
 
 Now refresh the browser to see the home page.
 
-.Home Page Preview
+=== Home Page Preview
 image:http://res.cloudinary.com/adonisjs/image/upload/v1472841283/home-page_uab9il.png[]
 
 Let's also complete the other views

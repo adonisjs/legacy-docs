@@ -1,5 +1,5 @@
 ---
-permalink: adonisjs-introduction
+permalink: overview
 categories:
 - prologue
 ---
@@ -54,6 +54,7 @@ Learning a new framework can be overwhelming at first. Since AdonisJs ships with
 
 To start your development journey, we recommend you to start by reading following topics:
 
+[support-list]
 * link:routing[Routing]
 * link:request[Request]
 * link:response[Response]

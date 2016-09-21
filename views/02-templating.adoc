@@ -379,6 +379,7 @@ Loop over a range of values. Think of it as calling a `for` loop.
 ----
 
 .Output
+[source]
 ----
 0,1,2,3,4
 ----
