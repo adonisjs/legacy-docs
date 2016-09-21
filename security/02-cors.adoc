@@ -3,7 +3,6 @@ permalink: cors
 categories:
 - security
 ---
-
 = CORS
 
 toc::[]

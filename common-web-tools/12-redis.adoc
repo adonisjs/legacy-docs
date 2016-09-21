@@ -3,7 +3,6 @@ permalink: redis
 categories:
 - web-development-tools
 ---
-
 = Redis
 
 toc::[]

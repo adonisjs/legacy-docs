@@ -3,7 +3,6 @@ permalink: response
 categories:
 - getting-started
 ---
-
 = Response
 
 toc::[]

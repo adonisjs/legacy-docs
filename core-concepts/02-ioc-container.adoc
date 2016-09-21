@@ -3,7 +3,6 @@ permalink: ioc-container
 categories:
 - core-concepts
 ---
-
 = IoC Container
 
 toc::[]

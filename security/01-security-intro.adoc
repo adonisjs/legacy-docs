@@ -3,7 +3,6 @@ permalink: security-introduction
 categories:
 - security
 ---
-
 = Introduction
 
 toc::[]

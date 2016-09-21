@@ -3,7 +3,6 @@ permalink: adonis-blog-part3
 categories:
 - tutorial
 ---
-
 = Database Models
 
 toc::[]

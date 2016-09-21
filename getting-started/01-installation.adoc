@@ -3,7 +3,6 @@ permalink: installation
 categories:
 - getting-started
 ---
-
 = Installation
 
 toc::[]

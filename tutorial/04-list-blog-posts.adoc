@@ -3,7 +3,6 @@ permalink: adonis-blog-part4
 categories:
 - tutorial
 ---
-
 = Listing Blog Posts
 
 In this tutorial, we will continue the topic of link:adonis-blog-part3[Database Models] by using them inside *PostController*. Make sure your server is up and running on http://localhost:3333.

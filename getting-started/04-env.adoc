@@ -3,7 +3,6 @@ permalink: env
 categories:
 - getting-started
 ---
-
 = Environment Variables
 
 toc::[]

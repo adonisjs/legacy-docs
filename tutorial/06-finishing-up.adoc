@@ -3,7 +3,6 @@ permalink: adonis-blog-part6
 categories:
 - tutorial
 ---
-
 = Finishing Up
 
 Let's finish up this tutorial by making final changes to the entire flow. Intentionally it was a simple tutorial to make you feel comfortable with the framework.

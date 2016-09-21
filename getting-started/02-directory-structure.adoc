@@ -3,7 +3,6 @@ permalink: directory-structure
 categories:
 - getting-started
 ---
-
 = Directory Structure
 
 toc::[]

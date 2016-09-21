@@ -3,7 +3,6 @@ permalink: adonis-blog-part2
 categories:
 - tutorial
 ---
-
 = Routes And Controllers
 
 toc::[]

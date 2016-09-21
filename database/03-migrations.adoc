@@ -3,7 +3,6 @@ permalink: migrations
 categories:
 - database
 ---
-
 = Migrations
 
 toc::[]

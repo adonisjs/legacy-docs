@@ -3,7 +3,6 @@ permalink: overview
 categories:
 - prologue
 ---
-
 = AdonisJs at a Glance
 
 toc::[]

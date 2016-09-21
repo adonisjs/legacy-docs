@@ -3,7 +3,6 @@ permalink: helpers
 categories:
 - web-development-tools
 ---
-
 = Helpers
 
 toc::[]

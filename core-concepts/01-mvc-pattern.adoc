@@ -3,7 +3,6 @@ permalink: mvc-pattern
 categories:
 - core-concepts
 ---
-
 = MVC Pattern
 
 toc::[]

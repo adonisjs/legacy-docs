@@ -3,7 +3,6 @@ permalink: adonis-blog-part5
 categories:
 - tutorial
 ---
-
 = Creating Blog Posts
 
 In the last link:adonis-blog-part4[tutorial] we displayed the list of blog posts by fetching them from the database. Now let's move one step ahead and add the functionality of creating posts.

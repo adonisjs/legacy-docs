@@ -3,7 +3,6 @@ permalink: shield
 categories:
 - security
 ---
-
 = Shield Middleware
 
 toc::[]

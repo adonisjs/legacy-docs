@@ -3,7 +3,6 @@ permalink: templating
 categories:
 - views
 ---
-
 = Nunjucks Templates
 
 toc::[]

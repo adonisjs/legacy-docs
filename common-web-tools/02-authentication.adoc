@@ -3,7 +3,6 @@ permalink: authentication
 categories:
 - web-development-tools
 ---
-
 = Authentication
 
 toc::[]

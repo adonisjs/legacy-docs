@@ -3,7 +3,6 @@ permalink: form-builder
 categories:
 - views
 ---
-
 = Form Builder
 
 toc::[]

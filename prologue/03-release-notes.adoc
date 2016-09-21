@@ -3,7 +3,6 @@ permalink: release-notes
 categories:
 - prologue
 ---
-
 = Release Notes
 
 toc::[]

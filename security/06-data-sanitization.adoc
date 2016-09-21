@@ -3,7 +3,6 @@ permalink: data-sanitization
 categories:
 - security
 ---
-
 = Data Sanitization
 
 toc::[]

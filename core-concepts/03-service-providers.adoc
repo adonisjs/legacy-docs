@@ -3,6 +3,5 @@ permalink: service-providers
 categories:
 - core-concepts
 ---
-
 = Service Providers
 

@@ -3,7 +3,6 @@ permalink: database-setup
 categories:
 - database
 ---
-
 = Database Setup
 
 toc::[]

@@ -3,7 +3,6 @@ permalink: cookies
 categories:
 - web-development-tools
 ---
-
 = Cookies
 
 toc::[]

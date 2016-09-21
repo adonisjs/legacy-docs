@@ -3,7 +3,6 @@ permalink: mail
 categories:
 - web-development-tools
 ---
-
 = Mail
 
 toc::[]

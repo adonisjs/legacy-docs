@@ -3,7 +3,6 @@ permalink: interactive-shell
 categories:
 - web-development-tools
 ---
-
 = Interactive Shell Aka Ace
 
 toc::[]

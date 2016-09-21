@@ -3,7 +3,6 @@ permalink: error-and-exceptions
 categories:
 - web-development-tools
 ---
-
 = Error & Exceptions Handling
 
 toc::[]
