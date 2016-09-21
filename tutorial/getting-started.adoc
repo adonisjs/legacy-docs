@@ -1,0 +1,119 @@
+---
+permalink: adonis-blog-part1
+categories:
+- tutorial
+---
+
+= Getting Started
+
+toc::[]
+
+This the first part of the tutorial. By the end of this series, you will find yourself comfortable with the concepts of AdonisJs to create your next ambitious WebApp.
+
+Make sure you have followed the link:http://adonisjs.com/docs/3.0/installation[installation] process and able to run AdonisJs server to see the welcome page.
+
+In this tutorial, we will start by creating a new app and register some routes to render views.
+
+== Creating New Application
+We'll make use of adonis executable to create a new application.
+
+[source, bash]
+----
+adonis new blog
+----
+
+.Output
+[source]
+----
+Cloning into 'blog'...
+cleaning project
+setting up app key
+Fixing ace file
+installing dependencies may take a while
+installing dependencies....
+----
+
+Above command will create a new project *blog*. Now `cd` into the directory and start the server.
+
+[source, bash]
+----
+cd blog
+npm run dev
+----
+
+.Output
+[source]
+----
+[nodemon] starting `node --harmony_proxies server.js`
+info adonis:framework serving app on http://localhost:3333
+----
+
+== Creating Routes
+AdonisJs comes with a pre-defined route that renders the welcome.njk view. Let's remove this route and start from scratch.
+
+.app/Http/routes.js
+[source, javascript]
+----
+const Route = use('Route')
+
+Route.on('/').render('home')
+Route.on('/about').render('about')
+Route.on('/contact').render('contact')
+----
+We have registered 3 different routes to render the *home*, *about* and the *contact* page.
+
+== Creating Views
+Let's create these 3 views by typing the below commands on the terminal.
+
+[source, bash]
+----
+./ace make:view home
+./ace make:view about
+./ace make:view contact
+----
+
+link:interactive-shell[Ace] is a command line utility tool comes with AdonisJs. You can make use of ace commands to generate *views*, *controllers* and *models*, etc.
+
+Views live inside `resources/views` directory and must have `.njk` extension. Let's open the `home.njk` view and write some HTML inside it.
+
+.resources/views/home.njk
+[source, html]
+----
+<h2> This is the home page </h2>
+----
+
+Now refresh the browser and you will see the heading we wrote inside the home view.
+
+It is so simple to render nunjucks views in AdonisJs. Let's write some HTML inside all the views and link them together. We will be making use of link:http://v4-alpha.getbootstrap.com/[Bootstrap, window="_blank"] to design the web pages.
+
+.resources/views/master.njk
+[source, twig]
+----
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+
+    <div class="header clearfix">
+      <nav>
+        <ul class="nav nav-pills pull-xs-right">
+          <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+          <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
+        </ul>
+        <h3 class="text-muted"> Adonis Blog </h3>
+      </nav>
+    </div>
+
+    <section>
+      {% block content %}{% endblock %}
+    </section>
+
+  </div>
+</body>
+</html>
+----

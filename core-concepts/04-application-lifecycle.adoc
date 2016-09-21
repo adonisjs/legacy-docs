@@ -1,0 +1,55 @@
+---
+permalink: app-lifecycle
+categories:
+- core-concepts
+---
+
+= Application LifeCycle
+
+toc::[]
+
+The guide is geared towards giving you an in-depth understanding of the AdonisJs application flow. The flow is divided into three broad categories of *HTTP Server*, *Ace Command* and *HTTP Request*.
+
+== HTTP Server
+
+The HTTP server involves wiring the pieces of application together and booting the HTTP server. This is a one-time job since the HTTP server is a long running process.
+
+The first step is to load all the providers and set up their aliases. Let's talk about all the involved steps:
+
+1. Providers and their aliases are defined inside `bootstrap/app.js` file.
+2. The `bootstrap/http.js` file will make use of the `providers` array and will register them with the IoC container.
+3. Next, we register the autoloading directory defined inside `package.json` file. You free to change the directory or the autoloading namespace which is set to `App`.
++
+[source, json]
+----
+{
+  "autoload": {
+    "App": "./app"
+  }
+}
+----
+4. The boot process will then load the following files in defined sequence.
+  * bootstrap/events.js
+  * app/Http/kernel.js
+  * app/Http/routes.js
+  * database/factory.js
+5. Finally, it will start the HTTP server by listening on the host and port defined inside `.env` file and emits `Http.start` event, which you can listen to hook your custom implementations.
+
+
+== Ace Command
+The process of wiring up the ace command is similar to the xref:_http_server[Http Server] but following differences.
+
+1. All Providers defined inside `bootstrap/app.js` file will be loaded. Which means `aceProviders` and `providers` will be concatenated and sent to the IoC container.
+2. All `commands` array will be registered with link:interactive-shell[Ace].
+3. This time `Ace.start` event gets emitted instead of `Http.start`.
+
+== HTTP Request
+
+HTTP request is a dynamic flow of processing one or more HTTP requests at a given time.
+
+1. The incoming request URL is checked against a static file inside the `public` directory and if found the static file will be served.
+2. Next, a corresponding route will get searched against the request URL and following steps are performed.
+  * Run all global middleware
+  * Run all route specific middleware
+  * Execute route action which can be a *Controller method* or a *Closure*.
+3. If above 2 are false a 404 `HttpException` will be thrown.

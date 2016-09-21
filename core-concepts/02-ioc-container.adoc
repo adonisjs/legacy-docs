@@ -1,0 +1,140 @@
+---
+permalink: ioc-container
+categories:
+- core-concepts
+---
+
+= IoC Container
+
+toc::[]
+
+This document covers the concept and usage of Inversion of Control(IoC) container within AdonisJs. It is a concept of storing/binding dependencies inside a *container* and then fetching them back from the container instead of requiring them manually. The benefit of this approach is:
+
+[pretty-list]
+1. The configuration of an object is hidden from the end-user providing simple & clear API.
+2. Solid support for *Dependency Injection(DI)*, since all objects are fetched from a single source of truth.
+3. Easy to write 3rd party modules/addons, since you can fetch dependencies from the *IoC container*, instead of holding the end-user to pass them manually.
+
+== Basic Example
+Let's take a simple example of binding dependencies to the IoC container and then consuming them later. Throughout this process, you will be introduced to a lot of new terms and methods.
+
+.Binding Dependencies
+[source, javascript]
+----
+const Ioc = require('adonis-fold').Ioc
+const bugsnag = require('bugsnag')
+
+Ioc.bind('Adonis/Src/Bugsnag', function (app) { <1>
+
+  const Config = app.use('Adonis/Src/Config') <2>
+  const bugSnagConfig = Config.get('services.bugsnag') <3>
+
+  bugsnag.register(bugSnagConfig.apiKey, bugSnagConfig.options) <4>
+  return bugsnag <5>
+
+})
+----
+
+<1> We start by binding an object to the IoC container. Each binding needs to a have a unique namespace which is `Adonis/Src/Bugsnag` in this case.
+<2> Since we have access to the `Ioc` container within the closure we fetch the *Config* binding.
+<3> Next we grab the configuration of the `bugsnag` which is supposed to be saved inside `config/services.js` file.
+<4> Using the configuration options, we register the `apiKey` with bugsnag.
+<5> Finally we return the `bugsnag` object, which can be used to report the errors.
+
+To make use of the *Bugsnag* binding, we can take advantage of the global `use` method.
+
+[source, javascript]
+----
+const Bugsnag = use('Adonis/Src/Bugsnag')
+Bugsnag.notify(new Error('Something went wrong'))
+----
+
+With the help of the IoC container, we can abstract the setup process of Bugsnag and offer an excellent API to the end-user. This small example may not be the right way of understanding the real power of the IoC container. Checkout the following video for in-depth understanding.
+
+== Unpacking IoC Container
+video::[youtube, width=100%, height=480]
+
+== Available Methods
+Below is the list of available methods exposed by the IoC container.
+
+==== use(namespace/alias)
+Fetch a binding using it's *namespace* or *alias*.
+
+[source, javascript]
+----
+const Redis = use('Redis')
+----
+
+==== make(namespace/alias/class)
+Returns an instance of class by auto injecting constructor dependencies.
+
+[source, javascript]
+----
+class Book {
+
+  static get inject () { <1>
+    return ['App/Model/Book', 'Adonis/Addons/Mail']
+  }
+
+  constructor (BookModel, Mail) { <2>
+    this.BookModel = BookModel
+    this.Mail = Mail
+  }
+
+}
+
+const bookInstance = make(Book) <3>
+----
+
+<1> The static `inject` getter returns an array of dependencies to be injected in the order they are defined.
+<2> All specified dependencies are injected to the constructor
+<3> Finally we make use of the `make` method to create an instance of the `Book` class, which auto injects the defined dependencies.
+
+==== alias(name, namespace)
+Define alias for a given namespace.
+
+[source, javascript]
+----
+const Ioc = require('adonis-fold').Ioc
+Ioc.alias('UserModel', 'App/Model/User')
+----
+
+== Events
+Below is the list of events fired by the IoC container.
+
+[source, javascript]
+----
+const Ioc = require('adonis-fold').Ioc
+
+Ioc.on('bind:provider', (namespace, isSingleton) => {
+  // binding registered
+})
+
+Ioc.on('provider:resolved', (namespace, returnValue) => {
+  // binding resolved
+})
+
+Ioc.on('module:resolved', (namespace, fromPath, returnValue) => {
+  // resolved autoloaded module
+})
+
+Ioc.on('extend:provider', (key, namespace) => {
+  // a provider has been extended
+})
+
+Ioc.on('bind:autoload', (namespace, directoryPath) => {
+  // defined autoload namespace and directory
+})
+
+Ioc.on('bind:alias', (alias, namespace) => {
+  // an alias has been registered
+})
+
+Ioc.on('providers:registered', () => {
+  // all providers have been registered
+})
+
+Ioc.on('providers:booted', () => {
+  // all providers have been booted
+})
+----

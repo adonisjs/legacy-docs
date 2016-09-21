@@ -39,7 +39,7 @@ If we tell you that within six lines of code you can fetch all users from the da
 [source, javascript]
 ----
 const Route = use('Route')
-const User = use ('App/Model/User')
+const User = use('App/Model/User')
 
 Route.get('/', function * (request, response) {
   const users = yield User.all()
