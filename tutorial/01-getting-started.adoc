@@ -8,14 +8,12 @@ categories:
 
 toc::[]
 
-This the first part of the tutorial. By the end of this series, you will find yourself comfortable with the concepts of AdonisJs to create your next ambitious WebApp.
+This is the first part of the tutorial. By the end of this series, you will find yourself comfortable with the concepts of AdonisJs to create your next ambitious WebApp.
 
-Make sure you have followed the link:http://adonisjs.com/docs/3.0/installation[installation] process and able to run AdonisJs server to see the welcome page.
-
-In this tutorial, we will start by creating a new app and register some routes to render views.
+Make sure you have followed the link:installation[installation] process and able to run AdonisJs server to see the welcome page. In this tutorial, we will start by creating a new app and register some routes to render views.
 
 == Creating New Application
-We'll make use of adonis executable to create a new application.
+We'll make use of the *adonis* executable to create a new application.
 
 [source, bash]
 ----
@@ -49,11 +47,13 @@ info adonis:framework serving app on http://localhost:3333
 ----
 
 == Creating Routes
-AdonisJs comes with a pre-defined route that renders the welcome.njk view. Let's remove this route and start from scratch.
+AdonisJs comes with a pre-defined route that renders the *welcome.njk* view. Let's remove this route and start from scratch.
 
 .app/Http/routes.js
 [source, javascript]
 ----
+'use strict'
+
 const Route = use('Route')
 
 Route.on('/').render('home')
@@ -63,7 +63,7 @@ Route.on('/contact').render('contact')
 We have registered 3 different routes to render the *home*, *about* and the *contact* page.
 
 == Creating Views
-Let's create these 3 views by typing the below commands on the terminal.
+Let's create these three views by typing the below commands on the terminal.
 
 [source, bash]
 ----
@@ -116,4 +116,71 @@ It is so simple to render nunjucks views in AdonisJs. Let's write some HTML insi
   </div>
 </body>
 </html>
+----
+
+The `master.njk` is the base template that we will extend in every view. Now copy and paste the below code inside `home.njk` file.
+
+.resources/views/home.njk
+[source, twig]
+----
+{% extends 'master' %}
+
+{% block content %}
+  <h2> Blog posts will be listed here </h2>
+{% endblock %}
+----
+
+We will also need some *CSS* to make the output look little nicer. So copy and paste the below snippet to `public/style.css` file.
+
+.public/style.css
+[source, css]
+----
+body {
+  background: #ffffff;
+}
+
+.header {
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+  border-bottom: .05rem solid #e5e5e5;
+}
+
+@media (min-width: 48em) {
+  .container {
+    max-width: 46rem;
+  }
+}
+
+.header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 3rem;
+}
+----
+
+Now refresh the browser to see the home page.
+
+.Home Page Preview
+image:http://res.cloudinary.com/adonisjs/image/upload/v1472841283/home-page_uab9il.png[]
+
+Let's also complete the other views
+
+.resources/views/about.njk
+[source, twig]
+----
+{% extends 'master' %}
+
+{% block content %}
+  <h2> This is the about page </h2>
+{% endblock %}
+----
+
+.resources/views/contact.njk
+[source, twig]
+----
+{% extends 'master' %}
+
+{% block content %}
+  <h2> This is the contact page </h2>
+{% endblock %}
 ----

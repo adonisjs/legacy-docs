@@ -1,0 +1,139 @@
+---
+permalink: adonis-blog-part3
+categories:
+- tutorial
+---
+
+= Database Models
+
+toc::[]
+
+So far we have covered the basics of setting up a new AdonisJs application by creating Routes, Controllers and rendering Views. In this tutorial, we will take a step further by learning about *Database Models*.
+
+AdonisJs supports a majority of SQL databases. Here is a complete guide on link:database-setup[Database Setup]. We will start by creating migrations and Data models which are also known as Lucid models.
+
+
+== What is a Database Model?
+Each Database model represents a single SQL table inside your database. For example:
+
+[options="header"]
+|====
+| Model | Database Table
+| User | users
+| Post | posts
+| Category | categories
+|====
+
+Hope it makes sense. Now to interact with posts, we need two things.
+
+[pretty-list]
+1. A Post Model.
+2. And a posts database table.
+
+== Creating Database Model
+Models live inside a dedicated directory called *app/Model*. Let's make use of ace to create the Post model.
+
+[source, bash]
+----
+./ace make:model Post
+----
+
+.Output
+[source]
+----
+create: app/Model/Post.js
+----
+
+.app/Model/Post.js
+[source, javascript]
+----
+'use strict'
+
+const Lucid = use('Lucid')
+
+class Post extends Lucid {
+}
+
+module.exports = Post
+----
+
+Each model is a dedicated *ES2015 Class* just like our link:controllers[Controllers], but each model will extend Lucid to make it different from an ordinary class.
+
+You never have to touch your models in most cases. So we will leave this file as it is and switch to another task.
+
+== What are Migrations?
+Our next step is to choose a database we want to work with and create the necessary database tables. For the sake of simplicity, we will stick to *SQLite*. However, you are free to use *MYSQL* or *PostgreSQL*.
+
+Migration is a process of creating database tables using the Javascript code. Migrations have lots of benefits as compared to the standard workflow of creating database tables using SequelPro, Workbench, etc. Check out the link:migrations[Migrations] guide to learn more about them.
+
+== Creating Migrations
+As always *ace (our buddy)* is going to create a migration for us.
+
+[source, bash]
+----
+./ace make:migration posts --create=posts
+----
+
+.Output
+[source]
+----
+create: database/migrations/1464075245386_posts.js
+----
+
+Quickly open this file and explore the options to create database table without touching the SQL interface.
+
+.database/migrations/1464075245386_posts.js
+[source, javascript]
+----
+'use strict'
+
+const Schema = use('Schema')
+
+class PostSchema extends Schema {
+
+  up () {
+    this.create('posts', (table) => {
+      table.increments()
+      table.string('title')
+      table.text('content')
+      table.timestamps()
+    })
+  }
+
+  down () {
+    this.drop('posts')
+  }
+
+}
+
+module.exports = PostSchema
+----
+
+Wow! It is so simple to define a database table within your standard Js files. Just keep a note of the following points when working with migrations
+
+[pretty-list]
+1. The `up` method is used to create a table, or add new fields to the existing table, etc.
+2. The `down` is always opposite of up. It is used when you want to undo the changes you just made, also known as *rollback*.
+
+== SQLite Driver & Running Migrations
+Finally, we need to run this migration to execute SQL query and create the database table called *posts*. Before that, we need to make sure that SQLite is setup properly.
+
+.Installing SQLite3 driver
+[source, bash]
+----
+npm i --save sqlite3
+----
+
+.Running Migrations
+[source, bash]
+----
+./ace migration:run
+----
+
+.Output
+[source]
+----
+✔ Database migrated successfully.
+----
+
+We covered a lot in this tutorial, especially if you are new to these concepts. That's the thing about frameworks you need to spend few days to get a solid grasp of available tools and options to make your development cycle a lot easier in future.

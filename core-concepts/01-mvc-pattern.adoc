@@ -12,7 +12,7 @@ MVC pattern separates the application into three main logical components known a
 
 image:http://res.cloudinary.com/adonisjs/image/upload/v1472842310/MVC-Flow-Chart_ccz2zb.jpg[]
 
-=== Model
+== Model
 Model is the data layer responsible for fetching data from the database which is SQL in the case of AdonisJs. To make the process of fetching data simple and secure AdonisJs ships with a beautiful ORM called link:lucid[Lucid].
 
 .Defing A Model
@@ -39,7 +39,7 @@ const users = yield User.all()
 const activeUsers = yield User.query().where('status', 'active').fetch()
 ----
 
-=== Controller
+== Controller
 Controller, as the name suggests, controls the flow of an HTTP request. It makes use of the *Model* to fetch the required data and pass that data to the *View* for creating an HTML page.
 
 Controllers also contain business/domain logic for your application, whereas you will often find people abstracting the domain logic into reusable services but still those services are consumed directly by the controllers, and you never access them inside the models or views.
@@ -62,7 +62,7 @@ class UserController {
 <1> Here we import the *User Model*.
 <2> Next we render the `users/list.njk` view and pass it the user's object which can be used by the view to display a list of users.
 
-=== View
+== View
 The view is the final part of the flow, it makes use of the dynamic data and renders HTML. To keep your views declarative, AdonisJs offers a nice data-binding syntax to consume dynamic data and make use of it. You can learn more about the templating link:templating[here].
 
 .Example Of View
