@@ -321,7 +321,7 @@ const isPlain = request.is('html', 'plain')
 `accepts` will header the `Accept` header to negotiate the best response type for a given HTTP request.
 
 ```javascript
-const type = request.accept('json', 'html')
+const type = request.accepts('json', 'html')
 
 switch (type) {
   
