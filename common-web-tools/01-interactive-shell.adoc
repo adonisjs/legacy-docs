@@ -10,8 +10,8 @@ toc::[]
 Ace is a powerful command line tool crafted for AdonisJs. So far you have been using lots of ace commands to generate *controllers*, *models*, run *migrations*, etc. In this guide, we will learn about the internals of Ace and how to create commands.
 
 == About Ace
-[pretty-list]
 
+[pretty-list]
 1. `ace` is an executable file inside the root of your application.
 2. Each command is specific to a single project, for reusable commands, you must bundle them as an npm package.
 3. Commands have access to all the applications components like *Models*, *Routes*, etc. That makes it so easy to create useful commands.

@@ -27,7 +27,7 @@ To overcome this problem AdonisJs makes use of link:https://en.wikipedia.org/wik
 There is a `.env` file inside the root of every brand new AdonisJs project. The purpose of this file is to keep all the configuration variables, which are supposed to change across environments. Following is the default .env file.
 
 .(.env)
-[source, env]
+[source]
 ----
 HOST=localhost
 PORT=3333
