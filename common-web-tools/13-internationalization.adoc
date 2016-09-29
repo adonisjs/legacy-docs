@@ -1,0 +1,228 @@
+---
+permalink: internationalization
+categories:
+- web-development-tools
+---
+= Internationalization
+
+toc::[]
+
+Internationalization is a process of translating your web apps into different multiple languages. Since web apps reaches all parts of the world, internationalization makes it easier for you to detect the user language and translate your web apps for localized experience.
+
+== Drivers
+
+[support-list]
+* File (file)
+* Database (database)
+
+== About Internationalization
+
+[pretty-list]
+* It follows the conventions and libraries provided by link:http://formatjs.io/[Format.js, window="_blank"].
+* All locale messages are formatted using link:http://userguide.icu-project.org/formatparse/messages[ICU Message Syntax, window="_blank"].
+* All locale strings are stored within *.json* files inside `resources/locales` directory or database table `locales` based upon the driver you are using.
+* A middleware can be used to detect the user language in runtime.
+
+== Setup
+The `adonis-antl` package is not installed/setup by default and you are required to install it when required.
+
+.Installing Via Npm
+[source, bash]
+----
+npm i --save adonis-antl
+----
+
+.bootstrap/app.js
+[source, javascript]
+----
+const providers = [
+  'adonis-antl/providers/AntlProvider'
+]
+----
+
+.bootstrap/app.js
+[source, javascript]
+----
+const aliases = {
+  Antl: 'Adonis/Addons/Antl',
+  Formats: 'Adonis/Addons/AntlFormats'
+}
+----
+
+Based upon the default driver you will have to store your locales inside the `resources/locales` directory or the `locales` database table. To make the setup process simple, you can run the following command.
+
+[source, bash]
+----
+./ace antl:setup
+
+# for database driver
+./ace antl:setup --driver=database
+----
+
+Above command will create a migration file(if database driver) or will create the `resources/locales/*` directory or the migrations to create the database table. Along with that it will the required configuration to the `config/app.js` file.
+
+== Basic Example
+Let's start with a basic example of formatting raw values and messages written using xref:_icu_messages[ICU Syntax]. This time we will play with the *Ace REPL* within the command line.
+
+[source, bash]
+----
+./ace repl
+----
+
+.Output
+[source]
+----
+repl+>
+----
+
+=== Formatting Values
+[source, javascript]
+----
+const Antl = use('Antl')
+
+Antl.formatAmount(1000, 'usd')
+
+// or
+Antl
+  .for('fr') <1>
+  .formatAmount(1000, 'usd')
+----
+
+<1> The method `for` will let you switch the language for a single operation.
+
+image:http://res.cloudinary.com/adonisjs/image/upload/v1475061511/Adonis-Antl_hlpwxd.gif[]!
+
+=== Formatting Messages
+Using the default `file` driver, we can define locales inside the `resources/locales` directory. Each language gets it's own sub-directory.
+
+.resources/locales/en/messages.json
+[source, json]
+----
+{
+  "product.cost": "{product} will cost {price, number, usd}"
+}
+----
+
+.Formatting Product Cost Message
+[source, javascript]
+----
+const Antl = use('Antl')
+Antl.formatMessage('messages.product.cost', { product: 'Chair', price: 29 })
+----
+
+.Output
+[source]
+----
+Chair will cost $29.00
+----
+
+== ICU Messages
+Before you can start using the *Antl* provider it is really important to understand the link:http://userguide.icu-project.org/formatparse/messages[ICU message syntax] since it is a standard adopted by the web globally.
+
+=== String Literals
+A message can just a string literal in different multiple languages.
+
+.resources/locales/en/messages.json
+[source, json]
+----
+{
+  "greeting": "Hello!"
+}
+----
+
+.resources/locales/fr/messages.json
+[source, json]
+----
+{
+  "greeting": "Bonjour!"
+}
+----
+
+=== Simple Arguments
+You can also define placeholders for simple arguments and pass dynamic data at runtime to replace them with their actual values.
+
+.resources/locales/en/messages.json
+[source, json]
+----
+{
+  "greeting": "Hello {name}"
+}
+----
+
+.resources/locales/fr/messages.json
+[source, json]
+----
+{
+  "greeting": "Bonjour {name}"
+}
+----
+
+.Formatting
+[source, javascript]
+----
+use('Antl').formatMessage('messages.greeting', { name: 'Virk' })
+
+// Returns - Hello Virk or Bonjour Virk
+----
+
+=== Formatted Arguments
+Formatted arguments gives you the functionality to define the argument type and format as `{ key, type, format }`.
+
+[options="header"]
+|====
+| Name | Description
+| key | Key is used to define the placeholder name which is used in the data object.
+| type | Type defines the type of data to expect/format the key for. Internationalization has a set of defined types.
+| format | Format is an object of values defining how to format the type. For example: `number` type can be formatted as *percentage*, *decimal* or *currency*.
+|====
+
+.resource/locales/en/messages.json
+[source, json]
+----
+{
+  "cart.total": "Your cart total is {total, number, curr}"
+}
+----
+
+Now when formatting the above message we need to pass `curr` format to the *number type*, so that the inbuilt formatter can format the total as a currency.
+
+[source, javascript]
+----
+const Antl = use('Antl')
+
+Antl.formatMessage('messages.cart.total', { price: 59 }, (message) => {
+  message
+    .passFormat('curr')
+    .to('number')
+    .withValues({ currency: 'usd' })
+})
+----
+
+Also you can pass the format as an expression instead of attaching the callback.
+
+[source, javascript]
+----
+const Antl = use('Antl')
+
+Antl.formatMessage('messages.cart.total', { price: 59 }, 'curr:number[currency=usd]')
+----
+
+You can also access antl directly in your views using the `antl` global.
+
+[source, twig]
+----
+{{ antl.formatMessage('messages.cart.total', { price: 59 }, 'curr:number[currency=usd]') }}
+----
+
+== List Of Types
+
+
+== Locale & Groups
+
+== Detecting User Locale
+
+== Helpers
+
+== Switching Drivers
+
+== Adding Drivers
