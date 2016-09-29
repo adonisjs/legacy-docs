@@ -7,7 +7,7 @@ categories:
 
 toc::[]
 
-Internationalization is a process of translating your web apps into different multiple languages. Since web apps reaches all parts of the world, internationalization makes it easier for you to detect the user language and translate your web apps for localized experience.
+Internationalization is a process of translating your web apps into multiple different languages. Since web apps reach all parts of the world, internationalization makes it easier for you to detect the user language and translate your web apps for localized experience.
 
 == Drivers
 
@@ -19,12 +19,12 @@ Internationalization is a process of translating your web apps into different mu
 
 [pretty-list]
 * It follows the conventions and libraries provided by link:http://formatjs.io/[Format.js, window="_blank"].
-* All locale messages are formatted using link:http://userguide.icu-project.org/formatparse/messages[ICU Message Syntax, window="_blank"].
+* All locale strings are defined using link:http://userguide.icu-project.org/formatparse/messages[ICU Message Syntax, window="_blank"].
 * All locale strings are stored within *.json* files inside `resources/locales` directory or database table `locales` based upon the driver you are using.
 * A middleware can be used to detect the user language in runtime.
 
 == Setup
-The `adonis-antl` package is not installed/setup by default and you are required to install it when required.
+The `adonis-antl` package is not installed/setup by default, and you are required to install it when needed.
 
 .Installing Via Npm
 [source, bash]
@@ -59,10 +59,10 @@ Based upon the default driver you will have to store your locales inside the `re
 ./ace antl:setup --driver=database
 ----
 
-Above command will create a migration file(if database driver) or will create the `resources/locales/*` directory or the migrations to create the database table. Along with that it will the required configuration to the `config/app.js` file.
+Above command will create the `resources/locales/*` directory or the migrations to create the database table. Along with that, it will save the required configuration to the `config/app.js` file.
 
 == Basic Example
-Let's start with a basic example of formatting raw values and messages written using xref:_icu_messages[ICU Syntax]. This time we will play with the *Ace REPL* within the command line.
+Let's start with a basic example of formatting raw values and messages written using xref:_icu_messages[ICU Syntax]. This time, we will play with the *Ace REPL* within the command line.
 
 [source, bash]
 ----
@@ -93,7 +93,7 @@ Antl
 image:http://res.cloudinary.com/adonisjs/image/upload/v1475061511/Adonis-Antl_hlpwxd.gif[]!
 
 === Formatting Messages
-Using the default `file` driver, we can define locales inside the `resources/locales` directory. Each language gets it's own sub-directory.
+Using the default `file` driver, we can define locales inside the `resources/locales` directory. Each language gets its own sub-directory.
 
 .resources/locales/en/messages.json
 [source, json]
@@ -117,10 +117,10 @@ Chair will cost $29.00
 ----
 
 == ICU Messages
-Before you can start using the *Antl* provider it is really important to understand the link:http://userguide.icu-project.org/formatparse/messages[ICU message syntax] since it is a standard adopted by the web globally.
+Before you can start using the *Antl* provider, it is crucial to understand the link:http://userguide.icu-project.org/formatparse/messages[ICU message syntax] since it is a standard adopted by the web globally.
 
 === String Literals
-A message can just a string literal in different multiple languages.
+A message can be just a string literal in multiple different languages.
 
 .resources/locales/en/messages.json
 [source, json]
@@ -166,13 +166,13 @@ use('Antl').formatMessage('messages.greeting', { name: 'Virk' })
 ----
 
 === Formatted Arguments
-Formatted arguments gives you the functionality to define the argument type and format as `{ key, type, format }`.
+Formatted arguments give you the functionality to define the argument key, type and format as `{ key, type, format }`.
 
 [options="header"]
 |====
 | Name | Description
 | key | Key is used to define the placeholder name which is used in the data object.
-| type | Type defines the type of data to expect/format the key for. Internationalization has a set of defined types.
+| type | Defines the format type for the value. Internationalization has a set of defined types.
 | format | Format is an object of values defining how to format the type. For example: `number` type can be formatted as *percentage*, *decimal* or *currency*.
 |====
 
@@ -198,7 +198,7 @@ Antl.formatMessage('messages.cart.total', { price: 59 }, (message) => {
 })
 ----
 
-Also you can pass the format as an expression instead of attaching the callback.
+Also, you can pass the format as an expression instead of attaching the callback.
 
 [source, javascript]
 ----
@@ -214,15 +214,378 @@ You can also access antl directly in your views using the `antl` global.
 {{ antl.formatMessage('messages.cart.total', { price: 59 }, 'curr:number[currency=usd]') }}
 ----
 
-== List Of Types
+== Antl Methods
+Below is the list of antl methods.
 
+==== for(locale)
+Temporarily switch locale for a single method call.
+
+[source, javascript]
+----
+Antl.for('fr').formatNumber(1000)
+----
+
+==== getLocale
+Returns the currently active locale
+
+[source, javascript]
+----
+Antl.getLocale()
+----
+
+==== setLocale(locale)
+Permanently switch locale for all future translations.
+
+[source, javascript]
+----
+Antl.setLocale('fr')
+Antl.formatNumber(1000)
+----
+
+==== isLocale(locale)
+Detect if a given locale is the active locale.
+
+[source, javascript]
+----
+Antl.isLocale('en')
+----
+
+==== locales
+Return a list of registered locales as an array. It is based upon the messages saved inside a file/database.
+
+[source, javascript]
+----
+Antl.locales()
+----
+
+==== strings([group])
+Return a list of registered strings for a given/default locale. An optional group can be passed to fetch strings for a given group only.
+
+TIP: This method can be helpful in populating a dropdown.
+
+[source, javascript]
+----
+Antl.strings()
+// or
+Antl.strings('messages')
+// or
+Antl.for('fr').strings()
+----
+
+==== pair([group])
+This method is similar to xref:_strings_group[strings] but instead returns a flat object by joining nested objects with a (dot).
+
+[source, javascript]
+----
+Antl.pair()
+// or
+Antl.pair('messages')
+// or
+Antl.for('fr').pair()
+----
+
+==== get(key)
+Get raw string for a given key
+
+[source, javascript]
+----
+Antl.get('messages.cart.total')
+// or
+Antl.for('fr').get('messages.cart.total')
+----
+
+==== set(group, key, value)
+Update/Create value for a given key inside a group
+
+NOTE: This method will update the underlying store for the currently active driver which means it will update the database row or update the file system.
+
+[source, javascript]
+----
+yield Antl.set('messages', 'cart.total', 'You will be paying {total, number, curr}')
+----
+
+==== remove(group, key)
+Remove a given key for the currently active locale.
+
+[source, javascript]
+----
+yield Antl.remove('messages', 'cart.total')
+----
+
+==== load()
+This method is used to `load` the locales for the currently active driver. First time *Antl Provider* will load all the strings for the default driver defined inside `config/app.js` file whereas you are required to call this method manually whenever you switch the driver in runtime.
+
+TIP: The `load` method smartly caches the values returned by a driver. Which means calling the method multiple time will have no side effects.
+
+[source, javascript]
+----
+const db = Antl.driver('database')
+yield db.load()
+
+db.formatMessage('messages.cart.total', {total: 1000})
+----
+
+==== reload
+Since the `load` method caches the values, you can make use of `reload` to forcefully reloads all the strings for a given driver.
+
+[source, javascript]
+----
+const db = Antl.driver('database')
+yield db.reload()
+
+db.formatMessage('messages.cart.total', {total: 1000})
+----
+
+== Formatter Methods
+Below is the list of formatter methods and available options you can pass to get desired output.
+
+==== formatNumber(value, options)
+[source, javascript]
+----
+const Antl = use('Antl')
+
+Antl.formatNumber(1000)
+// or
+Antl.formatNumber(1000, { style: 'percent' })
+----
+
+[source, twig]
+----
+{{ antl.formatNumber(1000) }}
+{# or #}
+{{ antl.formatNumber(1000, { style: 'percent' }) }}
+----
+
+.Options
+[options="header"]
+|====
+| Key | Default Value | Possible Values | Description
+| style | decimal | decimal, currency, percentage | The formatting style to be used for formatting the value.
+| currency | null | A valid ISO 4217 currency code | If *style* is currency, this option must pass a valid currency code to be used for formatting the value. link:https://en.wikipedia.org/wiki/ISO_4217#Active_codes[Reference list of country code, window="_blank"]
+| currencyDisplay | symbol | symbol, code | How to display the currency. For example &dollar; is the *symbol* and USD is the *code*
+| useGrouping | true | true, false | Whether to use grouping separators like thousand/lakh/crore separators.
+| minimumIntegerDigits | 1 | 1-21 | The minimum number of integer digits to use.
+| minimumFractionDigits | floating | 0-20 | The minimum number of fraction digits to use. The default value is *0* for plain numbers and minor unit digits provided by the ISO 4217 for currency values.
+| maximumFractionDigits | floating | 0-20 | The maximum number of fraction digits to use. The default value is greater than the *minimumFractionDigits* value.
+| minimumSignificantDigits | 1 | 1-21 | The minimum number of significant digits to use.
+| maximumSignificantDigits | minimumSignificantDigits | 1-21 | The maximum number of significant digits to use.
+|====
+
+==== formatAmount(value, currency, options)
+[source, javascript]
+----
+const Antl = use('Antl')
+
+Antl.formatAmount(1000, 'usd')
+// or
+Antl.formatNumber(1000, { currencyDisplay: 'code' })
+----
+
+[source, twig]
+----
+{{ antl.formatAmount(1000, 'usd') }}
+{# or #}
+{{ antl.formatAmount(1000, 'usd', { currencyDisplay: 'code' }) }}
+----
+
+The formatting options are similar to xref:_formatnumber_value_options[formatNumber]
+
+==== formatDate(value, options)
+[source, javascript]
+----
+const Antl = use('Antl')
+
+Antl.formatDate(new Date())
+// or
+Antl.formatDate(new Date(), { hour12: false })
+----
+
+[source, twig]
+----
+{{ antl.formatDate(new Date()) }}
+{# or #}
+{{ antl.formatDate(new Date(), { hour12: false }) }}
+----
+
+.Options
+[options="header"]
+|====
+| Key | Default Value | Possible Values | Description
+| hour12 | locale dependent | true, false | Whether to show time in *12 hours* format or not.
+| weekday | none | narrow, short, long | The representation of the weekday.
+| era | none | narrow, short, long | The representation of the era.
+| year | none | numeric, 2-digit | The representation of the year.
+| month | none | numeric, 2-digit, narrow, short, long | The representation of the month.
+| day | none | numeric, 2-digit | The representation of the day.
+| hour | none | numeric, 2-digit | The representation of the hour.
+| minute | none | numeric, 2-digit | The representation of the minute.
+| second | none | numeric, 2-digit | The representation of the second.
+| timeZoneName | none | short, long | The representation of the time zone name.
+|====
+
+==== formatRelative(key, value, options)
+[source, javascript]
+----
+const Antl = use('Antl')
+const threeHoursPrior = new Date().setHours(new Date().getHours() - 3)
+
+Antl.formatRelative(threeHoursPrior)
+// 3 hours ago
+----
+
+[source, twig]
+----
+{{ antl.formatRelative(threeHoursPrior) }}
+----
+
+.Options
+[options="header"]
+|====
+| Key | Default Value | Possible Values | Description
+| units | best fit | second, minute, hour, day, month, year | The particular rendering unit. For example *30 days ago* instead of *1 month ago*
+| style | best fit | numeric | The rendering style for the value. For example: *numeric* will force the output to *1 day ago* instead of *yesterday*.
+|====
+
+==== formatMessage(key, values, [callback|options])
+Formatting a message requires you first to save your strings inside the locales files or the database table called `locales` and it must follow the xref:_icu_messages[ICU Message Syntax].
+
+[source, javascript]
+----
+const Antl = use('Antl')
+
+Antl.formatMessage('messages.total', { total: 1000 })
+// or
+Antl.formatMessage('messages.total', { total: 1000 }, (message) => {
+  message.passFormat('curr').to.('number').withValues({ currency: 'usd' })
+})
+----
+
+Since views do not allow adding callbacks to a function, you are supposed to pass a string expression to the `formatMessage` method.
+
+[source, twig]
+----
+{{ antl.formatMessage('messages.total', { total: 1000 }) }}
+{# or #}
+{{ antl.formatMessage('messages.total', { total: 1000 }, 'curr:number[currency=usd]') }}
+----
 
 == Locale & Groups
+When working with *Antl provider* your messages are divided into segments of `locale` and `groups`. Locale refers to the language for which you have defined the message, and a group defines the category of the message. Take the following example:
+
+[source]
+----
+├── locales
+│   ├── en <1>
+│   │   ├── messages.json <2>
+----
+
+<1> The `en` is the locale or language for the message.
+<2> The file `messages.json` is the group called *messages* for all the strings defined inside this file.
+
+When translating/formatting a message, you can are required to pass a string starting with the group. `messages.cart.total`. Also for generic messages which are same for all the languages can be defined next to the `*` locale.
+
+.resources/locales/*/messages.json
+[source, json]
+----
+{
+  "greeting": "I am available to all the languages."
+}
+----
+
+In the same way, you can define a group when using the `database` driver.
+
+.Database locales table
+[options="header"]
+|====
+| id | locale | group | item | text
+| 1 | en | messages | cart.total | Your cart total is {total, number, curr}
+| 2 | * | messages | greeting | I am available to all the languages
+|====
 
 == Detecting User Locale
+So far we have seen the ways of formatting messages and values using Antl provider. All values will be formatted for the *default locale* defined in `config/app.js` file.
 
-== Helpers
+.config/locale.js
+[source, javascript]
+----
+{
+  locales: {
+    driver: 'file',
+    locale: 'en',
+    fallbackLocale: 'en'
+  }
+}
+----
+
+You can change the default locale value, and all values will be formatted accordingly. To make this process dynamic based upon the user language, you are required to make use of `Antl` middleware which will detect the user language and set it as the default language for all translations.
+
+.app/Http/kernel.js
+[source, javascript]
+----
+const globalMiddleware = [
+  'Adonis/Middleware/Antl'
+]
+----
+
+Now all HTTP requests header *Accept-Language* or query string param *lang* will be used to detect the user language.
 
 == Switching Drivers
+Antl Provider makes use of the default driver defined inside `config/app.js` file. Whereas you can switch the drivers in runtime to make use of a different driver.
+
+[source, javascript]
+----
+const db = Antl.driver('db')
+yield db.load() <1>
+
+db.formatNumber(1000, { format: 'curr' })
+----
+
+<1> The xref:_load[load] method should be called after switching the driver since it will load and cache all the strings for a given driver.
 
 == Adding Drivers
+You can extend *Antl Provider* by adding your own custom drivers and register them inside `bootstrap/extend.js` file.
+
+.bootstrap/extend.js
+[source, javscript]
+----
+const Ioc = require('adonis-fold').Ioc
+
+Ioc.extend('Adonis/Addons/Antl', 'mongo', (app) => {
+  return new Mongo()
+})
+----
+
+.The Mongo Driver
+[source, javascript]
+----
+class Mongo {
+  * load () { <1>
+    // load all locales and return as a nested object
+  }
+
+  * set (locale, group, key, value) { <2>
+    // save new/update value
+  }
+
+  * remove (locale, group, key) { <3>
+    // remove value for a given group
+  }
+}
+----
+
+[support-list]
+1. It should return all locale strings as a nested object of `language` and `group`. For example
++
+[source, json]
+----
+{
+  "en": {
+    "messages": {
+      "cart.total": "Your cart total is"
+    }
+  }
+}
+----
+
+2. The `set` method should save the value for a given key, group and locale. It the value already exists, it should update it.
+3. The `remove` method should delete the value.
