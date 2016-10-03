@@ -22,6 +22,7 @@ Internationalization is a process of translating your web apps into multiple dif
 * All locale strings are defined using link:http://userguide.icu-project.org/formatparse/messages[ICU Message Syntax, window="_blank"].
 * All locale strings are stored within *.json* files inside `resources/locales` directory or database table `locales` based upon the driver you are using.
 * A middleware can be used to detect the user language in runtime.
+* Generic messages (same for all languages) are saved inside `resources/locales/fallback` directory and `fallback` group when using database driver.
 
 == Setup
 The `adonis-antl` package is not installed/setup by default, and you are required to install it when needed.
@@ -32,7 +33,7 @@ The `adonis-antl` package is not installed/setup by default, and you are require
 npm i --save adonis-antl
 ----
 
-.bootstrap/app.js
+.Registering Provider (bootstrap/app.js)
 [source, javascript]
 ----
 const providers = [
@@ -40,7 +41,7 @@ const providers = [
 ]
 ----
 
-.bootstrap/app.js
+.Registering Alias (bootstrap/app.js)
 [source, javascript]
 ----
 const aliases = {
@@ -51,6 +52,14 @@ const aliases = {
 
 Based upon the default driver you will have to store your locales inside the `resources/locales` directory or the `locales` database table. To make the setup process simple, you can run the following command.
 
+.Registering Command (bootstrap/app.js)
+[source, javascript]
+----
+const commands = [
+  'Adonis/Commands/Antl:Setup'
+]
+----
+
 [source, bash]
 ----
 ./ace antl:setup
@@ -59,7 +68,30 @@ Based upon the default driver you will have to store your locales inside the `re
 ./ace antl:setup --driver=database
 ----
 
-Above command will create the `resources/locales/*` directory or the migrations to create the database table. Along with that, it will save the required configuration to the `config/app.js` file.
+Above command will create the `resources/locales/*` directory or the migrations to create the database table.
+
+== Config
+The configuration for *Antl Provider* is saved inside `config/app.js` file. Release version _3.1_ includes the config by default but always make sure to keep it updated.
+
+.config/app.js
+[source, javascript]
+----
+{
+  locales: {
+    driver: 'file',
+    locale: 'en',
+    fallbackLocale: 'en'
+  }
+}
+----
+
+[options="header"]
+|====
+| Key | Possible Values | Description
+| driver | file, database | The driver to use for reading/writing and removing locale strings.
+| locale | Any valid locale | The default locale to be used when unable to detect user locale.
+| fallbackLocale | Any valid locale | The fallback locale when detected user locale is not supported.
+|====
 
 == Basic Example
 Let's start with a basic example of formatting raw values and messages written using xref:_icu_messages[ICU Syntax]. This time, we will play with the *Ace REPL* within the command line.
@@ -479,12 +511,12 @@ When working with *Antl provider* your messages are divided into segments of `lo
 │   │   ├── messages.json <2>
 ----
 
-<1> The `en` is the locale or language for the message.
+<1> The `en` is the language for the message.
 <2> The file `messages.json` is the group called *messages* for all the strings defined inside this file.
 
-When translating/formatting a message, you can are required to pass a string starting with the group. `messages.cart.total`. Also for generic messages which are same for all the languages can be defined next to the `*` locale.
+When translating/formatting a message, you can are required to pass a string starting with the group. `messages.cart.total`. Also for generic messages which are same for all the languages can be defined next to the `fallback` folder/group.
 
-.resources/locales/*/messages.json
+.resources/locales/fallback/messages.json
 [source, json]
 ----
 {
@@ -499,7 +531,7 @@ In the same way, you can define a group when using the `database` driver.
 |====
 | id | locale | group | item | text
 | 1 | en | messages | cart.total | Your cart total is {total, number, curr}
-| 2 | * | messages | greeting | I am available to all the languages
+| 2 | fallback | messages | greeting | I am available to all the languages
 |====
 
 == Detecting User Locale
@@ -546,7 +578,7 @@ db.formatNumber(1000, { format: 'curr' })
 You can extend *Antl Provider* by adding your own custom drivers and register them inside `bootstrap/extend.js` file.
 
 .bootstrap/extend.js
-[source, javscript]
+[source, javascript]
 ----
 const Ioc = require('adonis-fold').Ioc
 
@@ -573,7 +605,6 @@ class Mongo {
 }
 ----
 
-[support-list]
 1. It should return all locale strings as a nested object of `language` and `group`. For example
 +
 [source, json]
