@@ -1,0 +1,671 @@
+---
+permalink: lucid
+categories:
+- lucid
+---
+= Lucid
+
+Lucid is the implementation of link:https://en.wikipedia.org/wiki/Active_record_pattern[Active record, window="_blank"] which is an architectural pattern of storing and manipulating SQL data as objects. Lucid makes it so simple for you to write non-trivial web applications with ease and less code.
+
+Lucid has support for:
+
+[pretty-list]
+1. Fluent query builder to query data by chaining javascript methods.
++
+[source, javascript]
+----
+yield User.all()
+yield User.query().where('status', 'active').fetch()
+----
+
+2. Solid support for defining database relations without touching your SQL schema.
++
+[source, javascript]
+----
+class User extends Lucid {
+
+  profile () {
+    return this.hasOne('App/Model/Profile')
+  }
+
+  posts () {
+    return this.hasMany('App/Model/Post')
+  }
+
+}
+----
+3. Running queries as transactions.
+4. Getters/Setters to mutate data on the fly.
+5. Inbuilt support for computed properties.
+6. Database hooks to add domain logic to specific events.
+7. Support to define *visible/hidden* fields to remove them from the JSON output. The best example is of hiding the `password` field from the JSON output.
+
+== Basic Example
+Let's start with a basic example of creating a user model and querying users from the corresponding database table.
+
+.Creating New Model
+[source, bash]
+----
+./ace make:model User
+
+# or with migration
+./ace make:model User --migration
+----
+
+.app/Model/User
+[source, javascript]
+----
+'use strict'
+
+const Lucid = use('Lucid')
+
+class User extends Lucid {
+}
+----
+
+Yes, that's all you need to define a Lucid model. Lucid will figure out the database table name using some predefined conventions. For example *User* model will look for *users* table.
+
+.users (table)
+[source]
+----
++---------+-----------+--------------------+------------+
+| id (PK) |  username |  email             | password   |
++---------+-----------+--------------------+------------+
+| 1       |  unicorn  |  unicorns@ages.com | secret     |
+| 2       |  lois     |  lois@oscar.com    | secret     |
++---------+-----------+--------------------+------------+
+----
+
+NOTE: Make sure to use link:migrations[Migrations] to set up the `users` table. Lucid does not create/alter database tables for you.
+
+Now let's say we want to fetch all the users from the `users` table. For the sake of simplicity, we will make fetch the users within the `routes` file.
+
+.app/Http/routes.js
+[source, javascript]
+----
+const Route = use('Route')
+const User = use('App/Model/User')
+
+Route.get('/users', function * (request, response) {
+  const users = yield User.all() <1>
+  response.ok(users)
+})
+----
+
+<1> The `all` method will fetch all the records from the database table. Think of it as `select * from "users"` query.
+
+== Convention over Configuration
+Models inherit a handful of properties from Lucid base class, which prevents you from re-writing the same code again and again. Only implement below methods if you want to change the default behavior of a model.
+
+==== table
+The table name is the plural underscore representation of your model class name.
+
+[options="header"]
+|====
+| Model | Table Name
+| User | users
+| Person | people
+| PostComment | post_comments
+|====
+
+To override the conventional table name, you can return a value from the `table` getter.
+
+[source, javascript]
+----
+class User extends Lucid {
+
+  static get table () {
+    return 'my_users'
+  }
+
+}
+----
+
+==== primaryKey
+Each model needs to have a primary key which is set to `id` by default. Value for primary key is auto-populated by Lucid whenever you save a new model to the database. Also, the primary key is required to resolve model relations.
+
+[source, javascript]
+----
+class User extends Model {
+
+  static get primaryKey () {
+      return 'userId'
+  }
+
+}
+----
+
+==== connection
+Connection parameter helps you in using different databases connection for a given model.
+
+Database connections are defined inside `config/database.js` file. Lucid makes use of *default* connection defined under the same file. However, you can swap this value to use any defined connection from your database config file.
+
+.config/database.js
+[source, javascript]
+----
+module.exports = {
+  connection: 'mysql',
+
+  mysql: {
+    ....
+  },
+
+  reportsMysql: {
+    ...
+  }
+}
+----
+
+.app/Model/Report
+[source, javascript]
+----
+class Report extends Mysql {
+
+  static get connection () {
+    return 'reportsMysql'
+  }
+
+}
+----
+
+== TimeStamps
+Timestamps eliminate the need for setting up timestamps manually every time you create or update a record. Following timestamps are used for different database operations.
+
+==== createTimestamp
+Create timestamp defines the database field to be used for adding row creation time to the database table. You can override this property to specify a different field name or return `null` to disable it.
+
+[source, javascript]
+----
+class User extends Lucid {
+
+  static get createTimestamp () {
+    return 'created_at'
+  }
+
+}
+----
+
+==== updateTimestamp
+Every time you modify a row in a database table `updateTimestamp` will be updated to the current time.
+
+[source, javascript]
+----
+class User extends Lucid {
+
+  static get updateTimestamp () {
+    return 'updated_at'
+  }
+
+}
+----
+
+==== deleteTimestamp
+The `deleteTimestamp` behaves a little different from *create* and *update* timestamps. You should only return value from this method if you want to make use of soft deletes.
+
+[source, javascript]
+----
+class User extends Lucid {
+
+  static get deleteTimestamp () {
+    return null
+  }
+
+}
+----
+
+Soft deletes is a term for deleting records by updating a delete timestamp instead of removing the row from the database.In other words, *soft deletes are safe deletes*, where you never loose data from your SQL tables.
+
+Soft deletes are disabled by default and to enable them you must return a table field name from `deleteTimestamp` getter.
+
+==== dateFormat
+Date format specifies the format of date in which timestamps should be saved. Internally models will convert dates to link:http://momentjs.com/[moment.js, window="_blank"] instance. You can define any valid date format supported by momentjs.
+
+[source, javascript]
+----
+class User extends Lucid {
+
+  static get dateFormat () {
+    return 'YYYY-MM-DD HH:mm:ss'
+  }
+
+}
+----
+
+== Omitting Fields From JSON Output
+Quite often you will find yourself omitting/picking fields from the database results. For example: Hiding the *user's password* from the JSON output. Doing this manually can be tedious in many ways.
+
+1. You will have manually loop over the rows and delete the key/value pair.
+2. When you fetch relationships, you will have to loop through all the parent records and then their child records to delete the key/value pair.
+
+AdonisJs makes it simpler by defining the *visible* or *hidden* (one at a time) on your model.
+
+.Defining Hidden
+[source, javascript]
+----
+class User extends Lucid {
+
+  static get hidden () {
+    return ['password']
+  }
+
+}
+----
+
+.Defining Visible
+[source, javascript]
+----
+class Post extends Lucid {
+
+  static get visible () {
+    return ['title', 'body']
+  }
+
+}
+----
+
+== Query Scopes
+Query scopes are fluent methods defined on your models as static methods and can be used within the query builder chain. Think of them as *descriptive* convenient methods for extending the query builder.
+
+[source, javascript]
+----
+class User extends Lucid {
+
+  static scopeActive (builder) {
+    builder.where('status', 'active')
+  }
+
+}
+----
+
+Now to make use of the *active* scope, you just need to call the method on the query builder chain.
+
+[source, javascript]
+----
+const activeUsers = yield User.query().active().fetch()
+----
+
+=== Query Scopes Rules
+[pretty-list]
+1. Query scopes are always defined as static methods.
+2. You must append your methods with `scope` followed by the *PascalCase* method name. For example: `scopeLatest()` will be used as `latest`.
+3. You must call the `query` method on your model before calling any query scopes.
+
+== Traits
+Unfortunately, Javascript has no way of defining traits/mixins natively. *Lucid* models makes it easier for you to add traits to your models and extend them by adding new methods/properties.
+
+==== traits
+[source, javascript]
+----
+class Post extends Lucid {
+
+  static get traits () {
+    return ['Adonis/Traits/Slugify']
+  }
+
+}
+----
+
+==== use(trait)
+Also, you can dynamically add traits using the `use` method.
+
+[source, javascript]
+----
+class Post extends Lucid {
+
+  static boot () {
+    super.boot()
+    this.use('Adonis/Traits/Slugify')
+  }
+
+}
+----
+
+NOTE: Make sure to define traits only once. Redefining traits will cause multiple registrations of a triat, and your models will misbehave. The best place of defining *dynamic* traits is inside the Model `boot` method.
+
+== CRUD Operations
+CRUD is a term used to *Create*, *Read*, *Update* and *Delete* records from a database table. Lucid models offer a handful of convenient methods to make this process easier. Let's take an example of managing *posts* using the Post model.
+
+.posts table
+[source]
+----
++------------+-----------------+
+| name       |  type           |
++------------+-----------------+
+| id (PK)    |  INTEGER        |
+| title      |  VARCHAR(255)   |
+| body       |  TEXT           |
+| created_at |  DATETIME       |
+| updated_at |  DATETIME       |
++------------+-----------------+
+----
+
+.Create Post Model
+[source, bash]
+----
+./ace make:model Post
+----
+
+Now let's make use of the Post Model to perform CRUD operations
+
+==== create
+[source, javascript]
+----
+const post = new Post()
+post.title = 'Adonis 101'
+post.body  = 'Adonis 101 is an introductory guide for beginners.'
+
+yield post.save() // SQL Insert
+----
+
+The `save` method will persist the model to the database. If row already exists in the database, it will update it. Alternatively, you can also make use of the `create` method which allows you to pass all the values as a parameter
+
+[source, javascript]
+----
+const post = yield Post.create({
+  title: 'Adonis 101',
+  body: 'Adonis 101 is an introductory guide for beginners'
+})
+----
+
+==== read
+Read operation is divided into two segments. First is to fetch all the *posts* and another one is to fetch a single post using `id` or any other unique identifier.
+
+.Fetching All Posts
+[source, javascript]
+----
+const posts = yield Post.all()
+----
+
+.Fetching A Single Post
+[source, javascript]
+----
+const postId = request.param('id')
+const post = yield Post.find(postId)
+
+if (post) {
+  yield response.sendView('posts.show', { post: post.toJSON() })
+} else {
+  response.send('Sorry, cannot find the selected found')
+}
+----
+
+==== update
+The update operation is performed on an existing model instance. In general scenarios, you will have an id of a row that you want to update.
+
+[source, javascript]
+----
+const post = yield Post.findBy('id', 1)
+post.body = 'Adding some new content'
+
+yield post.save() // SQL Update
+----
+
+Alternatively, you can also make use of the `fill` method to pass all new key/values pairs as an object.
+
+[source, javascript]
+----
+const post = yield Post.findBy('id', 1)
+post.fill({body: 'Adding some new content'})
+
+yield post.save() // SQL Update
+----
+
+==== delete
+Delete operation is also performed on an existing model instance. If you have turned on xref:_deletetimestamp[softDeletes], then rows will not be deleted from SQL. However, the model instance will be considered deleted.
+
+[source, javascript]
+----
+const post = yield Post.findBy('id', 1)
+yield post.delete()
+----
+
+Also, from this point model instance will *freeze for edits*. However, you can still read data from existing model instance but will not be able to edit it anymore.
+
+[source, javascript]
+----
+const post = yield Post.findById(1)
+yield post.delete()
+
+console.log(post.title) // Adonis 101
+
+post.title = 'New title' // will throw RuntimeException
+----
+
+
+== Lucid Methods
+Lucid internally makes use of link:query-builder[Database Provider] which means all methods from Database provider are available to your models. Also below methods have been added for convenience.
+
+==== query()
+The `query` method will return the query builder instance which means you build your queries with the same ease as would do with Database provider.
+
+[source, javascript]
+----
+yield Post.query().where('title', 'Adonis 101').fetch()
+----
+
+==== fetch
+It is important to understand role of the `fetch` method. Fetch method will execute the query chain but also makes sure to return a collection of model instances.
+
+Which means each item inside the collection array will not be a regular Object. Instead, it will be a complete model instance.For example:
+
+.Without Fetch
+[source, javascript]
+----
+const posts = yield Post.query().where('title', 'Adonis 101')
+console.log(posts)
+----
+
+.Output
+[source]
+----
+[
+  {
+    id: 1,
+    title: 'Adonis 101',
+    body: 'Adonis 101 is an introductory guide for beginners.',
+    created_at: '2016-02-20 17:59:25',
+    updated_at: '2016-02-20 17:59:29'
+  }
+]
+----
+
+.With Fetch
+[source, javascript]
+----
+const posts = yield Post.query().where('title', 'Adonis 101').fetch()
+console.log(posts.value())
+----
+
+.Output
+[source]
+----
+[
+  Post {
+    attributes: {
+      id: 1,
+      title: 'Adonis 101',
+      body: 'Adonis 101 is an introductory guide for beginners.',
+      created_at: '2016-02-20 17:59:25',
+      updated_at: '2016-02-20 17:59:29'
+    },
+    original: { ... }
+  }
+]
+----
+
+Later one is an array of model instances, which has its benefits. We will talk about them in a different guide.
+
+==== first
+The `first` method will return only the first matched row as the model instance. If no row has been found, it will return `null`.
+
+[source, javascript]
+----
+const post = yield Post.query().where('title', 'Adonis 101').first()
+----
+
+==== findBy(key, value)
+Find a single row for a given key/value pair.
+
+[source, javascript]
+----
+yield Post.findBy('title', '...')
+yield Post.findBy('body', '...')
+yield Post.findBy('id', '...')
+----
+
+==== find(value)
+The `find` method is similar to the xref:_find_by_key_value(findBy) method instead it makes use of the xref:_primary_key(primaryKey) as the key for fetching the row.
+
+[source, javascript]
+----
+yield Post.find(1)
+----
+
+==== all()
+Returns all the rows from the corresponding database table.
+
+[source, javascript]
+----
+yield Post.all()
+----
+
+==== ids()
+Returns an array of all the *ids* from the corresponding database table.
+
+[source, javscript]
+----
+const ids = yield Post.ids()
+----
+
+==== pair(lhs, rhs)
+The `pair` method will return a flat object with a key/value pair of *lhs* and *rhs* key. It is helpful in populating the select box options.
+
+[source, javascript]
+----
+const countries = yield Country.pair('code', 'name')
+----
+
+.Output
+[source, javascript]
+----
+{
+  ind: 'India',
+  us: 'United States',
+  uk: 'United Kingdom'
+}
+----
+
+==== paginate(page, [perPage=20])
+The `paginate` method makes it so simple to paginate over database records.
+
+[source, javascript]
+----
+const posts = yield Post.paginate(request.input('page'))
+----
+
+==== pick([limit=1])
+The `pick` method will pick the give number of records from the database.
+
+[source, javascript]
+----
+const posts = yield Post.pick(2)
+----
+
+==== pickInverse([limit=1])
+The `pickInverse` works similar to the `pick` method instead it will pick rows with `desc` clause.
+
+[source, javascript]
+----
+const posts = yield Post.pickInverse(2)
+----
+
+==== create(values)
+The `create` method is used to create a new row to the database
+
+[source, javascript]
+----
+const user = yield User.create({ username: 'virk', email: 'virk@adonisjs.com' })
+----
+
+==== save()
+Create/Update a model instance
+
+[source, javascript]
+----
+const user = new User()
+user.username = 'virk'
+user.email = 'virk@adonisjs.com'
+
+yield user.save()
+----
+
+==== createMany
+Create multiple rows at once. This method will return an array of model instances.
+
+[source, javascript]
+----
+const users = yield User.createMany([{...}, {...}])
+----
+
+== Failing Early
+Lucid also has some handy methods that will throw exceptions when not able to find a given row using `find` or `findBy` method. Some programmers find it simpler to throw exception and catch them later inside a global handler to avoid `if/else` clause everywhere.
+
+==== findOrFail(value)
+
+[source, javascript]
+----
+const userId = request.param('id')
+const user = yield User.findOrFail(userId)
+----
+
+==== findByOrFail(key, value)
+
+[source, javascript]
+----
+const user = yield User.findByOrFail('username', 'virk')
+----
+
+If you want, you can wrap your `orFail` methods inside a `try/catch` block, or you can handle them globally inside `app/Listeners/Http.js` file.
+
+.app/Listeners/Http.js
+[source, javascript]
+----
+Http.handleError = function * (error, request, response) {
+  if (error.name === 'ModelNotFoundException') {
+    response.status(401).send('Resource not found')
+    return
+  }
+}
+----
+
+==== findOrCreate (whereAttributes, values)
+The `findOrCreate` method is a shortcut to finding a record and if not found a new record will be created and returned back on the fly.
+
+[source, javascript]
+----
+const user = yield User.findOrCreate(
+  { username: 'virk' },
+  { username: 'virk', email: 'virk@adonisjs.com' }
+)
+----
+
+== Using Transactions
+AdonisJs has first class support for running SQL transactions using the link:database#_database_transactions[Database Provider]. Also, your Lucid models can make use of transactions when creating, updating or deleting records.
+
+==== useTransaction
+[source, javascript]
+----
+const Database = use('Database')
+const trx = yield Database.beginTransaction() <1>
+
+const user = new User()
+user.username = 'liza'
+user.password = 'secret'
+user.useTransaction(trx) <2>
+yield user.save()
+trx.commit() <3>
+----
+
+<1> You always make use of the database provider to begin a new transaction. The reason we decoupled transactions from the Lucid models is to offer the flexibility of using same transaction instance of different models.
+<2> The `useTransaction` method will use the transaction instance to perform upcoming SQL operations.
+<3> The `commit` method gives you the ability to commit the transaction or `rollback` it if something unexpected happened.
