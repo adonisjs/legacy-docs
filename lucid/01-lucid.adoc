@@ -5,6 +5,8 @@ categories:
 ---
 = Lucid
 
+toc::[]
+
 Lucid is the implementation of link:https://en.wikipedia.org/wiki/Active_record_pattern[Active record, window="_blank"] which is an architectural pattern of storing and manipulating SQL data as objects. Lucid makes it so simple for you to write non-trivial web applications with ease and less code.
 
 Lucid has support for:
@@ -34,7 +36,7 @@ class User extends Lucid {
 
 }
 ----
-3. Running queries as transactions.
+3. Running queries inside transactions.
 4. Getters/Setters to mutate data on the fly.
 5. Inbuilt support for computed properties.
 6. Database hooks to add domain logic to specific events.
@@ -52,7 +54,7 @@ Let's start with a basic example of creating a user model and querying users fro
 ./ace make:model User --migration
 ----
 
-.app/Model/User
+.app/Model/User.js
 [source, javascript]
 ----
 'use strict'
@@ -129,7 +131,7 @@ Each model needs to have a primary key which is set to `id` by default. Value fo
 class User extends Model {
 
   static get primaryKey () {
-      return 'userId'
+    return 'userId'
   }
 
 }
@@ -384,9 +386,10 @@ const post = yield Post.find(postId)
 
 if (post) {
   yield response.sendView('posts.show', { post: post.toJSON() })
-} else {
-  response.send('Sorry, cannot find the selected found')
+  return
 }
+
+response.send('Sorry, cannot find the selected found')
 ----
 
 ==== update
@@ -650,7 +653,7 @@ const user = yield User.findOrCreate(
 ----
 
 == Using Transactions
-AdonisJs has first class support for running SQL transactions using the link:database#_database_transactions[Database Provider]. Also, your Lucid models can make use of transactions when creating, updating or deleting records.
+AdonisJs has first class support for running SQL transactions using the link:query-builder#_database_transactions[Database Provider]. Also, your Lucid models can make use of transactions when creating, updating or deleting records.
 
 ==== useTransaction
 [source, javascript]

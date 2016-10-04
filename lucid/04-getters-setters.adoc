@@ -1,0 +1,114 @@
+---
+permalink: database-getters-setters
+categories:
+- lucid
+---
+= Getters & Setters
+
+toc::[]
+
+One of the important steps towards building data driven applications is to control the flow of data. Lucid offers getter and setters to make it easier for you to control the data flow.
+
+Let's take an example of *Post Model* on which you will always have a *post title* which should be capitalized when displaying it to the end-user. For example, A title called *getting started with adonis* should be displayed as *Getting Started With Adonis*.
+
+There are a couple of ways to achieve the end results. First talk about the *naive* way of doing it.
+
+[support-list]
+1. Use CSS property `text-transform` to capitalise it. What if you also have a JSON API?
+2. Whenever you find an article, manually capitalize it, by modifying the property.
+  * Will you do it for 20 posts inside a loop?
+  * What if you are fetching posts as a relation for a given user? It means loop through all the users, and then their posts and manually mutate the article title.
+
+All tricks as mentioned earlier are not maintainable. The best way is, to modify the title from its origin to make sure it returns the same value no matter what.
+
+== Getters
+In Lucid we define *getters* for such situations. Getters mutate a given attribute on the fly without changing the original value in the database.
+
+[source, javascript]
+----
+'use strict'
+
+const Lucid = use('Lucid')
+
+class Post extends Lucid {
+
+  getTitle (title) {
+    return title.replace(/^(.)|\s(.)/g, function($1) {
+      return $1.toUpperCase();
+    })
+  }
+
+}
+----
+
+=== About Getters
+
+[pretty-list]
+1. Getters are always defined with the keyword `get` followed by the attribute name. For example, a getter for the `title` attribute will be defined as `getTitle`.
+2. Getters are synchronous, which means you cannot run asynchronous code inside them. You must use link:database-hooks[hooks] for that.
+3. Getters will receive the current value of a given field.
+4. Getters are evaluated when you call the `toJSON` method on a model instance or a collection.
+
+== Setters
+Setters are opposite of getters, and they mutate the value when you set them on your model instance. For example
+
+[source, javascript]
+----
+'use strict'
+
+const Lucid = use('Lucid')
+
+class User extends Lucid {
+
+  setAccess (access) {
+    return access === 'admin' ? 1 : 0
+  }
+
+}
+
+const user = new User()
+user.access = 'admin'
+
+console.log(user.access) // will return 1
+yield user.save()
+----
+
+=== About Setters
+
+[pretty-list]
+1. Setters are always defined with the keyword `set` followed by the attribute name. For example, a setter for the `access` attribute will be defined as `setAccess`.
+2. Setters are synchronous, which means you cannot run asynchronous code inside them. You must use link:database-hooks[hooks] for that.
+3. Setters will receive the current value of a given field.
+4. They are executed only when you *set/update* value of a given field on the model instance.
+
+== Computed Properties
+Computed properties are like getters, but they are virtual values that do not exist in your database tables.
+
+You may want computed properties in many cases. For example calculating the full name of a given user using their first and last name.
+
+[source, javascript]
+----
+'use strict'
+
+const Lucid = use('Lucid')
+
+class User extends Lucid {
+
+  static get computed () {
+    return ['fullname']
+  }
+
+  getFullname () {
+    return `${this.firstname} ${this.lastname}`
+  }
+
+}
+----
+
+=== About Computed Properties
+
+[pretty-list]
+1. Computed properties must be returned as an array from the `computed` getter.
+2. Computed methods are defined same as the `getters`.
+3. They do not receive any value and hence access the values from the model instance using `this` keyword.
+

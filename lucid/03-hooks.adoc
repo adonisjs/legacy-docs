@@ -1,0 +1,144 @@
+---
+permalink: database-hooks
+categories:
+- lucid
+---
+= Database Hooks
+
+toc::[]
+
+Hooks are the actions you perform *before* or *after* a specified database operation. Hooks plays a major role in keeping your codebase DRY and easy to reason about For example: *Hashing* the user password before saving it to the database.
+
+== About Hooks
+
+[pretty-list]
+1. Model hooks are defined inside `app/Model/Hooks` directory.
+2. Each model hook is a *ES2015* generator method, making it simpler to run the asynchronous code.
+3. You have to define hooks on your models explicitly.
+4. Like other generator commands, you can use ace to make a hook for you.
++
+[source, bash]
+----
+./ace make:hook User
+
+# or with predefined method
+./ace make:hook User --method=encryptPassword
+----
+
+== Basic Example
+Let's take the most basic example of encrypting the user password using a model hook.
+
+.app/Model/Hooks/User.js
+[source, javascript]
+----
+const Hash = use('Hash')
+const User = exports = module.exports = {}
+
+User.encryptPassword = function * (next) {
+  this.password = yield Hash.make(this.password)
+  yield next
+}
+----
+
+Next, we need to register this hook on the *User model* manually.
+
+.app/Model/User.js
+[source, javascript]
+----
+class User extends Lucid {
+
+  static boot () { <1>
+    super.boot()
+    this.addHook('beforeCreate', 'User.encryptPassword') <2>
+  }
+
+}
+----
+
+<1> All hooks should only be registered once and the `boot` method is perfect place since Lucid makes sure it is only executed once.
+<2> The `addHook` method will before the hook for a given event which is `beforeCreate` in this case.
+
+== Defining Hooks
+Hooks are executed in the sequence they are registered. To execute the next hook, you must `yield next` from the existing hook. The process is quite similar to HTTP middleware layer.
+
+==== addHook(event, [name], action)
+The `addHook` method will define a hook for a given event. Optionally you can give it a unique name, which can be used later to remove the hook.
+
+[source, javascript]
+----
+static boot () {
+  super.boot()
+  this.addHook('beforeCreate', 'User.encryptPassword')
+}
+----
+
+And for named hooks
+
+[source, javascript]
+----
+static boot () {
+  super.boot()
+  this.addHook(
+    'beforeCreate', <1>
+    'encryptingPassword', <2>
+    'User.encryptPassword' <3>
+  )
+}
+----
+
+<1> Hook event
+<2> Unique name
+<3> Action to be executed. The action can be a reference to a plain javascript method, or a namespace to be resolved by the IoC container.
+
+==== defineHooks(event, arrayOfActions)
+The `defineHooks` method is quite similar to the `addHook` method, instead you can define multiple hooks in one go.
+
+[source, javascript]
+----
+class User extends Lucid {
+
+  static boot () {
+    super.boot()
+    this.defineHooks('beforeCreate', ['UserHooks.validate', 'UserHook.encryptPassword'])
+  }
+
+}
+----
+
+==== removeHook(name)
+As stated earlier, you can also remove *named hooks* anytime during in your application.
+
+[source, javascript]
+----
+User.removeHook('encryptingPassword')
+----
+
+== Aborting Database Operations
+Hooks have the ability to abort the database operations by throwing exceptions.
+
+.app/Model/Hooks/User.js
+[source, javascript]
+----
+UserHook.validate = function * (next) {
+  if (!this.username) {
+    throw new Error('Username is required')
+  }
+  yield next
+}
+----
+
+== Hooks Events
+Below is the list of hooks events.
+
+[options="header"]
+|====
+| Event | Description
+| beforeCreate | Before a new record gets created.
+| beforeUpdate | Before an existing record gets updated.
+| beforeDelete | Before you are about to a delete a given record.
+| beforeRestore | This event is only triggered when you have enabled link:lucid#_deletetimestamp[soft deletes] and restoring a previously deleted record.
+| afterCreate | After a new record has been successfully created.
+| afterUpdate | After an existing record has been updated.
+| afterDelete | After a record has been deleted successfully.
+| afterRestore | After a soft deleted record has been restored.
+|====
