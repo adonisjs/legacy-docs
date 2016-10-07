@@ -7,4 +7,32 @@ categories:
 
 toc::[]
 
-=== AdonisJs 3.1
+== How Release Is Managed?
+AdonisJs is a combination of multiple npm packages called *Service providers*. All packages are free to have their own release cycle and versions. The combination of these packages form a release for AdonisJs. In breif you should look into the version number in `package.json` file of your project to know the current version.
+
+== AdonisJs 3.1
+Release v3.1 is a minor update with handful or bug fixes and incremental API updates. All features/methods from *v3.0* are fully supported and compatible with *v3.1*. Below is the changelog for individual modules.
+
+==== adonis-framework (3.0.2 - 3.0.3)
+There are no notable changes for this repo and all existing features from 3.0 will continue to work. Checkout the link:https://github.com/adonisjs/adonis-framework/blob/develop/CHANGELOG.md[git changelog, window="_blank"]
+
+==== adonis-lucid (3.0.4 - 3.0.7)
+Below is the list of notable changes:
+
+1. With the newer release you can assign traits to your models. Traits makes it easy to extend your models by adding methods/features to your models.
+2. Added support for `fresh` method to get a fresh instance of the model from database. link:https://github.com/adonisjs/adonis-lucid/commit/4d72794[4d72794].
+3. Add support for table prefix via database config file. link:https://github.com/adonisjs/adonis-lucid/commit/22399a0[22399a0]
+
+Checkout the entire link:https://github.com/adonisjs/adonis-lucid/blob/develop/CHANGELOG.md[git chanagelog].
+
+==== adonis-fold(3.0.3)
+1. Added support for `boot` method on service providers.
+2. Added support for listening to IoC container events. link:ioc-container#_events[Read more]
+
+==== adonis-auth(1.0.1 - 1.0.4)
+There are no notable changes for this repo Checkout the link:https://github.com/adonisjs/adonis-auth/blob/develop/CHANGELOG.md[git changelog, window="_blank"]
+
+==== adonis-commands(2.1.1 - 2.1.2)
+1. Added new *ace command* `route:list` to list all the registered routes on terminal.
+
+Checkout the entire link:https://github.com/adonisjs/adonis-commands/blob/develop/CHANGELOG.md[git chanagelog].

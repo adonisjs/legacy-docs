@@ -13,6 +13,8 @@ All routes are defined inside `app/Http/routes.js` file which at the time of sta
 
 NOTE: All examples in this document makes use of `Closures` as route actions, whereas it is recommended to create *Controllers* and bind them next to your routes. This way you will keep your routes file clean and your route actions testable.
 
+video::w7LD7E53w3w[youtube, width=100%, height=480]
+
 == Basic Example
 .app/Http/routes.js
 [source, javascript]
