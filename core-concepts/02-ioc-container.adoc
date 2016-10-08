@@ -3,7 +3,7 @@ permalink: ioc-container
 categories:
 - core-concepts
 ---
-= IoC Container
+= IoC Container & Service Providers
 
 toc::[]
 
@@ -48,7 +48,7 @@ const Bugsnag = use('Adonis/Src/Bugsnag')
 Bugsnag.notify(new Error('Something went wrong'))
 ----
 
-With the help of the IoC container, we can abstract the setup process of Bugsnag and offer an excellent API to the end-user. This small example may not be the right way of understanding the real power of the IoC container. Checkout the following video for in-depth understanding.
+With the help of the IoC container, we can abstract the setup process of Bugsnag and offer an excellent API to the end-user. This small example may not be the right way of understanding the real power of the IoC container. Check out the following video for in-depth understanding.
 
 == Unpacking IoC Container
 video::[youtube, width=100%, height=480]
@@ -85,8 +85,8 @@ class Book {
 const bookInstance = make(Book) <3>
 ----
 
-<1> The static `inject` getter returns an array of dependencies to be injected in the order they are defined.
-<2> All specified dependencies are injected to the constructor
+<1> The static `inject` getter returns an array of dependencies to be injected in sequence.
+<2> All specified dependencies are injected to the constructor.
 <3> Finally we make use of the `make` method to create an instance of the `Book` class, which auto injects the defined dependencies.
 
 ==== alias(name, namespace)
@@ -97,6 +97,37 @@ Define alias for a given namespace.
 const Ioc = require('adonis-fold').Ioc
 Ioc.alias('UserModel', 'App/Model/User')
 ----
+
+== Service Providers
+So far we have been manually binding dependencies to the IoC container using the `bind` method, but we are unsure of where to write this code and how to structure the bindings. Service providers give a friendly interface to *register* the bindings to the IoC container.
+
+NOTE: Always make sure to give unique names to your bindings. For example: Adonis uses `Adonis/Src/<ModuleName>` for the core bindings and `Adonis/Addons/<ModuleName>` for 1st party add-ons. Consider suffixing providers with your company name.
+
+A Service Provider is an `ES2015` class and supports two methods for registering the bindings and booting the initial state of the provider. For example:
+
+[source, javascript]
+----
+const ServiceProvider = require('adonis-fold').ServiceProvider
+
+class BugSnagProvider extends ServiceProvider {
+
+  * register () { <1>
+    this.app.bind('Adonis/Addons/BugSnag', (app) => {
+      const BugSnag = require('./BugSnag')
+      const Config = app.use('Adonis/Src/Config')
+      return new BugSnag(Config)
+    })
+  }
+
+  * boot () { <2>
+    // Everything is registered do some hard work
+  }
+
+}
+----
+
+<1> The `register` method is used to register bindings to the IoC container. Also, you can `use` other bindings from the IoC container using their *namespace*.
+<2> The `boot` method is called when all providers have been registered Which means you can do some heavy lifting inside this method to boot your provider. Also, this method is not required by every provider and only implement it when your provider needs to be booted.
 
 == Events
 Below is the list of events fired by the IoC container.
