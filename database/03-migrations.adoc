@@ -211,6 +211,20 @@ class UserSchema {
 }
 ----
 
+==== db(closure)
+The `db` method will give you the access to the link:query-builder[Database query builder] within your migrations. It is helpful if you want to migrate data while altering the database tables.
+
+[source, javascript]
+----
+class UserSchema {
+  up () {
+    this.db(function * (database) {
+      const names = yield database.from('users').pluck('name')
+    })
+  }
+}
+----
+
 == Schema Builder
 Please refer to the docs of link:http://knexjs.org/#Schema-Building[Knex Schema Building, window="_blank"], everything from knex is fully supported. Below is the example making use of schema builder to create the *users* table.
 
