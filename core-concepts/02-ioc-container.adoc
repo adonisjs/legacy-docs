@@ -48,10 +48,7 @@ const Bugsnag = use('Adonis/Src/Bugsnag')
 Bugsnag.notify(new Error('Something went wrong'))
 ----
 
-With the help of the IoC container, we can abstract the setup process of Bugsnag and offer an excellent API to the end-user. This small example may not be the right way of understanding the real power of the IoC container. Check out the following video for in-depth understanding.
-
-== Unpacking IoC Container
-video::[youtube, width=100%, height=480]
+With the help of the IoC container, we can abstract the setup process of Bugsnag and offer an excellent API to the end-user.
 
 == Available Methods
 Below is the list of available methods exposed by the IoC container.
