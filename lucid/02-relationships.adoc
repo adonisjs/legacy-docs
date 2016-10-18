@@ -7,7 +7,7 @@ categories:
 
 toc::[]
 
-Relational Databases are so powerful in managing the relationship between multiple database tables. Lucid extends this power by offering Javascript, only database associations which mean you can define a relationship between two tables without touching the SQL schema.
+Relational Databases are very powerful in managing the relationship between multiple database tables. Lucid extends this power by offering Javascript-only database associations, which means that you can define a relationship between two tables without touching the SQL schema.
 
 == Basic Example
 Relational databases are intended to define relations between two or more database tables. There are several benefits of defining relationships as they make common database operations a lot easier.
