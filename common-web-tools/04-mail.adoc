@@ -369,7 +369,7 @@ Ioc.extend('Adonis/Addons/Mail', 'postmark', function (app) {
 === Using PostMark Driver
 [source, javascript]
 ----
-yield Mail.driver('postmark').send('emails.welcome', (message) => {
+yield Mail.driver('postmark').send('emails.welcome', {}, (message) => {
   ...
 })
 ----
