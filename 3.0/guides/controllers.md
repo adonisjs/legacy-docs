@@ -101,7 +101,7 @@ Route.get('/users', 'Admin/UserController.index')
 
 CRUD applications are built on the idea of **Creating, Reading, Updating and Deleting** records from a database table.
 
-Since these are very common operations, AdonisJs helps you in defining conventional routes and their Controller actions using a term called `resource`.
+Since these are very common operations, AdonisJs helps you in defining conventional routes and their Controller actions using a term called `resource`. You can also use `resources`, which is an alias for the former.
 
 #### resources(name, Controller)
 ```javascript
