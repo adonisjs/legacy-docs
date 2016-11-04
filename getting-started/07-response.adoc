@@ -147,6 +147,8 @@ response.redirect('/welcome', 301)
 ==== route(route, data, status)
 Redirect to a defined route.
 
+NOTE: If AdonisJs cannot find a route with the name given it will consider it as an url and redirect to it.
+
 [source, javascript]
 ----
 Route
