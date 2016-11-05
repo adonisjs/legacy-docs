@@ -59,7 +59,7 @@ The configuration for ally is defined inside `config/services.js` file. You can 
 [source, javascript]
 ----
 module.exports = {
-  social: {
+  ally: {
 
     // Configuration for facebook
     facebook: {
@@ -163,6 +163,16 @@ Returns redirect url for a given provider
 [source, javascript]
 ----
 yield request.ally.driver('facebook').getRedirectUrl()
+----
+
+==== scope
+Update the scopes to be used for asking permission.
+
+[source, javascript]
+----
+yield request.ally.driver('facebook')
+  .scope(['public_profile', 'email', 'user_friends'])
+  .redirect()
 ----
 
 ==== getUser
