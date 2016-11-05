@@ -1,0 +1,241 @@
+---
+permalink: social-auth
+categories:
+- web-development-tools
+---
+= Social Auth Via Ally
+
+toc::[]
+
+Ally is a social authentication provider for AdonisJs. It makes it super easy to authenticate users via 3rd party websites like *Facebook*, *Twitter*, *Google*, etc. with minimum efforts.
+
+== Drivers
+Below is the list of officially supported drivers whereas you are free to contribute and add more.
+
+[support-list]
+* Facebook (facebook)
+* Google (google)
+* Twitter (twitter)
+* Github (github)
+* LinkedIn (linkedin)
+
+== About Ally
+[pretty-list]
+1. Ally is 1st party provider installed and configured to add support for social authentication.
+2. You are required to define the configuration inside `config/services.js` file. The configuration includes a *Client Id*, *Secret* and the *Redirect URI*.
+3. Ally will attach an object called `ally` to the link:request[request] instance so that you can access the methods inside your controllers.
+
+== Setup
+Let's begin with the setup process which is incredibly simple as always.
+
+.Installing From Npm
+[source, bash]
+----
+npm i --save adonis-ally
+----
+
+.bootstrap/app.js
+[source, javascript]
+----
+const providers = [
+  ...,
+  'adonis-ally/providers/AllyProvider'
+]
+----
+
+.app/Http/kernel.js
+[source, javascript]
+----
+const globalMiddleware = [
+  'Adonis/Middleware/Ally'
+]
+----
+Once the setup process has been done successfully, you are good to authenticate your users using their social profiles.
+
+== Config
+The configuration for ally is defined inside `config/services.js` file. You can copy the sample configuration from link:https://raw.githubusercontent.com/adonisjs/adonis-ally/develop/examples/config.js[github].
+
+.config/services.js
+[source, javascript]
+----
+module.exports = {
+  social: {
+
+    // Configuration for facebook
+    facebook: {
+      clientId: '',
+      clientSecret: '',
+      redirectUri: ''
+    },
+
+    // Configuration for github
+    github: {
+      clientId: '',
+      clientSecret: '',
+      redirectUri: ''
+    }
+
+  }
+}
+----
+
+== Basic Example
+Let's start with the basic example of *Login with Facebook* where we will authenticate the users using Facebook and will create their user account without a password.
+
+NOTE: Make sure you have defined the required configuration for facebook inside `config/services.js` file.
+
+.Registering Routes
+[source, javascript]
+----
+const Route = use('Route')
+
+Route.get('/facebook/login', 'LoginController.redirect')
+Route.get('/facebook/authenticated', 'LoginController.handleCallback')
+----
+
+.Redirecting User To The Provider
+First, we need to redirect the user to the facebook to allow our application to access their profile.
+[source, javascript]
+----
+class LoginController {
+
+  * redirect (request, response) {
+    yield request.ally.driver('facebook').redirect()
+  }
+
+}
+----
+
+.Handling Provider Callback
+[source, javascript]
+----
+const User = use('App/Model/User')
+
+class LoginController {
+
+  * handleCallback (request, response) {
+    const fbUser = yield request.ally.driver('facebook').getUser() <1>
+
+    const searchAttr = {
+      email: fbUser.getEmail()
+    }
+
+    const newUser = {
+      email: fbUser.getEmail(),
+      avatar: fbUser.getAvatar(),
+      username: fbUser.getName()
+    }
+
+    const user = yield User.findOrCreate(searchAttr, newUser) <2>
+
+    request.auth.loginViaId(user.id) <3>
+  }
+
+}
+----
+
+<1> The `getUser` method will fetch the user profile for the given provider. This method only works when the user has been redirected back to the `redirectUri`.
+<2> The `findOrCreate` is a lucid method to find a user with user details or create a new user if unable to find.
+<3> Finally we log in the user using their `id`.
+
+== Ally Methods
+Below is the list of available methods exposed by Ally provider.
+
+==== driver
+Select the driver
+
+[source, javascript]
+----
+request.ally.driver('facebook')
+----
+
+==== redirect
+Redirect the user to the provider website
+
+[source, javascript]
+----
+yield request.ally.driver('facebook').redirect()
+----
+
+==== getRedirectUrl
+Returns redirect url for a given provider
+
+[source, javascript]
+----
+yield request.ally.driver('facebook').getRedirectUrl()
+----
+
+==== getUser
+Returns user profile for a given provider
+
+[source, javascript]
+----
+yield request.ally.driver('facebook').getUser()
+----
+
+== User Methods
+Below is the list of methods to be used for fetching user profile details. All these methods are called on *User Instance* returned by xref:_getuser[getUser].
+
+==== getName
+[source, javascript]
+----
+const user = yield request.ally.driver('facebook').getUser()
+user.getName()
+----
+
+==== getEmail
+[source, javascript]
+----
+const user = yield request.ally.driver('facebook').getUser()
+user.getEmail()
+----
+
+==== getNickname
+[source, javascript]
+----
+const user = yield request.ally.driver('facebook').getUser()
+user.getNickname()
+----
+
+==== getAvatar
+[source, javascript]
+----
+const user = yield request.ally.driver('facebook').getUser()
+user.getAvatar()
+----
+
+==== getAccessToken
+[source, javascript]
+----
+const user = yield request.ally.driver('facebook').getUser()
+user.getAccessToken()
+----
+
+==== getRefreshToken
+Returns the refresh token to be used when access token has been expired. It is only returned when using *OAuth2*, and the provider supports access token expiry.
+
+[source, javascript]
+----
+const user = yield request.ally.driver('facebook').getUser()
+user.getAccessToken()
+----
+
+==== getExpires
+Access token expiry time in milliseconds. It is only returned when using *OAuth2*, and the provider supports access token expiry.
+
+[source, javascript]
+----
+const user = yield request.ally.driver('facebook').getUser()
+user.getExpires()
+----
+
+==== getTokenSecret
+Returns access token secret. It is only returned when using *OAuth1*.
+
+TIP: Twitter is the only driver which makes use of OAuth1.
+
+[source, javascript]
+----
+const user = request.ally.driver('twitter').getUser()
+user.getTokenSecret()
+----

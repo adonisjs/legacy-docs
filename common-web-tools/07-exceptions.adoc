@@ -123,6 +123,22 @@ Below is the list of all the exceptions only raised by the link:form-builder[For
 | E_INVALID_MAKE_STRING | This exception is raised when a string passed to `Ioc.makeFunc` is incorrect. Strings needs to have *dot(.)* seperated class and function name. For example: `Ioc.makeFunc('UserController.store')`
 |====
 
+=== Antl Provider
+[options="header"]
+|====
+| Error Code | Description
+| E_INVALID_ANTL_DRIVER | Exception is raised when the antl driver defined inside the `config/antl.js` file does not exists.
+|====
+
+=== Ally (Social Authentication) Provider
+[options="header"]
+|====
+| Error Code | Description
+| E_OAUTH_TOKEN_EXCHANGE | This exception is raised when unable to exchange access token using oauth code. This generally happens within the callback when using link:social-auth#_getuser[getUser] method.
+| E_INVALID_ALLY_DRIVER | This exception is raised when ally driver defined inside `config/services.js` file does not exists.
+| E_MISSING_OAUTH_CONFIG | This exception is raised when ally configuration does not exists for a given driver.
+|====
+
 == Throwing Exceptions
 It is recommended to throw a contextual exception since it makes it easier for the end user to act upon them. AdonisJs makes use of link:https://npmjs.org/package/node-exceptions[node-exception, window="_blank"] an npm module to structure exceptions. You can learn more about it via its documentation.
 
