@@ -9,6 +9,8 @@ toc::[]
 
 Ally is a social authentication provider for AdonisJs. It makes it super easy to authenticate users via 3rd party websites like *Facebook*, *Twitter*, *Google*, etc. with minimum efforts.
 
+video::SDKz5qLMeBI[youtube, width=100%, height=480]
+
 == Drivers
 Below is the list of officially supported drivers whereas you are free to contribute and add more.
 
