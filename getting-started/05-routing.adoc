@@ -104,7 +104,7 @@ Route.get('/make/:drink?', function * (request, response) {
 `?` makes a parameter optional which means both URL's `/make` or `/make/shake` are valid.
 
 == Content Negotiation Via Routes
-link:https://en.wikipedia.org/wiki/Content_negotiation[Content neogatiation, window="_blank"] is a way of finding the best output type for a given request. Ideally, HTTP header *Accept* is used to negotiate the content, but some modern apps make the output more explicit by defining the output extension within the URL. For example:
+link:https://en.wikipedia.org/wiki/Content_negotiation[Content negotiation, window="_blank"] is a way of finding the best output type for a given request. Ideally, HTTP header *Accept* is used to negotiate the content, but some modern apps make the output more explicit by defining the output extension within the URL. For example:
 
 A URL `/users.json` will return the JSON output, whereas `/users.html` will render a view.
 
