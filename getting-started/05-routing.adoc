@@ -197,7 +197,7 @@ You can also define `formats` to a group of routes. See xref:_formats_types_stri
 == Named Routes
 Routes are defined inside `app/Http/routes.js` file, but they are used everywhere. For example:
 
-1. Inside a view, to create then navigation bar.
+1. Inside a view, to create the navigation bar.
 2. Inside Controllers, to redirect to a different URL, etc.
 
 As you application will grow, new requirements will lead to changing routes quite often. Now changing them inside the routes file is pretty straight forward but finding their references inside all the views and controllers is not something you are going to enjoy.
