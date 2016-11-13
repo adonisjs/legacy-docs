@@ -368,3 +368,4 @@ You can also use *twig* highlighter if you cannot find nunjucks support for your
 * link:https://packagecontrol.io/packages/PHP-Twig[Sublime Text( Via Twig ), window="_blank"].
 * link:https://plugins.jetbrains.com/plugin/7303?[Webstorm( Via Twig ), window="_blank"].
 * link:https://github.com/axelboc/nunjucks-brackets/[Brackets, window="_blank"].
+* link:https://marketplace.visualstudio.com/items?itemName=ronnidc.nunjucks[Visual Studio Code, window="_blank"].
