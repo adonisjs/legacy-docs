@@ -85,24 +85,8 @@ installing dependencies...
 
 NOTE: If `new` command fails in the middle, make sure to `cd` into the newly created project and manually run `npm install`.
 
-== Serving The App
-You are all set to see your brand new project. Run the below commands to start a development server.
-
-[source, bash]
-----
-cd yardstick
-npm run dev
-----
-
-.Output
-[source, bash]
-----
-[nodemon] starting `node server.js`
-info adonis:framework serving app on http://localhost:3333
-----
-
 == Getting Proxies Error
-Older versions of Node.js requires `--harmony_proxies` flag to add support for *ES2015 Proxies*. If you are using*Node.js < 6.0*, make sure to make following changes.
+Older versions of Node.js requires `--harmony_proxies` flag to add support for *ES2015 Proxies*. If you are using *Node.js < 6.0*, make sure to make following changes.
 
 Replace the scripts inside `package.json` file with following
 
@@ -120,6 +104,22 @@ Replace the first line of the `ace` file with following
 [source, bash]
 ----
 #!/usr/bin/env node --harmony_proxies
+----
+
+== Serving The App
+You are all set to see your brand new project. Run the below commands to start a development server.
+
+[source, bash]
+----
+cd yardstick
+npm run dev
+----
+
+.Output
+[source, bash]
+----
+[nodemon] starting `node server.js`
+info adonis:framework serving app on http://localhost:3333
 ----
 
 By default, AdonisJs will use port `3333` to start the server, which is configurable via `.env` file. Now open http://localhost:3333 to see the welcome page.
