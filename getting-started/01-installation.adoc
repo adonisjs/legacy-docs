@@ -97,8 +97,29 @@ npm run dev
 .Output
 [source, bash]
 ----
-[nodemon] starting `node --harmony_proxies server.js`
+[nodemon] starting `node server.js`
 info adonis:framework serving app on http://localhost:3333
+----
+
+== Getting Proxies Error
+Older versions of Node.js requires `--harmony_proxies` flag to add support for *ES2015 Proxies*. If you are using*Node.js < 6.0*, make sure to make following changes.
+
+Replace the scripts inside `package.json` file with following
+
+.package.json
+[source, json]
+----
+"scripts": {
+  "dev": "nodemon --watch app --watch bootstrap --watch config --watch .env -x \"node --harmony_proxies\" server.js",
+  "start": "node --harmony_proxies server.js"
+}
+----
+
+Replace the first line of the `ace` file with following
+.ace
+[source, bash]
+----
+#!/usr/bin/env node --harmony_proxies
 ----
 
 By default, AdonisJs will use port `3333` to start the server, which is configurable via `.env` file. Now open http://localhost:3333 to see the welcome page.
