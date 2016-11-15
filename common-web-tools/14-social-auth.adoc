@@ -185,6 +185,18 @@ Returns user profile for a given provider
 yield request.ally.driver('facebook').getUser()
 ----
 
+==== fields
+Define custom fields when trying to access the user profile.
+
+[source, javascript]
+----
+yield request.ally.driver('facebook')
+  .fields(['email', 'verified']) <1>
+  .getUser()
+----
+
+NOTE: Make sure to access additional fields using the xref:_getoriginal[getOriginal] method on user instance.
+
 == User Methods
 Below is the list of methods to be used for fetching user profile details. All these methods are called on *User Instance* returned by xref:_getuser[getUser].
 
@@ -250,4 +262,13 @@ TIP: Twitter is the only driver which makes use of OAuth1.
 ----
 const user = request.ally.driver('twitter').getUser()
 user.getTokenSecret()
+----
+
+==== getOriginal
+Returns the original response from the provider.
+
+[source, javascript]
+----
+const user = request.ally.driver('twitter').getUser()
+user.getOriginal()
 ----
