@@ -248,7 +248,7 @@ Routing layer makes it easier for you to define conventional routes for CRUD bas
 [source, javascript]
 ----
 const Route = use('Route')
-Route.resources('users', 'UserController')
+Route.resource('users', 'UserController')
 ----
 
 .Output
