@@ -25,8 +25,9 @@ Providers are registered inside `bootstrap/app.js` file. Once they are registere
 [source, javascript]
 ----
 const providers = [
-  ...,
+  // ...
   'adonis-validation-provider/providers/ValidatorProvider'
+  // ...
 ]
 ----
 
@@ -37,7 +38,9 @@ Let's create an alias for the validator namespace which makes it easier to impor
 [source, javascript]
 ----
 const aliases = {
+  // ...
   Validator: 'Adonis/Addons/Validator'
+  // ...
 }
 ----
 

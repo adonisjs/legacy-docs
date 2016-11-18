@@ -25,9 +25,10 @@ Global middleware is defined inside `app/Http/kernel.js` file as an array and ge
 [source, javascript]
 ----
 const globalMiddleware = [
+  // ...
   'Adonis/Middleware/Cors',
   'Adonis/Src/BodyParser',
-  ...
+  // ...
 ]
 ----
 
@@ -38,7 +39,9 @@ Named middleware on the other hand are registered with a unique name and you are
 [source, javascript]
 ----
 const namedMiddleware = {
+  // ...
   auth: 'Adonis/Middleware/Auth'
+  // ...
 }
 ----
 
@@ -47,13 +50,13 @@ const namedMiddleware = {
 [source, javascript]
 ----
 Route
-  .get('account/:id', 'AccountController.show')
+  .get('accounts/:id', 'AccountsController.show')
   .middleware('auth')
 
 // or
 
 Route.group('auth-routes', () => {
-  Route.get('account/:id', 'AccountController.show')
+  Route.get('accounts/:id', 'AccountsController.show')
 }).middleware('auth')
 ----
 
@@ -81,8 +84,6 @@ class CountryDetector {
   }
 
 }
-
-module.exports = CountryDetector
 ----
 
 [pretty-list]
@@ -109,8 +110,6 @@ class CountryDetector {
   }
 
 }
-
-module.exports = CountryDetector
 ----
 
 Next, we need to register this as a *global or named* middleware based upon the nature of the application. Let's register it as a global middleware for now.
@@ -119,8 +118,9 @@ Next, we need to register this as a *global or named* middleware based upon the 
 [source, javascript]
 ----
 const globalMiddleware = [
-  ...,
+  // ...
   'App/Http/Middleware/CountryDetector'
+  // ...
 ]
 ----
 

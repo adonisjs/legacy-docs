@@ -125,7 +125,7 @@ Returns the namespace mapped to the `app` directory inside `package.json` file.
 [source, javascript]
 ----
 const namespace = Helpers.appNameSpace()
-const UserController = use(`${namespace}/Http/Controllers/UserController`)
+const UsersController = use(`${namespace}/Http/Controllers/UsersController`)
 ----
 
 ==== makeNameSpace(directory, toFile)

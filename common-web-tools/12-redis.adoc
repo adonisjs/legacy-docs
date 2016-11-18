@@ -31,9 +31,10 @@ npm i --save adonis-redis
 [source, javascript]
 ----
 const providers = [
-  ...,
+  // ...
   'adonis-redis/providers/RedisFactoryProvider',
   'adonis-redis/providers/RedisProvider'
+  // ...
 ]
 ----
 
@@ -41,7 +42,9 @@ const providers = [
 [source, javascript]
 ----
 const aliases = {
+  // ...
   Redis: 'Adonis/Addons/Redis'
+  // ...
 }
 ----
 
@@ -59,7 +62,7 @@ Once everything is configured, you are good to make use of Redis inside your Ado
 
 NOTE: Below example may not be the best way to cache users but does give you some idea on how to use the redis provider.
 
-.app/Http/Controllers/UserController.js
+.app/Http/Controllers/UsersController.js
 [source, javascript]
 ----
 'use strict'
@@ -67,7 +70,7 @@ NOTE: Below example may not be the best way to cache users but does give you som
 const Redis = use('Redis')
 const User = use('App/Model/User')
 
-class UserController {
+class UsersController {
 
   * index (request, response) {
     const cachedUsers = yield Redis.get('users')
@@ -82,8 +85,6 @@ class UserController {
   }
 
 }
-
-module.exports = UserController
 ----
 
 == Redis Commands
@@ -138,7 +139,7 @@ Now anywhere inside your application, you can publish to the music channel and t
 const Route = use('Route')
 const Redis = use('Redis')
 
-Route.get('/music/store', function * (request, response) {
+Route.post('musics', function * (request, response) {
   Redis.publish('music', request.all())
 })
 ----
@@ -219,7 +220,7 @@ Transactions are helpful when you want to perform bulk operations at a given poi
 const User = use('App/Model/User')
 const Redis = use('Redis')
 
-class UserController {
+class UsersController {
 
   * index (request, response) {
     const users = yield User.all()
@@ -235,8 +236,6 @@ class UserController {
   }
 
 }
-
-module.exports = UserController
 ----
 
 ==== multi
@@ -317,9 +316,11 @@ You can register a listener for lifecycle events in the same way you will do for
 
 const Redis = use('Redis')
 Redis.on('connect', function () {
+  // ...
 })
 
 Redis.on('error', function (error) {
+  // ...
 })
 ----
 

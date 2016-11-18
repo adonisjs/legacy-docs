@@ -88,6 +88,8 @@ There are plenty of use cases for link:seeds-and-factories#_about_factories[Data
 .database/factory.js
 [source, javascript]
 ----
+'use strict'
+
 const Factory = use('Factory')
 
 Factory.blueprint('App/Model/Post', (fake) => {

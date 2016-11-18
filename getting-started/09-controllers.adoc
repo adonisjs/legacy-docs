@@ -36,7 +36,7 @@ In typical web applications, you will begin by binding a controller method to a 
 +
 [source, javascript]
 ----
-Route.get('/users', 'UserController.index')
+Route.get('users', 'UsersController.index')
 ----
 
 +
@@ -48,7 +48,7 @@ Let's take a basic example of rendering all the users using the route, controlle
 .Route
 [source, javascript]
 ----
-Route.get('/users', 'UsersController.index')
+Route.get('users', 'UsersController.index')
 ----
 
 .Controller
@@ -83,7 +83,7 @@ TIP: Mocking dependencies is very subjective and is not always required. Still, 
 === Defining Controller
 [source, javascript]
 ----
-class UserController {
+class UsersController {
 
   static get inject () {
     return ['App/Model/User'] <1>
@@ -109,7 +109,7 @@ NOTE: Below test example is written to give you an idea on how to mock dependenc
 
 [source, javascript]
 ----
-const UserController = use('App/Http/Controllers/User')
+const UsersController = use('App/Http/Controllers/User')
 
 class FakeUser {
   static * all () {
@@ -117,5 +117,5 @@ class FakeUser {
   }
 }
 
-const user = new UserController(FakeUser)
+const user = new UsersController(FakeUser)
 ----

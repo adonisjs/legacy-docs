@@ -48,7 +48,7 @@ Controllers also contain business/domain logic for your application, whereas you
 ----
 const User = use('App/Model/User') <1>
 
-class UserController {
+class UsersController {
 
   * index (request, response) {
     const users = yield User.all()

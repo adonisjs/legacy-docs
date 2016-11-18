@@ -36,8 +36,6 @@ npm i --save got
 .app/Commands/Quote.js
 [source, javascript]
 ----
-'use strict'
-
 const Command = use('Command')
 const got = use('got')
 
@@ -61,8 +59,6 @@ class Quote extends Command { <1>
   } <4>
 
 }
-
-module.exports = Quote
 ----
 
 <1> Each command should be inherited from the base `Command` class.
@@ -365,6 +361,8 @@ Additionally, you can output icons and add color to your console messages inside
 
 [source, javascript]
 ----
+'use strict'
+
 const Command = use('Command')
 
 class Greet extends Command {
@@ -373,8 +371,6 @@ class Greet extends Command {
     console.log(`${successIcon} That went great`)
   }
 }
-
-module.exports = Greet
 ----
 
 .Output

@@ -26,8 +26,8 @@ Let's walk through a basic example of saving/reading cart items for a given user
 
 [source, javascript]
 ----
-Route.get('/cart', function * (request, response) {
-  const cartItems = [...]
+Route.get('carts', function * (request, response) {
+  const cartItems = []
   yield request.session.put('cart-items', cartItems)
   yield response.send('Items added to cart successfully')
 })
@@ -41,10 +41,10 @@ Add a value to the session store.
 
 [source, javascript]
 ----
-Route.get('/user', function * (request, response) {
+Route.post('users', function * (request, response) {
   yield request.session.put('username', 'doe')
   // or
-  yield request.session.put({username: 'doe'})
+  yield request.session.put({ username: 'doe' })
 })
 ----
 
@@ -53,7 +53,7 @@ Returns the value for a given key. It will return the *defaultValue* when actual
 
 [source, javascript]
 ----
-Route.get('/user', function * (request, response) {
+Route.get('users/current', function * (request, response) {
   const username = yield request.session.get('username')
   // or
   const userId = yield request.session.get('userId', 123)
@@ -93,8 +93,9 @@ Just make sure that `Flash` middleware is added to the list of global middleware
 [source, javascript]
 ----
 const globalMiddleware = [
-  ...,
+  // ...
   'Adonis/Middleware/Flash'
+  // ...
 ]
 ----
 
@@ -104,8 +105,8 @@ Let's work on the flow of flashing validation errors with the form input and see
 .app/Http/routes.js
 [source, javascript]
 ----
-Route.on('/users/create').render('users.create')
-Route.post('/users', 'UsersController.store')
+Route.on('users/create').render('users.create')
+Route.post('users', 'UsersController.store')
 ----
 
 .app/Http/Controllers/UsersController.js
@@ -183,7 +184,7 @@ Flash a custom object.
 
 [source, javascript]
 ----
-yield request.with({error: 'Please fill in all details'}).flash()
+yield request.with({ error: 'Please fill in all details' }).flash()
 ----
 
 ==== andWith(values)
@@ -193,7 +194,7 @@ Chainable method to send custom object with request data.
 ----
 yield request
   .withAll()
-  .andWith({error: 'Please fill in all details'})
+  .andWith({ error: 'Please fill in all details' })
   .flash()
 ----
 

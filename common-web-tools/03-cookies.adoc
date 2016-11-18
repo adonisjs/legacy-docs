@@ -84,7 +84,7 @@ Removes the existing cookie.
 
 [source, javascript]
 ----
-Route.get('/checkout', function * (request, response) {
+Route.get('checkout', function * (request, response) {
   response.clearCookie('cartValue')
   response.send('Order Confirmed')
 })

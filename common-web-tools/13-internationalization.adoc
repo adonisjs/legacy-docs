@@ -37,7 +37,9 @@ npm i --save adonis-antl
 [source, javascript]
 ----
 const providers = [
+  // ...
   'adonis-antl/providers/AntlProvider'
+  // ...
 ]
 ----
 
@@ -45,8 +47,10 @@ const providers = [
 [source, javascript]
 ----
 const aliases = {
+  // ...
   Antl: 'Adonis/Addons/Antl',
   Formats: 'Adonis/Addons/AntlFormats'
+  // ...
 }
 ----
 
@@ -56,7 +60,9 @@ Based upon the default driver you will have to store your locales inside the `re
 [source, javascript]
 ----
 const commands = [
+  // ...
   'Adonis/Commands/Antl:Setup'
+  // ...
 ]
 ----
 
@@ -555,7 +561,9 @@ You can change the default locale value, and all values will be formatted accord
 [source, javascript]
 ----
 const globalMiddleware = [
+  // ...
   'Adonis/Middleware/Antl'
+  // ...
 ]
 ----
 

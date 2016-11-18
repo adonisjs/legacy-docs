@@ -67,7 +67,7 @@ Let's take a basic example of sending a welcome email to the newly registered us
 'use strict'
 
 const Route = use('Route')
-Route.post('/users', 'UsersController.store')
+Route.post('users', 'UsersController.store')
 ----
 
 .app/Http/Controllers/UsersController.js
@@ -117,8 +117,8 @@ The `send` method will compile a view with given data and send it as HTML. Attac
 
 [source, javascript]
 ----
-yield Mail.send('receipt', {name: 'Doe', amount: 22}, (message) => {
-  ...
+yield Mail.send('receipt', {name: 'Doe', amount: 22}, message => {
+  // ...
 })
 ----
 
@@ -127,7 +127,7 @@ Send email using raw text, instead of using a view.
 
 [source, javascript]
 ----
-yield Mail.raw('Your security code is 301030', (message) => {
+yield Mail.raw('Your security code is 301030', message => {
   message.from('secret@yourcompany.com')
   message.to('doe@example.org', 'Doe')
 })
@@ -139,7 +139,7 @@ Message Builder makes it super easy to chain methods and build the message body.
 ==== from(email, [name])
 [source, javascript]
 ----
-yield Mail.send('receipt', {}, (message) => {
+yield Mail.send('receipt', {}, message => {
   message.from('awesome@adonisjs.com', 'AdonisJs')
 })
 ----
@@ -147,7 +147,7 @@ yield Mail.send('receipt', {}, (message) => {
 ==== sender(email, [name])
 [source, javascript]
 ----
-yield Mail.send('receipt', {}, (message) => {
+yield Mail.send('receipt', {}, message => {
   message.sender('awesome@adonisjs.com', 'AdonisJs')
 })
 ----
@@ -155,7 +155,7 @@ yield Mail.send('receipt', {}, (message) => {
 ==== replyTo(email, [name])
 [source, javascript]
 ----
-yield Mail.send('receipt', {}, (message) => {
+yield Mail.send('receipt', {}, message => {
   message.replyTo('noreply@adonisjs.com')
 })
 ----
@@ -163,7 +163,7 @@ yield Mail.send('receipt', {}, (message) => {
 ==== to(email, [name])
 [source, javascript]
 ----
-yield Mail.send('receipt', {}, (message) => {
+yield Mail.send('receipt', {}, message => {
   message.to('johndoe@example.com', 'John Doe')
 })
 ----
@@ -171,7 +171,7 @@ yield Mail.send('receipt', {}, (message) => {
 ==== cc(email, [name])
 [source, javascript]
 ----
-yield Mail.send('receipt', {}, (message) => {
+yield Mail.send('receipt', {}, message => {
   message.cc('jamie@example.com', 'Jamie Doe')
 })
 ----
@@ -179,7 +179,7 @@ yield Mail.send('receipt', {}, (message) => {
 ==== bcc(email, [name])
 [source, javascript]
 ----
-yield Mail.send('receipt', {}, (message) => {
+yield Mail.send('receipt', {}, message => {
   message.bcc('finance@example.com')
 })
 ----
@@ -187,7 +187,7 @@ yield Mail.send('receipt', {}, (message) => {
 ==== subject(message)
 [source, javascript]
 ----
-yield Mail.send('receipt', {}, (message) => {
+yield Mail.send('receipt', {}, message => {
   message.subject('Recent purchase receipt')
 })
 ----
@@ -213,7 +213,7 @@ message.header('x-id', 1)
 ==== headers(arrayOfHeaders)
 [source, javascript]
 ----
-message.header([{key: 'x-id', value: 1}])
+message.header([{ key: 'x-id', value: 1 }])
 ----
 
 ==== attach(filePath, [options])
@@ -222,7 +222,7 @@ Attach a file to the email
 [source, javascript]
 ----
 message.attach(path.join(__dirname, '/assets/logo.png'))
-message.attach(path.join(__dirname, '/assets/logo.png'), {filename: 'MyLogo.png'})
+message.attach(path.join(__dirname, '/assets/logo.png'), { filename: 'MyLogo.png' })
 ----
 
 .Attachment Options
@@ -290,8 +290,8 @@ You can define multiple views for *HTML*, *Plain text* and *Apple watch* by pass
 
 [source, javascript]
 ----
-yield Mail.send(['welcome', 'welcome-text', 'welcome-watch'], {}, (message) => {
-
+yield Mail.send(['welcome', 'welcome-text', 'welcome-watch'], {}, message => {
+  // ...
 })
 ----
 
@@ -302,8 +302,8 @@ The default driver defined inside the config file is used to send emails, but yo
 ----
 const mandrill = Mail.driver('mandrill')
 
-yield mandrill.send('emails.welcome', {}, (message) => {
-  ...
+yield mandrill.send('emails.welcome', {}, message => {
+  // ...
 })
 ----
 
@@ -321,6 +321,8 @@ Let's make use of link:https://github.com/killmenot/nodemailer-postmark-transpor
 .src/PostMark.js
 [source, javascript]
 ----
+'use strict'
+
 class PostMark {
 
   constructor (Config) {
@@ -341,8 +343,6 @@ class PostMark {
   }
 
 }
-
-module.exports = PostMark
 ----
 
 <1> We create a default transport by calling `_createTransport` method and passing it the key to the config block.
@@ -369,8 +369,8 @@ Ioc.extend('Adonis/Addons/Mail', 'postmark', function (app) {
 === Using PostMark Driver
 [source, javascript]
 ----
-yield Mail.driver('postmark').send('emails.welcome', {}, (message) => {
-  ...
+yield Mail.driver('postmark').send('emails.welcome', {}, message => {
+  // ...
 })
 ----
 

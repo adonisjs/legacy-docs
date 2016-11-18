@@ -39,7 +39,7 @@ Event.on('user.registered', 'User.registered')
 The configuration for Events provider is stored inside `config/events.js` file. Under the hood AdonisJs makes use of link:https://github.com/asyncly/EventEmitter2[EventEmitter 2, window="_blank"] and implements all the available configuration options.
 
 == Basic Example
-Let's walk through a basic example of sending a welcome email to a newly registered user using the *Events provider*. We will start by setting up a route and will use the *UsersContoller* to fire the event after creating a new user.
+Let's walk through a basic example of sending a welcome email to a newly registered user using the *Events provider*. We will start by setting up a route and will use the *UsersController* to fire the event after creating a new user.
 
 .app/Http/routes.js
 [source, javascript]
@@ -47,7 +47,7 @@ Let's walk through a basic example of sending a welcome email to a newly registe
 'use strict'
 
 const Route = use('Route')
-Route.post('/users', 'UsersController.store')
+Route.post('users', 'UsersController.store')
 ----
 
 .bootstrap/events.js
@@ -84,7 +84,7 @@ const Mail = use('Mail')
 const User = exports = module.exports = {}
 
 User.sendWelcomeEmail = function * (user) {
-  yield Mail.send('emails.welcome', user, (message) => {
+  yield Mail.send('emails.welcome', user, message => {
     message.to(user.email, user.firstname)
     message.from('awesome@adonisjs.com')
     message.subject('Welcome to the Kitten\'s World')
@@ -109,7 +109,7 @@ Event.when('user.registered', 'Mail.sendWelcomeEmail')
 [source, javascript]
 ----
 Event.when('user.registered', function * () {
-  // As a closure
+  // ...
 })
 ----
 
@@ -132,7 +132,7 @@ Works same as `when` but is executed only for one time.
 [source, javascript]
 ----
 Event.once('app.boot', function * () {
-  // Do something
+  // ...
 })
 ----
 

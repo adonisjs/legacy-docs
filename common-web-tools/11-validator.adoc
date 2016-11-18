@@ -22,8 +22,9 @@ npm i --save adonis-validation-provider
 [source, javascript]
 ----
 const providers = [
-  ...,
+  // ...
   'adonis-validation-provider/providers/ValidatorProvider'
+  // ...
 ]
 ----
 
@@ -31,7 +32,9 @@ const providers = [
 [source, javascript]
 ----
 const aliases = {
+  // ...
   Validator: 'Adonis/Addons/Validator'
+  // ...
 }
 ----
 
@@ -43,6 +46,8 @@ Let's start by defining the rules on the User model. Make sure also to check out
 .app/Model/User
 [source, javascript]
 ----
+'use strict'
+
 const Lucid = use('Lucid')
 
 class User extends Lucid {
@@ -56,13 +61,14 @@ class User extends Lucid {
 }
 ----
 
-.app/Http/Controllers/UserController.js
+.app/Http/Controllers/UsersController.js
 [source, javascript]
 ----
+'use strict'
 const Validator = use('Validator')
 const User = use('App/Model/User')
 
-class UserController {
+class UsersController {
 
   * store(request, response) {
     const userData = request.all()
@@ -146,7 +152,7 @@ You can make use of is method to do inline validations instead of going through 
 [source, javascript]
 ----
 if (Validator.is.email('foo')) {
-  // do something
+  // ...
 }
 ----
 

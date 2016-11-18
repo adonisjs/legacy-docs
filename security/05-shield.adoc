@@ -18,8 +18,9 @@ Make sure *shield* middleware is added to the list of global middleware inside `
 [source, javascript]
 ----
 const globalMiddlewares = [
-  ...,
+  // ...
   'Adonis/Middleware/Shield'
+  // ...
 ]
 ----
 
@@ -84,7 +85,7 @@ csp: {
   directives: {
     scriptSrc: ['self', '@nonce']
   },
-  ...
+  // ...
 }
 ----
 
@@ -93,7 +94,7 @@ Now you have to tell the browser that your selected inline script blocks should 
 [source, twig]
 ----
 <script nonce="{{ cspNonce }}">
-  // Your JS code
+  // ...
 </script>
 ----
 
