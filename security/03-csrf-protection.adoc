@@ -9,7 +9,7 @@ toc::[]
 
 Cross-site request forgery(CSRF) allows an attacker to perform actions on behalf of another user without their knowledge or permission.
 
-AdonisJs protects your application from CSRF attacks by denying unidentified requests. HTTP requests with *POST*, *PUT* and *DELETE* methods are checked to make sure that these requests are invoked by right people from right place. You can learn more about CSRF link:https://www.owasp.org/index.php/Cross-Site_Request_Forgery[here, window="_blank"]
+AdonisJs protects your application from CSRF attacks by denying unidentified requests. HTTP requests with *POST*, *PUT*, *PATCH* and *DELETE* methods are checked to make sure that these requests are invoked by right people from right place. You can learn more about CSRF link:https://www.owasp.org/index.php/Cross-Site_Request_Forgery[here, window="_blank"]
 
 == How It Works?
 
@@ -18,7 +18,7 @@ AdonisJs protects your application from CSRF attacks by denying unidentified req
 +
 Generated token can be accessed inside views as `csrfToken` or `csrfField`, so that you can pass this token when submitting HTML forms.
 3. Also, the same token is set to a cookie with key `XSRF-TOKEN`. Frontend Frameworks like *AngularJs* automatically reads this cookie and send it along with each Ajax request.
-4. Finally, when a *POST*, *PUT* or *DELETE* requests comes, the middleware will verify the token with the secret to make sure it is valid. It will try to access the token from following sources.
+4. Finally, when a *POST*, *PUT*, *PATCH* or *DELETE* requests comes, the middleware will verify the token with the secret to make sure it is valid. It will try to access the token from following sources.
   * `_csrf` field on the request body.
   * Will also try to access *csrf-token*, *x-csrf-token* or *x-xsrf-token* headers.
 
@@ -30,7 +30,7 @@ The configuration for CSRF is saved inside `config/shield.js` file.
 ----
 csrf: {
   enable: true,
-  methods: ['POST', 'PUT', 'DELETE'],
+  methods: ['POST', 'PUT', 'PATCH', 'DELETE'],
   filterUris: ['/user/:id']
 }
 ----

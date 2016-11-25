@@ -203,21 +203,20 @@ class User extends Lucid {
 
 ==== deleteTimestamp
 The `deleteTimestamp` behaves a little different from *create* and *update* timestamps. You should only return value from this method if you want to make use of soft deletes.
+Soft deletes are disabled by default, You can override this property to specify a different field name or return `null` to disable it.
 
 [source, javascript]
 ----
 class User extends Lucid {
 
   static get deleteTimestamp () {
-    return null
+    return 'deleted_at'
   }
 
 }
 ----
 
 Soft deletes is a term for deleting records by updating a delete timestamp instead of removing the row from the database.In other words, *soft deletes are safe deletes*, where you never loose data from your SQL tables.
-
-Soft deletes are disabled by default and to enable them you must return a table field name from `deleteTimestamp` getter.
 
 ==== dateFormat
 Date format specifies the format of date in which timestamps should be saved. Internally models will convert dates to link:http://momentjs.com/[moment.js, window="_blank"] instance. You can define any valid date format supported by momentjs.
@@ -509,6 +508,8 @@ const post = yield Post.query().where('title', 'Adonis 101').first()
 ==== findBy(key, value)
 Find a single row for a given key/value pair.
 
+TIP: this is just a short alias for the "first()" method above
+
 [source, javascript]
 ----
 yield Post.findBy('title', '...')
@@ -567,7 +568,7 @@ const posts = yield Post.paginate(request.input('page'))
 ----
 
 ==== pick([limit=1])
-The `pick` method will pick the give number of records from the database.
+The `pick` method will pick the first given number of records from the database.
 
 [source, javascript]
 ----

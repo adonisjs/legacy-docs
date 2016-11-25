@@ -9,6 +9,8 @@ toc::[]
 
 AdonisJs Query builder gives you a unified syntax to interact with SQL databases using Javascript methods. This guide is a reference to all the available methods on query builder.
 
+TIP: The query builder syntax is fluent which means you can chain methods to build a complete SQL query. Also, you will not have to change a line of code when you switch between multiple databases.
+
 Checkout link:database-setup[Database Setup] guide to check the list of *supported databases*, *configuration options* and *debugging queries*.
 
 == Introduction
@@ -405,7 +407,7 @@ trx.rollback() // will not insert anything
 ----
 
 ==== transaction
-Also, you can wrap your transactions inside a *callback*. The major difference is, you will not have to call `commit or `rollback` manually if any of your queries throws an error, the transaction will rollback automatically. Otherwise, it will commit.
+Also, you can wrap your transactions inside a *callback*. The major difference is, you will not have to call `commit or rollback` manually if any of your queries throws an error, the transaction will rollback automatically. Otherwise, it will commit.
 
 [source, javascript]
 ----
