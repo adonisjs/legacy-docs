@@ -103,6 +103,35 @@ Route.get('/make/:drink?', function * (request, response) {
 
 `?` makes a parameter optional which means both URL's `/make` or `/make/shake` are valid.
 
+You may also want to have a parameter that can have every character you want (including `/`). This is generaly use to simulate a storage with URL like `/~/media/xyz.pdf`. If it is the case you can use the `*` parameter and get whatever string you want.
+
+[source, javascript]
+----
+Route.get('/~/*', function * (request, response) {
+  const media = request.param(0)
+  response.send(`You want to download the ${media} file`)
+})
+----
+
+[NOTE]
+====
+You are still able to use query parameter with an `*` parameter.
+[source, javascript]
+----
+// url: `/~/media/xyz.pdf?download`
+Route.get('/~/*', function * (request, response) {
+  const media = request.param(0)
+
+  if (request.input('download') !== null) {
+    // ...
+  }
+
+  response.send(`You want to download the ${media} file`)
+})
+----
+====
+
+
 == Content Negotiation Via Routes
 link:https://en.wikipedia.org/wiki/Content_negotiation[Content negotiation, window="_blank"] is a way of finding the best output type for a given request. Ideally, HTTP header *Accept* is used to negotiate the content, but some modern apps make the output more explicit by defining the output extension within the URL. For example:
 
