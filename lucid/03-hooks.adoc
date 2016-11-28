@@ -24,6 +24,18 @@ Hooks are the actions you perform *before* or *after* a specified database opera
 # or with predefined method
 ./ace make:hook User --method=encryptPassword
 ----
+5. Hooks are only executed for commands run via the model instance. For example: Calling the static `update` method will not execute the hooks.
++
+[source, javascript]
+----
+const user = yield User.find(1)
+user.status = 'active'
+// Will execute the update hooks
+yield user.save()
+
+// Will not execute the update hooks
+yield User.query().where('id', 1).update('status', 'active')
+----
 
 == Basic Example
 Let's take the most basic example of encrypting the user password using a model hook.
