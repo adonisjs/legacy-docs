@@ -610,6 +610,22 @@ Create multiple rows at once. This method will return an array of model instance
 const users = yield User.createMany([{...}, {...}])
 ----
 
+==== first
+Select the first row from the database.
+
+[source, javascript]
+----
+const user = yield User.first()
+----
+
+==== last
+Select the last row from the database.
+
+[source, javascript]
+----
+const user = yield User.last()
+----
+
 == Failing Early
 Lucid also has some handy methods that will throw exceptions when not able to find a given row using `find` or `findBy` method. Some programmers find it simpler to throw exception and catch them later inside a global handler to avoid `if/else` clause everywhere.
 
