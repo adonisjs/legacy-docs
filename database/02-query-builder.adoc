@@ -514,10 +514,12 @@ yield Database
 
 == Helpers
 
-==== pluck(column)
+==== pluck(...columns)
 [source, javascript]
 ----
-const ids = yield Database.from('users').pluck('id')
+const usersIds = yield Database.from('users').pluck('id')
+// or
+const users = yield Database.from('users').pluck('id', 'username')
 ----
 
 ==== first

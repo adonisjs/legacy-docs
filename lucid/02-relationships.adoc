@@ -512,6 +512,8 @@ yield Student.courses().detach(coursesIds)
 ==== sync(rows, [pivotValues])
 The `sync` will remove all existing relations and will only add given relations. Think of it as calling xref:_detach_rows[detach] and xref:_attach_rows_pivot_values[attach] together.
 
+TIP: You can also pass *pivotValues* to the sync method similar to the attach method.
+
 [source, javascript]
 ----
 const student = yield Student.find(1)
@@ -520,7 +522,49 @@ const coursesIds = yield Courses.ids()
 yield Student.courses().sync(coursesIds)
 ----
 
-TIP: You can also pass *pivotValues* to the sync method similar to the attach method.
+==== updatePivot(values, [relatedModelId])
+In order to update the values inside the pivot table you can make use of `updatePivot` method.
+
+[source, javascript]
+----
+const student = yield Student.find(1)
+Student.courses().updatePivot({marks: 90})
+----
+
+Or
+
+[source, javascript]
+----
+const student = yield Student.find(1)
+const maths = yield Course.where('name', 'Maths').first()
+Student.courses().updatePivot({marks: 90}, maths.id)
+----
+
+==== withPivot(keys)
+When fetching records for *belongsToMany* lucid will not select any rows from the pivot table. In order to fetch additional fields you can make use of `withPivot` method.
+
+NOTE: Pivot table fields will be prefixed with `\_pivot_`. In below example the marks will be returned as `_pivot_marks`
+
+[source, javascript]
+----
+'use strict'
+
+class Student extends Lucid {
+
+  courses () {
+    return this.belongsToMany('App/Model/Course').withPivot('marks')
+  }
+
+}
+----
+
+Also you can define fields when running the select query.
+
+[source, javascript]
+----
+const student = yield Student.find(1)
+const courses = yield student.courses().withPivot('marks').fetch()
+----
 
 ==== associate(modelInstance)
 The `associate` method is used with *belongsTo* relationship to associate an existing database row.

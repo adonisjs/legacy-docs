@@ -70,6 +70,14 @@ Once the `adonis-cli` has been installed, you can make use of the `adonis` globa
 adonis new yardstick
 ----
 
+=== Using Yarn
+If you are thrilled with link:https://yarnpkg.com/[yarn, window="_blank"] and do not want to install your dependencies using npm. Run the following command.
+
+[source, bash]
+----
+adonis new yardstick --skip-npm
+----
+
 .Output
 [source, bash]
 ----
