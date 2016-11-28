@@ -564,7 +564,23 @@ The `paginate` method makes it so simple to paginate over database records.
 
 [source, javascript]
 ----
-const posts = yield Post.paginate(request.input('page'))
+const posts = yield Post.paginate(request.input('page', 1), 5)
+yield response.json(posts)
+----
+
+.Output
+[source, javascript]
+----
+{
+  total: 5,
+  perPage: 2,
+  currentPage: 1,
+  lastPage: 3,
+  data: [
+    {...},
+    {...},
+  ]
+}
 ----
 
 ==== pick([limit=1])

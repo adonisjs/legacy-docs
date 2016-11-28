@@ -369,6 +369,16 @@ const users = yield Database
   .forPage(1, 10)
 ----
 
+.Output
+[source, javascript]
+----
+[
+  {...},
+  {...},
+  // etc...
+]
+----
+
 ==== paginate(page, [limit=20])
 [source, javascript]
 ----
@@ -383,10 +393,10 @@ NOTE: The output of the `paginate` method is different from the `forPage` method
 [source, javascript]
 ----
 {
-  total: 0,
+  total: 20,
   currentPage: 2,
   perPage: 10,
-  lastPage: 0,
+  lastPage: 2,
   data: [{...}]
 }
 ----

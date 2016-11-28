@@ -56,7 +56,7 @@ class User extends Lucid {
 ----
 
 <1> All hooks should only be registered once and the `boot` method is perfect place since Lucid makes sure it is only executed once.
-<2> The `addHook` method will before the hook for a given event which is `beforeCreate` in this case.
+<2> The `addHook` method will run the hook for a given event which in this case is `beforeCreate`.
 
 == Defining Hooks
 Hooks are executed in the sequence they are registered. To execute the next hook, you must `yield next` from the existing hook. The process is quite similar to HTTP middleware layer.

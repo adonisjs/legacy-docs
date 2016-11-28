@@ -151,7 +151,7 @@ Let's take the example of a master and a child view.
     <section class="sidebar">
       {% block sidebar %}
         Common Sidebar
-      {% end block %}
+      {% endblock %}
     </section>
 
     <section class="content">
