@@ -274,7 +274,7 @@ TIP: All popular email clients does support HTML.
 
 [source, javascript]
 ----
-message.html('A plaintext view')
+message.text('A plaintext view')
 ----
 
 ==== watchHtml(body)
