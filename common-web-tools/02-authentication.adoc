@@ -153,7 +153,7 @@ Attempt to log in a user using the uid and password. It will throw an error if u
 try {
   yield request.auth.attempt(uid, password)
 } catch (e) {
-  yield response.with({error: e.message}).flash()
+  yield request.with({error: e.message}).flash()
   response.redirect('back')
 }
 ----
@@ -168,7 +168,7 @@ try {
   yield request.auth.login(user)
   response.redirect('/dashboard')
 } catch (e) {
-  yield response.with({error: e.message}).flash()
+  yield request.with({error: e.message}).flash()
   response.redirect('back')
 }
 ----
@@ -182,7 +182,7 @@ try {
   yield request.auth.loginViaId(1)
   response.redirect('/dashboard')
 } catch (e) {
-  yield response.with({error: e.message}).flash()
+  yield request.with({error: e.message}).flash()
   response.redirect('back')
 }
 ----
@@ -214,7 +214,7 @@ Validate user credentials to see if they are valid. This method will never set a
 try {
   yield request.auth.validate(uid, password)
 } catch (e) {
-  yield response.with({error: e.message}).flash()
+  yield request.with({error: e.message}).flash()
   response.redirect('back')
 }
 ----
