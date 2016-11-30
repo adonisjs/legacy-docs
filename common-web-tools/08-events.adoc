@@ -69,7 +69,7 @@ const User = use('App/Model/User')
 
 class UsersController {
   * store (request, response) {
-    const user = yield User.create(userDetails)
+    const user = yield User.create({...})
     Event.fire('user.registered', user.toJSON()) <2>
   }
 }

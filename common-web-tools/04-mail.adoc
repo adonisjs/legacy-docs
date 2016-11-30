@@ -81,7 +81,7 @@ const User = use('App/Model/User')
 class UsersController {
 
   * store (request, response) {
-    const user = yield User.create(userDetails) <1>
+    const user = yield User.create({...}) <1>
 
     yield Mail.send('emails.welcome', user, (message) => {
       message.to(user.email, user.firstname)
@@ -274,7 +274,7 @@ TIP: All popular email clients does support HTML.
 
 [source, javascript]
 ----
-message.html('A plaintext view')
+message.text('A plaintext view')
 ----
 
 ==== watchHtml(body)

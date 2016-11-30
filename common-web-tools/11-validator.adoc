@@ -50,7 +50,7 @@ class User extends Lucid {
     return {
       username: 'required|unique:users',
       email: 'required|email|unique:users',
-      password: 'required|confirmed',
+      password: 'required',
     }
   }
 }
@@ -126,7 +126,7 @@ if (validation.fails ()) {
 ----
 
 ==== sanitize(data, rules)
-Sanitize user data. Also make sure to check the link:sanitization[sanitization] docs for more info.
+Sanitize user data. Also make sure to check the link:data-sanitization[sanitization] docs for more info.
 
 [source, javascript]
 ----
@@ -141,7 +141,7 @@ const sanitizedData = Validator.sanitize(data, rules)
 ----
 
 ==== is
-You can make use of is method to do inline validations instead of going through a complete validation lifecycle.
+You can make use of 'is' method to do inline validations instead of going through a complete validation lifecycle.
 
 [source, javascript]
 ----
