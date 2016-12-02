@@ -50,7 +50,7 @@ class User extends Lucid {
     return {
       username: 'required|unique:users',
       email: 'required|email|unique:users',
-      password: 'required',
+      password: 'required|confirmed',
     }
   }
 }
@@ -164,6 +164,58 @@ const sanitizedEmail = Validator
 
 == Custom Rules
 AdonisJs supports all the validation rules by Indicative, but also adds a few who are specific to AdonisJs only. Below is the list of custom rules.
+
+==== confirmed
+The field under validation must have a matching field of 'foo_confirmation'. For example, if the field under validation is password, a matching 'password_confirmation' field must be present in the input.
+
+[source, javascript]
+.app/Model/User
+----
+'use strict'
+
+class User extends Lucid {
+
+  static get rules () {
+    return {
+      password: 'confirmed'
+    }
+  }
+
+}
+----
+
+.resources/views/UserLogin.njk
+[source, twig]
+----
+{% extends 'master' %}
+
+{% block content %}
+  {{ form.open({url: '/login'}) }}
+
+    {{ csrfField }}
+
+    <fieldset class="form-group">
+      {{ form.label('email', 'Email') }}
+      {{ form.email('email', old('email'), {class: 'form-control'}) }}
+    </fieldset>
+
+    <fieldset class="form-group">
+      {{ form.label('password', 'Password') }}
+      {{ form.password('password', null, {class:'form-control'}) }}
+    </fieldset>
+
+    <fieldset class="form-group">
+      {{ form.label('password_confirmation', 'Confirm Password') }}
+      {{ form.password('password_confirmation', null, {class:'form-control'}) }}
+    </fieldset>
+
+    {{ form.submit('Login', null, { class: 'btn btn-primary btn-block' }) }}
+
+  {{ form.close() }}
+{% endblock %}
+----
+
+
 
 ==== unique(tableName, [fieldName])
 Makes sure a given value is unique in a given database table.
