@@ -506,13 +506,13 @@ It is fairly simple to extend the provider by adding new *serializers* or *schem
 .bootstrap/extend.js
 [source, javascript]
 ----
-Ioc.extend('Adonis/Src/AuthManager', function (app) {
+Ioc.extend('Adonis/Src/AuthManager', 'mongo', function (app) {
   return new MongoSerializer()
 }, 'serializer')
 
 // Or
 
-Ioc.extend('Adonis/Src/AuthManager', function (app) {
+Ioc.extend('Adonis/Src/AuthManager', 'fingerprint', function (app) {
   // adonis will initiate the scheme itself for each request.
   return FingerPrint
 }, 'scheme')
