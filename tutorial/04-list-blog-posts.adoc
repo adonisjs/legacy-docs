@@ -109,7 +109,7 @@ Next, we need to make use of the defined blueprint inside the `database/seeds/Da
 
 const Factory = use('Factory')
 
-class DatbaseSeeder {
+class DatabaseSeeder {
 
   * run () {
     yield Factory.model('App/Model/Post').create(5) <1>
@@ -117,7 +117,7 @@ class DatbaseSeeder {
 
 }
 
-module.exports = DatbaseSeeder
+module.exports = DatabaseSeeder
 ----
 
 <1> Here we make use of the blueprint and create five posts using the `create` method.
