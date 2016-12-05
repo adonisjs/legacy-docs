@@ -237,7 +237,7 @@ It is better to give unique names to your commonly referenced routes and use the
 [source, javascript]
 ----
 Route
-  .get('/user/id', 'UserController.show')
+  .get('/user/:id', 'UserController.show')
   .as('profile')
 ----
 
