@@ -357,6 +357,7 @@ TIP: Make use of `auth:setup` command to generate the models/migrations and set 
 [source, javascript]
 ----
 'use strict'
+
 const Lucid = use('Lucid')
 
 class Token extends Lucid {
@@ -364,14 +365,13 @@ class Token extends Lucid {
     return this.belongsTo('App/Model/User')
   }
 }
-
-module.exports = Token
 ----
 
 .app/Model/User.js
 [source, javascript]
 ----
 'use strict'
+
 const Lucid = use('Lucid')
 
 class User extends Lucid {
@@ -379,8 +379,6 @@ class User extends Lucid {
     return this.hasMany('App/Model/Token')
   }
 }
-
-module.exports = User
 ----
 
 === Methods

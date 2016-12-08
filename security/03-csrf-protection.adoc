@@ -55,7 +55,7 @@ To send the token along with each request, you need access to it. There are a fe
 .Output
 [source, html]
 ----
-<input type="hidden" name="_csrf" value="xxxxxx" />
+<input type="hidden" name="_csrf" value="xxxxxx">
 ----
 
 ==== csrfToken
@@ -83,6 +83,6 @@ Http.handleError = function * (error, request, response) {
     return
   }
 
-  // handle other errors
+  // ...
 }
 ----

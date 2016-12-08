@@ -27,7 +27,7 @@ Route
 [source, javascript]
 ----
 Route
-  .get('/users', function * (request, response) {
+  .get('users', function * (request, response) {
     const users = yield User.all() // fetch users
     response.json(users)
   })
@@ -152,7 +152,7 @@ NOTE: If AdonisJs cannot find a route with the name given it will consider it as
 [source, javascript]
 ----
 Route
-  .get('/user/:id', '...')
+  .get('users/:id', '...')
   .as('profile')
 
 response.route('profile', {id: 1})

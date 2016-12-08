@@ -40,8 +40,9 @@ npm i --save adonis-ally
 [source, javascript]
 ----
 const providers = [
-  ...,
+  // ...
   'adonis-ally/providers/AllyProvider'
+  // ...
 ]
 ----
 
@@ -49,7 +50,9 @@ const providers = [
 [source, javascript]
 ----
 const globalMiddleware = [
+  // ...
   'Adonis/Middleware/Ally'
+  // ...
 ]
 ----
 Once the setup process has been done successfully, you are good to authenticate your users using their social profiles.
@@ -91,8 +94,8 @@ NOTE: Make sure you have defined the required configuration for facebook inside 
 ----
 const Route = use('Route')
 
-Route.get('/facebook/login', 'LoginController.redirect')
-Route.get('/facebook/authenticated', 'LoginController.handleCallback')
+Route.get('facebook/login', 'LoginController.redirect')
+Route.get('facebook/authenticated', 'LoginController.handleCallback')
 ----
 
 .Redirecting User To The Provider

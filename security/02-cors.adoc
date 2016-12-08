@@ -21,8 +21,9 @@ For CORS rules to work properly make sure that `Adonis/Middleware/Cors` is regis
 [source, javascript]
 ----
 const globalMiddleware = [
-  ...,
+  // ...
   'Adonis/Middleware/Cors'
+  // ...
 ]
 ----
 
@@ -72,7 +73,7 @@ As origin, *headers* also accept multiple values
 [source, javascript]
 ----
 headers: function (requestedHeaders) {
-  // Your code
+  // ...
 }
 ----
 

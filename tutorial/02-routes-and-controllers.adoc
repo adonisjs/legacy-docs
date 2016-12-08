@@ -14,17 +14,17 @@ Rendering simple views is fine without Controllers. To create real apps, you nee
 == Creating Controllers
 Controllers are *ES2015* classes stored inside `app/Http/Controllers` directory. Each file defines a single controller, and you are free to create as many methods as you want on a single controller.
 
-Let's dive in quickly and create a new controller. Since we will turn this app into a blog, let's name the controller *PostController*. As always we are going to make use of ace to create the controller for us.
+Let's dive in quickly and create a new controller. Since we will turn this app into a blog, let's name the controller *PostsController*. As always we are going to make use of ace to create the controller for us.
 
 [source, bash]
 ----
-./ace make:controller Post
+./ace make:controller Posts
 ----
 
 .Output
 [source]
 ----
-create: app/Http/Controllers/PostController.js
+create: app/Http/Controllers/PostsController.js
 ----
 
 We have created our first controller. Let's bind this controller to the route and render a view from the controller instead. We need to replace `Route.on('/').render('home')` with the below line of code.
@@ -32,7 +32,7 @@ We have created our first controller. Let's bind this controller to the route an
 .app/Http/routes.js
 [source, javascript]
 ----
-Route.get('/', 'PostController.index')
+Route.get('/', 'PostsController.index')
 ----
 
 .Final Routes File
@@ -40,19 +40,19 @@ Route.get('/', 'PostController.index')
 ----
 const Route = use('Route')
 
-Route.get('/', 'PostController.index')
-Route.on('/about').render('about')
-Route.on('/contact').render('contact')
+Route.get('/', 'PostsController.index')
+Route.on('about').render('about')
+Route.on('contact').render('contact')
 ----
 
-There is a complete guide on link:routing[Routes] you can reference. For now, we will write some code inside the PostController to render a view.
+There is a complete guide on link:routing[Routes] you can reference. For now, we will write some code inside the PostsController to render a view.
 
-.app/Http/Controllers/PostController.js
+.app/Http/Controllers/PostsController.js
 [source, javascript]
 ----
 'use strict'
 
-class PostController {
+class PostsController {
 
   * index (request, response) { <1>
     yield response.sendView('home') <2>
@@ -60,7 +60,7 @@ class PostController {
 
 }
 
-module.exports = PostController
+module.exports = PostsController
 ----
 
 <1> We created a controller method called `index` which is an ES2015 generator method making it simple to write async code.

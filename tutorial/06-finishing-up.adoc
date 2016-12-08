@@ -13,7 +13,7 @@ We have got a view listing all the blog posts. But there is no way to view a sin
 .app/Http/routes.js
 [source, javascript]
 ----
-Route.get('/post/:id', 'PostController.show')
+Route.get('posts/:id', 'PostsController.show')
 ----
 
 The `id` is a dynamic segment to pass the *post id* in the URL and access it from the controller. You can read more about link:routing#_route_parameters[Route parameters] in the docs.
@@ -22,19 +22,19 @@ Next, we need to create the view for showing a post.
 
 [source, bash]
 ----
-./ace make:view showPost
+./ace make:view posts/show
 ----
 
 .Output
 [source]
 ----
-create: resources/views/showPost.njk
+create: resources/views/posts/show.njk
 ----
 
 
 Paste the below code snippet to the showPost view.
 
-.resources/views/showPost.njk
+.resources/views/posts/show.njk
 [source, twig]
 ----
 {% extends 'master' %}
@@ -51,16 +51,18 @@ Paste the below code snippet to the showPost view.
 {% endblock %}
 ----
 
-Finally, we need the `PostController.show` method to fetch the post from the database and send to it view.
+Finally, we need the `PostsController.show` method to fetch the post from the database and send to it view.
 
-.app/Http/Controllers/PostController.js
+.app/Http/Controllers/PostsController.js
 [source, javascript]
 ----
-class PostController {
+'use strict'
+
+class PostsController {
 
   * show (request, response) {
     const post = yield Post.find(request.param('id'))
-    yield response.sendView('showPost', { post: post.toJSON() })
+    yield response.sendView('posts.show', { post: post.toJSON() })
   }
 
 }
@@ -71,7 +73,7 @@ This time, we make use of the `find` method to fetch the post for a given id, an
 .resources/views/home.njk
 [source, twig]
 ----
-<h2><a href="post/{{ post.id }}"> {{ post.title }} </a></h2>
+<h2><a href="posts/{{ post.id }}"> {{ post.title }} </a></h2>
 ----
 
 Now refresh the browser and click on the individual posts to view a particular post.
@@ -89,7 +91,7 @@ So far we have been visiting `post/create` route manually to create a new post. 
     Below is the list of all the awesome posts created by all of us. You can also
     contribute by clicking the below button.
   </p>
-  <a href="post/create" class="btn btn-success btn-block"> Create New Post </a>
+  <a href="posts/create" class="btn btn-success btn-block"> Create New Post </a>
   <hr>
 </div>
 ----
@@ -101,10 +103,12 @@ image:http://res.cloudinary.com/adonisjs/image/upload/v1472841278/add-new-post_d
 == Ordering Posts
 Another thing we should fix is to list the posts in *desc order*, so that the recent post always shows on the top.
 
-.app/Http/Controllers/PostController.js
+.app/Http/Controllers/PostsController.js
 [source, javascript]
 ----
-class PostController {
+'use strict'
+
+class PostsController {
 
   * index (request, response) {
     const posts = yield Post.query().orderBy('id', 'desc').fetch()

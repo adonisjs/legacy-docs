@@ -18,7 +18,7 @@ Let's take the classic case of reading request body for a given HTTP request.
 ----
 const Route = use('Route')
 
-Route.get('/posts', function * (request, response) {
+Route.get('posts', function * (request, response) {
   const body = request.all()
 
   // cherry picking fields
@@ -205,9 +205,9 @@ Returns a boolean indicating whether the current request URL matches any of the 
 ----
 // url - /user/1
 
-request.match('/user/:id') // true
-request.match('/user/all') // false
-request.match('/user/all', '/user/(.+)') // true
+request.match('/users/:id') // true
+request.match('/users/all') // false
+request.match('/users/all', '/user/(.+)') // true
 ----
 
 ==== hasBody

@@ -16,8 +16,10 @@ To make use of Encryption or Hashing, you must set up their providers inside the
 [source, javascript]
 ----
 const providers = [
+  // ...
   'adonis-framework/providers/EncryptionProvider',
   'adonis-framework/providers/HashProvider'
+  // ...
 ]
 ----
 
@@ -26,8 +28,10 @@ Also, it is recommended to setup aliases for both inside the same file.
 [source, javascript]
 ----
 const aliases = {
+  // ...
   Encryption : 'Adonis/Src/Encryption',
   Hash: 'Adonis/Src/Hash'
+  // ...
 }
 ----
 
@@ -77,6 +81,6 @@ const Hash = use('Hash')
 const isSame = yield Hash.verify('plain-value', 'hashed-value')
 
 if (isSame) {
-  // value is same
+  // ...
 }
 ----

@@ -83,7 +83,7 @@ Route parameters are dynamic segments of a URL which mean you can define URL's a
 
 [source, javascript]
 ----
-Route.get('/user/:id', function * (request, response) {
+Route.get('users/:id', function * (request, response) {
   const id = request.param('id')
   response.send(`Profile for user with id ${id}`)
 })
@@ -95,7 +95,7 @@ You can also keep route parameters optional depending upon the nature of your ap
 
 [source, javascript]
 ----
-Route.get('/make/:drink?', function * (request, response) {
+Route.get('make/:drink?', function * (request, response) {
   const drink = request.param('drink', 'coffee')
   response.send(`Order for ${drink} has been placed`)
 })
@@ -143,7 +143,7 @@ AdonisJs routes give you the option to define the formats next to your routes.
 [source, javascript]
 ----
 Route
-  .get('/users', function * (request, response) {
+  .get('users', function * (request, response) {
     const format = request.format() <1>
   })
   .formats(['json', 'html'])
@@ -162,7 +162,7 @@ Let's take the classical example of rendering an about page.
 .Not ideal
 [source, javascript]
 ----
-Route.get('/about', function * (request, response) {
+Route.get('about', function * (request, response) {
   yield response.sendView('about')
 })
 ----
@@ -174,7 +174,7 @@ AdonisJs routing layer eliminates this behavior by introducing the `render` whic
 .Ideal
 [source, javascript]
 ----
-Route.on('/about').render('about')
+Route.on('about').render('about')
 ----
 
 This is a small feature, but it will save you from typing few more characters and is more explicit about rendering a view.
@@ -188,9 +188,10 @@ Grouping of routes is required when you want a bunch of routes to share the same
 [source, javascript]
 ----
 Route.group('version1', function () {
-  Route.get('/users', function * (request, response) {
+  Route.get('users', function * (request, response) {
+    // ...
   })
-}).prefix('/api/v1')
+}).prefix('api/v1')
 ----
 
 All routes inside the above group get prefixed with `/api/v1` which means `/api/v1/users` will invoke the route action defined next to the above route definition.
@@ -203,7 +204,7 @@ Define middleware to all the routes inside the group
 [source, javascript]
 ----
 Route.group('authenticated', function () {
-  // YOUR ROUTES
+  // ...
 }).middleware('auth')
 ----
 
@@ -213,7 +214,8 @@ Define a subdomain for a group of routes.
 [source, javascript]
 ----
 Route.group('my-group', function () {
-  Route.get('/posts', function * (request, response) {
+  Route.get('posts', function * (request, response) {
+    // ...
   })
 }).domain('blog')
 ----
@@ -237,7 +239,7 @@ It is better to give unique names to your commonly referenced routes and use the
 [source, javascript]
 ----
 Route
-  .get('/user/id', 'UserController.show')
+  .get('users/:id', 'UserController.show')
   .as('profile')
 ----
 
@@ -253,8 +255,8 @@ Now you can reference the name inside your views as using the linkTo helper.
 .output
 [source, html]
 ----
-<a href="/user/1"> View Profile </a>
-<a href="/user/1" target="_blank"> View Profile </a>
+<a href="/users/1"> View Profile </a>
+<a href="/users/1" target="_blank"> View Profile </a>
 ----
 
 `linkTo` limits you to an anchor tag, there is a general purpose view filter called `route`, which can be used to resolve a named route inside your views.
