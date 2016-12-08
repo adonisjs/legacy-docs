@@ -549,6 +549,8 @@ class MongoSerializer {
   * validateCredentials (userPayload, password, options) {
   }
 
+  primaryKey(authenticatorOptions) {
+  }
 }
 ----
 
@@ -560,6 +562,7 @@ class MongoSerializer {
 6. *revokeTokens* - Revoke a single/multiple tokens. If `reverse=true` you must revoke all the tokens except the one passed as the 2nd parameter.
 7. *validateToken* - Here you must validate the token payload returned by *findByToken* method. The most common check is to verify the expiry.
 8. *validateCredentials* - This method is used to verify the user password against the plain password.
+9. *primaryKey* — This method is used to get primary key definition to make sure that the primary key is not null for the user.
 
 === Schemes
 Schemes defines the way of authenticating users. For example: Session, JWT, Basic Auth etc. You can add your own schemes if required. Below is the list of methods your scheme should implement.
