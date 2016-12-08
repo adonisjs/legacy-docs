@@ -62,7 +62,7 @@ class PostsController {
 
   * show (request, response) {
     const post = yield Post.find(request.param('id'))
-    yield response.sendView('showPost', { post: post.toJSON() })
+    yield response.sendView('posts.show', { post: post.toJSON() })
   }
 
 }
