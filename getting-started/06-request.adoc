@@ -245,6 +245,7 @@ Quite often applications have requirements of saving multiple entries to the dat
 [source, html]
 ----
 <form method="POST" action="/users">
+  {{ csrfField }}
   <div class="row">
     <h2> User 1 </h2>
     <input type="email" name="email[]" />

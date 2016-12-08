@@ -175,6 +175,8 @@ AdonisJs routing layer eliminates this behavior by introducing the `render` whic
 [source, javascript]
 ----
 Route.on('/about').render('about')
+// same as
+Route.get('/about').render('about')
 ----
 
 This is a small feature, but it will save you from typing few more characters and is more explicit about rendering a view.
@@ -237,7 +239,7 @@ It is better to give unique names to your commonly referenced routes and use the
 [source, javascript]
 ----
 Route
-  .get('/user/id', 'UserController.show')
+  .get('/user/:id', 'UserController.show')
   .as('profile')
 ----
 

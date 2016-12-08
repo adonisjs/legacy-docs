@@ -268,7 +268,7 @@ const profile = yield user.profile().fetch() <2>
 ----
 
 <1> First we `find` a user with the primary key.
-<2> Fetch we call the previously defined `profile` method to fetch the related profile for the given user.
+<2> Then we call the previously defined `profile()` to fetch the related profile for the given user.
 
 ==== Defining Query Constraints
 You can also attach query builder methods to your relationship definitions, and Lucid will make sure to execute them.
@@ -286,7 +286,7 @@ class User extends Lucid {
 }
 ----
 
-<1> Now when you will fetch the related profile for a given user, it will only include the record where is_active=true.
+<1> Now when you fetch the related profile for a given user, it will only include the record where 'is_active=true'.
 
 ==== Runtime Query Constraints
 You can also define runtime query constraints, just by chaining the query builder methods.
@@ -443,7 +443,7 @@ const user = yield User.find(1)
 const profile = new Profile({name: '@cybernox'})
 const anotherProfile = new Profile({name: '@jgwhite'})
 
-yield user.profile.saveMany([profile, anotherProfile])
+yield user.profile().saveMany([profile, anotherProfile])
 ----
 
 ==== createMany(arrayOfValues)

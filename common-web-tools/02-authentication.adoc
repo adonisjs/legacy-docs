@@ -42,8 +42,8 @@ module.exports = {
   authenticator: 'session',
   session: {
     serializer: 'Lucid',
-    scheme: 'session',
     model: 'App/Model/User',
+    scheme: 'session',
     uid: 'email',
     password: 'password'
   }
@@ -83,9 +83,9 @@ const commands = [
 [source, bash]
 ----
 create: app/Model/User.js
-create: database/migrations/1463212428511_User.js
+create: database/migrations/1463212428511_create_users_table.js
 create: app/Model/Token.js
-create: database/migrations/1463212428512_Token.js
+create: database/migrations/1463212428512_create_tokens_table.js
 ----
 
 == Basic Example
@@ -259,8 +259,10 @@ NOTE: JWT token is sent as the *Authorization* header. Example: `Authorization=B
   authenticator: 'jwt',
   jwt: {
     serializer: 'Lucid',
-    scheme: 'jwt',
     model: 'App/Model/User',
+    scheme: 'jwt',
+    uid: 'email',
+    password: 'password',
     secret: Config.get('app.appKey'),
     options: {
       // Options to be used while generating token
@@ -342,8 +344,8 @@ NOTE: API token is sent as the *Authorization* header. Example: `Authorization=B
 authenticator: 'api',
 api: {
   serializer: 'Lucid',
-  scheme: 'api',
   model: 'App/Model/Token',
+  scheme: 'api',
   expiry: '30d'
 }
 ----
