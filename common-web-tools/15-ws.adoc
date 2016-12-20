@@ -1,0 +1,534 @@
+---
+permalink: websocket
+categories:
+- web-development-tools
+---
+
+= WebSocket
+
+WebSocket Provider makes it super easy to build real-time applications in AdonisJs. It comes with out of the box support for *authentication*, *channels* and *rooms* management.
+
+## About Ws Provider
+
+[pretty-list]
+1. You are supposed to define channels to receive incoming WebSocket connections and same is done inside `app/Ws/socket.js` file.
+2. All incoming connections can be authenticated using the `auth` middleware.
+3. All web sockets actions supports *ES2015* generators. For example:
++
+[source, javascript]
+----
+Ws.channel('/chat', function (socket) {
+  socket.on('message', function * (payload) {
+  })
+})
+----
+4. You can attach controllers to your channels, the same as with routes.
++
+[source, javascript]
+----
+Ws.channel('/chat', 'ChatController')
+----
+
+## Setup
+If you are using AdonisJs *3.2 or later*, Ws provider is pre-configured otherwise follow the defined steps to install and setup the provider.
+
+.Install via npm
+[source, bash]
+----
+npm i --save adonis-websocket
+----
+
+Next, we need to register the provider and setup alias inside `bootstrap/app.js` file.
+
+.bootstrap/app.js
+[source, javascript]
+----
+const providers = [
+  'adonis-websocket/providers/WsProvider'
+]
+
+const aliases = {
+  Ws: 'Adonis/Addons/Ws'
+}
+----
+
+Next, we need to create required directories and files to organize our code.
+[source, bash]
+----
+mkdir -p app/Ws/Controllers
+touch app/Ws/socket.js
+touch app/Ws/kernel.js
+----
+
+1. The `socket.js` file is used to define websocket channels, you can think of it as the Http routes file.
++
+.app/Ws/socket.js
+[source, javascript]
+----
+const Ws = use('Ws')
+
+Ws.channel('/chat', function (socket) {
+  // here you go
+})
+----
+2. The `kernel.js` file is used to define global and named middleware just like your Http middleware but for Websocket connections.
++
+.app/Ws/kernel.js
+[source, javascript]
+----
+const Ws = use('Ws')
+
+const globalMiddleware = [
+  'Adonis/Middleware/AuthInit'
+]
+
+const namedMiddleware = {
+  auth: 'Adonis/Middleware/Auth'
+}
+
+Ws.global(globalMiddleware)
+Ws.named(namedMiddleware)
+----
+
+Finally we need to load `socket.js` and `kernel.js` file when booting the Http server and same can be done inside `bootstrap/http.js` file.
+
+.bootstrap/http.js
+[source, javascript]
+----
+use(Helpers.makeNameSpace('Ws', 'kernel'))
+use(Helpers.makeNameSpace('Ws', 'socket'))
+----
+
+## Basic Example
+Check out the following video showing how to build a simple chat room with user presence using Ws provider.
+
+## Channels
+Channels make it easier to distribute logic around exposing web socket endpoints. For each channel, you can follow different authentication process or bind different middleware to it. Also, Adonisjs makes use of *multiplexing* instead of creating a different connection for each channel.
+
+.app/Ws/socket.js
+[source, javascript]
+----
+'use strict'
+
+const Ws = use('Ws')
+
+Ws.channel('chat', function (socket, request, presence) {
+  socket.on('news', function (message) {
+
+  })
+})
+----
+
+The above closure will be executed every time a new socket will join the *chat* channel and receives following.
+
+1. *socket* - User socket instance to emit and listen for events.
+2. *request* - Instance of link:request[request] instantiated at the time of handshake.
+3. *presence* - A special presence instance to track the socket. Read more on xref:_presence[presence].
+
+## Controllers
+Apart from closures, you can also bind controllers to channels. All controllers are stored inside `app/Ws/Controllers` directory and can be referenced the same way as *Route controllers*.
+
+[source, javascript]
+----
+Ws.channel('chat', 'ChatController')
+----
+
+Now controllers can listen for new events just by creating appropriate methods on it.
+
+.app/Ws/Controllers/ChatController.js
+[source, javascript]
+----
+'use strict'
+
+class ChatController {
+
+  constructor (socket) {
+    this.socket = socket
+  }
+
+  onMessage (message) {
+    // listening for message event
+  }
+
+}
+----
+
+The `onMessage` method will be invoked every time message event will be fired from the client. Also, you can make your listeners a generator method for doing async operations.
+
+[source, javascript]
+----
+onMessage (message) {
+
+}
+
+// CAN BE
+
+* onMessage (message) {
+  const savedMessage = yield Message.create({ body: message })
+}
+----
+
+All events listeners must start with `on` and the *camel case* representation of the event name. For example `new:user` will invoke `onNewUser` method on the controller.
+
+[options="header"]
+|====
+| Event Name | Controller Method
+| message | onMessage
+| new:user | onNewUser
+| user:left| onUserLeft
+|====
+
+## Rooms
+Rooms make it easier to build multi-room chat systems. For example, Slack has public rooms that anyone can join and leave, whereas private rooms need further authorization.
+
+In the same manner, AdonisJs gives you hooks to authorize a socket before it can listen for messages inside a room.
+
+### Joining A Room
+The `joinRoom` method on the channel controller has invoked automatically every time a socket tries to join a room. You can make use of this method to authorize the join action or deny it by throwing an exception.
+
+#### Server
+.app/Ws/socket.js
+[source, javascript]
+----
+const Ws = use('Ws')
+
+Ws
+.channel('chat', 'ChatController')
+.middleware('auth')
+----
+
+.app/Ws/Controllers/ChatController.js
+[source, javascript]
+----
+'use strict'
+
+class ChatController {
+  constructor (socket) {
+    this.socket = socket
+  }
+
+  * joinRoom (room) {
+    const user = this.socket.currentUser
+    // throw error to deny a socket from joining room
+  }
+}
+----
+
+#### Client
+[source, javascript]
+----
+const io = ws('')
+const client = io.channel('chat').connect()
+client.joinRoom('lobby', {}, function (error, joined) {
+  // status
+})
+----
+
+### Emitting Messages To A Room
+Once a socket has joined a room, it can listen for messages.
+
+#### Server
+[source, javascript]
+----
+this.socket.inRoom('lobby').emit('message', 'Hello world')
+----
+
+#### Client
+[source, javascript]
+----
+client.on('message', function (room, message) {
+})
+----
+
+### Leaving A Room
+In order to leave a room, the client can call `leaveRoom` method.
+
+#### Server
+
+.app/Ws/Controllers/ChatController.js
+[source, javascript]
+----
+'use strict'
+
+class ChatController {
+  constructor (socket) {
+    this.socket = socket
+  }
+
+  * leaveRoom (room) {
+    // Do cleanup if required
+  }
+
+  * joinRoom (room) {
+    const user = this.socket.currentUser
+    // throw error to deny a socket from joining room
+  }
+}
+----
+
+#### Client
+[source, javascript]
+----
+const io = ws('')
+const client = io.channel('chat').connect()
+client.leaveRoom('lobby', {}, function (error, left) {
+  // status
+})
+----
+
+## Socket Methods
+Below is the list of methods you can call from the socket instance.
+
+#### on(event, callback)
+Listen for an event.
+
+[source, javascript]
+----
+socket.on('greet', function (greeting) {
+
+})
+----
+
+#### once(event, callback)
+Listen for an event only once.
+
+[source, javascript]
+----
+socket.once('greet', function (greeting) {
+
+})
+----
+
+#### emit(event, ...properties)
+Emit an event.
+[source, javascript]
+----
+socket.emit('greet', 'Hello world')
+----
+
+#### toEveryone()
+Emit a message to everyone including the originating socket itself.
+
+[source, javascript]
+----
+socket.toEveryone().emit('greet', 'Hello world')
+----
+
+#### toMe()
+Emit a message to the originating socket only.
+[source, javascript]
+----
+socket.toMe().emit('greet', 'Hello world')
+----
+
+#### to(ids)
+Emit a message to specific socket ids only.
+[source, javascript]
+----
+socket.to([]).emit('greet', 'Hello world')
+----
+
+#### inRoom(room)
+Emit a message a given room.
+[source, javascript]
+----
+socket.inRoom('lobby').emit('greet', 'Hello world')
+----
+
+#### inRooms(rooms)
+Emit a message to multiple rooms.
+[source, javascript]
+----
+socket.inRoom(['lobby', 'watercooler']).emit('greet', 'Hello world')
+----
+
+#### disconnect
+Disconnect a socket from receiving/sending messages.
+[source, javascript]
+----
+socket.disconnect()
+----
+
+## Channel Methods
+Below is the list of methods can be used on the channel instance.
+
+#### emit(event, ...properties)
+Emit a message to all the sockets connected to a given channel.
+
+[source, javascript]
+----
+const chatChannel = Ws.channel('chat')
+chatChannel.emit('message', 'Hello world')
+----
+
+#### inRoom(room)
+Emit a message a given room.
+[source, javascript]
+----
+const chatChannel = Ws.channel('chat')
+chatChannel.inRoom('lobby').emit('message', 'Hello world')
+----
+
+#### inRooms(rooms)
+Emit a message to all given rooms.
+[source, javascript]
+----
+const chatChannel = Ws.channel('chat')
+chatChannel.inRooms(['lobby', 'watercooler']).emit('message', 'Hello world')
+----
+
+#### to(ids)
+Emit a message to specific socket ids only.
+[source, javascript]
+----
+const chatChannel = Ws.channel('chat')
+chatChannel.to([]).emit('greet', 'Hello world')
+----
+
+#### get(socketId)
+Get socket instance using the socket id.
+
+[source, javascript]
+----
+const chatChannel = Ws.channel('chat')
+const socket = chatChannel.get(socketId)
+----
+
+## WebSocket Client
+The client library to be used with browser-based web apps can be installed as *Common Js* module from link:https://npmjs.org/package/adonis-websocket-client[npm, window="_blank"], *AMD* module from bower or you can reference it from a link:https://unpkg.com/adonis-websocket-client/dist/ws.min.js[CDN, window="_blank"].
+
+### CommonJs Usage
+After installation, you can require the module just like any other npm module.
+
+[source, bash]
+----
+npm i --save adonis-websocket-client
+----
+
+[source, javascript]
+----
+const ws = require('adonis-websocket-client')
+const io = ws('http://localhost:3333', {})
+----
+
+### AMD Usage
+First, install the package from bower.
+
+[source, bash]
+----
+bower i --save adonis-websocket-client
+----
+
+[source, javascript]
+----
+requirejs(['adonis-websocket-client'], function (ws) {
+  const io = ws('http://localhost:3333', {})
+})
+----
+
+
+### CDN Usage
+The CDN script file will create a `ws` global.
+
+[source, html]
+----
+<script src="https://unpkg.com/adonis-websocket-client/dist/ws.min.js"></script>
+<script>
+  const io = ws('http://localhost:3333', {})
+</script>
+----
+
+## Client Channel Methods
+Below is the list of methods you can call using the client SDK.
+
+#### connect(callback)
+Connect to a given channel.
+
+[source, javascript]
+----
+const client = io.channel('chat')
+client.connect(function (error, connected) {
+  if (error) {
+    // do something
+    return
+  }
+  // all good
+})
+----
+
+#### emit(event, ...properties)
+Emit an event.
+
+[source, javascript]
+----
+client.emit('message', 'Hello world')
+----
+
+#### on(event, callback)
+Listen for an event.
+
+[source, javascript]
+----
+client.on('message', function (message) {
+})
+----
+
+#### once(event, callback)
+Listen for an event only once.
+
+[source, javascript]
+----
+client.once('message', function (message) {
+})
+----
+
+#### joinRoom(room, payload, callback)
+Notify server to join a room and send optional data object as *payload*.
+
+[source, javascript]
+----
+client.joinRoom('lobby', {}, function (error, joined) {
+})
+----
+
+#### leaveRoom(room, payload, callback)
+Leave a room.
+
+[source, javascript]
+----
+client.leaveRoom('lobby', {}, function (error, left) {
+})
+----
+
+#### withBasicAuth(username, password)
+Connect to the channel by passing the username and password to be used for basic auth.
+
+[source, javascript]
+----
+client
+  .withBasicAuth('foo', 'secret')
+  .connect(function () {
+  })
+----
+
+#### withJwt(token)
+Connect to the channel by passing JWT token to be used for authentication.
+
+[source, javascript]
+----
+client
+  .withJwt('token')
+  .connect(function () {
+  })
+----
+
+#### withApiKey(token)
+Connect to the channel by passing personal API token to be used for authentication.
+
+[source, javascript]
+----
+client
+  .withApiKey('personal_token')
+  .connect(function () {
+  })
+----
