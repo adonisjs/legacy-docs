@@ -3,8 +3,9 @@ permalink: websocket
 categories:
 - web-development-tools
 ---
-
 = WebSocket
+
+toc::[]
 
 WebSocket Provider makes it super easy to build real-time applications in AdonisJs. It comes with out of the box support for *authentication*, *channels* and *rooms* management.
 
@@ -30,7 +31,7 @@ Ws.channel('/chat', 'ChatController')
 ----
 
 ## Setup
-If you are using AdonisJs *3.2 or later*, Ws provider is pre-configured otherwise follow the defined steps to install and setup the provider.
+NOTE: Feel free to skip the setup process if you are using AdonisJs *3.2 or later*. Since Web Sockets are pre-configured.
 
 .Install via npm
 [source, bash]
@@ -90,7 +91,7 @@ Ws.global(globalMiddleware)
 Ws.named(namedMiddleware)
 ----
 
-Finally we need to load `socket.js` and `kernel.js` file when booting the Http server and same can be done inside `bootstrap/http.js` file.
+Finally, we need to load `socket.js` and `kernel.js` file when booting the Http server and same can be done inside `bootstrap/http.js` file.
 
 .bootstrap/http.js
 [source, javascript]
@@ -103,7 +104,9 @@ use(Helpers.makeNameSpace('Ws', 'socket'))
 Check out the following video showing how to build a simple chat room with user presence using Ws provider.
 
 ## Channels
-Channels make it easier to distribute logic around exposing web socket endpoints. For each channel, you can follow different authentication process or bind different middleware to it. Also, Adonisjs makes use of *multiplexing* instead of creating a different connection for each channel.
+Channels make it easier to distribute logic around exposing web socket endpoints. For each channel, you can follow different authentication process or bind different middleware to it.
+
+TIP: Adonisjs makes use of *multiplexing* instead of creating a different connection for each channel.
 
 .app/Ws/socket.js
 [source, javascript]
@@ -121,9 +124,9 @@ Ws.channel('chat', function (socket, request, presence) {
 
 The above closure will be executed every time a new socket will join the *chat* channel and receives following.
 
-1. *socket* - User socket instance to emit and listen for events.
-2. *request* - Instance of link:request[request] instantiated at the time of handshake.
-3. *presence* - A special presence instance to track the socket. Read more on xref:_presence[presence].
+socket:: User socket instance to emit and listen for events.
+request:: Instance of link:request[request] instantiated at the time of handshake.
+presence:: A special presence instance to track the socket. Read more on xref:_presence[presence].
 
 ## Controllers
 Apart from closures, you can also bind controllers to channels. All controllers are stored inside `app/Ws/Controllers` directory and can be referenced the same way as *Route controllers*.
@@ -181,7 +184,7 @@ All events listeners must start with `on` and the *camel case* representation of
 ## Rooms
 Rooms make it easier to build multi-room chat systems. For example, Slack has public rooms that anyone can join and leave, whereas private rooms need further authorization.
 
-In the same manner, AdonisJs gives you hooks to authorize a socket before it can listen for messages inside a room.
+In the same manner, AdonisJs gives you hooks to authorize a socket before it can listen for events inside a room.
 
 ### Joining A Room
 The `joinRoom` method on the channel controller has invoked automatically every time a socket tries to join a room. You can make use of this method to authorize the join action or deny it by throwing an exception.
@@ -219,6 +222,7 @@ class ChatController {
 ----
 const io = ws('')
 const client = io.channel('chat').connect()
+
 client.joinRoom('lobby', {}, function (error, joined) {
   // status
 })
