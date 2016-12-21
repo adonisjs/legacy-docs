@@ -16,7 +16,7 @@ Release v3.2 is a minor update with handful or bug fixes and incremental API upd
 ==== adonis-framework (3.0.4 - 3.0.7)
 There are no notable changes for this repo and all existing features from 3.1 will continue to work. Checkout the link:https://github.com/adonisjs/adonis-framework/blob/develop/CHANGELOG.md[git changelog, window="_blank"]
 
-==== adonis-lucid (3.0.8 - 3.0.11)
+==== adonis-lucid (3.0.8 - 3.0.12)
 Below is the list of notable changes:
 
 1. Add support for updating and `belongsToMany` pivot table and fetch additional columns using `withPivot` method. link:https://github.com/adonisjs/adonis-lucid/commit/1d00425[Related commit]
@@ -30,7 +30,7 @@ yield User.last()
 
 Checkout the entire link:https://github.com/adonisjs/adonis-lucid/blob/develop/CHANGELOG.md[git chanagelog, window="_blank"].
 
-==== adonis-auth(1.0.5 - 1.0.6)
+==== adonis-auth(1.0.5)
 Below is the list of notable changes:
 
 1. You can now pass custom object to the JWT token when generating it. It can be helpful to add some meta information to the token to be read on the client side. link:https://github.com/adonisjs/adonis-auth/commit/2e413fe[Related commit].
