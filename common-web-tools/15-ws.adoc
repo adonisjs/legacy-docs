@@ -101,7 +101,9 @@ use(Helpers.makeNameSpace('Ws', 'socket'))
 ----
 
 ## Basic Example
-Check out the following video showing how to build a simple chat room with user presence using Ws provider.
+Check out the following video showing how to exchange messages between client and the server.
+
+video::rQTIwBV_ZgY[youtube, width=100%, height=480]
 
 ## Channels
 Channels make it easier to distribute logic around exposing web socket endpoints. For each channel, you can follow different authentication process or bind different middleware to it.
@@ -280,6 +282,49 @@ client.leaveRoom('lobby', {}, function (error, left) {
 })
 ----
 
+## Presence
+The presence feature allows you to track sockets for a given user. It is helpful in showing the list of online users and number of devices they are online from. Also when a user logouts, you can *disconnect* all of their related sockets to make sure they do not receive any realtime messages.
+
+Checkout this video to understand the presence in-depth.
+
+video::p_QNEZdQt6Y[youtube, width=100%, height=480]
+
+## Presence Methods
+Below is the list of presence methods.
+
+### track(socket, userId, [meta])
+The `track` method allows you to track a socket for a given user using their *userId*. Optionally you can pass meta data too.
+
+[source, javascript]
+----
+class ChatController {
+
+  constructor (socket, request, presence) {
+    presence.track(socket, socket.currentUser.id, {
+      device: 'chrome'
+    })
+  }
+
+}
+----
+
+### pull(userId, callback)
+Pull a list of sockets from the presence list for a given user. Pulled sockets will not be tracked anymore.
+
+[source, javascript]
+----
+const Ws = use('Ws')
+const chatChannel = Ws.channel('chat')
+const chromeOnlySockets = chatChannel.presence.pull(userId, function (payload) {
+  return payload.meta.device === 'chrome'
+})
+
+// disconnect user sockets from chrome
+chromeOnlySockets.forEach((payload) => {
+  payload.socket.disconnect()
+})
+----
+
 ## Socket Methods
 Below is the list of methods you can call from the socket instance.
 
@@ -355,6 +400,22 @@ socket.disconnect()
 
 ## Channel Methods
 Below is the list of methods can be used on the channel instance.
+
+#### middleware(...middleware)
+Apply an array of middleware on a given channel. Make sure to define middleware inside `app/Ws/kernel.js` file.
+
+[source, javascript]
+----
+Ws
+  .channel('chat')
+  .middleware('auth')
+
+// OR
+
+Ws
+  .channel('chat')
+  .middleware('auth:jwt')
+----
 
 #### emit(event, ...properties)
 Emit a message to all the sockets connected to a given channel.
