@@ -151,7 +151,7 @@ Let's take the example of a master and a child view.
     <section class="sidebar">
       {% block sidebar %}
         Common Sidebar
-      {% end block %}
+      {% endblock %}
     </section>
 
     <section class="content">
@@ -235,7 +235,7 @@ Let's take an example of creating a button component, which will adhere to boots
 [source, twig]
 ----
 {% macro button(value, style='default') %}
-  <button type="button" class="button btn-{{style}}"> {{ value }} </button>
+  <button type="button" class="btn btn-{{style}}"> {{ value }} </button>
 {% endmacro %}
 ----
 
