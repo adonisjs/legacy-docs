@@ -31,7 +31,7 @@ Let's create the `create` and `store` methods on the existing PostsController.
 class PostsController {
 
   * create (request, response) {
-    yield response.sendView('createPost')
+    yield response.sendView('posts.create')
   }
 
   * store (request, response) {
