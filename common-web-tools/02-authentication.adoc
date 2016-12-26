@@ -68,7 +68,7 @@ Authentication provider can generate required migrations for you using an *ace c
 [source, javascript]
 ----
 const commands = [
-  ...,
+  // ...,
   'Adonis/Commands/Auth:Setup'
 ]
 ----
@@ -98,16 +98,16 @@ Let's start with a basic example of creating a simple app to *login* and display
 
 const Route = use('Route')
 
-Route.get('/profile', 'UserController.profile')
-Route.post('/login', 'UserController.login')
+Route.get('profile', 'UsersController.profile')
+Route.post('login', 'UsersController.login')
 ----
 
-.app/Http/Controllers/UserController.js
+.app/Http/Controllers/UsersController.js
 [source, javascript]
 ----
 'use strict'
 
-class UserController {
+class UsersController {
 
   * login (request, response) {
     const email = request.input('email')
@@ -250,7 +250,7 @@ try {
 == JWT
 JWT authenticators require a couple of extra attributes to the configuration block.
 
-NOTE: JWT token is sent as the *Authorization* header. Example: `Authorization=Bearer JWT_TOKEN`
+NOTE: The JWT is sent as the *Authorization* header. Example: `Authorization=Bearer JWT_TOKEN`
 
 .config/auth.js
 [source, javascript]
@@ -294,7 +294,7 @@ if (!isLoggedIn) {
 ----
 
 ==== generate(user)
-Generates a JWT token for a given user.
+Generates a JWT for a given user.
 
 [source, javascript]
 ----
@@ -315,7 +315,7 @@ try {
 ----
 
 ==== attempt(uid, password)
-Validates the user credentials and generates a JWT token if they valid.
+Validates the user credentials and generates a JWT if they valid.
 
 [source, javascript]
 ----
@@ -326,7 +326,7 @@ try {
 }
 ----
 
-== API Tokens
+== API Token
 Personal API tokens are like the password for a given account. The majority of Web applications offers API-based authentication so that their customers can generate these tokens for developers without sharing their actual Login details.
 
 NOTE: API token is sent as the *Authorization* header. Example: `Authorization=Bearer API_TOKEN`
@@ -447,7 +447,7 @@ Now you are all set to take advantage of the `auth` middleware on your routes.
 [source, javascript]
 ----
 Route
-  .get('/user/profile', 'UserController.profile')
+  .get('users/profile', 'UsersController.profile')
   .middleware('auth')
 ----
 
@@ -456,7 +456,7 @@ Also, you can define a different authenticator by passing arguments to the auth 
 [source, javascript]
 ----
 Route
-  .get('/user/profile', 'UserController.profile')
+  .get('users/profile', 'UsersController.profile')
   .middleware('auth:basic')
 ----
 
@@ -521,34 +521,46 @@ Serializer is used to serialize/fetch the user from the data store using their u
 
 [source, javascript]
 ----
+'use strict'
+
 class MongoSerializer {
 
   * findById (id, options) {
+    // ...
   }
 
   * findByCredentials (email, options) {
+    // ...
   }
 
   * findByToken (token, options) {
+    // ...
   }
 
   * getUserForToken (tokenPayload, options) {
+    // ...
   }
 
   * saveToken (userPayload, token, options, expiry) {
+    // ...
   }
 
   * revokeTokens (userPayload, tokens, reverse) {
+    // ...
   }
 
   * validateToken (tokenPayload, options) {
+    // ...
   }
 
   * validateCredentials (userPayload, password, options) {
+    // ...
   }
 
   primaryKey(authenticatorOptions) {
+    // ...
   }
+
 }
 ----
 
@@ -569,6 +581,8 @@ NOTE: All the methods of your schemes are exposed to the end-user. Which means t
 
 [source, javascript]
 ----
+'use strict'
+
 class FingerPrint {
 
   constructor (request, serializer, options) {
@@ -578,9 +592,11 @@ class FingerPrint {
   }
 
   * check () {
+    // ...
   }
 
   * getUser () {
+    // ...
   }
 
 }
