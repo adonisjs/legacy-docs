@@ -199,12 +199,12 @@ yield request
 ----
 
 === Accessing Flash Values
-You can access the values of flash messages inside your views using the defined helpers.
+You can access the values of flash messages inside your views using the defined helpers. If there's nothing in the flash message at the requested key it will display the defaultValue.
 
-==== old(key)
+==== old(key, defaultValue)
 [source, twig]
 ----
-{{ old('username') }}
+{{ old('username', user.username) }}
 {# or #}
 {{ old('profile.username') }}
 ----
