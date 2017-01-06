@@ -179,6 +179,14 @@ Move the file to a given location with an optional name. If `newName` is not def
 yield avatar.move(Helpers.storagePath())
 ```
 
+#### delete()
+
+Delete before or after it has been moved.
+
+```javascript
+yield avatar.delete()
+```
+
 #### moved
 
 Tells whether the move operation was successful or not.
