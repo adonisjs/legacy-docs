@@ -300,6 +300,14 @@ Here is a couple of things to notice.
 1. You always have to register a controller with route resource.
 2. AdonisJs will automatically bind the methods for each route, and you cannot customize them. It is nice to stick with the defaults since others contributing to your code will find it easier to follow.
 
+=== Nested resources
+Resources can also be nested by making use of `dot notation`.
+
+[source, javascript]
+----
+Route.resource('posts.comments', 'CommentsController')
+----
+
 === Filtering resources
 `resource` will create a total of seven routes. Depending upon the nature of your application you may or may not need all the registered routes. AdonisJs makes it so easier to filter the routes.
 
