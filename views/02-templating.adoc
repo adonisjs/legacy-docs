@@ -213,26 +213,31 @@ Template engine will render all the white spaces between your tags. Use the foll
 All given expressions are supported.
 
 Strings::
+[source]
 ----
 "How are you?", 'How are you?'
 ----
 
 Numbers::
+[source]
 ----
 40, 30.123
 ----
 
 Arrays::
+[source]
 ----
 [1, 2, "array"]
 ----
 
 Objects::
+[source]
 ----
 {username: 'John', age: 28}
 ----
 
 Boolean::
+[source]
 ----
 true, false
 ----
@@ -259,12 +264,12 @@ Below is the list of supported mathematical operators.
 == Comparison Operators
 Below is the list of supported comparison operators.
 
-* Equals to `==`
-* Not equals to `!=`
-* Greater than `>`
-* Greater than equals to `>=`
-* Less than `<`
-* Less than equals to `<=`
+- Equals to `==`
+- Not equals to `!=`
+- Greater than `>`
+- Greater than equals to `>=`
+- Less than `<`
+- Less than equals to `<=`
 
 .Usage
 [source, twig]
