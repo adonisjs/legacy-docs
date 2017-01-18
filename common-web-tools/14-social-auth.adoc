@@ -20,6 +20,9 @@ Below is the list of officially supported drivers whereas you are free to contri
 * Twitter (twitter)
 * Github (github)
 * LinkedIn (linkedin)
+* Instagram (instagram)
+* Four Square (foursquare)
+* Bitbucket (bitbucket)
 
 == About Ally
 [pretty-list]
