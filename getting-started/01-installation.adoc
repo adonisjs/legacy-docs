@@ -57,8 +57,16 @@ adonis --help
 ----
 Commands
 ------------
-adonis new
-adonis fix
+Usage: index [options] [command]
+
+  Commands:
+
+    new [options] <name>  Scaffold a new AdonisJs application with the name provided.
+
+  Options:
+
+    -h, --help     output usage information
+    -V, --version  output the version number
 ----
 
 
@@ -73,17 +81,30 @@ adonis new yardstick
 .Output
 [source, bash]
 ----
-Cloning into 'yardstick'...
-cleaning project
-setting up app key
-Fixing ace file
-installing dependencies may take a while
-installing dependencies...
+✔ Your current Node.js & npm version match the AdonisJs requirements!
+
+⠋ Cloning master branch of adonisjs/adonis-app blueprint
+    clone: Repository cloned
+
+⠧ Installing dependencies using npm
 ----
 
 `new` command will create a project called *yardstick* with pre-defined directory structure and will also install all the required dependencies from npm.
 
 NOTE: If `new` command fails in the middle, make sure to `cd` into the newly created project and manually run `npm install`.
+
+=== Scaffold Options
+You can provide number of options to mimic the scaffold process.
+
+[options="header"]
+|====
+| Flag | Value | Description
+| --skip-install | Boolean | To skip the dependecies installation from npm or yarn
+| --branch | String | Adonisjs makes use of master branch when creating a new project. For bleeding edge changes, you can create a project from `develop` branch.
+| --blueprint | String | Blueprint is the incremental path to the Github repo. By default AdonisJs makes use of `adonisjs/adonis-app`.
+| --yarn | Boolean | Make use of yarn for installing modules
+| --npm | Boolean | Make use of npm for installing modules
+|====
 
 == Getting Proxies Error
 Older versions of Node.js requires `--harmony_proxies` flag to add support for *ES2015 Proxies*. If you are using *Node.js < 6.0*, make sure to make following changes.
@@ -94,8 +115,8 @@ Replace the scripts inside `package.json` file with following
 [source, json]
 ----
 "scripts": {
-  "dev": "nodemon --watch app --watch bootstrap --watch config --watch .env -x \"node --harmony_proxies\" server.js",
-  "start": "node --harmony_proxies server.js"
+  "serve:dev": "nodemon --watch app --watch bootstrap --watch config --watch .env -x \"node --harmony_proxies\" server.js",
+  "serve": "node --harmony_proxies server.js"
 }
 ----
 
@@ -112,7 +133,7 @@ You are all set to see your brand new project. Run the below commands to start a
 [source, bash]
 ----
 cd yardstick
-npm run dev
+npm run serve:dev
 ----
 
 .Output
