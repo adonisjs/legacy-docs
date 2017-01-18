@@ -21,6 +21,35 @@ Below is the list of available drivers.
 
 NOTE: Make sure to setup link:redis[Redis provider] before making use of the redis driver.
 
+== Configuration
+
+Take a look at the example config file link:https://github.com/adonisjs/adonis-app/blob/develop/config/session.js[example config file].
+
+[source, javascript]
+----
+const Env = use('Env')
+
+module.exports = {
+  // available options are file, cookie, redis
+  driver: Env.get('SESSION_DRIVER', 'cookie'),
+  // configuration settings for whichever driver you choose
+  redis: Env.get('REDIS_URL', 'redis://localhost:6379'),
+  cookie: 'adonis-session',
+  file: {
+    directory: 'sessions'
+  }
+  // other settings
+  age: 120,
+  clearWithBrowser: false,
+  httpOnly: true,
+  sameSite: true,
+  domain: null,
+  path: '/',
+  secure: false,
+
+}
+----
+
 == Basic Example
 Let's walk through a basic example of saving/reading cart items for a given user from the session.
 
