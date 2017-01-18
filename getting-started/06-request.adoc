@@ -103,7 +103,7 @@ request.stale()
 ----
 
 ==== ip
-Returns most trusted IP address for a given request. If you are application is behind a proxy server like Nginx, make sure to enable `http.trustProxy` inside the `config/app.js` file.
+Returns most trusted IP address for a given request. If your application is behind a proxy server like Nginx, make sure to enable `http.trustProxy` inside the `config/app.js` file.
 
 [source, javascript]
 ----
