@@ -322,7 +322,7 @@ class Post extends Lucid {
 }
 ----
 
-NOTE: Make sure to define traits only once. Redefining traits will cause multiple registrations of a triat, and your models will misbehave. The best place of defining *dynamic* traits is inside the Model `boot` method.
+NOTE: Make sure to define traits only once. Redefining traits will cause multiple registrations of a trait, and your models will misbehave. The best place of defining *dynamic* traits is inside the Model `boot` method.
 
 == CRUD Operations
 CRUD is a term used to *Create*, *Read*, *Update* and *Delete* records from a database table. Lucid models offer a handful of convenient methods to make this process easier. Let's take an example of managing *posts* using the Post model.
