@@ -562,7 +562,7 @@ You can change the default locale value, and all values will be formatted accord
 ----
 const globalMiddleware = [
   // ...
-  'Adonis/Middleware/Antl'
+  'Adonis/Middleware/DetectLocale'
   // ...
 ]
 ----
