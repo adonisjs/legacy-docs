@@ -133,3 +133,13 @@ This setting will stop IE from executing unknown script in the context of your w
   noopen: true
 }
 ----
+
+=== XFrame
+The xframe option within the `config/shield.js` file makes it easier for you to control the embed behaviour of your website inside an iframe. You can choose from `DENY`, `ALLOW` or `ALLOW-FROM http://mywebsite.com`.
+
+[source, javascript]
+----
+{
+  xframe: 'DENY'
+}
+----
