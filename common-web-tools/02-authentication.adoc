@@ -31,7 +31,7 @@ Each authenticator is a combination of serializers and an authentication scheme.
 2. Session based authentication is considered *Stateful Authentication*, since once logged in the user can navigate to different areas of the application without resending the credentials.
 3. *Stateless Authentication* requires the end-user to send the credentials on each HTTP request which is very common with REST API's.
 4. AdonisJs provides required tooling & helpers to manage both types of authentication with ease.
-5. Authentication provider will make use of the link:encryption-and-hashing#_hashing_values[Hash] module to verify passwords. Make sure to link:database-hooks#_basic_example[hash your passwords] before saying them to the database.
+5. Authentication provider will make use of the link:encryption-and-hashing#_hashing_values[Hash] module to verify passwords. Make sure to link:database-hooks#_basic_example[hash your passwords] before saving them to the database.
 
 == Config
 Configuration for authentication is saved inside `config/auth.js` file. By default, it makes use of the `session` authenticator to authenticate requests.
