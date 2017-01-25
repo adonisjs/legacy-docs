@@ -95,7 +95,7 @@ Quite a lot to cover here. Form builder provides some convenient methods to crea
 
 3. Everything else is a part of standard Form Builder API to create the input fields and the submit button.
 
-Visit link:http://localhost:3333/post/create[http://localhost:3333/post/create, window="_blank"] and you will see a nice looking form to create the posts.
+Visit link:http://localhost:3333/posts/create[http://localhost:3333/posts/create, window="_blank"] and you will see a nice looking form to create the posts.
 
 image:http://res.cloudinary.com/adonisjs/image/upload/v1472841279/create-posts_xgghpo.png[]
 
