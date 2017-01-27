@@ -170,6 +170,22 @@ class Report extends Mysql {
 }
 ----
 
+==== incrementing
+At times applications relies on `uuid` as their primary keys. Since uuids are generated before persisting the database record, they are not auto incremented. So it is important to tell Lucid before-hand about the same.
+
+[source, javascript]
+----
+class User extends Lucid {
+  static get primaryKey () {
+    return 'uuid'
+  }
+
+  static get incrementing () {
+    return false
+  }
+}
+----
+
 == TimeStamps
 Timestamps eliminate the need for setting up timestamps manually every time you create or update a record. Following timestamps are used for different database operations.
 
