@@ -396,6 +396,84 @@ console.log(user.toJSON())
 ]
 ----
 
+=== Filtering Records
+
+NOTE:: Supported by adonis-lucid 3.0.13 or greater
+
+A quite common use case is to filter top-level results based upon some conditions on a relationship. For example:
+
+1. Display all users who have contributed at least one post.
+2. Fetch all cars with 2 or more owners in a lifetime.
+
+Ideally, it requires some complex joins, but Lucid makes it so easier for you.
+
+==== has(relation, [expression], [value])
+
+[source, javascript]
+----
+class User extends Lucid {
+
+  posts () {
+    return this.hasMany('App/Model/Post')
+  }
+
+}
+
+// filtering
+const users = yield User.query().has('posts').fetch()
+
+// two or more
+const users = yield User.query().has('posts', '>=', 2).fetch()
+----
+
+==== whereHas(relation, callback, [expression], [value])
+
+[source, javascript]
+----
+const users = yield User.query().whereHas('posts', (builder) => {
+  builder.where('is_published', true)
+}).fetch()
+----
+
+Also, you can make use of `doesntHave` and `whereDoesntHave` methods, which are opposite of the above ones.
+
+==== doesntHave(relation)
+
+[source, javascript]
+----
+const users = yield User.query().doesntHave('friends').fetch()
+----
+
+==== whereDoesntHave(relation, callback)
+
+[source, javascript]
+----
+const users = yield User.query().whereDoesntHave('friends', (builder) => {
+  builder.where('is_verified', false)
+}).fetch()
+----
+
+=== Counting Related Models
+Getting counts of relationships is commonly used by web applications. For example: *Fetching comments count for every post*.
+
+==== withCount(relation)
+
+[source, javascript]
+----
+class Post extends Lucid {
+
+  comments () {
+    this.hasMany('App/Model/Comment')
+  }
+
+}
+
+// fetching counts
+const posts = yield Posts.query().withCount('comments').fetch()
+
+console.log(posts.first().comments_count)
+----
+
 == Insert, Updates & Deletes
 Relationships can also be *created*, *updated* and *deleted* with the same ease as fetching them. Whereas each relationship type has slightly different methods to persist related data.
 
