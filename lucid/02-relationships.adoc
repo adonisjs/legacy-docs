@@ -201,6 +201,18 @@ The `belongsToMany` method accepts multiple arguments to configure the table/fie
 | otherKey  | No | Reference to the related model foreign key inside the pivot table.
 |====
 
+==== withTimestamps
+Also you choose to save timestamps on the pivot table.
+
+[source, javascript]
+----
+class Student extends Lucid {
+  courses () {
+    this.belongsToMany('App/Model/Course')->withTimestamps()
+  }
+}
+----
+
 === HasManyThrough Relationship
 Another important relation type supported by Lucid is `hasManyThrough`. Where a given model is dependent on another model via 3rd model
 
@@ -477,8 +489,10 @@ console.log(posts.first().comments_count)
 == Insert, Updates & Deletes
 Relationships can also be *created*, *updated* and *deleted* with the same ease as fetching them. Whereas each relationship type has slightly different methods to persist related data.
 
-==== save(modelInstance)
+==== save(modelInstance, [pivotValues])
 The `save` method can be used to create/update related model instance. It works with following relations.
+
+NOTE:: `pivotValues` are only supported by *belongsToMany* relationship. Checkout xref:_attach_rows_pivotvalues[attach] method documentation on how pivotValues are defined.
 
 [support-list]
 1. hasOne
@@ -496,7 +510,7 @@ profile.avatar =  '...'
 yield user.profile().save(profile)
 ----
 
-==== create(values)
+==== create(values, [pivotValues])
 The `create` method is almost similar to the `save` method whereas you pass an arbitrary object instead of passing a model instance.
 
 [source, javascript]
