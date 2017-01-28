@@ -83,7 +83,7 @@ If you are thrilled with link:https://yarnpkg.com/[yarn, window="_blank"] and do
 
 [source, bash]
 ----
-adonis new yardstick --skip-npm
+adonis new yardstick --yarn
 ----
 
 .Output
