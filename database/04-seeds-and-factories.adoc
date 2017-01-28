@@ -102,7 +102,7 @@ const User = use('App/Model/User') <1>
 const user = yield User.find(1) <2>
 
 const post = Factory.model('App/Model/Post').make() <3>
-yield User.posts().create(post) <4>
+yield user.posts().create(post) <4>
 ----
 
 <1> Importing user model.
