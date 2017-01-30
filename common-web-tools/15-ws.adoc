@@ -370,6 +370,14 @@ Emit a message to the originating socket only.
 socket.toMe().emit('greet', 'Hello world')
 ----
 
+#### exceptMe()
+Emit a message to everyone except the originating socket.
+
+[source, javascript]
+----
+socket.exceptMe().emit('user:join', 'User joined!')
+----
+
 #### to(ids)
 Emit a message to specific socket ids only.
 [source, javascript]
