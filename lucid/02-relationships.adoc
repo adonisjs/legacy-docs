@@ -408,9 +408,9 @@ console.log(user.toJSON())
 ]
 ----
 
-=== Filtering Records
+== Filtering Records
 
-NOTE:: Supported by adonis-lucid 3.0.13 or greater
+NOTE: Supported by adonis-lucid 3.0.13 or greater
 
 A quite common use case is to filter top-level results based upon some conditions on a relationship. For example:
 
