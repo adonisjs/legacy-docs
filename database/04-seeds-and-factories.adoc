@@ -64,6 +64,12 @@ module.exports = DatabaseSeeder
 ./ace db:seed
 ----
 
+.Running The Seed Command for a *specificied* seed file
+[source, bash]
+----
+./ace db:seed --file=DatabaseSeeder.js
+----
+
 We started by defining a blueprint for the `User` model inside `database/factory.js` file. Each blueprint method should return an object defining the fields to be inserted into the database table using the *Model create* method.
 
 Since factories blueprints are defined once and used everywhere, we need to import the `Factory` provider inside the `database/seeds/Database.js` file and execute the `create` method passing the number of rows(5) to it.
