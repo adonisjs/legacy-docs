@@ -58,13 +58,13 @@ class DatabaseSeeder {
 module.exports = DatabaseSeeder
 ----
 
-.Running The Seed Command
+.Running The Seed Command - _for all seeds_
 [source, bash]
 ----
 ./ace db:seed
 ----
 
-.Running The Seed Command for a *specificied* seed file
+.Running The Seed Command - _for a *specific* seed file_
 [source, bash]
 ----
 ./ace db:seed --file=DatabaseSeeder.js
