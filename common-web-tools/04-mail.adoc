@@ -250,7 +250,7 @@ Embed a file within the email body. The `cid` must be unique and is required so 
 
 [source, javascript]
 ----
-messsage.embed(path.join(__dirname, '/assets/logo.png'), 'logo')
+message.embed(path.join(__dirname, '/assets/logo.png'), 'logo')
 ----
 
 .Embedding inside views
