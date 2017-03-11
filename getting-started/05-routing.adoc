@@ -217,7 +217,7 @@ Route.group('my-group', function () {
   Route.get('posts', function * (request, response) {
     // ...
   })
-}).domain('blog')
+}).domain('blog.mydomain.dev')
 ----
 
 Routes defined under a subdomain will be invoked when the URL belongs to a subdomain. For example: `blog.mydomain.dev/posts` will invoke the action for the above route.
