@@ -246,7 +246,7 @@ Returns the refresh token to be used when access token has been expired. It is o
 [source, javascript]
 ----
 const user = yield request.ally.driver('facebook').getUser()
-user.getAccessToken()
+user.getRefreshToken()
 ----
 
 ==== getExpires
