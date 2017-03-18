@@ -8,7 +8,7 @@ categories:
 toc::[]
 
 == How Release Is Managed?
-AdonisJs is a combination of multiple npm packages called *Service providers*. All packages are free to have their own release cycle and versions. The combination of these packages form a release for AdonisJs. In breif you should look into the version number in `package.json` file of your project to know the current version.
+AdonisJs is a combination of multiple npm packages called *Service providers*. All packages are free to have their own release cycle and versions. The combination of these packages form a release for AdonisJs. In brief you should look into the version number in `package.json` file of your project to know the current version.
 
 == AdonisJs 3.2
 Release v3.2 is a minor update with handful or bug fixes and incremental API updates. All features/methods from *v3.1* are fully supported and compatible with *v3.2*. Below is the changelog for individual modules.
