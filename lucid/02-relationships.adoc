@@ -280,7 +280,7 @@ const profile = yield user.profile().fetch() <2>
 ----
 
 <1> First we `find` a user with the primary key.
-<2> Fetch we call the previously defined `profile` method to fetch the related profile for the given user.
+<2> Then we call the previously defined `profile` method to fetch the related profile for the given user.
 
 ==== Defining Query Constraints
 You can also attach query builder methods to your relationship definitions, and Lucid will make sure to execute them.
