@@ -50,7 +50,7 @@ Or add multiple middlewares
 ----
 Route.get('/secured', function * (request, response) {
   response.send('This route is authenticated')
-}).middleware('auth,api')
+}).middleware(['auth', 'custom'])
 ----
 
 == HTTP Verbs
