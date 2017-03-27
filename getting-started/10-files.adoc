@@ -1,5 +1,5 @@
 ---
-permalink: templating
+permalink: files
 categories:
 - getting-started
 ---
