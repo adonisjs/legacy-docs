@@ -302,6 +302,37 @@ const user = yield User.find(1)
 const token = yield request.auth.generate(user)
 ----
 
+The generate function also accepts an optional second parameter that allows you to pass custom details and objects into the JWT for a given user.
+
+[source, javascript]
+----
+const user = yield User.find(1)
+const token = yield request.auth.generate(user, { 
+  username: 'GreatScott',
+  account_type: 'admin'
+})
+----
+
+Which would give you the following in your JWT on the client:
+[source, javascript]
+----
+import jwtDecode from 'jwt-decode'
+const decoded = jwtDecode(data.data.jwt)
+console.log(decoded)
+/* 
+{
+  iat: 1491568810
+  payload: {
+    uid: 1,
+    data: {
+      account_type: "admin",
+      username: "GreatScott"
+    }
+  }
+}
+*/
+----
+
 ==== validate(uid, password)
 Validate user credentials to see if they are valid or not.
 
