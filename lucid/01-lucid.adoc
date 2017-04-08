@@ -235,7 +235,7 @@ Soft deletes is a term for deleting records by updating a delete timestamp inste
 
 Soft deletes are disabled by default and to enable them you must return a table field name from `deleteTimestamp` getter.
 
-NOTE: You can make use of xref:with_trashed[withTrashed] method to fetch soft deleted rows.
+NOTE: You can make use of xref:withtrashed[withTrashed] method to fetch soft deleted rows.
 
 ==== dateFormat
 Date format specifies the format of date in which timestamps should be saved. Internally models will convert dates to link:http://momentjs.com/[moment.js, window="_blank"] instance. You can define any valid date format supported by momentjs.
