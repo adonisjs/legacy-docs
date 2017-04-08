@@ -208,7 +208,7 @@ Also you choose to save timestamps on the pivot table.
 ----
 class Student extends Lucid {
   courses () {
-    this.belongsToMany('App/Model/Course')->withTimestamps()
+    this.belongsToMany('App/Model/Course').withTimestamps()
   }
 }
 ----
