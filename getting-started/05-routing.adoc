@@ -32,6 +32,27 @@ Above we defined a route for the *root URL(/)* and attached a closure to it. Her
 1. The closure is an ES2015 generator which means you can make use of the `yield` keyword to perform async operations. Check out this link:https://strongloop.com/strongblog/write-your-own-co-using-es2015-generators/[post, window="_blank"] by Strongloop on generators.
 2. AdonisJs uses the terms `request` and `response` in place of `req` and `res`.
 
+==== middleware(...middleware)
+Define middleware to a single route
+
+.app/Http/routes.js
+[source, javascript]
+----
+Route.get('/authenticated', function * (request, response) {
+  response.send('This route is authenticated')
+}).middleware('auth')
+----
+
+Or add multiple middlewares
+
+.app/Http/routes.js
+[source, javascript]
+----
+Route.get('/secured', function * (request, response) {
+  response.send('This route is authenticated')
+}).middleware(['auth', 'custom'])
+----
+
 == HTTP Verbs
 HTTP verbs also known as HTTP methods defines the type of request. A very classic example of HTTP verbs is using a form where we define the `method` as POST since we want to submit the forms securely to the web server.
 
