@@ -302,7 +302,7 @@ const user = yield User.find(1)
 const token = yield request.auth.generate(user)
 ----
 
-The generate function also accepts an optional second parameter that allows you to pass custom details and objects into the JWT for a given user.
+The optional second parameter allows you to pass custom details and objects into the JWT for a given user.
 
 [source, javascript]
 ----
