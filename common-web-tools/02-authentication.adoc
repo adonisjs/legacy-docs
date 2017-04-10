@@ -345,8 +345,8 @@ try {
 }
 ----
 
-==== attempt(uid, password)
-Validates the user credentials and generates a JWT if they valid.
+==== attempt(uid, password, [customPayload])
+Validates the user credentials and generates a JWT if the credentials are valid. It can also accept an optional custom payload like within the `generate()` example above.
 
 [source, javascript]
 ----
