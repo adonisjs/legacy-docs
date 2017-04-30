@@ -152,6 +152,28 @@ Route.get('/~/*', function * (request, response) {
 ----
 ====
 
+== Regular Expression Constraints
+
+You may constrain the format of your route parameters using the where method on a route instance. The where method accepts the name of the parameter and a regular expression defining how the parameter should be constrained:
+
+[source, javascript]
+----
+Route.get('users/:id', function * (request, response) {
+  const id = request.param('id')
+  response.send(`Profile for user with id ${id}`)
+}).where({ id: '[0-9]+' })
+
+Route.get('users/:name', function * (request, response) {
+  const name = request.param('name')
+  response.send(`Profile for user with name ${name}`)
+}).where({ name: '[A-Za-z]+' })
+
+Route.get('users/:id/:name', function * (request, response) {
+  const id = request.param('id')
+  const name = request.param('name')
+  response.send(`Profile for user with id ${id} and name ${name}`)
+}).where({ id: '[0-9]+', name: '[A-Za-z]+' })
+----
 
 == Content Negotiation Via Routes
 link:https://en.wikipedia.org/wiki/Content_negotiation[Content negotiation, window="_blank"] is a way of finding the best output type for a given request. Ideally, HTTP header *Accept* is used to negotiate the content, but some modern apps make the output more explicit by defining the output extension within the URL. For example:
