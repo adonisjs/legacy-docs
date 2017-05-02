@@ -274,10 +274,14 @@ const ServiceProvider = require('adonis-fold').ServiceProvider
 
 class MyServiceProvider extends ServiceProvider {
 
-  boot () {
-    const View = use('Adonis/Src/View')
-    View.global('time', function () {
-      return new Date().getTime()
+  * boot () {
+    this.app.once('bind:autoload', () => {
+        // We need to wait for the application to bootstrap before we can use `View`
+        const View = use('Adonis/Src/View')
+
+        View.global('time', function () {
+          return new Date().getTime()
+        })
     })
   }
 
