@@ -7,11 +7,11 @@ categories:
 
 toc::[]
 
-AdonisJs has out of the box support for handling file uploads. You can easily manage *bulk uploads*, *file size/extension validation* and add global checks to deny requests containing more than expected payload.
+AdonisJs has out of the box support for handling file uploads. You can easily manage *bulk uploads*, *file size/extension validation* and add global checks to deny requests containing a larger than expected payload.
 
 == Basic Example
 
-Let's take an example of uploading user avatar. We will consider this as a **PUT** request to upload the user profile avatar and run necessary validations to make sure the user is uploading the right file.
+Let's take an example of uploading a user avatar. We will consider this as a **PUT** request to upload the user profile avatar and run the necessary validation to make sure the user is uploading the right file.
 
 .app/Http/routes.js
 [source, javascript]
@@ -58,13 +58,13 @@ module.exports = UsersController
 ----
 
 <1> First we get a file object from the `request` object. Additionally we can define `maxSize` and `allowedExtensions` to validate the file.
-<2> It is important to rename the file, same is done by grabbing the current date time and appending the file extension to it.
-<3> Next, we call the move operation on the file instance. Any validation errors will be returned using `errors()` method.
-<4> If all went fine, we set the path of avatar next to the user model object and persist it to the database.
+<2> It is important to rename the file. In this case, that's done by grabbing the current date time and appending the file extension to it.
+<3> Next, we call the move operation on the file instance. Any validation errors will be returned using the `errors()` method.
+<4> If all went fine, we set the path of the avatar to the user model object and persist it to the database.
 
 == Config
 
-The configuration for the file uploads is stored inside `config/bodyParser.js` file.
+The configuration for file uploads is stored inside the `config/bodyParser.js` file.
 
 .config/bodyParser.js
 [source, javascript]
