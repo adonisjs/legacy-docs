@@ -212,7 +212,7 @@ Route.group('version1', function () {
   Route.get('users', function * (request, response) {
     // ...
   })
-}).prefix('api/v1')
+}).prefix('/api/v1')
 ----
 
 All routes inside the above group get prefixed with `/api/v1` which means `/api/v1/users` will invoke the route action defined next to the above route definition.
