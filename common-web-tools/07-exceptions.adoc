@@ -48,7 +48,7 @@ Below is the list of exceptions only raised by the link:encryption-and-hashing[E
 [options="header"]
 |====
 | Error Code | Description
-| E_INVALID_ENCRPYTION_CIPHER | This exception is raised when a unsupported cipher is used to encrypt/decrypt a value.
+| E_INVALID_ENCRYPTION_CIPHER | This exception is raised when a unsupported cipher is used to encrypt/decrypt a value.
 | E_INVALID_ENCRYPTION_PAYLOAD | This exception is raised when the payload passed to the `encrypt` method is not readable.
 | E_INVALID_ENCRYPTION_MAC | This exception is raised when an unsupported encryption mac is defined to encrypt/decrypt a value.
 |====
