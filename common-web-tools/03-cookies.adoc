@@ -49,6 +49,16 @@ Route.get('/', function * (request, response) {
 })
 ----
 
+==== plainCookie(key)
+Since the cookie method validates the cookie and set it to null when it is not hashed the plainCookie method can be used.
+
+[source, javascript]
+----
+Route.get('/', function * (request, response) {
+  const phpsessionId = request.plainCookie('PHPSESSID')
+})
+----
+
 == Writing/Deleting Cookies
 To create/delete cookies you have to make use of the *response instance*.
 
