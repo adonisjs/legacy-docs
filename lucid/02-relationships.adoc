@@ -557,14 +557,14 @@ The `attach` method only works with *belongsToMany* relationship. You attach exi
 const student = yield Student.find(1)
 const coursesIds = yield Courses.ids()
 
-yield Student.courses().attach(coursesIds)
+yield student.courses().attach(coursesIds)
 ----
 
 Optionally, you can pass an object to populate fields inside the *pivotTable*.
 
 [source, javascript]
 ----
-yield Student.courses().attach(coursesIds, {enrollment_confirmed: false})
+yield student.courses().attach(coursesIds, {enrollment_confirmed: false})
 ----
 
 Or you can also define different pivotValues for each related row.
