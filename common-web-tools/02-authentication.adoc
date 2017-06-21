@@ -293,13 +293,44 @@ if (!isLoggedIn) {
 }
 ----
 
-==== generate(user)
+==== generate(user, [customPayload])
 Generates a JWT for a given user.
 
 [source, javascript]
 ----
 const user = yield User.find(1)
 const token = yield request.auth.generate(user)
+----
+
+The optional second parameter allows you to pass custom details and objects into the JWT for a given user.
+
+[source, javascript]
+----
+const user = yield User.find(1)
+const token = yield request.auth.generate(user, { 
+  username: 'GreatScott',
+  account_type: 'admin'
+})
+----
+
+Which would give you the following in your JWT on the client:
+[source, javascript]
+----
+import jwtDecode from 'jwt-decode'
+const decoded = jwtDecode(data.data.jwt)
+console.log(decoded)
+/* 
+{
+  iat: 1491568810
+  payload: {
+    uid: 1,
+    data: {
+      account_type: "admin",
+      username: "GreatScott"
+    }
+  }
+}
+*/
 ----
 
 ==== validate(uid, password)
@@ -314,8 +345,8 @@ try {
 }
 ----
 
-==== attempt(uid, password)
-Validates the user credentials and generates a JWT if they valid.
+==== attempt(uid, password, [customPayload])
+Validates the user credentials and generates a JWT if the credentials are valid. It can also accept an optional custom payload like within the `generate()` example above.
 
 [source, javascript]
 ----
