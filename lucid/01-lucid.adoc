@@ -310,6 +310,22 @@ const activeUsers = yield User.query().active().fetch()
 2. You must append your methods with `scope` followed by the *PascalCase* method name. For example: `scopeLatest()` will be used as `latest`.
 3. You must call the `query` method on your model before calling any query scopes.
 
+=== Global Query Scopes
+A query scope can be added to a model globally and it will be used every time that model is queried. It can be defined in the boot method of a Lucid model with the `addGlobalScope` method.
+
+[source, javascript]
+----
+class User extends Lucid {
+
+  static boot () {
+    this.addGlobalScope(function (builder) {
+      builder.where('status', 'active')
+    })
+  }
+
+}
+----
+
 == Traits
 Unfortunately, Javascript has no way of defining traits/mixins natively. *Lucid* models makes it easier for you to add traits to your models and extend them by adding new methods/properties.
 
