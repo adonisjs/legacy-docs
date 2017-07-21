@@ -261,7 +261,7 @@ class ChatController {
     this.socket = socket
   }
 
-  * leaveRoom (room) {
+  * leaveRoom (room, body, socket) {
     // Do cleanup if required
   }
 
