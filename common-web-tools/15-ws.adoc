@@ -212,8 +212,8 @@ class ChatController {
     this.socket = socket
   }
 
-  * joinRoom (room) {
-    const user = this.socket.currentUser
+  * joinRoom (room, body, socket) {
+    const user = socket.currentUser
     // throw error to deny a socket from joining room
   }
 }
@@ -261,12 +261,12 @@ class ChatController {
     this.socket = socket
   }
 
-  * leaveRoom (room) {
+  * leaveRoom (room, body, socket) {
     // Do cleanup if required
   }
 
-  * joinRoom (room) {
-    const user = this.socket.currentUser
+  * joinRoom (room, body, socket) {
+    const user = socket.currentUser
     // throw error to deny a socket from joining room
   }
 }
