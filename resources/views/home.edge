@@ -1,0 +1,129 @@
+@layout('layouts.main')
+
+@section('intro')
+<section class="section intro">
+  <div class="wrapper">
+    @include('partials.header')
+    <div class="intro__text">
+      <h1>It all boils down to confidence</h1>
+      <p class="intro__para margin">Writing micro services or you are a fan of TDD, it all boils down to confidence. AdonisJs simplicity will make you feel confident about your code.</p>
+      <a class="btn" href="#">Get started →</a>
+    </div>
+  </div>
+</section>
+@endsection
+
+@section('body')
+<section class="section">
+  <div class="wrapper">
+    <div class="why-adonis">
+      <div class="why-adonis-lede">
+        <h2 class="purple">Why AdonisJs</h2>
+        <p>Great you asked it! More than just being an MVC framework, AdonisJs is a eco-system and culture that favours developer joy over any other thing.</p>
+        <p>We don't get into twitter wars on which pattern is superior over other and instead focus on core semantics.</p>
+      </div>
+      <div>
+        <div class="reason">
+          <span class="number">1</span>
+          <div>
+            <b class="purple">Developer writing the code </b>
+            <p>should feel confident about it</p>
+          </div>
+        </div>
+        <div class="reason">
+          <span class="number">2</span>
+          <div>
+            <b class="purple">Respect every new comer in community </b>
+            <p>and help then use AdonisJs</p>
+          </div>
+        </div>
+        <div class="reason">
+          <span class="number">3</span>
+          <div>
+            <b class="purple">Bring the joy </b>
+            <p>of using Node.js back</p>
+          </div>
+        </div>
+        <div class="reason">
+          <span class="number">4</span>
+          <div>
+            <b class="purple">Superior over others </b>
+            <p>and instead focus on core semantics</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider">
+      <svg width="18" height="18" viewBox="0 0 18 18">
+        <path fill="#E8EBEE" d="M1.8 16.7L16.2 16.7 9 2.2 1.8 16.7ZM9 0L18 18 0 18 9 0Z"/>
+      </svg>
+    </div>
+
+    <div class="wrapper">
+      <div class="features">
+        <div class="feature">
+          <figure class="figure"></figure>
+          <b class="purple">Modern Javascript</b>
+          <p>AdonisJs makes use of modern Javascript features like Es6 classes and async/await driven actions. </p>
+        </div>
+        <div class="feature">
+          <figure class="figure"></figure>
+          <b class="purple">Modular & Consistent API</b>
+          <p>Officially supported packages gives you producitivity boost due to their consisent API and expressive syntax.</p>
+        </div>
+        <div class="feature">
+          <figure class="figure"></figure>
+          <b class="purple">Testing First</b>
+          <p>We test what we build. AdonisJs has first class support for testing and community encourages you to write tests.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section apps">
+  <div class="wrapper">
+    <div class="apps__content">
+      <div class="apps__text">
+        <h3 class="purple margin--small">How AdonisJs apps looks like?</h3>
+        <p>Let's get started with some inspirations and code samples you can use while you are on your way to learn AdonisJs.</p>
+      </div>
+      <div class="apps__grid">
+        <a class="app" href="">
+          <span>
+            <b class="app__title">Adonis rally</b>
+            <p>A forum writing using AdonisJs and Vuejs.</p>
+          </span>
+        </a>
+        <a class="app" href="">
+          <span>
+            <b class="app__title">Adonis deck</b>
+            <p>A forum writing using AdonisJs and Vuejs.</p>
+          </span>
+        </a>
+        <a class="app" href="">
+          <span>
+            <b class="app__title">Adonis blog</b>
+            <p>A forum writing using AdonisJs and Vuejs.</p>
+          </span>
+        </a>
+        <div class="app">
+          <span>More Coming Soon!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section donate">
+  <div class="wrapper">
+    <div class="donate__content">
+      <h3 class="purple margin--small">Like AdonisJs?</h3>
+      <p class="margin--xbig">We are running a campaign on pateron to raise enough funds, so that AdonisJs can work on the framework in fulltime to make it even more awesome. Please consider supporting AdonisJs since everyone's support matters</p>
+      <a class="btn--hollow" href="">Donate on pateron →</a>
+    </div>
+  </div>
+</section>
+@endsection
+

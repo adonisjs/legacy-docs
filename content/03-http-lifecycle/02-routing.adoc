@@ -1,0 +1,347 @@
+---
+permalink: routing
+title: Routing
+category: http-lifecycle
+---
+
+toc::[]
+
+AdonisJs routing favors *REST conventions*, but still give enough room to create and register custom routes. In this guide we will learn about creating routes, binding controller methods and different ways to organize them.
+
+All of the application routes are registered inside `start/routes.js` file. Also you are free to create multiple files for routes and just require them inside the routes file.
+
+== Basic example
+The most basic route requires a URL path and a closure to be executed. The returned value from the route is sent back as response.
+
+[source, js]
+----
+Route.get('/', () => 'Hello world')
+----
+
+After starting the server using `adonis serve --dev`, if you visit link:http://localhost:3333[localhost:3333], you will see the *Hello world* in the browser.
+
+== Route methods/verbs
+Restful routes makes of different HTTP methods to indicate the type of request. For example: `POST` method is used to create a record and `GET` is used to fetch record(s).
+
+You can define routes for different HTTP methods using one of the following methods.
+
+==== get
+Create a route with GET method.
+
+[source, js]
+----
+Route.get('/', async () => {
+})
+----
+
+==== post
+Create a route with POST method.
+
+[source, js]
+----
+Route.post('/', async () => {
+})
+----
+
+==== put/patch
+The `PUT` and `PATCH` methods are used to update a resource.
+
+[source, js]
+----
+Route.put('/', async () => {
+})
+
+Route.patch('/', async () => {
+})
+----
+
+==== delete
+The `DELETE` method indicates removing a resource.
+
+[source, js]
+----
+Route.delete('/', async () => {
+})
+----
+
+==== route
+Also you can create routes that responds to multiple verbs using the `Route.route` method.
+
+[source, js]
+----
+Route.route('/', async () => {
+
+}, ['GET', 'POST'])
+----
+
+== Route parameters
+Creating routes with static paths are not quite helpful and often you need a way to accept dynamic data as part of the URL, for example:
+
+[source, bash]
+----
+/posts/1
+/posts/2
+/posts/300
+----
+
+You would need a way to fetch the post id from the URL and render the appropriate post. The same is achieved by defining route parameters.
+
+[source, js]
+----
+Route.get('posts/:id', async ({ params }) => {
+  const post = await Post.find(params.id)
+  return post
+})
+----
+
+The `:id` is a route parameter which is passed as part of the `params` object. Also you can make a parameter optional by adding `?` to it. For example:
+
+[source, js]
+----
+Route.get('make/:drink?', async ({ params }) => {
+  // use Coffee as fallback when drink is not defined
+  const drink = params.drink || 'Coffee'
+
+  return `Will make ${drink} for you`
+})
+----
+
+== Routing for SPA's
+Quite often you find yourself creating SPA, where you want to render a single view from the server and handle routing on frontend using your favorite frontend framework.
+
+Same can be done by defining a wildcard route.
+
+[source, js]
+----
+Route.any('*', ({ view }) => view.render('main'))
+----
+
+If you have any other specific routes, they should be defined before the wildcard route. For example:
+
+[source, js]
+----
+Route.get('/api/v1/users', 'UsersController.index')
+
+// wildcard route
+Route.any('*', ({ view }) => view.render('main'))
+----
+
+== Binding controllers
+Defining closures as the route actions are not scalable, since writing all the code inside a single file is never desired and practical.
+
+AdonisJs being an MVC offers a nice abstractions layer called *Controllers* to keep all the request handling logic inside custom ES6 classes.
+
+Let's create a controller using the `make:controller` command.
+[source, bash]
+----
+adonis make:controller Posts
+----
+
+.Output
+[source, bash]
+----
+✔ create  app/Controllers/Http/PostController.js
+----
+
+The next step is to bind the controller method to the route. It is defined as a `dot (.)` separated string. Learn more about controllers link:controllers[here].
+
+[source, js]
+----
+Route.get('posts', 'PostController.index')
+----
+Finally, we need to create the `index` method on the controller class.
+
+[source, js]
+----
+'use strict'
+
+class PostController {
+  index () {
+    return 'Dummy response'
+  }
+}
+
+module.exports = PostController
+----
+
+== Route middleware
+You can apply selected middleware to routes by calling the `middleware` method.
+
+[source, js]
+----
+Route
+  .get('profile', 'UserController.profile')
+  .middleware(['auth'])
+----
+
+The `middleware` method accepts an array of named middleware, which are defined inside `start/kernel.js` file.
+
+.start/kernel.js
+[source, js]
+----
+const namedMiddleware = {
+  auth: 'Adonis/Middleware/Auth'
+}
+----
+
+Click link:middleware[here] to learn more about middleware.
+
+== Named routes
+Routes are defined inside `start/routes.js` file, but referenced everywhere inside your application. For example: Defining a form action to submit to a particular URL.
+
+[source, js]
+----
+Route.post('users', 'UserController.store')
+----
+
+and inside the template
+
+[source, edge]
+----
+<form method="POST" action="/users">
+</form>
+----
+
+Now if you change your route path from `/users` to something else, you will have to remember to come back and change it inside the template as-well.
+
+To overcome this problem, you can name your routes uniquely and reference them at other places.
+
+[source, js]
+----
+Route
+  .post('users', 'UserController.store')
+  .as('storeUser')
+----
+
+The `as` method will give your route a name. Now inside your template, you can reference it using a view global.
+
+[source, edge]
+----
+<form method="POST" action="{{ route('storeUser') }}">
+</form>
+----
+
+== Route formats
+Route formats opens up a new way for link:https://en.wikipedia.org/wiki/Content_negotiation[Content negotiation], where you can accept the response format as part of the URL.
+
+Route format is a contract between the client and the server on which type of response to be created. For example:
+
+[source, js]
+----
+Route
+  .get('users', async ({ request, view }) => {
+    const users = await User.all()
+
+    if (request.format() === 'json') {
+      return users
+    } else {
+      return view.render('users.list', { users })
+    }
+
+  })
+  .formats(['json'])
+----
+
+Now the `users` endpoint can respond in multiple formats, based upon the URL.
+
+/users.json::
+Will return JSON array of users
+
+/users::
+Will render the view and returns HTML
+
+Also you can disable the default URL and always force the client to define the format.
+
+[source, js]
+----
+Route
+  .get('/', async ({ request, view }) => {
+    const users = await User.all()
+    const format = request.format()
+
+    switch (format) {
+      case 'html':
+        return view.render('users.list', { users })
+      case 'json':
+        return users
+    }
+  })
+  .formats(['json', 'html'], true)
+----
+
+Passing `true` as the second parameter will make sure that the client defines one of the expected format, otherwise a 404 is thrown.
+
+== Routing domains
+AdonisJs makes it super easy to serve multiple domains within a single codebase. The domains can be static endpoints like `blog.adonisjs.com` or dynamic endpoints like `:user.adonisjs.com`.
+
+TIP: You can define domain on a single route as well, but generally it's a good idea to group domain specific routes together.
+
+[source, js]
+----
+Route
+  .group(() => {
+    Route.get('users', async ({ subdomains }) => {
+      return `The username is ${subdomains.user}`
+    })
+  })
+  .domain(':user.myapp.com')
+----
+
+Now if you visit `virk.myapp.com`, You will see the above route being executed.
+
+== Route groups
+Quite often your application routes share common logic/configuration around them. So instead of re-defining the configuration on each route, it's better to group them. For example:
+
+Not desired
+[source, js]
+----
+Route.get('/api/v1/users', 'UserController.index')
+Route.post('/api/v1/users', 'UserController.store')
+----
+
+Instead we can make use of the route's group here.
+
+[source, js]
+----
+Route
+  .group(() => {
+    Route.get('users', 'UserController.index')
+    Route.post('users', 'UserController.store')
+  })
+  .prefix('api/v1')
+----
+
+Just like the `prefix` method, you can call the following methods on a group of routes.
+
+==== middleware
+Define middleware on a group of routes. All group middleware will be executed before the middleware defined on a single route.
+
+[source, js]
+----
+Route
+  .group(() => {
+  })
+  .middleware(['auth'])
+----
+
+==== domain
+Specify routes on a group of routes.
+
+[source, js]
+----
+Route
+  .group(() => {
+  })
+  .domain('blog.adonisjs.com')
+----
+
+==== formats
+Define formats on a group of routes.
+
+[source, js]
+----
+Route
+  .group(() => {
+  })
+  .formats(['json', 'html'])
+----

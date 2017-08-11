@@ -1,0 +1,183 @@
+---
+permalink: number-guessing-game
+title: Number guessing game
+category: getting-started
+---
+
+toc::[]
+
+In this guide we will create a simple *number guessing game* as a way to learn more about the framework. By the end of this guide, you will know how to create new routes and bind controllers to them.
+
+TIP: You can see the final working version on link:https://adonis-number-guessing-game.glitch.me/?number=5[glitch, window="_blank"]. Also you can checkout the code using the remix button. +
+link:https://glitch.com/edit/#!/remix/adonis-number-guessing-game[image:https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg[], window="_blank"]
+
+== Game story
+The number guessing takes an input from the user and match it against a random number. If the number matches, it's called a match, otherwise it's a pass.
+
+To keep it simple, we will accept the user guessed number as query string in the URL.
+
+== Routing
+Let's start by removing everything from the `start/routes.js` file and paste the following code inside it.
+
+[source, js]
+----
+const Route = use('Route')
+
+Route.get('/', ({ request }) => {
+  /** get number from the url query string */
+  const guessedNumber = Number(request.input('number'))
+
+  /** if number is not specified, let the user know about it */
+  if (!guessedNumber) {
+    return 'Please specify a number by passing ?number=<num> to the url'
+  }
+
+  /** generate a random number */
+  const randomNumber = Math.floor(Math.random() * 20) + 1
+
+  /** let the user know about the match */
+  return randomNumber === guessedNumber
+  ? 'Matched'
+  : `Match failed. The actual number is ${randomNumber}`
+})
+----
+
+Now if we visit http://127.0.0.1:3333?number=5 and keep on changing the `number` between 1-20, we will see *Matched* or the *Match failed* statement.
+
+The logic of number guessing game will remain the same, but we will start extracting this code into a controller and also create a view for it.
+
+== Http controller
+Let's create a new controller by running the following command.
+
+[source, bash]
+----
+adonis make:controller Game
+----
+
+.Output
+[source, bash]
+----
+✔ create  app/Controllers/Http/GameController.js
+----
+
+Now open the `GameController.js` file and paste the following code into it.
+
+[source, js]
+----
+'use strict'
+
+class GameController {
+
+  render ({ request }) {
+    /** get number from the url query string */
+    const guessedNumber = Number(request.input('number'))
+
+    /** if number is not specified, let the user know about it */
+    if (!guessedNumber) {
+      return 'Please specify a number by passing ?number=<num> to the url'
+    }
+
+    /** generate a random number */
+    const randomNumber = Math.floor(Math.random() * 20) + 1
+
+    /** let the user know about the match */
+    return randomNumber === guessedNumber
+    ? 'Matched'
+    : `Match failed. The actual number is ${randomNumber}`
+  }
+}
+
+module.exports = GameController
+----
+
+All we have done is copy pasted the code from the route closure to the controller file. Which means we can remove all the code from `start/routes.js` file and instead bind controller to it.
+
+[source, js]
+----
+Route.get('/', 'GameController.render')
+----
+
+Now refresh the page and the game will work as expected.
+
+== Views
+AdonisJs makes use of link:http://edge.adonisjs.com/[edge.js] as the templating engine to power views. Let's learn how to register the view provider and render it from the controller method.
+
+=== Setup
+All of the providers are registered inside `start/app.js` file. So will the *ViewProvider*.
+
+[source, js]
+----
+const providers = [
+  '@adonisjs/framework/providers/ViewProvider'
+]
+----
+
+Once the provider has been registered, you can access the `view` instance inside your controller methods as follows.
+
+[source, js]
+----
+render ({ request, view }) {
+}
+----
+
+Now all we need to do is, create the `game.edge` template file and write the logic inside it.
+
+=== Creating template file
+
+Just like the controller, we can use of `make:view` command to create a new view for us.
+
+[source, bash]
+----
+adonis make:view game
+----
+
+.Output
+[source, bash]
+----
+✔ create  resources/views/game.edge
+----
+
+=== Extracting logic from controller
+Let's remove all the logic from the controller method and instead render a view with required data.
+
+[source, js]
+----
+'use strict'
+
+class GameController {
+
+  render ({ request, view }) {
+    const guessedNumber = Number(request.input('number'))
+    const randomNumber = Math.floor(Math.random() * 20) + 1
+
+    /** rendering view */
+    return view.render('game', { guessedNumber, randomNumber })
+  }
+}
+
+module.exports = GameController
+----
+
+.resources/views/game.edge
+[source, edge]
+----
+@if(!guessedNumber)
+  <p> Please specify a number by passing <code>?number</code> to the url </p>
+@elseif(guessedNumber === randomNumber)
+  <h2> Matched </h2>
+@else
+  <h2>Match failed. The actual number is {{ randomNumber }}</h2>
+@endif
+----
+
+As you can see, Edge makes it so simple to write logic within the template files. We are easily able to output the statement we want.
+
+TIP: If you can any questions or concerns, please join us on link:[discourse] to be a part of our small and helpful community.
+
+== Next steps
+This tutorial was the easiest attempt to make use of different pieces and build a simple application in AdonisJs. Moving forward you can learn more about specific topics like.
+
+[ol-shrinked]
+1. link:routing[Routing]
+2. link:database[Database]
+3. and link:authentication[Authentication]

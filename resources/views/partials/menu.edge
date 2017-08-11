@@ -1,0 +1,14 @@
+<div class="menu">
+  @each((items, category) in menu)
+    <h5 class="sidebar-category"> {{ humanize(category) }} </h5>
+    <ul>
+      @each(item in items)
+        <li>
+          <a class="sidebar-link {{ item.permalink === doc.permalink ? 'active' : '' }}" href="{{ item.permalink }}">
+            {{ item.title }}
+          </a>
+        </li>
+      @endeach
+    </ul>
+  @endeach
+</div>

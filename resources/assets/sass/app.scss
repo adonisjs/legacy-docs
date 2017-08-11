@@ -1,0 +1,225 @@
+@import "variables";
+@import "utils";
+@import "resets";
+@import "docs";
+
+.header-container {
+  height: 80px;
+  background-color: $color-purple;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 25px;
+
+  a {
+    color: #fff;
+    transition: color 0.15s;
+
+    &:hover {
+      color: $color-red;
+    }
+  }
+}
+
+.nav-link {
+  display: inline-block;
+  font-size: 16px;
+  margin-left: 20px;
+}
+
+.section {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.intro {
+  background-color: #220052;
+  color: #fff;
+
+  &__text {
+    max-width: 600px;
+    padding: 100px 0 125px 0;
+  }
+
+  h1 {
+    font-size: 65px;
+    line-height: 77px;
+  }
+
+  .intro__para {
+    font-size: 19px;
+  }
+}
+
+.why-adonis {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 120px;
+  padding-bottom: 120px;
+
+  .reason {
+    display: flex;
+    align-items: center;
+    color: $grey-2;
+    margin-bottom: 25px;
+
+    b {
+      text-transform: uppercase;
+    }
+  }
+
+  .number {
+    width: 35px;
+    font-size: 51px;
+    color: $grey-3;
+    margin-right: 25px;
+    display: block;
+    line-height: 53px;
+  }
+}
+
+.why-adonis-lede {
+  flex-basis: 600px;
+  padding-right: 10%;
+  margin-bottom: 30px;
+}
+
+.divider {
+  background-color: rgba(223, 227, 232, 0.7);
+  height: 1px;
+  text-align: center;
+
+  svg {
+    background-color: #fff;
+    transform: translateY(-9px);
+  }
+}
+
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 90px;
+  padding-bottom: 90px;
+}
+
+.feature {
+  flex-basis: calc(33.3% - 24px);
+  min-width: 260px;
+  margin-bottom: 20px;
+
+  &:not(:last-child) {
+    margin-right: 35px;
+  }
+}
+
+.apps {
+  padding-top: 75px;
+  padding-bottom: 75px;
+  background-color: $grey-4;
+
+  &__content {
+    display: flex;
+    @media screen and (max-width: 920px) {
+      flex-wrap: wrap;
+    }
+  }
+}
+
+.apps__text {
+  flex-basis: 480px;
+  margin-bottom: 30px;
+  margin-right: 8%;
+}
+
+.apps__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.app {
+  flex-basis: calc(50% - 15px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 250px;
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 60px 50px;
+  color: $grey-1;
+  box-shadow: 0 1px 6px 0 rgba(0, 23, 40, 0.06);
+
+  &:nth-child(2n) {
+    @media screen and (min-width: 560px) {
+      margin-left: 30px;
+    }
+  }
+
+  &:not(:last-child) {
+    background-color: #fff;
+  }
+
+  > span {
+    max-width: 200px;
+  }
+}
+
+.app__title {
+  color: $color-red;
+
+  &:after {
+    content: '';
+    display: block;
+    background: #eee;
+    height: 3px;
+    width: 24px;
+    margin-bottom: 10px;
+    margin-top: 8px;
+    margin-left: calc(50% - 12px);
+  }
+}
+
+.donate {
+  padding-top: 70px;
+  padding-bottom: 70px;
+  text-align: center;
+  box-shadow: 0 1px 6px 0 rgba(0, 23, 40, 0.06);
+
+  &__content {
+    max-width: 650px;
+    margin: 0 auto;
+  }
+}
+
+.footer {
+  padding: 50px 15px;
+  background-color: $color-purple;
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    color: #fff;
+    font-size: 15px;
+
+     a {
+        color: #fff;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.36);
+        transition: color 0.15s;
+
+        &:hover {
+          color: $color-red;
+        }
+     }
+  }
+}
+
+.footer__logo {
+  margin-left: 15px;
+  margin-right: 15px;
+}
