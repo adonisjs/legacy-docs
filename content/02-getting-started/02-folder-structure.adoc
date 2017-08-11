@@ -1,0 +1,68 @@
+---
+permalink: folder-structure
+title: Folder structure
+category: getting-started
+---
+
+toc::[]
+
+In this guide we will learn how AdonisJs apps are structured and how gracefully it scales as your project grows.
+
+The philosophy of AdonisJs is to always start lean and grow big on demand. The `adonis` command-line comes with a bunch of *commands* to create new directories/files whenever you need them.
+
+== Default structure
+
+[source, bash]
+----
+.
+├── ace
+├── package.json
+├── public
+├── server.js
+└── start
+    ├── app.js
+    ├── kernel.js
+    └── routes.js
+----
+
+[options="header", cols="5,95"]
+|====
+| File/Directory | Description
+| ace | The ace file bootstraps the command line tool for your project specific commands. Running `node ace <commandName>` will execute the command.
+| package.json | The standard Node.js packages file.
+| public | The public directory is used to store static assets like *Css, Javascript files or images*
+| server.js | This file bootstraps the HTTP server. Running `node server.js` will start the HTTP server on the port defined inside the .env file. +
+Whereas it is recommended to use `adonis serve --dev` in development.
+| start/app.js | This file is required to register the providers, commands and aliases. You can ignore this file for now especially if you are not familiar with providers.
+| start/kernel.js | The HTTP Middleware are registered inside this file.
+| start/routes.js | This file is used to define HTTP routes.
+|====
+
+== The app directory
+
+The `app` directory is not created by default, but as you will start developing your application, all of the code will go inside this directory only.
+
+AdonisJs has a concept of autoloading the `app` directory. Which means insteading of requiring files with relative path, you can require files with a namespace. For example:
+
+[source, bash]
+----
+├── app
+│   └── Services
+│       └── User.js
+----
+
+Normally you would require the above file as
+
+[source, js]
+----
+const UserService = require('../app/Services/User')
+----
+
+With autoloading in place, it can be required as
+
+[source, js]
+----
+const UserService = use('App/Services/User')
+----
+
+The benefit of the later approach is that the *namespace* always remains same and you never have to deal with relative paths by typing `../`. Learn more about link:autoloading[autoloading]

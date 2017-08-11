@@ -1,0 +1,100 @@
+---
+permalink: installation
+title: Installation
+category: getting-started
+---
+
+toc::[]
+
+This guide will get you started with AdonisJs by installing the framework and required dependencies. By the end of this guide, you will have a working AdonisJs web server with the *Hello world* page.
+
+If you face any troubles installing AdonisJs, please file an issue on link:https://github.com/adonisjs/adonis-framework[github].
+
+== Requirements
+Since AdonisJs is a Node.js framework, please make sure Node.js is installed on your operating system with npm. Below are the minimum required versions.
+
+[ol-shrinked]
+1. link:https://nodejs.org[Node.js] 8.0 or greater.
+2. link:https://www.npmjs.com[Npm] 3.0 or greater.
+
+TIP: You can also make use of link:https://github.com/creationix/nvm[nvm] to manage and run multiple versions of Node.js
+
+== Cli tool
+Once requirements to run AdonisJs Apps are met, the next step is to install the *cli* tool, which will help us in creating new AdonisJs applications.
+
+The cli tool is installed globally using npm.
+
+[source, bash]
+----
+npm i -g @adonisjs/cli
+----
+
+Once the installation completes, make sure that you can run `adonis` from your command line.
+
+[source, bash]
+----
+adonis --help
+----
+Continue, if everything works as expected. Otherwise please create an issue on link:https://github.com/adonisjs/adonis-framework[github]
+
+== Creating new app
+Let's start by creating a new application using the cli tool `new` command. It accepts the project name/folder as a required parameter.
+
+[source, bash]
+----
+adonis new yardstick
+----
+
+.Output
+[source, bash]
+----
+    _       _             _         _
+   / \   __| | ___  _ __ (_)___    | |___
+  / _ \ / _` |/ _ \| '_ \| / __|_  | / __|
+ / ___ \ (_| | (_) | | | | \__ \ |_| \__ \
+/_/   \_\__,_|\___/|_| |_|_|___/\___/|___/
+
+✔ Your current Node.js & npm version match the AdonisJs requirements!
+✔ Cloned [adonisjs/adonis-slim-app]
+✔ npm: Dependencies installed
+✔ Default environment variables copied
+✔ generated unique APP_KEY
+┌───────────────────────────────────┐
+│        Application crafted        │
+│                                   │
+│        cd yardstick               │
+│        adonis serve --dev         │
+└───────────────────────────────────┘
+----
+
+== Running application
+Once the installation process is completed, you can `cd` into the directory and run the following command to start the HTTP server.
+
+[source, bash]
+----
+adonis serve --dev
+----
+
+.Output
+[source, bash]
+----
+Started server in dev mode
+
+[date] - info: serving app on http://127.0.0.1:3333
+----
+
+The `serve` command starts the HTTP server on port defined inside the `.env` file in the project root. If you open http://127.0.0.1:3333 inside your browser, you will see the following *welcome page*.
+
+image:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502292352/welcome-page.png[]
+
+== Customizing new command
+
+[ol-spaced]
+1. The `adonis new <PATH>` command creates the project directory and does `npm install` for you automatically. You can pass `--yarn` to make use of yarn over npm.
+2. By default link:https://github.com/adonisjs/adonis-slim-app[slim app] blueprint will be cloned from github, which can be customized by passing `--full-stack` or `--api-only` flag. Which will clone appropriate repos for you.
+3. To make use of community created blueprints, you can pass `--blueprint=<github-org/repo>`.
+
+TIP: When in doubt, make use of the `adonis new --help` command to see the list of available options.
+
+== Next steps
+This guide was small and focused only on the installation part of the process. Going forward we will learn about more HTTP specific features and the link:folder-structure[folder structure].

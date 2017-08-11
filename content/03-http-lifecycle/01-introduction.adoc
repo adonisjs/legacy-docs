@@ -1,0 +1,72 @@
+---
+permalink: http-context
+title: Introduction
+category: http-lifecycle
+---
+
+toc::[]
+
+AdonisJs is primarily a web framework which deals over HTTP protocol. In this guide we will learn how AdonisJs handles the HTTP requests through registered routes or middleware.
+
+== Request flow
+Below is a flow chart on how HTTP request flow works +
+link:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502383746/Adonis-Http-Request-Flow_grqcfd.jpg[image:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502383746/Adonis-Http-Request-Flow_grqcfd.jpg[width="400px"], window="_blank"]
+
+[ol-spaced]
+1. The server level middleware stack includes a middleware to serve static resources from the `public` directory. You should only add server level middleware, when they can override the URL's registered by routes.
+2. If a request is not intercepted by server level middleware, AdonisJs will look for a registered route, if a route is found, the global, named middleware and route action is executed.
+3. Otherwise a 404 exception is thrown.
+
+== Http context
+Since Node.js handles HTTP requests concurrently, each request needs to be identified and managed uniquely. AdonisJs will create a request *Context* which is a class instance containing all the request related data.
+
+So when you bind a handler to the `Route`, that handler is executed for each request matching that URL and receives a unique `context` instance.
+
+[source, js]
+----
+Route.get('/', (ctx) => {
+  // ctx.request
+  // ctx.response
+})
+----
+
+Or you can make use of ES6 destructuring.
+
+[source, js]
+----
+Route.get('/', ({ request, response }) => {
+  // ctx.request
+  // ctx.response
+})
+----
+
+The best part of context object is that you can pull a lot more objects from it. For example: `auth`, `view` etc.
+
+== Public directory
+The `public` directory in the root of your application is registered to serve static resources like *css*, *images* and *fonts* etc.
+
+All files inside directory are available publicly without any authentication or restrictions.
+
+== Views
+There are couple of ways to make use of views and it's really important to understand the difference between them. One way is to import the *View* provider and other is to use the HTTP specific view instance.
+
+=== Import manually
+[source, js]
+----
+const View = use('View')
+
+// render view
+const html = View.render('home', {})
+----
+
+=== Http view instance
+[source, js]
+----
+Route.get('/', async ({ view }) => {
+  return view.render('home')
+})
+----
+
+The fundamental difference is that the HTTP view instance contains a bunch of request specific locals like: *request*, *authenticated user* etc.
+
+So always make sure to use the HTTP view instance during request lifecycle.

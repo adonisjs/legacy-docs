@@ -1,0 +1,32 @@
+@layout('layouts.main')
+
+@section('intro')
+<div class="header-container">
+  <div class="wrapper">
+    @include('partials.header')
+  </div>
+</div>
+@endsection
+
+@section('body')
+  <div class="wrapper">
+    <div class="docs">
+      <aside class="docs-nav">
+        @include('partials.menu')
+      </aside>
+      <section class="docs-content">
+        <h1> {{ doc.title }}</h1>
+        @adoc(doc.path)
+      </section>
+    </div>
+  </div>
+@endsection
+
+@section('scripts')
+  <script type="text/javascript">
+    document.querySelectorAll('pre').forEach(function (elem) {
+      elem.className += ' line-numbers'
+    })
+  </script>
+  <script src="/prism.js" async="true"></script>
+@endsection

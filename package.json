@@ -1,0 +1,31 @@
+{
+  "name": "docs-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@adonisjs/ace": "^4.0.2",
+    "@adonisjs/fold": "^4.0.0",
+    "@adonisjs/framework": "^4.0.2",
+    "@adonisjs/ignitor": "^1.0.2",
+    "asciidoctor.js": "^1.5.6-preview.2",
+    "clear-require": "^2.0.0",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "gray-matter": "^3.0.2",
+    "klaw": "^2.0.0",
+    "node-sass": "^4.5.3",
+    "node-watch": "^0.5.5",
+    "through2": "^2.0.3",
+    "watch": "^1.0.2"
+  },
+  "scripts": {
+    "compile:styles": "watch 'node-sass resources/assets/sass/app.scss public/app.css' resources/assets/sass",
+    "compile:docs": "node ace compile:docs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

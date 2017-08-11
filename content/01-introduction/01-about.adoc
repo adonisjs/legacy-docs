@@ -1,0 +1,32 @@
+---
+title: About AdonisJs
+permalink: about
+category: introduction
+---
+
+toc::[]
+
+AdonisJs is a Node.js MVC framework that runs on all major operating systems. It offers you a stable eco-system to write web servers so that you can focus on business needs over finalizing which package to choose or not.
+
+AdonisJs favors developer joy with consistent and expressive API to build fullstack web-servers or a micro API server.
+
+== Getting started
+The are no hard prerequisites to use AdonisJs, but having a decent understanding of Javascript, Async programming and Node.js will be great.
+
+Also, make sure to go through the link:installation[getting started] guide especially if this is your first time using AdonisJs.
+
+== Other sources
+Here are some other great places to find information about AdonisJs.
+
+1. The link:[discourse forum], where we talk about everything about AdonisJs from fixing bugs to discussing new features.
+2. Twitter
+3. Github
+4. If you love the project, then please consider supporting us on link:[patreon].
+
+== Providers
+AdonisJs is a modular framework that consists of multiple service providers. The service providers are the building blocks of AdonisJs applications.
+
+In theory they are like any other npm module with some code on top of it to play transparently with AdonisJs applications. For example: link:https://github.com/adonisjs/adonis-bodyparser[BodyParser] to parse HTTP request body or link:https://github.com/adonisjs/adonis-lucid[Lucid] which is a SQL ORM.
+
+== FQA's
+Below is the list of frequently asked questions, if you think a common question is missing in the list. Please create an issue link:[here]

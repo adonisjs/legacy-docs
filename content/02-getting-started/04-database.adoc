@@ -1,0 +1,181 @@
+---
+permalink: database
+title: Database
+category: getting-started
+---
+
+toc::[]
+
+When getting started with any web framework, the first question one often ask is, *how to create data driven applications?*. By the end of this guide, you will learn how easy AdonisJs makes to interact with SQL databases.
+
+TIP: Watch this video on youtube, if you prefer a Screencast over text.
+
+== Setup
+The database provider is not configured with the default application blueprint, but setting it up as simple as installing it from
+npm.
+
+[source, bash]
+----
+adonis install @adonisjs/lucid
+----
+
+.Output
+[source, bash]
+----
+✔ npm: Installed @adonisjs/lucid
+create: config/database.js
+----
+
+Post installation, you would have seen a new webpage getting popped up in your browser. That is the minimal instructions you need to follow in order to setup the installed package.
+
+Feel free to ignore the setup instructions and follow this guide instead.
+
+=== Registering provider
+As always we need to register the database provider inside `start/app.js` file.
+
+[source, js]
+----
+const providers = [
+  '@adonisjs/lucid/providers/LucidProvider'
+]
+
+const aceProviders = [
+  '@adonisjs/lucid/providers/MigrationsProvider'
+]
+----
+
+=== Configuration
+The database package *(lucid)* supports all popular SQL databases out of the box. You can learn more about it link:[here]
+
+By default the configuration file (config/database.js) makes use of `sqlite` database and needs a sqlite driver to be installed from npm.
+
+[source, bash]
+----
+adonis install sqlite3
+----
+
+== Creating database tables
+Now since the setup process has been completed, let's get started by creating a database table and run some queries to interact with it.
+
+Creating database tables in AdonisJs is done via link:https://en.wikipedia.org/wiki/Schema_migration[migrations, window="_blank"]. It is fine if you do not understand the concept of migrations properly, just follow along and you will find them super easy and useful.
+
+More `adonis` ❤️  &nbsp; to create the migration. Also select the `Create table` option on prompt.
+
+[source, bash]
+----
+adonis make:migration BlogPost
+----
+
+.Output
+[source, bash]
+----
+✔ create  database/migrations/1502346098443_blog_post_schema.js
+----
+
+The created file gives you an interface to create the database table structure using JavaScript. Let's see it in action.
+
+[source, js]
+----
+'use strict'
+
+const Schema = use('Schema')
+
+class BlogPostSchema extends Schema {
+  up () {
+    this.create('blog_posts', (table) => {
+      table.increments()
+      table.string('title')
+      table.longText('body')
+      table.timestamps()
+    })
+  }
+
+  down () {
+    this.drop('blog_posts')
+  }
+}
+
+module.exports = BlogPostSchema
+----
+
+The migration file has two methods
+
+up::
+The `up` method is used to take the action on a table. It can be creating a new table or altering the existing up.
+
+down::
+The `down` method is the reverse of the up action. When `up` method creates a table, you simply drop it inside the down method.
++
+The beauty of this approach, makes it easier to rollback the database changes.
+
+
+Now finally we can run another command to create the table using the schema file we just updated.
+
+[source, bash]
+----
+adonis migration:run
+----
+
+.Output
+[source, bash]
+----
+migrate: 1502346098443_blog_post_schema.js
+Database migrated successfully in 86 ms
+----
+
+Let's take a moment to recap on what we did so far.
+
+1. We installed `@adonisjs/lucid` package from npm and registered the required providers.
+2. Next, used the migrations feature to create a schema file and migrated the database.
+
+== Using database
+Let's see how we can use the *Database provider* to fetch all the blog posts from database.
+
+.start/routes.js
+[source, js]
+----
+const Database = use('Database')
+const Route = use('Route')
+
+Route.get('/posts', async () => {
+  return await Database.table('blog_posts').select('*')
+})
+----
+
+Assuming the web server is running on `port=3333`. If you visit link:http://localhost:3333/posts[localhost:3333/posts], you will see an empty array being returned, that's because we have not saved any posts inside the database table.
+
+== Saving posts
+The ideal way is to have an HTML form to create the posts, but for the sake the simplicity, we will take a shortcut and use the *Adonis repl* to interact with the database.
+
+=== What is repl?
+AdonisJs has an in-built command line repl, which can be used to interact with your application from command line. Let's see it in action to create a post.
+
+The following command will start the repl session and you are free to run Node.js code inside it.
+
+[source, bash]
+----
+adonis repl
+----
+
+And paste the following code inside it
+
+[source, bash]
+----
+await use('Database').table('blog_posts').insert({ title: 'Adonis 101', body: 'some description' })
+----
+
+Animated Gif::
+Checkout the following gif to see it in action
++
+image:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502354650/Adonis-repl_uiaar3.gif[]
+
+Now if you refresh the browser link:http://localhost:3333/posts[localhost:3333/posts] you will see the recently created blog post being returned as JSON.
+
+== Next steps
+This guide was just an introduction to the Database provider, there is a lot you can do when it comes to data driven applications. Consider learning more about
+
+[ol-shrinked]
+1. link:[Database query builder]
+2. link:[Lucid models]
+3. link:[Seeds & factories]
+
