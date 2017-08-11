@@ -1,43 +1,12 @@
-# AdonisJs docs
+# Adonis Documentation :books:
 
-This repo contains the docs, as well as the server to run the website. The server uses AdonisJs.
+This repo contains the documentation for AdonisJs framework.
 
-## Setup
+[![Site][site-image]][site-url]
 
-Clone this repo and run `npm install` to install the packages.
+<img src="https://res.cloudinary.com/adonisjs/image/upload/q_100/v1497112678/adonis-purple_pzkmzt.svg" width="200px" align="right" hspace="30px" vspace="140px">
 
-## Start server
-
-The server can be started using the `adonis` command.
-
-```bash
-adonis serve --dev
-```
-
-## Compile docs
-
-The docs are compiled using an edge tag at runtime, but we need a menu file to build the sidebar menu. Which is done using an ace command.
-
-```bash
-adonis compile:docs --watch
-
-# or
-
-npm run compile:docs
-```
-
-## Compile styles
-
-If you are making any changes to Sass, run the sass watcher.
-
-```bash
-npm run compile:styles
-```
-
-
-# Outline
-
-Let's start with the documentation outline.
+## What's in the box?
 
 1. Introduction
   - About Adonisjs
@@ -84,3 +53,6 @@ Let's start with the documentation outline.
   - Factories and Seeds
 
 7. Testing
+
+[site-image]: https://img.shields.io/badge/read-docs-green.svg?style=flat-square
+[site-url]: http://adonisjs.com/guides
