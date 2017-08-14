@@ -1,0 +1,112 @@
+---
+title: Hooks
+permalink: database-hooks
+category: lucid
+---
+
+toc::[]
+
+Hooks are the actions you perform before or after a specified database operation. Hooks plays a major role in keeping your codebase DRY and easy to reason about.
+
+For example: *Hashing* the user password before saving it to the database.
+
+== Defining hooks
+Hooks can be defined inline within the Model class or by referencing a `file.method` from the *Hooks* directory.
+
+=== Binding closure
+[source, js]
+----
+const Model = use('Model')
+const Hash = use('Hash')
+
+class User extends Model {
+  static boot () {
+    super.boot()
+
+    this.addHook('beforeCreate', async (userInstance) => {
+      userInstance.password = await Hash.make(userInstance.password)
+    })
+  }
+}
+
+module.exports = User
+----
+
+Now everytime we create a user, the `beforeCreate` hook closure will be executed with the current instance of the user and will hash the password.
+
+=== Hook file
+It's always nice to keep extract pieces of code into their own files. AdonisJs comes with a dedicated directory `app/Models/Hooks` to store model hooks.
+
+Let's use `adonis make:hook` command to create a hook for us.
+
+[source, bash]
+----
+adonis make:hook User
+----
+
+.Output
+[source, bash]
+----
+✔ create  app/Models/Hooks/UserHook.js
+----
+
+Let's open the created file and move the code to hash the password inside it.
+
+[source, js]
+----
+'use strict'
+
+const Hash = use('Hash')
+
+const UserHook = exports = module.exports = {}
+
+UserHook.hashPassword = async (user) => {
+  user.password = await Hash.make(user.password)
+}
+----
+
+Which means we can now remove the inline code from the model and instead reference this file and method.
+
+[source, js]
+----
+const Model = use('Model')
+
+class User extends Model {
+  static boot () {
+    super.boot()
+    this.addHook('beforeCreate', 'UserHook.hashPassword')
+  }
+}
+
+module.exports = User
+----
+
+== Aborting Database Operations
+Hooks have the ability to abort the database operations by throwing exceptions.
+
+.app/Models/Hooks/User.js
+[source, javascript]
+----
+UserHook.validate = async (user) => {
+  if (!user.username) {
+    throw new Error('Username is required')
+  }
+}
+----
+
+== Lifecycle Events
+Below is the list of life cycle events and their description
+
+[options="header"]
+|====
+| Event | Description
+| beforeCreate | Before creating a new row.
+| afterCreate | After a new record is created.
+| beforeUpdate | Before updating a row.
+| afterUpdate | After a row has been created.
+| beforeSave | This event occurs before *creating* or *updating* a new record.
+| afterSave | After a new record has been *created* or *updated*.
+| beforeDelete | Before removing a row.
+| afterDelete | After a row has been removed.
+| afterFind | After a single row is fetched from the database.
+|====

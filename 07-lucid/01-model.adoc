@@ -1,0 +1,509 @@
+---
+title: Lucid Models
+permalink: lucid
+category: lucid
+---
+
+toc::[]
+
+Lucid is an implementation of link:https://en.wikipedia.org/wiki/Active_record_pattern[Active Record] pattern in Javascript. If you are coming from the *Laravel* or the *Rails* world, then you will be quite familiar with it.
+
+== Introduction
+The reason behind using Models over writing plain database queries is the ease of use and the expressive API to drive the data flow. Lucid models under the hood, takes care of
+
+1. Fetching, persisting model instance transparently.
+2. Expressive API to manage relationships.
++
+[source, javascript]
+----
+class User extends Lucid {
+
+  profile () {
+    return this.hasOne('App/Model/Profile')
+  }
+
+  posts () {
+    return this.hasMany('App/Model/Post')
+  }
+
+}
+----
+3. Define life-cycle hooks to keep your code DRY.
+4. Getters/Setters to mutate data on the fly.
+5. Serialize data using *serializers*, *computed properties* etc.
+6. Manage date formats.
+7. and many more.
+
+NOTE: Lucid models are not tied to your database schema and instead manages everything of their own. +
+*For example*: There is no need to define associations in SQL when using lucid relationships.
+
+The lucid models are stored as ES6 classes inside `app/Models` directory, where each model represents a database table. For example
+
+[options="header"]
+|====
+| Model | Database table
+| User | users
+| Post | posts
+|====
+
+== Basic Example
+Let's see how to create and make use of a Model to read/write to the database. Make use of the `adonis` command to generate a model.
+
+=== Creating model
+[source, bash]
+----
+adonis make:model User
+
+# or with migration
+adonis make:model User --migration
+----
+
+.Output
+[source, bash]
+----
+✔ create  app/Models/User.js
+----
+
+And this is how a plain model looks like.
+
+[source, js]
+----
+'use strict'
+
+const Model = use('Model')
+
+class User extends Model {
+}
+
+module.exports = User
+----
+
+=== Fetching users
+Now inside the routes file, we will use this model to fetch all users.
+
+.start/routes.js
+[source, js]
+----
+const Route = use('Route')
+const User = use('App/Models/User')
+
+Route.get('users', async () => {
+  return await User.all()
+})
+----
+
+=== Creating user
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+const user = new User()
+
+user.username = 'virk'
+user.password = 'some-password'
+
+await user.save()
+----
+
+== Convention over configuration
+Lucid models does a lot based upon certain conventions, but ofcourse you are free to override the defaults with your own configuration.
+
+==== table
+The table name is always the *lowercase* and *plural* form of the model name. But you can override it defining a getter.
+
+[source, js]
+----
+class User extends Model {
+  static get table () {
+    return 'my_users'
+  }
+}
+----
+
+==== connection
+By default models makes use of the default connection defined inside `config/database.js` file. But you can define a different database connection for each model.
+
+[source, js]
+----
+class User extends Model {
+  static get connection () {
+    return 'mysql'
+  }
+}
+----
+
+==== primaryKey
+The primary key is set as `id` by default. However you can mark a different field as the primary key. Also make sure that the value of this field should always be unique.
+
+[source, js]
+----
+class User extends Model {
+  static get primaryKey () {
+    return 'uid'
+  }
+}
+----
+
+==== createdAtColumn
+The field name to be used for setting created at timestamp.
+
+[source, js]
+----
+class User extends Model {
+  static get createdAtColumn () {
+    return 'created_at'
+  }
+}
+----
+
+==== updatedAtColumn
+The field name to be used for setting updated at timestamp.
+
+[source, js]
+----
+class User extends Model {
+  static get updatedAtColumn () {
+    return 'updated_at'
+  }
+}
+----
+
+
+== Dates
+Dates are the hardest part of building data driver applications. We want to store them and differently and show them differently, which usually requires a lot of manual work.
+
+Lucid handles dates gracefully, so that you have mimimal work to do.
+
+=== Defining date fields
+The first step is to tell lucid, which all fields are supposed to be treated as dates. By default the timestamps `created_at` and `updated_at` are marked as dates.
+
+But ofcourse you can define your own too.
+
+[source, js]
+----
+class User extends Model {
+  static get dates () {
+    const defaultFields = super.dates
+    defaultFields.push('dob')
+    return defaultFields
+  }
+}
+----
+
+So here we pull the fields which are marked as dates by default and push a new date field to it and finally returns it back.
+
+=== Formatting date fields
+Lucid will format all dates as `YYYY-MM-DD HH:mm:ss` by default, which is a valid format for all database engines. Also it gives you a way to conditionally format certain or all date fields.
+
+NOTE: The `formatDates` method is called before saving the model instance to the database. So make sure the return value is always a valid format for the database engine you are using.
+
+[source, js]
+----
+class User extends Model {
+  static formatDates (field, value) {
+    if (field === 'dob') {
+      return value.format('YYYY-MM-DD')
+    }
+    return super.formatDate(field, value)
+  }
+}
+----
+
+The `value` is an instance of link:https://momentjs.com/[moment.js, window="_blank"], which means you can call any moment methods to format the date.
+
+=== Casting dates
+Now we have saved the dates to the database, we may want to format them differently when displaying it to the user. Which can be done quite easily using the `castDates` method.
+
+[source, js]
+----
+class User extends Model {
+  static castDates (field, value) {
+    if (field === 'dob') {
+      return `${value.fromNow(true)} old`
+    }
+    return super.formatDate(field, value)
+  }
+}
+----
+
+Again the `value` is an instance of link:https://momentjs.com/[moment.js, window="_blank"]. Also the `castDates` method is called when the model instance is *deserialized*, which happens after calling `toJSON`.
+
+[source, js]
+----
+const users = await User.all()
+
+// converting to JSON array
+const usersJSON = users.toJSON()
+----
+
+== Query builder
+Lucid models makes use of link:query-builder[database query builder] to run database queries. You can obtain an instance of query builder by calling `query` method on a model.
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+const adults = await User
+  .query()
+  .where('age', '>', 18)
+  .fetch()
+----
+
+1. All of the query builder methods are fully supported.
+2. With lucid models, you are supposed to call `fetch` method in order to execute the query. This is required to get results back within an instance of `serializer` ( learn more about link:lucid-serializers[serializers] ).
+
+== Static methods
+Lucid models comes with a bunch of static methods to do common operations without using the query builder interface.
+
+Also there is no need to call `fetch` when using one of the following static methods.
+
+==== find
+Find a record using for the primary key. Always returns one record.
+
+[source, js]
+----
+const User = use('App/Models/User')
+await User.find(1)
+----
+
+==== findOrFail
+Same as the `find` method but instead throws `ModelNotFoundException` when unable to find a record.
+
+[source, js]
+----
+const User = use('App/Models/User')
+await User.findOrFail(1)
+----
+
+==== findBy / findByOrFail
+Find a record using a key/value pair. Returns the first matching record.
+
+[source, js]
+----
+const User = use('App/Models/User')
+await User.findBy('email', 'foo@bar.com')
+
+// or
+await User.findByOrFail('email', 'foo@bar.com')
+----
+
+==== first / firstOrFail
+Find the first row from the database.
+
+[source, js]
+----
+const User = use('App/Models/User')
+await User.first()
+
+// or
+await User.firstOrFail()
+----
+
+==== pick(rows = 1)
+Pick `x` number of rows from the database table. By default it only selects `1` row.
+
+[source, js]
+----
+const User = use('App/Models/User')
+await User.pick(3)
+----
+
+==== pickInverse(rows = 1)
+Pick `x` number of rows from the database table from last. By default it only selects `1` row.
+
+[source, js]
+----
+const User = use('App/Models/User')
+await User.pickInverse(3)
+----
+
+==== ids
+Returns an array of primary keys. If the primary key is defined as `uid`, then it will be an array of `uid's`.
+
+[source, js]
+----
+const User = use('App/Models/User')
+const userIds = await User.ids()
+----
+
+==== pair(lhs, rhs)
+Returns an object of key/value pair. The `lhs` field will the object key and `rhs` will be the value.
+
+[source, js]
+----
+const User = use('App/Models/User')
+const users = await User.pair('id', 'country')
+
+// returns { 1: 'ind', 2: 'uk' }
+----
+
+==== all
+Returns everything from the model's table.
+
+[source, js]
+----
+const User = use('App/Models/User')
+const users = await User.all()
+----
+
+== Pagination
+Lucid also supports the `paginate` method from the query builder.
+
+[source, js]
+----
+const User = use('App/Models/User')
+const page = 1
+
+const users = await User.query().paginate(page)
+
+return view.render('users', { users: users.toJSON() })
+----
+
+The return value of `paginate` is not an array of users. Instead it's an object with metadata and `data` property that has list of users.
+
+[source, js]
+----
+{
+  total: '',
+  perPage: '',
+  lastPage: '',
+  page: '',
+  data: []
+}
+----
+
+== Inserts & Updates
+With models instead of inserting raw values to the database, you persist the model instance which inturn makes the insert query for you. For example
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+const user = new User()
+user.username = 'virk'
+user.email = 'foo@bar.com'
+
+await user.save()
+----
+
+The `save` method will persist the instance to the database. Also it will smartly figure out whether to create a new row or update the existing row. For example:
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+const user = new User()
+user.username = 'virk'
+user.email = 'foo@bar.com'
+
+// Insert
+await user.save()
+
+user.age = 22
+
+// Update
+await user.save()
+----
+
+The `update` query only takes place if something has been changed. Which means calling `save` for multiple times, without updating the model attributes will have no effect.
+
+==== create
+Alternatively, you can also feed a bunch of data directly to the model instance, instead of setting attributes manually.
+
+[source, js]
+----
+const User = use('App/Models/User')
+const userData = request.only('username', 'email', 'age')
+
+// save and get instance back
+const user = await User.create(userData)
+----
+
+==== createMany
+Just like `create` you can persist multiple instances of model using the createMany method.
+
+NOTE: The `createMany` method will make *n* number of queries instead of doing bulk insert. Where *n* is the number of rows.
+
+[source, js]
+----
+const User = use('App/Models/User')
+const usersData = request.collect('username' 'email', 'age')
+
+const users = await User.createMany(usersData)
+----
+
+=== Bulk updates
+The bulk updates can be done with the help of query builder. Lucid will make sure to format dates accordingly when doing bulk updates.
+
+*Bulk updates will never execute any model hooks*.
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+await User
+  .query()
+  .where('username', 'virk')
+  .update({ role: 'admin' })
+----
+
+== Deletes
+A single model instance can be deleted by calling the delete method.
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+const { id } = params
+const user = await User.find(id)
+
+await user.delete()
+----
+
+After calling `delete` method the model instance will freeze for any updates but you can still read data from it.
+
+[source, js]
+----
+await user.delete()
+
+console.log(user.id) // works fine
+
+user.id = 1 // throws exception
+----
+
+=== Bulk deletes
+Bulk deletes can be done with the help of query builder.
+
+*Bulk deletes will never execute any model hooks.*
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+await User
+  .query()
+  .where('role', 'guest')
+  .delete()
+----
+
+== Boot cycle
+Each model has a boot cycle where it gets booted and that happens only for once. So if you want to perform something that should occur only once, consider writing it inside the `boot` method.
+
+[source, js]
+----
+const Model = use('Model')
+
+class User extends Model {
+  static boot () {
+    super.boot()
+
+    /**
+      I will be called only once
+    */
+  }
+}
+
+module.exports = User
+----
+

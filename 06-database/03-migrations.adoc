@@ -1,0 +1,258 @@
+---
+permalink: migrations
+title: Migrations
+category: database
+---
+
+toc::[]
+
+Migrations are mutations to your database as you keep evolving your application. Think of them as step by step screenshot of your database schema, that you can rollback at any given point of time.
+
+Also migrations makes it easier to work as a team, where database changes from one developer are easily spotted and used by other developers in the team.
+
+== Creating migrations
+Let's start from beginning where we want to create a users table with the help of migrations.
+
+NOTE: Make sure the link:database#_setup[migrations provider] is registered inside `aceProviders` array inside `start/app.js` file.
+
+We will make use of the `adonis make:migration` command to create a schema file for us.
+
+[source, bash]
+----
+adonis make:migration users
+----
+
+On prompt choose `Create table` option and press kbd:[Enter]
+
+.Output
+[source, bash]
+----
+✔ create  database/migrations/1502691651527_users_schema.js
+----
+
+== Defining schema
+Now quickly open the created file and write some code inside it.
+
+[source, js]
+----
+'use strict'
+
+const Schema = use('Schema')
+
+class UsersSchema extends Schema {
+  up () {
+    this.create('users', (table) => {
+      table.increments()
+      table.string('username').unique()
+      table.string('email').unique()
+      table.string('password', 80)
+      table.timestamps()
+    })
+  }
+
+  down () {
+    this.drop('users')
+  }
+}
+
+module.exports = UsersSchema
+----
+
+As you can see, it is so simply to create/alter database tables using schema files, since you can chain different methods to define the field attributes.
+
+The schema file is a Javascript ES6 class with two required methods called `up` and `down` on it.
+
+up::
+The `up` method is used to take the action on a table. It can be creating a new table or altering the existing table.
+
+down::
+The `down` method is the reverse of the up action. When `up` method creates a table, you simply drop it inside the down method.
+
+== Run migrations
+Finally we need to call another command to run the migrations, which will execute the `up` method on this class.
+
+[source, bash]
+----
+adonis migration:run
+----
+
+.Output
+[source, bash]
+----
+migrate: 1502691651527_users_schema.js
+Database migrated successfully in 117 ms
+----
+
+== Migrations status
+Also you can check the migration status by running `migration:status` command.
+
+[source, bash]
+----
+adonis migration:status
+----
+
+Output
+link:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502694030/migration-status_zajqib.jpg[image:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502694030/migration-status_zajqib.jpg[], window="_blank"]
+
+If you notice there is a *Batch* next to each migration. This is set, so that you can rollback to a given batch without manually altering the database tables.
+
+This is how migrations works under the hood.
+
+1. Everytime you run `adonis migration:run`, a new batch will be created for all the pending schema files.
+2. Files which are migrated once, are not executed again.
+3. Running `adonis migration:rollback` will rollback the last batch migrations in reverse order.
+
+TIP: Do not create all tables in a single schema file, instead create a new file for each database change. This way you will keep your database atomic and can rollback to any version.
+
+== Migrations commands
+Below is the list of available command with their description. Also make sure to append `--help` to the command name to see a list of available options. For example:
+
+
+=== Commands list
+[options="header"]
+|====
+| Command  | Description
+| make:migration | Create a new migration file,
+| migration:run | Run all pending migrations.
+| migration:rollback | Rollback last set of migrations.
+| migration:refresh | Rollback all migrations to the `0` batch and then re-run them from start.
+| migration:reset | Rollback all migrations to the `0` batch.
+| migration:status | Get status of all the migrations.
+|====
+
+
+=== Command help
+
+[source, bash]
+----
+adonis migration:run --help
+----
+
+.Output
+[source, bash]
+----
+Usage:
+  migration:run [options]
+
+Options:
+  -f, --force Forcefully run migrations in production
+  --log       Log SQL queries instead of executing them
+
+About:
+  Run all pending migrations
+----
+
+== Table's API
+Below is the list of methods available to interact with databse tables.
+
+==== create
+Create a new database table
+
+[source, js]
+----
+up () {
+  this.create('users', (table) => {
+  })
+}
+----
+
+==== createIfNotExists
+Create a new database table only if it doesn't exists
+
+[source, js]
+----
+up () {
+  this.createIfNotExists('users', (table) => {
+  })
+}
+----
+
+==== rename(from, to)
+Rename existing database table
+
+[source, js]
+----
+up () {
+  this.rename('users', 'my_users')
+}
+----
+
+==== drop
+Drop database table
+
+[source, js]
+----
+down () {
+  this.drop('users')
+}
+----
+
+==== dropIfExists
+Drop database table only when it exists
+
+[source, js]
+----
+down () {
+  this.dropIfExists('users')
+}
+----
+
+==== alter
+Select database table for alternation.
+
+[source, js]
+----
+up () {
+  this.alter('users', (table) => {
+    // add new columns or remove existing
+  })
+}
+----
+
+==== raw
+Run an arbitrary SQL query.
+
+[source, js]
+----
+up () {
+  this
+    .raw("SET sql_mode='TRADITIONAL'")
+    .table('users', (table) => {
+      table.dropColumn('name')
+      table.string('first_name')
+      table.string('last_name')
+    })
+}
+----
+
+==== hasTable
+Tells whether a table exists or not. This is an `async` method.
+
+[source, js]
+----
+async up () {
+  const exists = await this.hasTable('users')
+
+  if (!exists)  {
+    this.create('up', (table) => {
+    })
+  }
+}
+----
+
+== Schema builder API
+The schema builder API is exactly same as the link:http://knexjs.org/#Schema-Building[knex api], so make sure to read their documentation.
+
+==== fn.now()
+Knex has a method called link:http://knexjs.org/#Schema-timestamp[knex.fn.now()], which is used to set the current timestamp on the database field.
+
+In AdonisJs, you reference this method as `this.fn.now()`.
+
+[source, js]
+----
+up () {
+  this.table('users', (table) => {
+    table.timestamp('created_at').defaultTo(this.fn.now())
+  })
+}
+----
