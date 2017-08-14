@@ -1,0 +1,230 @@
+---
+title: Introduction
+permalink: database
+category: database
+---
+
+toc::[]
+
+Creating data driven apps is AdonisJs is comparatively simple with the help of rich Database query builder, link:lucid[Lucid ORM], link:migrations[migrations] and link:seeds[database seeder].
+
+In this guide we will understand the basics of Database provider.
+
+NOTE: AdonisJs makes use of link:http://knexjs.org[Knex.js, window="_blank"] internally, so make sure to read the knex docs whenever required.
+
+== Supported databases
+Following is the list of supported database and their equivalent drivers.
+
+[options="header"]
+|====
+| Database | Npm driver
+| PostgreSQL | `npm i pg`
+| MySQL | `npm i mysql` or +
+`npm i mysql2`
+| SQLite3 | `npm i sqlite3`
+| MariaDB | `npm i mariasql`
+| Oracle | `npm i strong-oracle` or +
+`npm i oracle`
+| MSSQL | `npm i mssql`
+|====
+
+== Setup
+Certain project boilerplates have lucid pre-configured by default. If not, here are the setup instructions.
+
+=== Installation
+[source, bash]
+----
+adonis install @adonisjs/lucid
+----
+
+Once the installation has been done, register the providers inside `start/app.js` file.
+
+[source, js]
+----
+const providers = [
+  '@adonisjs/lucid/providers/LucidProvider'
+]
+
+const aceProviders = [
+  '@adonisjs/lucid/providers/MigrationsProvider'
+]
+----
+
+=== Configuration
+Lucid makes use of `sqlite` by default. But you can change the configuration from `config/database.js` file and choose from one of the available databases.
+
+All of the link:http://knexjs.org/#Installation-client[knex configuration, window="_blank"] options are supported as it is.
+
+== Basic Example
+Database query builder has fluent API, which means you can chain Javascript methods to create SQL queries.
+
+Let's see an example of selecting all users and returning them back as JSON.
+[source, js]
+----
+const Database = use('Database')
+
+Route.get('/', async () => {
+  return await Database.table('users').select('*')
+})
+----
+
+=== Where clause
+Adding a where clause is as simple as calling a method.
+
+[source, js]
+----
+Database
+  .table('users')
+  .where('age', '>', 18)
+----
+
+A `orWhere` clause
+
+[source, js]
+----
+Database
+  .table('users')
+  .where('age', '>', 18)
+  .orWhere('vip', true)
+----
+
+Checkout the link:query-builder[query builder docs] for complete API reference.
+
+== Multiple connections
+By default, AdonisJs makes use of the connection defined inside `config/database.js` file for making all database queries.
+
+However, you can define multiple database connections inside `config/database.js` file and at runtime you can select any of the defined connections to make the queries.
+
+[source, js]
+----
+Database
+  .connection('mysql')
+  .table('users')
+----
+
+Since, AdonisJs creates a pool of connections and re-use them, all used connections will be maintained unless the process dies.
+
+In order to close a connection manually, simply call the `close` method with connection name(s).
+
+[source, js]
+----
+const users = await Database
+  .connection('mysql')
+  .table('users')
+
+// later close the connection
+Database.close(['mysql'])
+----
+
+== Table prefixing
+Database allows transparent table prefixing for all queries by defining a `prefix` inside the config file.
+
+.config/database.js
+[source, js]
+----
+module.exports = {
+  connection: 'sqlite',
+
+  sqlite: {
+    client: 'sqlite3',
+    prefix: 'my_'
+  }
+}
+----
+
+Now all queries on the `sqlite` connection will prefix `my_` to the table name.
+
+[source, js]
+----
+await Database
+  .table('users')
+  .select('*')
+----
+
+Output
+[source, sql]
+----
+select * from `my_users`
+----
+
+==== withOutPrefix
+Optionally you can skip the *prefixing* by calling `withOutPrefix`.
+
+[source, js]
+----
+await Database
+  .withOutPrefix()
+  .table('users')
+----
+
+== Debugging
+Debugging database queries can be handy in development as well as in production. Let's go through the available strategies on debugging queries.
+
+=== Globally
+By setting `debug: true` inside the config file will enable debugging for all queries globally.
+
+.config/database.js
+[source, js]
+----
+module.exports = {
+  connection: 'sqlite',
+
+  sqlite: {
+    client: 'sqlite3',
+    connection: {},
+    debug: true
+  }
+}
+----
+
+Also you can turn on debugging by listening for the `query` event on Database provider. The best place to register a listener is under the `start/hooks.js` file.
+
+[source, js]
+----
+const { hooks } = require('@adonisjs/ignitor')
+
+hooks.after.providersBooted(() => {
+  const Database = use('Database')
+  Database.on('query', console.log)
+})
+----
+
+=== Individually
+Also you can listen for `query` event on a single query at runtime.
+
+[source, js]
+----
+await Database
+  .table('users')
+  .select('*')
+  .on('query', console.log)
+----
+
+=== Slow query logs
+Tracking slow SQL queries is helpful to keep your app running in healthy mode. AdonisJs makes it easier to track slow SQL queries by listening for the `slow:query` event.
+
+[source, js]
+----
+Database.on('slow:query', (sql, time) => {
+  console.log(`${time}: ${sql.query}`)
+})
+----
+
+The configuration is saved next to the connection settings in `config/database.js` file.
+
+[source, js]
+----
+module.exports = {
+  connection: 'sqlite',
+
+  sqlite: {
+    client: 'sqlite3',
+    slowQuery: {
+      enabled: true,
+      threshold: 5000
+    }
+  }
+}
+----
+
+

@@ -1,0 +1,677 @@
+---
+permalink: query-builder
+title: Query builder
+category: database
+---
+
+toc::[]
+
+AdonisJs query builder gives you a unified syntax to interact with SQL databases using Javascript methods. This guide is a reference to all the available methods on query builder.
+
+Checkout link:database[database introduction] guide to check the list of *supported databases*, *configuration options* and *debugging queries*.
+
+== Introduction
+Writing SQL queries can be tedious in so many ways, even if you are good with SQL.
+
+Let's imagine you write all of your queries for MySQL and after some time your manager asks you to migrate everything to PostgreSQL. Now you will have to re-write/amend your MySQL queries to make sure they work well with PostgreSQL.
+
+Another issue can be of building incremental queries with conditional blocks.
+
+.Without Query Builder
+[source, javascript]
+----
+const sql = 'SELECT * FROM `users`'
+
+if (username) {
+  sql += ' WHERE `username` = ' + username
+}
+----
+
+.With Query Builder
+[source, javascript]
+----
+const query = Database.table('users')
+
+if (username) {
+  query.where('username', username)
+}
+----
+
+== Basic example
+Let's review a basic example of working with the query builder by chaining different methods.
+
+[source, javascript]
+----
+const Database = use('Database')
+
+class UserController {
+
+  async index (request, response) {
+    return await Database
+      .table('users')
+      .where('username', 'john')
+      .first()
+  }
+
+}
+----
+
+== Selects
+The `select` method will define the fields to be selected for a given query.
+
+[source, javascript]
+----
+await Database.select('id', 'username').from('users')
+// or
+await Database.select('*').from('users')
+----
+
+.SQL Output
+[source, sql]
+----
+select `id`, `username` from `users`
+select * from `users`
+----
+
+Also you can defining aliases
+[source, js]
+----
+await Database.select('username as uname')
+----
+
+== Where Clauses
+Query builder offers a bunch of dynamic methods to add *where* clauses. Also, it supports sub-queries by passing a `closure` or `another query` instead of the actual value.
+
+Also make sure to reference the link:http://knexjs.org/#Builder-wheres[knex documentation, window="_blank"]
+
+NOTE: Passing `undefined` to the where clause will cause an error during SQL compilation. Make sure that dynamic values are not `undefined` before passing them.
+
+==== where
+
+[source, javascript]
+----
+const users = await Database.from('users').where('id', 1)
+// Or
+const users = await Database.from('users').where({ id: 1 })
+----
+
+Also, you can define the comparison operator to the where clause.
+
+[source, javascript]
+----
+const adults = await Database
+  .from('users')
+  .where('age', '>', 18)
+----
+
+==== where ( with callback )
+You can also add a callback to the *where* clause. Callback outputs a little different SQL query, and will group all where clauses inside a callback.
+
+[source, javascript]
+----
+await Database.from('users').where(function () {
+  this.where('id', 1)
+})
+----
+
+[source, sql]
+----
+select * from `users` where (`id` = 1)
+----
+
+==== whereNot
+[source, javascript]
+----
+await Database
+  .from('users')
+  .whereNot('age', '>', 15)
+
+// or
+await Database
+  .from('users')
+  .whereNot({username: 'foo'})
+----
+
+==== whereIn
+[source, javascript]
+----
+await Database
+  .from('users')
+  .whereIn('id', [1,2,3])
+----
+
+==== whereNotIn
+[source, javascript]
+----
+await Database
+  .from('users')
+  .whereNotIn('id', [1,2,3])
+----
+
+==== whereNull
+[source, javascript]
+----
+await Database
+  .from('users')
+  .whereNull('deleted_at')
+----
+
+==== whereNotNull
+[source, javascript]
+----
+await Database
+  .from('users')
+  .whereNotNull('created_at')
+----
+
+==== whereExists
+[source, javascript]
+----
+await Database.from('users').whereExists(function () {
+  this.from('accounts').where('users.id', 'accounts.user_id')
+})
+----
+
+==== whereNotExists
+[source, javascript]
+----
+await Database.from('users').whereNotExists(function () {
+  this.from('accounts').where('users.id', 'accounts.user_id')
+})
+----
+
+==== whereBetween
+[source, javascript]
+----
+await Database
+  .table('users')
+  .whereBetween('age',[18,32])
+----
+
+==== whereNotBetween
+[source, javascript]
+----
+await Database
+  .table('users')
+  .whereNotBetween('age',[45,60])
+----
+
+==== whereRaw
+Convenience helper for `.where(Database.raw(query))`
+
+[source, javascript]
+----
+await Database
+  .from('users')
+  .whereRaw('id = ?', [20])
+----
+
+== Joins
+
+==== innerJoin
+
+[source, javascript]
+----
+await Database
+  .table('users')
+  .innerJoin('accounts', 'user.id', 'accounts.user_id')
+----
+
+Also, you can pass a closure to construct the join.
+
+[source, javascript]
+----
+await Database
+  .table('users')
+  .innerJoin('accounts', function () {
+    this
+      .on('users.id', 'accounts.user_id')
+      .orOn('users.id', 'accounts.owner_id')
+  })
+----
+
+==== leftJoin
+[source, js]
+----
+Database
+  .select('*')
+  .from('users')
+  .leftJoin('accounts', 'users.id', 'accounts.user_id')
+----
+
+==== leftOuterJoin
+[source, js]
+----
+await Database
+  .select('*')
+  .from('users')
+  .leftOuterJoin('accounts', 'users.id', 'accounts.user_id')
+----
+
+==== rightJoin
+[source, js]
+----
+await Database
+  .select('*')
+  .from('users')
+  .rightJoin('accounts', 'users.id', 'accounts.user_id')
+----
+
+==== rightOuterJoin
+[source, js]
+----
+await Database
+  .select('*')
+  .from('users')
+  .rightOuterJoin('accounts', 'users.id', 'accounts.user_id')
+----
+
+==== outerJoin
+[source, js]
+----
+await Database
+  .select('*')
+  .from('users')
+  .outerJoin('accounts', 'users.id', 'accounts.user_id')
+----
+
+==== fullOuterJoin
+[source, js]
+----
+await Database
+  .select('*')
+  .from('users')
+  .fullOuterJoin('accounts', 'users.id', 'accounts.user_id')
+----
+
+==== crossJoin
+[source, js]
+----
+await Database
+  .select('*')
+  .from('users')
+  .crossJoin('accounts', 'users.id', 'accounts.user_id')
+----
+
+==== joinRaw
+[source, js]
+----
+await Database
+  .select('*')
+  .from('accounts')
+  .joinRaw('natural full join table1').where('id', 1)
+----
+
+== Ordering and Limits
+
+==== distinct
+[source, javascript]
+----
+await Database
+  .table('users')
+  .distinct('age')
+----
+
+==== groupBy
+[source, javascript]
+----
+await Database
+  .table('users')
+  .groupBy('age')
+----
+
+==== groupByRaw
+[source, javascript]
+----
+await Database
+  .table('users')
+  .groupByRaw('age, status')
+----
+
+==== orderBy(column, [direction=asc])
+[source, javascript]
+----
+await Database
+  .table('users')
+  .orderBy('id', 'desc')
+----
+
+==== orderByRaw(column, [direction=asc])
+[source, javascript]
+----
+await Database
+  .table('users')
+  .orderBy('col NULLS LAST DESC')
+----
+
+==== having(column, operator, value)
+NOTE: `groupBy()` clause is always required before making use of `having()` method.
+
+[source, javascript]
+----
+await Database
+  .table('users')
+  .groupBy('age')
+  .having('age', '>', 18)
+----
+
+==== offset/limit(value)
+[source, javascript]
+----
+await Database
+  .table('users')
+  .offset(11)
+  .limit(10)
+----
+
+== Inserts
+Insert operation will return the `id` of the inserted row. In the case of bulk inserts, the `id` of the first record will be returned, and it is more of a limitation with MYSQL itself. link:http://dev.mysql.com/doc/refman/5.6/en/information-functions.html#function_last-insert-id[LAST_INSERT_ID].
+
+==== insert(values)
+[source, javascript]
+----
+const userId = await Database
+  .table('users')
+  .insert({username: 'foo', ...})
+
+// BULK INSERT
+const firstUserId = await Database
+  .from('users')
+  .insert([{username: 'foo'}, {username: 'bar'}])
+----
+
+==== into(tableName)
+Method `into` is more readable than `table/from` when insert rows to the database.
+
+[source, javascript]
+----
+const userId = await Database
+  .insert({username: 'foo', ...})
+  .into('users')
+----
+
+=== PostgreSQL only
+For PostgreSQL, you will have to define the returning column explicitly. All other database clients will ignore this statement.
+
+[source, javascript]
+----
+const userId = await Database
+  .insert({ username: 'virk' })
+  .into('users')
+  .returning('id')
+----
+
+== Updates
+All update operations will return the number of affected rows.
+
+[source, javascript]
+----
+const affectedRows = await Database
+  .table('users')
+  .where('username', 'tutlage')
+  .update('lastname', 'Virk')
+----
+
+Pass an object for multiple columns.
+
+[source, javascript]
+----
+const affectedRows = await Database
+  .table('users')
+  .where('username', 'tutlage')
+  .update({ lastname: 'Virk', firstname: 'Aman' })
+----
+
+== Deletes
+Delete operations will also return the number of affected rows.
+
+==== delete
+Also, you can make use of `del()`, since `delete` is a reserved keyword in Javascript.
+
+[source, javascript]
+----
+const affectedRows = await Database
+  .table('users')
+  .where('username', 'tutlage')
+  .delete()
+----
+
+==== truncate
+Truncate will remove all the rows from a database and will set auto increment id back to *0*.
+
+[source, javascript]
+----
+await Database.truncate('users')
+----
+
+== Pagination
+Query builder provides a handful of convenient ways to paginate results from the database.
+
+==== forPage(page, [limit=20])
+[source, javascript]
+----
+const users = await Database
+  .from('users')
+  .forPage(1, 10)
+----
+
+==== paginate(page, [limit=20])
+[source, javascript]
+----
+const results = await Database
+  .from('users')
+  .paginate(2, 10)
+----
+
+NOTE: The output of the `paginate` method is different from the `forPage` method.
+
+.Output
+[source, javascript]
+----
+{
+  total: 0,
+  currentPage: 2,
+  perPage: 10,
+  lastPage: 0,
+  data: [{...}]
+}
+----
+
+== Database Transactions
+Database transactions are safe operations, which are not reflected in the database until and unless you explicitly commit your changes.
+
+==== beginTransaction
+The `beginTransaction` method will return the transaction object, which can be used to perform any queries.
+
+[source, javascript]
+----
+const trx = await Database.beginTransaction()
+await trx.insert({username: 'virk'}).into('users')
+
+trx.commit() // insert query will take place on commit
+trx.rollback() // will not insert anything
+----
+
+==== transaction
+Also, you can wrap your transactions inside a *callback*. The major difference is, you will not have to call `commit or `rollback` manually if any of your queries throws an error, the transaction will rollback automatically. Otherwise, it will commit.
+
+[source, javascript]
+----
+await Database.transaction(async (trx) => {
+  await trx.insert({username: 'virk'}).into('users')
+})
+----
+
+== Aggregates
+
+==== count()
+[source, javascript]
+----
+const total = await Database
+  .from('users')
+  .count()
+
+// COUNT A COLUMN
+const total = await Database
+  .from('users')
+  .count('id')
+
+// COUNT COLUMN AS NAME
+const total = await Database
+  .from('users')
+  .count('id as id')
+----
+
+==== countDistinct
+The `countDistinct` is same as count, but adds distinct expression.
+
+[source, javascript]
+----
+const total = await Database
+  .from('users')
+  .countDistinct('id')
+----
+
+==== min
+
+[source, javascript]
+----
+await Database.from('users').min('age')
+await Database.from('users').min('age as a')
+----
+
+==== max
+
+[source, javascript]
+----
+await Database.from('users').max('age')
+await Database.from('users').max('age as a')
+----
+
+==== sum
+[source, javascript]
+----
+await Database.from('cart').sum('total')
+await Database.from('cart').sum('total as t')
+----
+
+==== sumDistinct
+[source, javascript]
+----
+await Database.from('cart').sumDistinct('total')
+await Database.from('cart').sumDistinct('total as t')
+----
+
+==== avg
+[source, javascript]
+----
+await Database.from('users').avg('age')
+await Database.from('users').avg('age as age')
+----
+
+==== avgDistinct
+[source, javascript]
+----
+await Database.from('users').avgDistinct('age')
+await Database.from('users').avgDistinct('age as age')
+----
+
+==== increment
+Increment the column existing value by *1*.
+
+[source, javascript]
+----
+await Database
+  .table('credits')
+  .where('id', 1)
+  .increment('balance', 10)
+----
+
+==== decrement
+Opposite of `increment`.
+
+[source, javascript]
+----
+await Database
+  .table('credits')
+  .where('id', 1)
+  .decrement('balance', 10)
+----
+
+== Helpers
+
+==== pluck(column)
+The `pluck` method will return an array of values for the selected column.
+[source, javascript]
+----
+const usersIds = await Database.from('users').pluck('id')
+----
+
+==== first
+The `first` method will add a *limit 1* clause to the query.
+
+[source, javascript]
+----
+await Database.from('users').first()
+----
+
+==== clone
+Clone the current query chain for re-usability.
+
+[source, javascript]
+----
+const query = Database
+  .from('users')
+  .where('username', 'virk')
+  .clone()
+
+// later
+await query
+----
+
+==== columnInfo
+Returns information for a given column.
+
+[source, javascript]
+----
+const username = await Database
+  .table('users')
+  .columnInfo('username')
+----
+
+== Sub queries
+[source, javascript]
+----
+const subquery = Database
+  .from('accounts')
+  .where('account_name', 'somename')
+  .select('account_name')
+
+const users = await Database
+  .from('users')
+  .whereIn('id', subquery)
+----
+
+[source, sql]
+----
+select * from `users` where `id` in (select `account_name` from `accounts` where `account_name` = 'somename')
+----
+
+== Raw Queries
+The `Database.raw` method should be used for running raw SQL queries.
+
+[source, js]
+----
+await Database
+  .raw('select * from users where username = ?', [username])
+----
+
+== Closing connection
+The database connections can be closed by calling the `close` method. By default this method all close all open database connections. To close selected connections, make sure to pass an array of connection names.
+
+[source, js]
+----
+Database.close() // all
+
+Database.close(['sqlite', 'mysql'])
+----
