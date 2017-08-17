@@ -51,6 +51,7 @@ This repo contains the documentation for AdonisJs framework.
   - Serializers
   - Migrations
   - Factories and Seeds
+  - Relationships
 
 7. Testing
 
