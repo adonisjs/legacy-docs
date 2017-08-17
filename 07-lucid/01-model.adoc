@@ -16,7 +16,7 @@ The reason behind using Models over writing plain database queries is the ease o
 +
 [source, javascript]
 ----
-class User extends Lucid {
+class User extends Model {
 
   profile () {
     return this.hasOne('App/Models/Profile')
