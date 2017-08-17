@@ -347,6 +347,38 @@ const User = use('App/Models/User')
 const users = await User.all()
 ----
 
+== Query scopes
+Query scopes are convenient methods to extract query constraints to useable and expressive methods. For example, we want to fetch all those users, who have a profile
+
+[source, js]
+----
+const Model = use('Model')
+
+class User extends Model {
+  static scopeHasProfile (query) {
+    return query.has('profile')
+  }
+
+  profile () {
+    return this.hasOne('App/Models/Profile')
+  }
+}
+----
+
+And now you can use it as
+
+[source, js]
+----
+const users = await User.query().hasProfile().fetch()
+----
+
+The idea of query scopes is to make your code more readable, as if you are reading plain text.
+
+1. The scopes are always defined with a keyword called `scope`, followed by the method name.
+2. When using the scope, you can call the method by dropping the `scope` keyword and calling the method in *Camelcase* form.
+3. You can call all standard query builder methods inside a query scope.
+
+
 == Pagination
 Lucid also supports the `paginate` method from the query builder.
 
@@ -506,4 +538,3 @@ class User extends Model {
 
 module.exports = User
 ----
-
