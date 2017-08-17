@@ -1,0 +1,175 @@
+---
+permalink: views
+title: Views
+category: http-lifecycle
+---
+
+toc::[]
+
+AdonisJs makes use link:http://edge.adonisjs.com/[Edge.js, window="_blank"] as the templating engine, which is blazing fast and comes with an elegant API to create dynamic views.
+
+Under the hood, Edge supports.
+[ol-shrinked]
+1. Layouts & partials
+2. Components
+3. Runtime debugging using chrome devtools
+4. Logical tags and everything in between.
+
+== Basic example
+Let's start the basic example of saying *Hello world* by rendering an edge template. All of the views are stored inside `resources/views` directory and ends with `.edge` extension.
+
+As always you can use the `adonis` command to create the view.
+
+[source, bash]
+----
+adonis make:view home
+----
+
+Output
+[source, bash]
+----
+✔ create  resources/views/home.edge
+----
+
+And let's create a route to render the `home.edge` view.
+
+[source, js]
+----
+Route.get('/', ({ view }) => {
+  return view.render('home')
+})
+----
+
+The `view.render` method takes the relative path to view file. There is no need to type `.edge` extension, since that is obvious.
+
+Also you can render views from the subfolders with dot notation.
+
+[source, js]
+----
+// file path - users/list.edge
+
+view.render('users.list')
+----
+
+== Request information
+All views have access to the current `request` object by default. Which means you can call all request methods within the views as well.
+
+[source, edge]
+----
+The request url is {{ request.url() }}
+----
+
+Also there is a helper to get the url.
+
+[source, edge]
+----
+The request url is {{ url }}
+----
+
+== Globals
+All of the edge.js link:http://edge.adonisjs.com/docs/globals[globals] are supported as it is. Here is the list of globals specific to AdonisJs only.
+
+==== css
+Add `link` tag to a css file. The file name should be relative from the `public` directory.
+
+[source, edge]
+----
+{{ css('style') }}
+----
+
+Or
+[source, edge]
+----
+{{ css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css') }}
+----
+
+==== script
+Adds a script tag to the document
+
+[source, edge]
+----
+{{ script('app') }}
+----
+
+==== assetsUrl
+Returns path of a file relative from the `public` directory.
+
+[source, edge]
+----
+<img src="{{ assetsUrl('logo.png') }}" />
+----
+
+==== route
+Get actual url for a route
+
+Expecting the route to be register as following
+
+[source, js]
+----
+Route.get('users/:id', 'UserController.show').as('profile')
+----
+
+[source, edge]
+----
+<a href="{{ route('profile', { id: 1 }) }}">
+  View profile
+</a>
+----
+
+Also you can use the controller method name.
+
+[source, edge]
+----
+<a href="{{ route('UserController.show', { id: 1 }) }}">
+  View profile
+</a>
+----
+
+==== url
+The current request url
+
+[source, js]
+----
+The request url is {{ url }}
+----
+
+==== auth
+If you are using the auth provider, then you can access the current logged in user using the `auth` object.
+
+[source, js]
+----
+{{ auth.user }}
+----
+
+== Tags
+link:http://edge.adonisjs.com/docs/tags[Tags, window="_blank"] are building blocks for edge templates. For example: `@if`, `@each` all are the tags shipped with edge by default.
+
+Also edge exposes a very powerful API to add new tags to it. Here is a list of the `tags` specific to AdonisJs only.
+
+==== loggedIn
+The loggedIn tag allows you to write `if/else` clause around the logged in user. For example:
+
+[source, edge]
+----
+@loggedIn
+  <h2> You are logged in </h2>
+@else
+  <p> <a href="/login">Click here</a> to login </p>
+@endloggedIn
+----
+
+Everything inside `@loggedIn` tag will be executed when the user is loggedin.
+
+==== inlineSvg
+Render a svg file inline inside the HTML. The tag expects relative path to the file from the `public` directory.
+
+[source, edge]
+----
+<a href="/login">
+  @inlineSvg('lock')
+  Login
+</a>
+----
+
+== Templating
+The templating syntax is same as the Edge. So make sure to read the link:http://edge.adonisjs.com/docs/syntax-guide[edge documentation].

@@ -1,0 +1,138 @@
+---
+permalink: sessions
+title: Sessions
+category: http-lifecycle
+---
+
+toc::[]
+
+AdonisJs has the first class support for sessions and comes with a variety of inbuilt *drivers* to easily manage and store sessions. In this guide we will learn how to configure different drivers and use them.
+
+== Setup
+If session provider is not already setup, make sure to install it as defined below.
+
+[source, bash]
+----
+adonis install @adonisjs/session
+----
+
+The above command will install the provider, creates the config file automatically and shows a small set of instructions to follow in order to set it up.
+
+First step is to register the provider inside `start/app.js` file.
+
+[source, js]
+----
+const providers = [
+  '@adonisjs/session/providers/SessionProvider'
+]
+----
+
+Also register the middleware inside `start/kernel.js` file.
+
+[source, js]
+----
+const globalMiddleware = [
+  'Adonis/Middleware/Session'
+]
+----
+
+== Supported drivers
+Below is the list of drivers supported by the session provider. You can change the current driver inside `config/session.js` file.
+
+NOTE: The redis driver rely on `@adonisjs/redis` make sure to install the provider.
+
+[options="header", cols="10, 20, 70"]
+|====
+| Name | Config key | Description
+| Cookie | cookie | Saves the session values in encrypted form inside cookies.
+| File | file | Saves inside a file on a server. Should not be used if you are running Adonisjs on multiple server and behind a load balancer.
+| Redis | redis | Save inside redis. Ideal when want to scale horizontally.
+|====
+
+== Basic example
+The `session` object is passed as part of http `context`, just like request and response. Let's see how to use sessions during the HTTP lifecycle.
+
+[source, js]
+----
+Route.get('/', ({ session, response }) => {
+  session.put('username', 'virk')
+  response.redirect('/print')
+})
+
+Route.get('/print', ({ session }) => {
+  return session.get('username')
+})
+----
+
+== Session methods
+Here is the list of methods.
+
+==== put(key, value)
+Add a key/value pair to the session store.
+
+[source, js]
+----
+session.put('username', 'virk')
+----
+
+==== get(key, [defaultValue])
+Returns the value for a given or the default value.
+
+[source, js]
+----
+session.get('username', 'fallbackName')
+----
+
+==== all
+Get everything back as an object from the session store.
+
+[source, js]
+----
+session.all()
+----
+
+==== increment(key, steps)
+Increment the value for a given key. Make sure the previous value is always a number.
+
+[source, js]
+----
+session.increment('counter')
+
+// or increment by 5
+session.increment('counter', 5)
+----
+
+==== decrement(key, steps)
+Decrement the value for a given key. Make sure the previous value is always a number.
+
+[source, js]
+----
+session.increment('counter')
+
+// or decrement by 2
+session.decrement('counter', 2)
+----
+
+==== forget(key)
+Remove key/value pair from the store
+[source, js]
+----
+session.forget('username')
+----
+
+==== pull(key, defaultValue)
+Remove the value from the store and get it back.
+
+[source, js]
+----
+const username = session.pull('username') // returns username
+request.pull('username') // null
+----
+
+==== clear
+Empty the session store
+
+[source, js]
+----
+session.clear()
+----
