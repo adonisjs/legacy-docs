@@ -316,7 +316,7 @@ link:https://github.com/defunkt/jquery-pjax[Pjax] is an evolved way to make use 
 This methods looks at `X-PJAX` header to identify if request is pjax or not.
 [source, js]
 ----
-if (request.ajax()) {
+if (request.pjax()) {
   // do something
 }
 ----
