@@ -6,20 +6,20 @@ category: introduction
 
 toc::[]
 
-AdonisJs 4.0, known as *(dawn)* is a major release of the framework after more than a year. Each major release comes with handful of breaking changes, which is required to keep the framework fresh and address all issues reported during the year.
+AdonisJs 4.0, known as *(dawn)* is a major release of the framework after more than a year. Each major release comes with a handful of breaking changes, which is required to keep the framework fresh and address all issues reported during the year.
 
 == Javascript movement
-This release is even special, since lot of movement has happened in ES6 and Node.js 8.0 has implemented 99% of the link:http://node.green/[language features].
+This release is even special since a lot of movement has happened in ES6 and Node.js 8.0 has implemented 99% of the link:http://node.green/[language features].
 
-Also link:https://v8project.blogspot.in/2017/08/v8-release-61.html[V8 engine] has been updated with lots of speed improvements.
+Also, link:https://v8project.blogspot.in/2017/08/v8-release-61.html[V8 engine] has been updated with lots of speed improvements.
 
-Finally, the time was to update the code base and start supporting latest features, so that we all can write simpler and expressive code, while gaining all performance benefits.
+Finally, the time was to update the code base and start supporting latest features, so that we all can write simpler and expressive code while gaining all performance benefits.
 
 == Language changes
-Below is the list of changes made due to availability of ES6 features.
+Below is the list of changes made due to the availability of ES6 features.
 
 ==== Using async/await
-Generator functions using `yield` keyword is no more supported and instead we make use of `async/await` now.
+Generator functions using `yield` keyword is no more supported and instead, we make use of `async/await` now.
 
 Which means all functions starting with `*` needs to be replaced with `async` and `yield` keyword will be replaced with `await`.
 
@@ -40,7 +40,7 @@ async index () {
 ----
 
 ==== Destructuring
-ES6 allows link:https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring[Object destructuring] which can be used to pull selected values from an object. This feature is really powerful and intuitive to build API's around passing parameters.
+ES6 allows link:https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring[Object destructuring] which can be used to pull selected values from an object. This feature is really powerful and intuitive to build API around passing parameters.
 
 In newer of AdonisJs, all route handlers and controller actions will receive an object of values, instead of receiving multiple parameters with `request` and `response`.
 
@@ -59,3 +59,319 @@ Route.get('/', async ({ request, response }) => {
 
 })
 ----
+
+== Directory structure
+The directory structure has been tweaked a bit to keep it as flat as possible and also making the upgrade path easier in upcoming versions.
+
+==== bootstrap -> start
+The `bootstrap` directory has renamed to `start`, which means same but is simpler to understand.
+
+Also, the bunch of files like `http.js and `kernel.js` has been removed since they contained the code to wire the app and boot the server. All this has been moved to a separate package called `@adonisjs/ignitor`.
+
+==== Controllers
+The location of *Controllers* have been changed as follows
+
+[source, bash]
+----
+app/Http/Controllers → app/Controllers/Http
+----
+
+Having a top level `Http` directory doesn't make sense, since the only thing we store inside it is the `Controllers`, so it's better to have `Controllers` as the top-level directory and keep Websocket and Http controllers inside it.
+
+==== routes.js
+The `routes.js` file has been moved from `app/Http/routes.js` to `start/routes.js`. Since routes are starting point to your app, they should be in start directory.
+
+==== kernel.js
+The `kernel.js`, which stores the list of Middleware have been moved from `app/Http/kernel.js` to `start/kernel.js`.
+
+==== storage -> tmp
+The job of `storage` directory was to hold files which are never committed to version control like Github. But the name itself was not clear that the directory holds temporary files. The rename to `tmp` makes it more clear
+
+== Routing
+
+==== addCollection, addMember
+The `addCollection` and `addMember` methods have been removed from the route resource. This is done in the favor of keeping routes straightforward since it is never clear in which sequence a new *member* will be added via `addMember method. For example
+
+[source, js]
+----
+Route
+  .resource('users', 'UserController')
+  .addMember('active')
+----
+
+Now the resource will create a route called `users/:id` as part of the resourceful routes and adding a new member will add `users/active` route, now it's unclear which action will be called, since `users/:id` will catch all the routes including `users/active`.
+
+
+==== group
+The group method signature has been changed and now it's optional to pass the name.
+
+Earlier
+[source, js]
+----
+Route.group('auth', () => {
+})
+----
+
+Now
+[source, js]
+----
+Route.group(() => {
+})
+----
+
+The `1st` param is the group name, which is optional now. If you give a group name, then all route names will be prefixed with that.
+
+==== Route.route
+The `Route.route` method signature has been tweaked a bit.
+
+Earlier
+[source, js]
+----
+Route.route('/', ['GET', 'POST'], () => {
+})
+----
+
+Now
+[source, js]
+----
+Route.route('/', () => {
+}, ['GET', 'POST'])
+----
+
+== Request
+Below is the list of breaking API changes in the link:request[Request] object.
+
+==== param/params
+The `param/params` methods have been removed in 4.0 and instead, a separate object is passed with all the route params.
+
+Earlier
+[source, js]
+----
+Route.get('users/:id', function (request) {
+  const id = request.param('id')
+})
+----
+
+Now
+[source, js]
+----
+Route.get('users/:id', function ({ params }) {
+  const id = params.id
+})
+----
+
+== Views
+The view layer of AdonisJs now uses link:http://edge.adonisjs.com[Edge] over link:https://mozilla.github.io/nunjucks/[nunjucks] which is a home-grown template engine written for AdonisJs itself.
+
+Extending the core of nunjucks was so painful that adding new *tags* and *helpers* was becoming hard. Edge has a very minimal developer API and it's pretty straightforward to extend the core.
+
+Make sure to check link:http://edge.adonisjs.com/docs/getting-started[edge guides] to learn more about it.
+
+==== response.sendView
+The `response.sendView` function has been removed and instead a `view` instance is passed to all the HTTP requests.
+
+Earlier
+[source, js]
+----
+Route.get('/', function * (request, response) {
+  yield response.sendView('home')
+})
+----
+
+Now
+[source, js]
+----
+Route.get('/',  ({ view }) => {
+  return view.render('home')
+})
+----
+
+== Auth
+The authentication engine is more or less the same, instead received a bunch of new additions. This section outlines some of the breaking changes.
+
+==== request.auth
+The `request.auth` method has been removed and instead a dedicated `auth` instance is passed to all HTTP requests.
+
+Earlier
+[source, js]
+----
+Route.get('/', function * (request) {
+  const auth = request.auth
+  console.log(auth.currentUser)
+})
+----
+
+Now
+[source, js]
+----
+Route.get('/', ({ auth }) => {
+  console.log(auth.user)
+})
+----
+
+==== revokeToken(s)
+The `api` authenticator used to have `revokeToken` and `revokeTokens` methods, which have been removed and instead you can use the `User` model directly to revoke tokens.
+
+Earlier
+[source, js]
+----
+Route.get('/', function (request) {
+  yield request.auth.revokeTokens(request.currentUser)
+})
+----
+
+Now
+
+[source, js]
+----
+Route.get('/', async ({ auth }) => {
+  await auth.user
+    .tokens()
+    .where('type', 'api_token')
+    .update({ is_revoked: true })
+})
+----
+
+Since the `tokens` table now keep all sort of tokens like *remember tokens*, *jwt refresh tokens*. It is more convenient to use the `User` model directly and revoke the required tokens.
+
+== Models
+A bunch of changes had been made to link:https://github.com/adonisjs/adonis-lucid/blob/develop/CHANGELOG.md#400-2017-07-16[lucid], the majority of them are improvements, bug fixes, and much-awaited features.
+
+Here is the list of breaking changes.
+
+==== extend
+All models used to fetch `Lucid` namespace in order to extend themselves. Going forward, you need to pull `Model` namespace.
+
+Earlier
+[source, js]
+----
+const Lucid = use('Lucid')
+
+class User extends Lucid {
+}
+----
+
+Now
+[source, js]
+----
+const Model = use('Model')
+
+class User extends Model {
+}
+----
+
+==== dateFormat
+The `dateFormat` getter has been removed in the favor of alternate approach to handling dates. Read link:https://adonisjs.svbtle.com/curious-case-of-date-formats-in-data-models[this blog post] to learn more about it.
+
+==== useTransaction
+In order to run model operations inside a transaction, the `useTransaction` method was used. In 4.0, you pass the transaction object directly to the `save` and `create` methods.
+
+Earlier
+[source, js]
+----
+const trx = yield Database.beginTransaction()
+
+const user = new User()
+user.username = 'virk'
+user.useTransaction(trx)
+
+yield user.save()
+----
+
+Now
+[source, js]
+----
+const trx = await Database.beginTransaction()
+
+const user = new User()
+user.username = 'virk'
+
+await user.save(trx)
+----
+
+==== belongsToMany
+The `belongsToMany` method used to receive the *pivot table name* as part of the method call which has been changed in 4.0.
+
+Earlier
+[source, js]
+----
+class User extends Lucid {
+  cars () {
+    return this.belongsToMany('App/Model/Car', 'my_cars')
+  }
+}
+----
+
+Now
+[source, js]
+----
+class User extends Model {
+  cars () {
+    return this
+      .belongsToMany('App/Models/Car')
+      .pivotTable('my_cars')
+  }
+}
+----
+
+==== with
+The `with` method is used to eagerload relationships and the signature has been changed quite a bit.
+
+Earlier
+[source, js]
+----
+User
+  .query()
+  .with('profiles', 'posts')
+----
+
+Now
+[source, js]
+----
+User
+  .query()
+  .with('profiles')
+  .with('posts')
+----
+
+Now you have to call the `with` for multiple times in order to eagerload multiple relations. This is done since the `2nd param` to the with the method is a callback to add query constraints on the relationship.
+
+Earlier
+[source, js]
+----
+User
+  .query()
+  .with('profiles')
+  .scope('profiles', (builder) => {
+    builder.where('is_latest', true)
+  })
+----
+
+Now
+[source, js]
+----
+User
+  .query()
+  .with('profiles', (builder) => {
+    builder.where('is_latest', true)
+  })
+----
+
+==== attach
+The `attach` method of *Belongs To Many* relationship has been changed in how it receives the values for pivot tables.
+
+Earlier
+[source, js]
+----
+await user.cars().attach([1], { current_owner: true })
+----
+
+Now
+[source, js]
+----
+await user.cars().attach([1], (pivotModel) => {
+  pivotModel.current_owner = true
+})
+----
+
+The new signature makes it easier to add conditional attributes. For example: When calling `attach` with 3 cars and want to set a different `current_owner` attribute to each car. The callback approach makes it easier to do that since the callback will be invoked for `cars.length` number of times.
