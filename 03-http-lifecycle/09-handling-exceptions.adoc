@@ -1,0 +1,133 @@
+---
+permalink: exceptions
+title: Handling Exceptions
+category: http-lifecycle
+---
+= Handling Exceptions
+
+toc::[]
+
+AdonisJs not only treats exceptions as a way to guide the developer on what went wrong but also as a way to build application flow around them.
+
+In this guide, we will learn how exceptions are raised, how to write logic around them and finally creating your own custom exceptions.
+
+== Getting started
+Exceptions are great since they halt the program at a certain stage and makes sure that everything is correct before proceeding.
+
+Generally, exceptions are considered as a bunch of text, only to tell the developer about what went wrong, but if handled carefully they can help you build application flow around it.
+
+NOTE: Watch this link:[video] to learn more on how to structure application around *custom exceptions*.
+
+== Handling exceptions
+Exceptions can be handled by binding a *wildcard* exception handler or handling individual exceptions using their names.
+
+Let's start with the wildcard handler by creating an exception handler using the `adonis` command line tool.
+
+=== Wildcard handler
+[source, bash]
+----
+adonis make:ehandler
+----
+
+Output
+[source, bash]
+----
+✔ create  app/Exceptions/Handler.js
+----
+
+Once you create this file, AdonisJs will hand over all the exceptions occurred during HTTP lifecycle to it. It should have the `handle` method with an optional `report` method on it.
+
+[source, js]
+----
+class ExceptionHandler {
+
+  async handle (error, { response, session }) {
+    if (error.name === 'ValidationException') {
+      session.withErrors(error.messages).flashAll()
+      await session.commit()
+      response.redirect('back')
+      return
+    }
+
+    response.status(error.status).send(error.message)
+  }
+}
+
+module.exports = ExceptionHandler
+----
+
+The `handle` method in this class will handle the `ValidationException` in a different way by flashing the errors back to the form.
+
+Also, the `report` method is used to report the exception to a 3rd party service like *Bugsnag* for logging purposes.
+
+=== Individual exceptions
+Also, you can hook into individual exceptions by defining an inline exception handler for them. The same can be done inside the `start/hooks.js` file.
+
+[source, js]
+----
+const { hooks } = require('@adonisjs/ignitor')
+
+hooks.after.providersBooted(() => {
+  const Exception = use('Exception')
+
+  Exception.handle('ValidationException', async (error, { response, session }) => {
+    session.withErrors(error.messages).flashAll()
+    await session.commit()
+    response.redirect('back')
+    return
+  })
+})
+----
+
+== Custom exceptions
+We learned how to handle certain exceptions with their names, also Adonisjs makes it so simple to build your own custom exceptions and even define handlers for them.
+
+All the exceptions are stored inside `app/Exceptions` folder and as always let's use the `adonis` command to create an exception.
+
+[source, bash]
+----
+adonis make:exception Custom
+----
+
+Output
+[source, bash]
+----
+✔ create  app/Exceptions/CustomException.js
+----
+
+[source, js]
+----
+const GE = require('@adonisjs/generic-exceptions')
+
+class CustomException extends GE.LogicalException {
+}
+
+module.exports = CustomException
+----
+
+Now you can throw this exception just by importing the exceptions file. The `status` and `errorCode` are optional when throwing the exception.
+
+[source, js]
+----
+const CustomException = use('App/Exceptions/CustomException')
+
+throw new CustomException(message, status, errorCode)
+----
+
+The beauty of this approach is that you can unique name your exceptions as the `class name` and then catch them accordingly.
+
+=== A step further
+Also, we can take a step further and define the `handle` and `report` methods on the exception itself. AdonisJs will make sure to call them if they exist.
+
+[source, js]
+----
+class CustomException extends GE.LogicalException {
+  handle (error, { response }) {
+    response.status(500).send('Some message')
+  }
+}
+
+module.exports = CustomException
+----
+
+Throwing the above exception will call the `handle` method on the exception itself to handle it.

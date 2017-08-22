@@ -1,0 +1,128 @@
+---
+permalink: middleware
+title: Middleware
+category: http-lifecycle
+---
+= Middleware
+
+toc::[]
+
+The HTTP middleware are a set of functions executed in sequence, one after the other. The concept of a sequential chain makes it really powerful to transform the request or end it at any stage.
+
+Features like *sessions*, *authentication*, etc makes extensive use of the middleware to add features to the framework.
+
+Middleware can perform one/all of the following operations
+
+1. Decorate HTTP context and add values to it.
+2. Respond to a given request, without reaching the route action.
+3. Or deny requests by throwing errors.
+
+== Using Middleware
+All of the middleware are registered inside `start/kernel.js` file and seperated into 2 different categories.
+
+=== Global middleware
+The global middleware are executed for each request that has a register route and defined under the `globalMiddleware` array.
+
+NOTE: Middleware are executed in sequence they are defined.
+
+[source, js]
+----
+const globalMiddleware = [
+  'Adonis/Middleware/BodyParser'
+]
+----
+
+=== Named middleware
+Named middleware is a object of key/value of pairs, and you can define they keys to individual routes or a group of routes to apply certain middleware.
+
+Named middleware are used, when you want to perform certain actions on selected routes only.
+
+[source, js]
+----
+const named = {
+  auth: 'Adonis/Middleware/Auth'
+}
+----
+
+And later you can use the `auth` key on your Routes.
+
+[source, js]
+----
+Route
+  .get('users/:id', 'UserController.show')
+  .middleware(['auth'])
+----
+
+Also you can apply multiple middleware to a route and they will executed in the sequence they are passed.
+
+=== Middleware Props
+To keep middleware configurable at runtime. AdonisJs makes it possible to pass *props to named middleware*. For example: Using the auth middleware with different authentication scheme for different routes.
+
+TIP: Middleware uses the link:https://www.npmjs.com/package/haye#pipe-expression[pipe expression] to define props.
+
+[source, js]
+----
+Route
+  .post('users', 'UsersController.store')
+  .middleware(['auth:session'])
+----
+
+And
+
+[source, js]
+----
+Route
+  .post('posts', 'PostsController.store')
+  .middleware(['auth:jwt'])
+----
+
+Multiple props can be passed as `auth:session,jwt`.
+
+== Creating Middleware
+You can also create middleware to add application specific logic the HTTP lifecycle. All project related middleware are stored inside `app/Middleware` directory.
+
+You can use the `adonis` command to create a middleware for you.
+
+[source, bash]
+----
+adonis make:middleware CountryDetector
+----
+
+Output
+[source, js]
+----
+✔ create  app/Middleware/CountryDetector.js
+----
+
+=== Creating middleware
+Now let's say we want to use the user ip address and detect their country. We can write all that code inside the `handle` method of the middleware.
+
+[source, js]
+----
+'use strict'
+
+const geoip = use('geoip-lite')
+
+class CountryDetector {
+  async handle ({ request }, next) {
+    const ip = request.ip()
+    request.country = geoip.lookup(ip).country
+    await next()
+  }
+}
+
+module.exports = CountryDetector
+----
+
+=== Registering middleware
+Let's register this as a global middleware, so that we can fetch country for all the users.
+
+.start/kernel.sj
+[source, js]
+----
+const globalMiddleware = [
+  'App/Middleware/CountryDetector'
+]
+----
+
+That's all 😎 Now all of your requests will have the `country` property on it.

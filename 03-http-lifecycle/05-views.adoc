@@ -3,6 +3,7 @@ permalink: views
 title: Views
 category: http-lifecycle
 ---
+= Views
 
 toc::[]
 
@@ -16,7 +17,7 @@ Under the hood, Edge supports.
 4. Logical tags and everything in between.
 
 == Basic example
-Let's start the basic example of saying *Hello world* by rendering an edge template. All of the views are stored inside `resources/views` directory and ends with `.edge` extension.
+Let's start with the basic example of saying *Hello world* by rendering an edge template. All of the views are stored inside `resources/views` directory and ends with `.edge` extension.
 
 As always you can use the `adonis` command to create the view.
 
@@ -40,9 +41,9 @@ Route.get('/', ({ view }) => {
 })
 ----
 
-The `view.render` method takes the relative path to view file. There is no need to type `.edge` extension, since that is obvious.
+The `view.render` method takes the relative path to view the file. There is no need to type `.edge` extension, since that is obvious.
 
-Also you can render views from the subfolders with dot notation.
+Also, you can render views from the sub folders with dot notation.
 
 [source, js]
 ----
@@ -59,11 +60,11 @@ All views have access to the current `request` object by default. Which means yo
 The request url is {{ request.url() }}
 ----
 
-Also there is a helper to get the url.
+Also, there is a helper to get the URL.
 
 [source, edge]
 ----
-The request url is {{ url }}
+The request URL is {{ url }}
 ----
 
 == Globals
@@ -102,7 +103,7 @@ Returns path of a file relative from the `public` directory.
 ==== route
 Get actual url for a route
 
-Expecting the route to be register as following
+Expecting the route to be registered as following
 
 [source, js]
 ----
@@ -116,7 +117,7 @@ Route.get('users/:id', 'UserController.show').as('profile')
 </a>
 ----
 
-Also you can use the controller method name.
+Also, you can use the controller method name.
 
 [source, edge]
 ----
@@ -130,7 +131,7 @@ The current request url
 
 [source, js]
 ----
-The request url is {{ url }}
+The request URL is {{ url }}
 ----
 
 ==== auth
@@ -142,12 +143,12 @@ If you are using the auth provider, then you can access the current logged in us
 ----
 
 == Tags
-link:http://edge.adonisjs.com/docs/tags[Tags, window="_blank"] are building blocks for edge templates. For example: `@if`, `@each` all are the tags shipped with edge by default.
+link:http://edge.adonisjs.com/docs/tags[Tags, window="_blank"] are building blocks for edge templates. For example: `@if`, `@each` all are the tags shipped with the edge by default.
 
-Also edge exposes a very powerful API to add new tags to it. Here is a list of the `tags` specific to AdonisJs only.
+Also, edge exposes a very powerful API to add new tags to it. Here is a list of the `tags` specific to AdonisJs only.
 
 ==== loggedIn
-The loggedIn tag allows you to write `if/else` clause around the logged in user. For example:
+The `loggedIn` tag allows you to write `if/else` clause around the logged in user. For example:
 
 [source, edge]
 ----
@@ -158,10 +159,10 @@ The loggedIn tag allows you to write `if/else` clause around the logged in user.
 @endloggedIn
 ----
 
-Everything inside `@loggedIn` tag will be executed when the user is loggedin.
+Everything inside `@loggedIn` tag will be executed when the user is logged in.
 
 ==== inlineSvg
-Render a svg file inline inside the HTML. The tag expects relative path to the file from the `public` directory.
+Render an svg file inline inside the HTML. The tag expects the relative path to the file from the `public` directory.
 
 [source, edge]
 ----
@@ -173,3 +174,10 @@ Render a svg file inline inside the HTML. The tag expects relative path to the f
 
 == Templating
 The templating syntax is same as the Edge. So make sure to read the link:http://edge.adonisjs.com/docs/syntax-guide[edge documentation].
+
+== Syntax highlighting
+The plugins for the following editors are available to get syntax highlighting support for Edge.
+
+1. For link:https://github.com/poppinss/edge-sublime-syntax[Sublime text].
+2. For link:https://github.com/poppinss/edge-atom-syntax[Atom].
+3. For link:https://github.com/duyluonglc/vscode-edge[Vscode].

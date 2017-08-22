@@ -3,6 +3,7 @@ permalink: query-builder
 title: Query builder
 category: database
 ---
+= Query builder
 
 toc::[]
 

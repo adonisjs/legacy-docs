@@ -3,6 +3,7 @@ permalink: response
 title: Response
 category: http-lifecycle
 ---
+= Response
 
 toc::[]
 
@@ -30,10 +31,10 @@ Route.get('/', async ({ response }) => {
 })
 ----
 
-Also you can use `response.json` which is same as `response.send` but more expressive that the response is in JSON format.
+Also, you can use `response.json` which is same as `response.send` but more expressive that the response is in JSON format.
 
 == Making response
-As of 4.0 you can also `return` values from the route closure or controller method, instead of using dedicated `response` methods.
+As of 4.0, you can also `return` values from the route closure or controller method, instead of using dedicated `response` methods.
 
 Which means the following is equivalent to `response.send` or `response.json` and feels more natural with a return statement.
 
@@ -75,7 +76,7 @@ Route.get('/', async ({ response }) => {
 })
 ----
 
-See how cleaner the code is now. Javascript has a rich eco-system now and it is *100% possible* to write code without callbacks just by promisfying them and as a community we want to encourage it.
+See how cleaner the code is now. Javascript has a rich eco-system now and it is *100% possible* to write code without callbacks just by promisfying them and as a community, we want to encourage it.
 
 === I need callbacks
 Even if you think using callbacks are great, we got a way for you to use them. Simply instruct `response` object not to end `implicitly`.
@@ -103,7 +104,7 @@ response.header('Content-type', 'application/json')
 ----
 
 ==== safeHeader
-Only set the header if it doesn't exists.
+Only set the header if it doesn't exist.
 
 [source, js]
 ----
@@ -127,7 +128,7 @@ response.type('application/json')
 ----
 
 == Cookies
-Also you can set/remove cookies by calling one of the following methods
+Also, you can set/remove cookies by calling one of the following methods
 
 ==== cookie
 [source, js]
@@ -144,7 +145,7 @@ response.clearCookie('cartTotal')
 ----
 
 ==== plainCookie
-Since all cookies are encrypted and signed, it is not possible to read them from frontend Javascript code. In that case may want to set a plain cookie instead.
+Since all cookies are encrypted and signed, it is not possible to read them from frontend Javascript code. In that case, may want to set a plain cookie instead.
 
 [source, js]
 ----
@@ -166,7 +167,7 @@ response.redirect('/url')
 response.redirect('/url', false, 301)
 ----
 
-Also you can send current request params to the other request as well by setting `true` as the 2nd param.
+Also, you can send current request params to the other request as well by setting `true` as the 2nd param.
 
 [source, js]
 ----
@@ -174,7 +175,7 @@ response.redirect('/url', true)
 ----
 
 ==== route(route, data, domain, sendParams = false, status = 302)
-Redirect to a route. This method will build the url automtically from the route name or controller method.
+Redirect to a route. This method will build the URL automatically from the route name or controller method.
 
 .Defining route
 [source, js]
@@ -190,7 +191,7 @@ Route
 response.route('profile', { id: 1 })
 ----
 
-Also you can pass the controller method.
+Also, you can pass the controller method.
 
 .Redirect
 [source, js]
@@ -209,7 +210,7 @@ response.route('posts', { id: 1 }, 'blog.adonisjs.com')
 The response object makes it super easy to stream files from your server to the client.
 
 ==== download(filePath)
-Stream the file to the client. This method will not force the client to download the file as an attachment. For example: Browsers will display the file in a new window.
+Stream the file to the client. This method will not force the client to download the file as an attachment. For example, Browsers will display the file in a new window.
 
 [source, js]
 ----

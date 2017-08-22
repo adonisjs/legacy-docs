@@ -3,6 +3,7 @@ title: Relationships
 permalink: relationships
 category: lucid
 ---
+= Relationships
 
 toc::[]
 
