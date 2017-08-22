@@ -3,6 +3,7 @@ permalink: database-getters-setters
 title: Getters & Setters
 category: lucid
 ---
+= Getters & Setters
 
 toc::[]
 

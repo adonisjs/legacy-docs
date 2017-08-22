@@ -3,6 +3,7 @@ title: Seeds & Factories
 permalink: seeds-and-factories
 category: database
 ---
+= Seeds & Factories
 
 toc::[]
 

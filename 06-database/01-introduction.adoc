@@ -3,6 +3,7 @@ title: Introduction
 permalink: database
 category: database
 ---
+= Introduction
 
 toc::[]
 

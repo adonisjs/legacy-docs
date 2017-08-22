@@ -3,6 +3,7 @@ title: Hooks
 permalink: database-hooks
 category: lucid
 ---
+= Hooks
 
 toc::[]
 

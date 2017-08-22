@@ -3,6 +3,7 @@ title: Upgrading from 3.x
 permalink: upgrade-guide
 category: introduction
 ---
+= Upgrading from 3.x
 
 toc::[]
 

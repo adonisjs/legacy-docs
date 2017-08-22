@@ -3,6 +3,7 @@ permalink: migrations
 title: Migrations
 category: database
 ---
+= Migrations
 
 toc::[]
 

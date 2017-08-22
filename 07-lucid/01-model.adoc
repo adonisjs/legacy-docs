@@ -3,6 +3,7 @@ title: Lucid Models
 permalink: lucid
 category: lucid
 ---
+= Lucid Models
 
 toc::[]
 

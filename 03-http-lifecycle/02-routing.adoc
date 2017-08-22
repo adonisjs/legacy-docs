@@ -3,12 +3,13 @@ permalink: routing
 title: Routing
 category: http-lifecycle
 ---
+= Routing
 
 toc::[]
 
 AdonisJs routing favors *REST conventions*, but still give enough room to create and register custom routes. In this guide we will learn about creating routes, binding controller methods and different ways to organize them.
 
-All of the application routes are registered inside `start/routes.js` file. Also you are free to create multiple files for routes and just require them inside the routes file.
+All of the application routes are registered inside `start/routes.js` file. Also you are free to create multiple files for routes and just require them inside the `routes.js` file.
 
 == Basic example
 The most basic route requires a URL path and a closure to be executed. The returned value from the route is sent back as response.
@@ -21,7 +22,7 @@ Route.get('/', () => 'Hello world')
 After starting the server using `adonis serve --dev`, if you visit link:http://localhost:3333[localhost:3333], you will see the *Hello world* in the browser.
 
 == Route methods/verbs
-Restful routes makes of different HTTP methods to indicate the type of request. For example: `POST` method is used to create a record and `GET` is used to fetch record(s).
+Restful routes makes use of different HTTP methods to indicate the type of request. For example: `POST` method is used to create a record and `GET` is used to fetch record(s).
 
 You can define routes for different HTTP methods using one of the following methods.
 
@@ -65,7 +66,7 @@ Route.delete('/', async () => {
 ----
 
 ==== route
-Also you can create routes that responds to multiple verbs using the `Route.route` method.
+Also, you can create routes that respond to multiple verbs using the `Route.route` method.
 
 [source, js]
 ----
@@ -94,7 +95,7 @@ Route.get('posts/:id', async ({ params }) => {
 })
 ----
 
-The `:id` is a route parameter which is passed as part of the `params` object. Also you can make a parameter optional by adding `?` to it. For example:
+The `:id` is a route parameter which is passed as part of the `params` object. Also, you can make a parameter optional by adding `?` to it. For example:
 
 [source, js]
 ----
@@ -107,7 +108,7 @@ Route.get('make/:drink?', async ({ params }) => {
 ----
 
 == Routing for SPA's
-Quite often you find yourself creating SPA, where you want to render a single view from the server and handle routing on frontend using your favorite frontend framework.
+Quite often you find yourself creating an SPA ( single page application ), where you want to render a single view from the server and handle routing on front-end using your favorite frontend framework.
 
 Same can be done by defining a wildcard route.
 
@@ -120,7 +121,7 @@ If you have any other specific routes, they should be defined before the wildcar
 
 [source, js]
 ----
-Route.get('/api/v1/users', 'UsersController.index')
+Route.get('/api/v1/users', 'UserController.index')
 
 // wildcard route
 Route.any('*', ({ view }) => view.render('main'))
@@ -129,7 +130,7 @@ Route.any('*', ({ view }) => view.render('main'))
 == Binding controllers
 Defining closures as the route actions are not scalable, since writing all the code inside a single file is never desired and practical.
 
-AdonisJs being an MVC offers a nice abstractions layer called *Controllers* to keep all the request handling logic inside custom ES6 classes.
+AdonisJs being an MVC framework offers a nice abstractions layer called *Controllers* to keep all the request handling logic inside custom ES6 classes.
 
 Let's create a controller using the `make:controller` command.
 [source, bash]
@@ -143,7 +144,7 @@ adonis make:controller Posts
 ✔ create  app/Controllers/Http/PostController.js
 ----
 
-The next step is to bind the controller method to the route. It is defined as a `dot (.)` separated string. Learn more about controllers link:controllers[here].
+The next step is to bind the controller method to the route. It is defined as a `dot (.)` separated string.
 
 [source, js]
 ----
@@ -174,7 +175,7 @@ Route
   .middleware(['auth'])
 ----
 
-The `middleware` method accepts an array of named middleware, which are defined inside `start/kernel.js` file.
+The `middleware` method accepts an array of named middleware, which is defined inside `start/kernel.js` file.
 
 .start/kernel.js
 [source, js]
@@ -187,7 +188,7 @@ const namedMiddleware = {
 Click link:middleware[here] to learn more about middleware.
 
 == Named routes
-Routes are defined inside `start/routes.js` file, but referenced everywhere inside your application. For example: Defining a form action to submit to a particular URL.
+Routes are defined inside `start/routes.js` file but referenced everywhere inside your application. For example: Defining a form action to submit to a particular URL.
 
 [source, js]
 ----
@@ -250,7 +251,7 @@ Will return JSON array of users
 /users::
 Will render the view and returns HTML
 
-Also you can disable the default URL and always force the client to define the format.
+Also, you can disable the default URL and always force the client to define the format.
 
 [source, js]
 ----
@@ -269,12 +270,112 @@ Route
   .formats(['json', 'html'], true)
 ----
 
-Passing `true` as the second parameter will make sure that the client defines one of the expected format, otherwise a 404 is thrown.
+Passing `true` as the second parameter will make sure that the client defines one of the expected formats, otherwise, a 404 is thrown.
+
+== Route Resources
+If you like building web apps around REST conventions then *route resources* will help you in defining conventional routes by writing less code.
+
+NOTE: It is required to bind a *Controller* to the resource. Binding a closure will throw exception.
+
+[source, js]
+----
+Route.resource('users', 'UsersController')
+----
+
+The `Route.resource` method under the hood, will create a total of 7 routes
+
+[role="resource-table", options="header", cols="40%, 10%, 25%, 25%"]
+|===
+| Url | Verb  | Name | Controller Method
+| users [description]#Show a list of all the users# | GET | users.index | `UsersController.index`
+| users/create [description]#Render a form to be used for creating a new user# | GET  | users.create | `UsersController.create`
+| users [description]#Create/save a new user.# | POST | users.store | `UsersController.store`
+| users/:id [description]#Display a single user# | GET | users.show | `UsersController.show`.
+| users/:id/edit [description]#Render a form to update an existing user.# | GET | users.edit | `UsersController.edit`
+| users/:id [description]#Update user details.# | PUT or PATCH | users.update | `UsersController.update`
+| users/:id [description]#Delete a user with id.# | DELETE | users.destroy | `UsersController.destroy`
+|===
+
+Nested resources can be created with `dot (.)` notation.
+
+[source, js]
+----
+Route.resource('posts.comments', 'CommentsController')
+----
+
+=== Filtering Resources
+You can limit the number of routes a resource should create by chaining handful of methods.
+
+==== apiOnly
+Limit the routes to only 5 by removing `users/create` and `users/:id/edit`. Since when writing an API server, you may want to render the forms using your Frontend Framework or within the Android app.
+
+[source, js]
+----
+Route
+  .resource('users', 'UsersController')
+  .apiOnly()
+----
+
+==== only([names])
+Remove all other routes but not the one's passed to the `only` method.
+
+[source, js]
+----
+Route
+  .resource('users', 'UsersController')
+  .only(['index', 'show'])
+----
+
+==== except([names])
+Remove route for names passed to the `except` method.
+
+[source, js]
+----
+Route
+  .resource('users', 'UsersController')
+  .except(['index', 'show'])
+----
+
+=== Resource Middleware
+You can attach middleware to the resource, just like you would do to a single route.
+
+[source, js]
+----
+Route
+  .resource('users', 'UsersController')
+  .middleware('auth')
+----
+
+Since attaching auth middleware to all the routes is not desired, you can customize the behavior by passing a *Closure* which should return an array of middleware to applied to each route within the resource.
+
+[source, js]
+----
+Route
+  .resource('users', 'UsersController')
+  .middleware(function (route) {
+    if (['users.store', 'users.update', 'users.delete'].indexOf(route.name) > -1) {
+      return ['auth']
+    }
+    return []
+  })
+----
+
+Here we have defined the `auth` middleware on *store*, *update* and *delete* routes.
+
+=== Resource Formats
+Also you can define the formats for all the resourceful routes, just like the way you will do for a single route or a group of routes.
+
+[source, js]
+----
+Route
+  .resource('users', 'UsersController')
+  .formats(['json'])
+----
 
 == Routing domains
 AdonisJs makes it super easy to serve multiple domains within a single codebase. The domains can be static endpoints like `blog.adonisjs.com` or dynamic endpoints like `:user.adonisjs.com`.
 
-TIP: You can define domain on a single route as well, but generally it's a good idea to group domain specific routes together.
+TIP: You can define the domain on a single route as well, but generally it's a good idea to group domain specific routes together.
 
 [source, js]
 ----
@@ -299,7 +400,7 @@ Route.get('/api/v1/users', 'UserController.index')
 Route.post('/api/v1/users', 'UserController.store')
 ----
 
-Instead we can make use of the route's group here.
+Instead, we can make use of the route's group here.
 
 [source, js]
 ----
@@ -344,4 +445,23 @@ Route
   .group(() => {
   })
   .formats(['json', 'html'])
+----
+
+== Route Renderer
+Route renderer is a one liner to render a view without creating a controller method or binding a closure.
+
+Instead of following
+
+[source, js]
+----
+Route.get('/', async function ({ view }) {
+  return view.render('welcome')
+})
+----
+
+We can write
+
+[source, js]
+----
+Route.on('/').render('welcome')
 ----

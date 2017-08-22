@@ -3,6 +3,7 @@ title: Serializers
 permalink: serializers
 category: lucid
 ---
+= Serializers
 
 toc::[]
 
