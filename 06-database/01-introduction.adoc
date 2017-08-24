@@ -7,7 +7,7 @@ category: database
 
 toc::[]
 
-Creating data driven apps is AdonisJs is comparatively simple with the help of rich Database query builder, link:lucid[Lucid ORM], link:migrations[migrations] and link:seeds[database seeder].
+Creating data driven apps is AdonisJs is comparatively simple with the help of rich Database query builder, link:lucid[Lucid ORM], link:migrations[migrations] and link:seeds-and-factories[database seeder].
 
 In this guide we will understand the basics of Database provider.
 
@@ -103,7 +103,7 @@ Database
   .table('users')
 ----
 
-Since, AdonisJs creates a pool of connections and re-use them, all used connections will be maintained unless the process dies.
+Since, AdonisJs creates a pool of connections and re-uses them, all used connections will be maintained unless the process dies.
 
 In order to close a connection manually, simply call the `close` method with connection name(s).
 
@@ -201,6 +201,7 @@ await Database
   .on('query', console.log)
 ----
 
+////
 === Slow query logs
 Tracking slow SQL queries is helpful to keep your app running in healthy mode. AdonisJs makes it easier to track slow SQL queries by listening for the `slow:query` event.
 
@@ -227,5 +228,4 @@ module.exports = {
   }
 }
 ----
-
-
+////

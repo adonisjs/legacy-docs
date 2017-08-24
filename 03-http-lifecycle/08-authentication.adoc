@@ -37,7 +37,7 @@ Each authenticator is a combination of serializers and an authentication scheme.
 
 
 == Setup
-Authentication provider comes pre-installed with `full-stack` and `api-only` boilerplates. If not installed, follow the defined steps.
+Authentication provider comes pre-installed with `fullstack` and `api` boilerplates. If not installed, follow the defined steps.
 
 Install the package from npm and automatically set it up.
 [source, bash]
@@ -184,7 +184,7 @@ await auth.loginViaId(1)
 ----
 
 ==== remember
-Anytime you can call methods like `attempt`, `login` or `loginViaId`, you can chain the `remember` method to make sure that users are logged in again even after closing their browser.
+Anytime you call methods like `attempt`, `login` or `loginViaId`, you can chain the `remember` method to make sure that users are logged in again even after closing their browser.
 
 NOTE: The `remember` method will create a token for the user inside the `tokens` table. If you ever want to revoke the long-lived session of a particular user, simply set `is_revoked` to true.
 
@@ -257,7 +257,7 @@ try {
 ----
 
 == JWT
-The link:https://jwt.io/[jwt authentication] is an industry standard to implement stateless authentication on the basis of tokens and AdonisJs has out of the box support for JWT.
+The link:https://jwt.io/[jwt authentication, window="_blank"] is an industry standard to implement stateless authentication on the basis of tokens and AdonisJs has out of the box support for JWT.
 
 NOTE: Set the `Authorization = Bearer <token>`  header in order to authenticate the request.
 
@@ -344,16 +344,16 @@ try {
 }
 ----
 
-==== tokensList
+==== listTokens
 List all JWT refresh tokens for the user.
 
 [source, js]
 ----
-await auth.tokensList()
+await auth.listTokens()
 ----
 
 == Personal API tokens
-The personal API tokens become popular by link:https://github.com/blog/1509-personal-api-tokens[Github], where a user can generate a token to be used in scripts, where it's not possible to manually type the *email* and *password*.
+The personal API tokens become popular by link:https://github.com/blog/1509-personal-api-tokens[Github, window="_blank"], to use a token for automated scripts, where it's not possible to manually type the *email* and *password* everytime.
 
 AdonisJs allows you to build applications, where your users can create personal API tokens and can use them to get authenticated.
 
@@ -410,12 +410,12 @@ try {
 }
 ----
 
-==== tokensList
+==== listTokens
 List all API tokens for the user.
 
 [source, js]
 ----
-await auth.tokensList()
+await auth.listTokens()
 ----
 
 == Switching authenticators
@@ -448,7 +448,7 @@ Usage
 ----
 Route
   .get('users/profile', 'UserController.profile')
-  .middleware('auth')
+  .middleware(['auth'])
 ----
 
 == Helpers

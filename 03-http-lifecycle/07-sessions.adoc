@@ -137,3 +137,90 @@ Empty the session store
 ----
 session.clear()
 ----
+
+== Flash messages
+Flash messages are short-lived session values for a single request only. Mainly flash messages are used to *flash form errors* but can be used for any other purpose.
+
+Taking the example of HTML forms, let's say we want to validate the user data and redirect the request back to the form with the validation errors.
+
+.Html form
+[source, edge]
+----
+<form method="POST" action="/users">
+  {{ csrfField() }}
+  <input type="text" name="username" />
+  <button type="submit"> Submit </button>
+</form>
+----
+
+Now let's register the route and validate the form data.
+
+[source, js]
+----
+const { validate } = use('Validator')
+
+Route.post('users', ({ request, session, response }) => {
+  const rules = { username: 'required' }
+  const validation = await validate(request.all(), rules)
+
+  if (validation.fails()) {
+    session.withErrors(validation.messages()).flashAll()
+    return response.redirect('back')
+  }
+
+  return 'Validation passed'
+})
+----
+
+Now inside the view, we can grab the flash data using *view helpers*.
+
+[source, edge]
+----
+<input type="text" name="username" value="{{ old('username', '') }}" />
+{{ getErrorFor('username') }}
+----
+
+=== Methods
+Below is the list of available methods
+
+==== flashAll
+Flash the request form data.
+
+[source, js]
+----
+session.flashAll()
+----
+
+==== flashOnly
+Flash only selected fields.
+
+[source, js]
+----
+session.flashOnly(['username', 'email'])
+----
+
+==== flashExcept
+Flash except selected fields.
+
+[source, js]
+----
+session.flashExcept(['password', 'csrf_token'])
+----
+
+==== withErrors
+Flash with an array of errors
+
+[source, js]
+----
+session
+  .withErrors([{ field: 'username', message: 'Error message' }])
+  .flashAll()
+----
+
+==== flash
+Flash custom object
+
+[source, js]
+----
+session.flash({ notification: 'You have been redirected back' })
+----

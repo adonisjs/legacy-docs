@@ -173,11 +173,12 @@ Render an svg file inline inside the HTML. The tag expects the relative path to 
 ----
 
 == Templating
-The templating syntax is same as the Edge. So make sure to read the link:http://edge.adonisjs.com/docs/syntax-guide[edge documentation].
+The templating syntax is same as the Edge. So make sure to read the link:http://edge.adonisjs.com/docs/syntax-guide[edge documentation, window="_blank"].
 
 == Syntax highlighting
 The plugins for the following editors are available to get syntax highlighting support for Edge.
 
-1. For link:https://github.com/poppinss/edge-sublime-syntax[Sublime text].
-2. For link:https://github.com/poppinss/edge-atom-syntax[Atom].
-3. For link:https://github.com/duyluonglc/vscode-edge[Vscode].
+[ol-shrinked]
+1. For link:https://github.com/poppinss/edge-sublime-syntax[Sublime text, window="_blank"].
+2. For link:https://github.com/poppinss/edge-atom-syntax[Atom, window="_blank"].
+3. For link:https://github.com/duyluonglc/vscode-edge[Vscode, window="_blank"].

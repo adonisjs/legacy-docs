@@ -10,9 +10,9 @@ toc::[]
 AdonisJs 4.0, known as *(dawn)* is a major release of the framework after more than a year. Each major release comes with a handful of breaking changes, which is required to keep the framework fresh and address all issues reported during the year.
 
 == Javascript movement
-This release is even special since a lot of movement has happened in ES6 and Node.js 8.0 has implemented 99% of the link:http://node.green/[language features].
+This release is even special since a lot of movement has happened in ES6 world and Node.js 8.0 has implemented 99% of the link:http://node.green/[language features, window="_blank"].
 
-Also, link:https://v8project.blogspot.in/2017/08/v8-release-61.html[V8 engine] has been updated with lots of speed improvements.
+Also, link:https://v8project.blogspot.in/2017/08/v8-release-61.html[V8 engine, window="_blank"] has been updated with lots of speed improvements.
 
 Finally, the time was to update the code base and start supporting latest features, so that we all can write simpler and expressive code while gaining all performance benefits.
 
@@ -41,9 +41,9 @@ async index () {
 ----
 
 ==== Destructuring
-ES6 allows link:https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring[Object destructuring] which can be used to pull selected values from an object. This feature is really powerful and intuitive to build API around passing parameters.
+ES6 allows link:https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring[Object destructuring, window="_blank"] which can be used to pull selected values from an object. This feature is really powerful and intuitive to build API around passing parameters.
 
-In newer of AdonisJs, all route handlers and controller actions will receive an object of values, instead of receiving multiple parameters with `request` and `response`.
+In newer version of AdonisJs, all route handlers and controller actions will receive an object of values, instead of receiving multiple parameters with `request` and `response`.
 
 Old Way
 [source, js]
@@ -67,7 +67,7 @@ The directory structure has been tweaked a bit to keep it as flat as possible an
 ==== bootstrap -> start
 The `bootstrap` directory has renamed to `start`, which means same but is simpler to understand.
 
-Also, the bunch of files like `http.js and `kernel.js` has been removed since they contained the code to wire the app and boot the server. All this has been moved to a separate package called `@adonisjs/ignitor`.
+Also, the bunch of files like `http.js` and `kernel.js` has been removed since they contained the code to wire the app and boot the server. All this has been moved to a separate package called link:https://npmjs.org/package/@adonisjs/ignitor[@adonisjs/ignitor].
 
 ==== Controllers
 The location of *Controllers* have been changed as follows
@@ -79,6 +79,14 @@ app/Http/Controllers → app/Controllers/Http
 
 Having a top level `Http` directory doesn't make sense, since the only thing we store inside it is the `Controllers`, so it's better to have `Controllers` as the top-level directory and keep Websocket and Http controllers inside it.
 
+==== Models
+The models directory has been pluralized.
+
+[source, bash]
+----
+app/Model → app/Models
+----
+
 ==== routes.js
 The `routes.js` file has been moved from `app/Http/routes.js` to `start/routes.js`. Since routes are starting point to your app, they should be in start directory.
 
@@ -86,12 +94,12 @@ The `routes.js` file has been moved from `app/Http/routes.js` to `start/routes.j
 The `kernel.js`, which stores the list of Middleware have been moved from `app/Http/kernel.js` to `start/kernel.js`.
 
 ==== storage -> tmp
-The job of `storage` directory was to hold files which are never committed to version control like Github. But the name itself was not clear that the directory holds temporary files. The rename to `tmp` makes it more clear
+The job of `storage` directory was to hold files which are never committed to version control like Github. But the name itself was not clear that the directory holds temporary files. The rename to `tmp` makes it more clear.
 
 == Routing
 
 ==== addCollection, addMember
-The `addCollection` and `addMember` methods have been removed from the route resource. This is done in the favor of keeping routes straightforward since it is never clear in which sequence a new *member* will be added via `addMember method. For example
+The `addCollection` and `addMember` methods have been removed from the route resource. This is done in the favor of keeping routes straightforward since it is never clear in which sequence a new *member* will be added via `addMember` method. For example
 
 [source, js]
 ----
@@ -102,6 +110,13 @@ Route
 
 Now the resource will create a route called `users/:id` as part of the resourceful routes and adding a new member will add `users/active` route, now it's unclear which action will be called, since `users/:id` will catch all the routes including `users/active`.
 
+Instead, you should manually define the extra routes.
+
+[source, js]
+----
+Route.get('users/active', 'UserController.getActive')
+Route.resource('users', 'UserController')
+----
 
 ==== group
 The group method signature has been changed and now it's optional to pass the name.
@@ -162,11 +177,11 @@ Route.get('users/:id', function ({ params }) {
 ----
 
 == Views
-The view layer of AdonisJs now uses link:http://edge.adonisjs.com[Edge] over link:https://mozilla.github.io/nunjucks/[nunjucks] which is a home-grown template engine written for AdonisJs itself.
+The view layer of AdonisJs now uses link:http://edge.adonisjs.com[Edge, window="_blank"] over link:https://mozilla.github.io/nunjucks/[nunjucks, window="_blank"] which is a home-grown template engine written for AdonisJs itself.
 
 Extending the core of nunjucks was so painful that adding new *tags* and *helpers* was becoming hard. Edge has a very minimal developer API and it's pretty straightforward to extend the core.
 
-Make sure to check link:http://edge.adonisjs.com/docs/getting-started[edge guides] to learn more about it.
+Make sure to check link:http://edge.adonisjs.com/docs/getting-started[edge guides, window="_blank"] to learn more about it.
 
 ==== response.sendView
 The `response.sendView` function has been removed and instead a `view` instance is passed to all the HTTP requests.
@@ -236,7 +251,7 @@ Route.get('/', async ({ auth }) => {
 Since the `tokens` table now keep all sort of tokens like *remember tokens*, *jwt refresh tokens*. It is more convenient to use the `User` model directly and revoke the required tokens.
 
 == Models
-A bunch of changes had been made to link:https://github.com/adonisjs/adonis-lucid/blob/develop/CHANGELOG.md#400-2017-07-16[lucid], the majority of them are improvements, bug fixes, and much-awaited features.
+A bunch of changes had been made to link:https://github.com/adonisjs/adonis-lucid/blob/develop/CHANGELOG.md#400-2017-07-16[lucid, window="_blank"], the majority of them are improvements, bug fixes, and much-awaited features.
 
 Here is the list of breaking changes.
 
@@ -262,7 +277,7 @@ class User extends Model {
 ----
 
 ==== dateFormat
-The `dateFormat` getter has been removed in the favor of alternate approach to handling dates. Read link:https://adonisjs.svbtle.com/curious-case-of-date-formats-in-data-models[this blog post] to learn more about it.
+The `dateFormat` getter has been removed in the favor of alternate approach to handling dates. Read link:https://adonisjs.svbtle.com/curious-case-of-date-formats-in-data-models[this blog post, window="_blank"] to learn more about it.
 
 ==== useTransaction
 In order to run model operations inside a transaction, the `useTransaction` method was used. In 4.0, you pass the transaction object directly to the `save` and `create` methods.
@@ -376,3 +391,85 @@ await user.cars().attach([1], (pivotModel) => {
 ----
 
 The new signature makes it easier to add conditional attributes. For example: When calling `attach` with 3 cars and want to set a different `current_owner` attribute to each car. The callback approach makes it easier to do that since the callback will be invoked for `cars.length` number of times.
+
+== Factories
+The database factories API is tweaked a little to make it more explicit.
+
+==== create
+Earlier, the `create` method can create one or many rows based upon the number passed to it. Now you have to call `createMany` to create multiple rows.
+
+This makes sure that the `create` method always returns the created model instance and `createMany` always returns an array of created model instances.
+
+Earlier
+[source, js]
+----
+// create one
+Factory.model('App/Models/User').create()
+
+// create many
+Factory.model('App/Models/User').create(3)
+----
+
+Now
+[source, js]
+----
+// create one
+Factory.model('App/Models/User').create()
+
+// create many
+Factory.model('App/Models/User').createMany(3)
+----
+
+==== make
+The `make` method has been changed accordingly and `makeMany` method has been introduced.
+
+== Sessions
+The way to interact with sessions has been changed too. All of the sessions related code has been extracted from core to an individual repo. Now API only servers can easily remove sessions from their app.
+
+==== Using sessions
+
+Earlier
+[source, js]
+----
+Route.get('/', function * (request) {
+  yield request.session.put('username', 'virk')
+})
+----
+
+Now
+[source, js]
+----
+Route.get('/', ({ session }) => {
+  session.put('username', 'virk')
+})
+----
+
+==== Flash messages
+The flash messages signature has also been changed
+
+Earlier
+[source, js]
+----
+Route.get('/', function * (request) {
+  yield request.withAll().flash()
+
+  // errors
+  yield request
+    .withAll()
+    .andWith({ error: { message: 'Some error' } })
+    .flash()
+})
+----
+
+Now
+[source, js]
+----
+Route.get('/', ({ session }) => {
+  session.flashAll()
+
+  // errors
+  yield session
+    .withErrors({ message: 'Some error' })
+    .flashAll()
+})
+----

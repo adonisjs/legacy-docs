@@ -10,7 +10,7 @@ toc::[]
 Once you have got your database schema ready with link:migrations[migrations], the next step is to add some data to get started. This is where *database seeds* and *factories* comes into the picture.
 
 == Seeds
-Seeds are Javascript classes with a `run` method on them. Now you are free to write any database related operation inside this method.
+Seeds are Javascript classes with a `run` method on them. You are free to write any database related operation inside this method.
 
 Just like migrations, you create a seed file and then execute it using command line command.
 
@@ -42,7 +42,7 @@ class UserSeeder {
 module.exports = UserSeeder
 ----
 
-Now you can run the seed file by calling `adonis seed` command. Based upon whether you have users inside the `users` table or not, it will just log them.
+Run the seed file by calling `adonis seed` command. Based upon whether you have users inside the `users` table or not, it will just log them.
 
 Since you can write any database related code inside your seed files and execute them from command line is really helpful in off loading some tasks from your actual application code.
 
@@ -135,7 +135,7 @@ Below is the list of available commands with their usage and description.
 == Usage without Lucid
 You can also make use of link:query-builder[Database provider] if you have decided not to make use of link:lucid[Lucid models].
 
-The blueprints are define the same way, but instead you make use of the `table name` over the model name.
+The blueprints are defined the same way, but instead you make use of the `table name` over the model name.
 
 [source, js]
 ----
@@ -158,7 +158,7 @@ run () {
 ----
 
 ==== table
-A different table name can also be define at runtime.
+A different table name can also be defined at runtime.
 
 [source, js]
 ----
@@ -245,7 +245,7 @@ await Factory
 ----
 
 == Custom data
-All methods `make`, `makeMany`, `create` and `createMany` can pass an custom data object to the blueprints. For example
+All methods `make`, `makeMany`, `create` and `createMany` accepts a custom data object, which is passed directly to the blueprints. For example
 
 [source, js]
 ----
@@ -267,7 +267,7 @@ Factory.blueprint('App/Models/User', async (faker, i, data) => {
 ----
 
 == Faker API
-The `faker` object passed to factory blueprint is a reference to link:http://chancejs.com[chancejs] library. Make sure to read their documentation for list of available methods and properties.
+The `faker` object passed to factory blueprint is a reference to link:http://chancejs.com[chancejs, window="_blank"] library. Make sure to read their documentation for list of available methods and properties.
 
 == FAQ's
 Since factories and seeds fits into many different use cases, the chances are you may get confused on how and when to use them. So here is the list of some frequently asked questions.
@@ -280,5 +280,10 @@ For example: you can make use of seed files to import data from a different app 
 2. *Can I use factories when writing tests?* +
   Yes. Just import the factory provider and use it.
 
-3. *How to run only select seed files?* +
-  You can pass `--files=` with a list of comma seperated file names to `adonis seed` command. It will make use to run only those files.
+3. *How to run only selected seed files?* +
+  You can pass `--files` with a list of comma seperated file names to `adonis seed` command. It will make sure to run only those files.
++
+[source, bash]
+----
+adonis seed --files='UsersSeeder.js, PostsSeeder.js'
+----

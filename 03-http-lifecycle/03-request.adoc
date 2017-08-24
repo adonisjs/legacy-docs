@@ -7,7 +7,7 @@ category: http-lifecycle
 
 toc::[]
 
-This guide gives an outline on how to make use of the HTTP link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Request/index.js[Request] object to read data for a request.
+This guide gives an outline on how to make use of the HTTP link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Request/index.js[Request, window="_blank"] object to read data for a request.
 
 AdonisJs passes the current HTTP request object as part of the `context` which is sent to all route handlers and middleware.
 
@@ -19,7 +19,7 @@ Route.get('/', ({ request }) => {
 
 TIP: The Node.js raw `req` object can be accessed as `request.request`.
 
-We used link:https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment[ES6 destructuring] to get the `request` object from context.
+We used link:https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment[ES6 destructuring, window="_blank"] to get the `request` object from context.
 
 == Request body
 The request object offers a bunch of helpful methods to read the request body. First, make sure that you have installed the bodyparser middleware.
@@ -92,7 +92,7 @@ Returns an object with `only` specified keys
 
 [source, js]
 ----
-const body = request.only('username', 'email', 'age')
+const body = request.only(['username', 'email', 'age'])
 ----
 
 ==== except
@@ -100,7 +100,7 @@ The opposite of `only` and returns everything except defined keys.
 
 [source, js]
 ----
-const body = request.except('csrf_token', 'submit')
+const body = request.except(['csrf_token', 'submit'])
 ----
 
 ==== input
@@ -116,7 +116,7 @@ const drink = request.input('drink', 'coffee')
 
 
 == Request collection
-Quite often you want to handle HTML forms that submit an array of data over key/value pairs. For example A form to create multiple users at once.
+Quite often you want to handle HTML forms that submit an array of data over key/value pairs. *For example:* Form to create multiple users at once.
 
 [source, html]
 ----
@@ -134,19 +134,19 @@ Let's say we want to get the username and age inside the controller.
 
 [source, js]
 ----
-const users = request.only('username', 'age')
+const users = request.only(['username', 'age'])
 
 // output
 { username: ['virk', 'nikk'], age: [26, 25] }
 ----
 
-The above piece of data is something that you cannot save to the database directly since it is not in the right format.
+The above piece of data is something that you cannot save to the database directly, since it is not in the right format.
 
 Using `request.collect` we can get it formatted out of the box.
 
 [source, js]
 ----
-const users = request.collect('username', 'age')
+const users = request.collect(['username', 'age'])
 
 // output
 [{ username: 'virk', age: 26 }, { username: 'nikk', age: 25 }]
@@ -215,7 +215,7 @@ const plainCookies = request.plainCookies()
 ----
 
 == Content negotiation
-link:https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation[Content negotiation] is a way for server and client to decide upon the best response type to be returned from the server.
+link:https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation[Content negotiation, window="_blank"] is a way for server and client to decide upon the best response type to be returned from the server.
 
 NOTE: Content negotiation can also be done on the basis on route formats. Learn more about it link:routing#_route_formats[here]
 
@@ -315,7 +315,7 @@ if (request.ajax()) {
 ----
 
 ==== pjax
-link:https://github.com/defunkt/jquery-pjax[Pjax] is an evolved way to make use of Ajax to deliver better user experience on traditional apps. In rails world, it is known as Turbolinks.
+link:https://github.com/defunkt/jquery-pjax[Pjax, window="_blank"] is an evolved way to make use of Ajax to deliver better user experience on traditional apps. In rails world, it is known as Turbolinks.
 
 This methods looks at `X-PJAX` header to identify if request is pjax or not.
 [source, js]
@@ -362,7 +362,7 @@ if (request.hasBody()) {
 ----
 
 ==== is
-The is method returns the best matching content type for the current request. The check is entirely based upon the `content-type` header.
+The `is` method returns the best matching content type for the current request. The check is entirely based upon the `content-type` header.
 
 [source, js]
 ----

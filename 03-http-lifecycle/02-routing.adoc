@@ -223,7 +223,7 @@ The `as` method will give your route a name. Now inside your template, you can r
 ----
 
 == Route formats
-Route formats opens up a new way for link:https://en.wikipedia.org/wiki/Content_negotiation[Content negotiation], where you can accept the response format as part of the URL.
+Route formats opens up a new way for link:https://en.wikipedia.org/wiki/Content_negotiation[Content negotiation, window="_blank"], where you can accept the response format as part of the URL.
 
 Route format is a contract between the client and the server on which type of response to be created. For example:
 
@@ -272,7 +272,7 @@ Route
 
 Passing `true` as the second parameter will make sure that the client defines one of the expected formats, otherwise, a 404 is thrown.
 
-== Route Resources
+== Route resources
 If you like building web apps around REST conventions then *route resources* will help you in defining conventional routes by writing less code.
 
 NOTE: It is required to bind a *Controller* to the resource. Binding a closure will throw exception.
@@ -303,7 +303,7 @@ Nested resources can be created with `dot (.)` notation.
 Route.resource('posts.comments', 'CommentsController')
 ----
 
-=== Filtering Resources
+=== Filtering resources
 You can limit the number of routes a resource should create by chaining handful of methods.
 
 ==== apiOnly
@@ -352,7 +352,7 @@ Since attaching auth middleware to all the routes is not desired, you can custom
 ----
 Route
   .resource('users', 'UsersController')
-  .middleware(function (route) {
+  .middleware((route) => {
     if (['users.store', 'users.update', 'users.delete'].indexOf(route.name) > -1) {
       return ['auth']
     }

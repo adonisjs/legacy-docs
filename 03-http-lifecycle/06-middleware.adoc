@@ -13,6 +13,7 @@ Features like *sessions*, *authentication*, etc makes extensive use of the middl
 
 Middleware can perform one/all of the following operations
 
+[ol-shrinked]
 1. Decorate HTTP context and add values to it.
 2. Respond to a given request, without reaching the route action.
 3. Or deny requests by throwing errors.
@@ -21,9 +22,9 @@ Middleware can perform one/all of the following operations
 All of the middleware are registered inside `start/kernel.js` file and seperated into 2 different categories.
 
 === Global middleware
-The global middleware are executed for each request that has a register route and defined under the `globalMiddleware` array.
+The global middleware are executed for each request that has a registered route and defined under the `globalMiddleware` array.
 
-NOTE: Middleware are executed in sequence they are defined.
+NOTE: Middleware are executed in the sequence they are defined.
 
 [source, js]
 ----
@@ -33,7 +34,7 @@ const globalMiddleware = [
 ----
 
 === Named middleware
-Named middleware is a object of key/value of pairs, and you can define they keys to individual routes or a group of routes to apply certain middleware.
+Named middleware is an object of key/value pairs, and you can define the keys to individual routes or a group of routes to apply certain middleware.
 
 Named middleware are used, when you want to perform certain actions on selected routes only.
 
@@ -53,12 +54,12 @@ Route
   .middleware(['auth'])
 ----
 
-Also you can apply multiple middleware to a route and they will executed in the sequence they are passed.
+Also you can apply multiple middleware to a route and they will be executed in the sequence they are passed.
 
 === Middleware Props
 To keep middleware configurable at runtime. AdonisJs makes it possible to pass *props to named middleware*. For example: Using the auth middleware with different authentication scheme for different routes.
 
-TIP: Middleware uses the link:https://www.npmjs.com/package/haye#pipe-expression[pipe expression] to define props.
+TIP: Middleware uses the link:https://www.npmjs.com/package/haye#pipe-expression[pipe expression, window="_blank"] to define props.
 
 [source, js]
 ----
@@ -79,7 +80,7 @@ Route
 Multiple props can be passed as `auth:session,jwt`.
 
 == Creating Middleware
-You can also create middleware to add application specific logic the HTTP lifecycle. All project related middleware are stored inside `app/Middleware` directory.
+You can also create middleware to add application specific logic to the HTTP lifecycle. All project related middleware are stored inside `app/Middleware` directory.
 
 You can use the `adonis` command to create a middleware for you.
 
@@ -117,7 +118,7 @@ module.exports = CountryDetector
 === Registering middleware
 Let's register this as a global middleware, so that we can fetch country for all the users.
 
-.start/kernel.sj
+.start/kernel.js
 [source, js]
 ----
 const globalMiddleware = [

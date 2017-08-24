@@ -68,6 +68,6 @@ Route.get('/', async ({ view }) => {
 })
 ----
 
-The fundamental difference is that the HTTP view instance contains a bunch of request specific locals like *request*, *authenticated user* etc.
+The fundamental difference is that, the HTTP view instance contains a bunch of request specific locals like *request*, *authenticated user* etc.
 
 So always make sure to use the HTTP view instance during request lifecycle.
