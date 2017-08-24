@@ -1,0 +1,59 @@
+---
+title: Encryption and Hashing
+permalink: encryption-and-hashing
+category: cookbooks
+---
+= Encryption and Hashing
+
+toc::[]
+
+AdonisJs comes with a couple of providers for *hashing values* and *encrypting data*. Hashing values are different from encryption since hashed values cannot be decrypted once encrypted that is not the case with encryption.
+
+== Encrypting Data
+
+AdonisJs encryption provider makes use of link:https://nodejs.org/api/crypto.html[Node.js crypto module, window="_blank"] to encrypt and decrypt values.
+
+NOTE: Make sure that *appKey* inside `config/app.js` is defined before you can encrypt values.
+
+==== encrypt(value)
+[source, javascript]
+----
+const Encryption = use('Encryption')
+const encrypted = Encryption.encrypt('hello world')
+----
+
+==== decrypt
+[source, javascript]
+----
+const Encryption = use('Encryption')
+const decrypted = Encryption.decrypt('encrypted value')
+----
+
+== Hashing Values
+AdonisJs hash provider makes use of link:https://en.wikipedia.org/wiki/Bcrypt[bcrypt, window="_blank"] to hash values which is a slow algorithm to hash/verify a value.
+
+Bcrypt is commonly used to hash passwords, and since it is a slow algorithm, it makes it expensive(if not impossible) for attackers to crack a password. The slowness of the algorithm is based upon the number of *rounds* to be executed before returning the hashed value.
+
+==== make(value, [rounds=10])
+[source, javascript]
+----
+const Hash = use('Hash')
+const safePassword = yield Hash.make(request.input('password'))
+
+// or
+const safePassword = yield Hash.make(request.input('password'), 20)
+----
+
+==== verify(value, hashedValue)
+Since you cannot decrypt a hash, you can verify the user input against the previously hashed value.
+
+[source, javascript]
+----
+const Hash = use('Hash')
+const isSame = yield Hash.verify('plain-value', 'hashed-value')
+
+if (isSame) {
+  // ...
+}
+----
+

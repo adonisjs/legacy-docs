@@ -1,0 +1,169 @@
+---
+title: File uploads
+permalink: file-uploads
+category: cookbooks
+---
+= File uploads
+
+toc::[]
+
+File uploads have been re-imagined in 4.0 and gives you enough ways to process files securely and without wasting the server resources.
+
+== Basic example
+Let's see how to handle files uploaded by HTML form.
+
+[source, edge]
+----
+<form method="POST" action="upload" enctype="multipart/form-data">
+  <input type="file" name="profile_pic" />
+  <button type="submit"> Submit </button>
+</form>
+----
+
+Registering route
+
+[source, js]
+----
+const Helpers = use('Helpers')
+
+Route.post('upload', async ({ request }) => {
+  const profilePic = request.file('profile_pic', {
+    types: ['image'],
+    size: '2mb'
+  })
+
+  await profilePic.move(Helpers.tmpPath('uploads'))
+
+  if (!profilePic.moved()) {
+    return profilePic.error()
+  }
+  return 'File moved'
+})
+----
+
+[ol-spaced]
+1. The `request.file` method accepts two arguments, as *field name* and *an object of validations* to be performed, before moving the file.
+2. Next, we call `profilePic.move` method, which attempts to move the file to the defined directory.
+3. Finally, we check whether the move operation was successful or not using `profilePic.moved()` method and return errors (if any).
+
+== Multiple file uploads
+Uploading multiple files at a time is as simple as uploading one file. The `request.file` method returns a *File jar* in case of multiple files.
+
+[source, edge]
+----
+<form method="POST" action="upload" enctype="multipart/form-data">
+  <input type="file" name="profile_pics[]" multiple />
+  <button type="submit"> Submit </button>
+</form>
+----
+
+[source, js]
+----
+const Helpers = use('Helpers')
+
+Route.post('upload', async ({ request }) => {
+  const profilePics = request.file('profile_pics', {
+    types: ['image'],
+    size: '2mb'
+  })
+
+  await profilePics.moveAll(Helpers.tmpPath('uploads'))
+
+  if (!profilePics.movedAll()) {
+    return profilePics.errors()
+  }
+})
+----
+
+The route handler code has been changed a bit in case of multiple file uploads.
+
+[ol-spaced]
+1. Instead of using `move`, we make use of `moveAll` method. Which will move all files to the defined directory in parallel.
+2. Also other methods has been changed as `moved -> movedAll` and `error -> errors`.
+
+=== Moved list
+Since some files have been moved succesfully, we can optimize our workflow by processing those file or removing them completely, so that there are no duplicate files.
+
+[source, js]
+----
+const removeFile = Helpers.promisify(fs.unlink)
+
+if (!profilePics.movedAll()) {
+  const movedFiles = profilePics.movedList()
+
+  await Promise.all(movedFiles.map((file) => {
+    return removeFile(path.join(file._location, file._fileName))
+  }))
+
+  return profilePics.errors()
+}
+----
+
+== Errors
+Below is the list of errors format, that will be returned in case of errors
+
+.Type error
+[source, js]
+----
+{
+  fieldName: "profile_pic",
+  clientName: "GitHub-Mark.ai",
+  message: "Invalid file type postscript or application. Only image is allowed",
+  type: "type"
+}
+----
+
+.Size error
+[source, js]
+----
+{
+  fieldName: "profile_pic",
+  clientName: "adonis_landing.sketch",
+  message: "File size should be less than 2MB",
+  type: "size"
+}
+----
+
+And multiple file uploads `errors` method will return an array of errors in same format.
+
+== Streaming files
+Majority of file uploading libraries/frameworks process the files for multiple times when you want to stream them to an external service like *s3*.
+
+Here's how majority of file uploading workflows are designed.
+
+1. Process all the request files and save them into the `tmp` directory.
+2. Move that file from the `tmp` directory to the destination directory.
+3. Use *aws sdk* and then stream the file to s3.
+
+This process wastes a bunch of server resources, since a single is getting *read* and *written* for multiple times. On the other hand, Adonisjs makes the process of streaming files smooth and efficient.
+
+=== Disable auto processing
+The config file `config/bodyparser.js` has a section to disable auto-processing of files for a number of selected routes.
+
+[source, js]
+----
+processManually: ['upload']
+----
+
+The `processManually` option takes a array of routes or route patterns, for which files will not be processed automatically.
+
+=== Process inside the controller
+Next thing we need to do is call the `process` method inside the controller/route handler.
+
+[source, js]
+----
+Route.post('upload', async ({ request }) => {
+
+  request.multipart.file('profile_pic', {}, async (file) => {
+    file.stream // readable stream
+  })
+
+  await request.multipart.process()
+})
+----
+
+NOTE: Always make sure to call `await request.multipart.process()` to start processing the files.
+
+The `request.multipart.file` method let's you select a specific and you can access the readable stream via `file.stream` property. Now you are free to consume the stream by piping it to *s3* or any other service you want.
+
+The entire process is asynchronous and process the file(s) only once.

@@ -1,0 +1,267 @@
+---
+title: Validator
+permalink: validator
+category: cookbooks
+---
+= Validator
+
+toc::[]
+
+AdonisJs makes it so simple to validate the users input with the help of dedication validation provider. By the end of this guide you will know how to validate the data *manually* or via *route validators*.
+
+NOTE: Adonisjs validator using link:http://indicative.adonisjs.com/[indicative] under the hood, so make sure to read the official documentation whenever required.
+
+== Setup
+The validator is not installed by default, so follow the below instructions to get started.
+
+=== Install
+[source, bash]
+----
+adonis install @adonisjs/validator
+----
+
+=== Registering provider
+Next, you need to register the provider inside `start/app.js` file.
+
+[source, bash]
+----
+const providers = [
+  '@adonisjs/validator/providers/ValidatorProvider'
+]
+----
+
+And that's all 🎉
+
+== Validating user input
+Let's start the example of validating user input received via HTML form.
+
+[source, edge]
+----
+<form method="POST" action="{{ route('UserController.store') }}">
+  <div>
+    <input type="text" name="email" />
+  </div>
+
+  <div>
+    <input type="text" name="password" />
+  </div>
+
+  <button type="submit"> Submit </button>
+</form>
+----
+
+Next, register the route and controller to handle the form submission and use the validator to validate the data.
+
+[source, js]
+----
+Route.post('users', 'UserController.store')
+----
+
+[source, js]
+----
+const { validate } = use('Validator')
+
+class UserController {
+
+  async store ({ request, session, response }) {
+    const rules = {
+      email: 'required|email|unique',
+      password: 'required'
+    }
+
+    const validation = await validate(request.all(), rules)
+
+    if (validation.fails()) {
+      session
+        .withErrors(validation.messages())
+        .flashExcept(['password'])
+
+      return response.redirect('back')
+    }
+
+    return 'Validation passed'
+  }
+}
+
+module.exports = UserController
+----
+
+Let's understand the above piece of code into small steps.
+
+1. First we have defined the `rules` schema.
+2. Next, we make use of the `validate` method to validate the request data with our defined rules.
+3. If validation fails, we will redirect the user back to the form and flash all the errors back.
+
+=== Showing flash errors
+Now quickly modify the HTML form to display the flash messages, which are set when validation fails.
+
+[source, edge]
+----
+<form method="POST" action="{{ route('UserController.store') }}">
+  <div>
+    <input type="text" name="email" value="{{ old('email', '') }}" />
+    {{ elIf('<span>$self</span>', getErrorFor('email'), hasErrorFor('email')) }}
+  </div>
+
+  <div>
+    <input type="text" name="password" />
+    {{ elIf('<span>$self</span>', getErrorFor('password'), hasErrorFor('password')) }}
+  </div>
+
+  <button type="submit"> Submit </button>
+</form>
+----
+
+== Validator methods
+Below is the list of available methods.
+
+==== validate(data, rules, [message])
+Validate data with defined rules. Optionally, you can define custom link:http://indicative.adonisjs.com/#indicative-basics-custom-messages[error messages].
+
+[source, js]
+----
+const { validate } = use('Validator')
+
+const validation = await validate(data, rules)
+if (!validation.fails()) {
+  return validation.messages()
+}
+----
+
+==== validateAll
+Same as `validate` but validate's all the fields, whereas the validate method stops on first error.
+
+[source, js]
+----
+const { validateAll } = use('Validator')
+const validation = await validateAll(data, rules)
+----
+
+==== sanitize(data, rules)
+Sanitize data, this method will return a new object with sanitized data.
+
+[source, js]
+----
+const { sanitize } = use('Validator')
+const data = sanitize(request.all(), rules)
+----
+
+==== is
+Returns a reference to link:http://indicative.adonisjs.com/#indicative-raw-validations[indicative raw validator].
+
+[source, js]
+----
+const { is } = use('Validator')
+
+if (is.email('foo@bar.com')) {
+}
+----
+
+==== sanitizor
+Returns a reference to link:http://indicative.adonisjs.com/#indicative-sanitizor-raw-sanitizor[indicative raw sanitizor].
+
+[source, js]
+----
+const { sanitizor } = use('Validator')
+const slug = sanitizor.slug('My first blog post')
+----
+
+== Route validator
+Majority of times the data validation happens during the normal HTTP request/response lifecycle, where you end up writing the same amount of code inside each controller.
+
+The route validator makes the process of manual validation a bit easier, by defining *Route validator*.
+
+[source, js]
+----
+Route
+  .post('users', 'UserController.store')
+  .validator('StoreUser')
+----
+
+All validators lives inside `app/Validators` directory. Let's create the `StoreUser` validator by using the `adonis` command.
+
+[source, bash]
+----
+adonis make:validator StoreUser
+----
+
+Output
+[source, bash]
+----
+create: app/Validators/StoreUser.js
+----
+
+All we need to do is, define the rules on the validator
+
+[source, js]
+----
+'use strict'
+
+class StoreUser {
+  get rules () {
+    return {
+      email: 'required|email|unique',
+      password: 'required'
+    }
+  }
+}
+
+module.exports = StoreUser
+----
+
+That's all! If the validation will fail, the validator will flash the error message back to the form, like we did in our previous example.
+
+Not only that, it will detect if the request has `Accept: application/json` header set, it will return the errors back in JSON format.
+
+=== Sanitizing user input
+Also you can sanitize the user input by defining the `sanitizationRules`. The sanitization happens before the validation.
+
+[source, js]
+----
+class StoreUser {
+  get sanitizationRules () {
+    email: 'normalize_email',
+    age: 'to_int'
+  }
+}
+
+module.exports = StoreUser
+----
+
+=== Handling validation failure
+Since every application is structured differently, automatic failure handling may be not something you want. You can handle failures yourself by defining `fails` method on validator class.
+
+[source, js]
+----
+class StoreUser {
+  await fails (errorMessages) {
+    return this.ctx.response(errorMessages)
+  }
+}
+
+module.exports = StoreUser
+----
+
+=== Authorization
+Quite often you want to perform couple of checks to make sure that the user is authorized to take the desired action. Same can be done by defining `authorize` method on validator class.
+
+NOTE: It is important to return a `boolean` from the authorize method to tell the validator, where or not to forward the request to your controller.
+
+[source, js]
+----
+class StoreUser {
+  await authorize () {
+    if (!isAdmin) {
+      this.ctx.response.unauthorized('Not authorized')
+      return false
+    }
+
+    return true
+  }
+}
+
+module.exports = StoreUser
+----
+
+=== Request context
+All route validators can access the current request context via `this.ctx`.
