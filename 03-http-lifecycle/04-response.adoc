@@ -7,7 +7,7 @@ category: http-lifecycle
 
 toc::[]
 
-This guide gives an outline on how to make use of the HTTP link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Response/index.js[Response] object to make the response.
+This guide gives an outline on how to make use of the HTTP link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Response/index.js[Response, window="_blank"] object to make the response.
 
 AdonisJs passes the current HTTP response object as part of the `context` which is sent to all route handlers and middleware.
 
@@ -31,7 +31,7 @@ Route.get('/', async ({ response }) => {
 })
 ----
 
-Also, you can use `response.json` which is same as `response.send` but more expressive that the response is in JSON format.
+Also, you can use `response.json` which is same as `response.send` but more explicit that the response is in JSON format.
 
 == Making response
 As of 4.0, you can also `return` values from the route closure or controller method, instead of using dedicated `response` methods.
@@ -222,7 +222,7 @@ Force download the file
 
 [source, js]
 ----
-response.download(
+response.attachment(
   Helpers.tmpPath('uploads/avatar.jpg')
 )
 ----
@@ -231,7 +231,7 @@ With a custom name
 
 [source, js]
 ----
-response.download(
+response.attachment(
   Helpers.tmpPath('uploads/avatar.jpg'),
   'myAvatar.jpg'
 )

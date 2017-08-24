@@ -7,9 +7,9 @@ category: lucid
 
 toc::[]
 
-Relationships are the core of data driven apps. Whether is about maintaing *posts* written by a given *author* or *cars* from a given *company*.
+Relationships are the backbone of data driven apps. Whether its about maintaing *posts* written by a given *author* or *cars* from a given *company*.
 
-Lucid expressive API makes the process of associating and fetching these relations so simple and intuitive even without touching the SQL schema.
+Lucid expressive API makes the process of associating and fetching these relations so simple and intuitive, without even touching the SQL schema.
 
 == Basic example
 Let’s take the most common scenario of a User and a Profile model. Where every user in your database can have a social profile. We call this a *one to one relationship*.
@@ -351,7 +351,7 @@ class Country extends Model {
 }
 ----
 
-NOTE: The `posts` parameter passed as the 2nd parameter is the reference to the `posts` method on the User model and is always required to relationship to work.
+NOTE: The `posts` parameter passed as the 2nd parameter is the reference to the `posts` method on the User model and is always required for relationship to work.
 
 == Querying data
 Querying related data is pretty straight forward with the help of the intuitive API lucid offers. The API is consistent for all types of relationships.
@@ -419,7 +419,7 @@ for (let user of users) {
 
 The above is the worst thing you can do. Since it will make *n+1* queries to the database, where *n* is the number of users. Also all of the queries will be made in sequence 😨
 
-On the other hand eagerloading will make total of 2 database queries to fetch all the users and their related posts.
+On the other hand eagerloading will make a total of 2 database queries to fetch all the users and their related posts.
 
 [source, js]
 ----

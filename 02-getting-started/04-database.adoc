@@ -9,10 +9,10 @@ toc::[]
 
 When getting started with any web framework, the first question one often ask is, *how to create data-driven applications?*. By the end of this guide, you will learn how easy AdonisJs makes to interact with SQL databases.
 
-TIP: Watch this video on youtube, if you prefer a Screencast over text.
+// TIP: Watch this video on youtube, if you prefer a Screencast over text.
 
 == Setup
-The database provider is not configured with the default application blueprint, but setting it up as simple as installing it from
+The database provider is not configured with the *slim application blueprint*, but setting it up as simple as installing it from
 npm.
 
 [source, bash]
@@ -46,7 +46,7 @@ const aceProviders = [
 ----
 
 === Configuration
-The database package *(lucid)* supports all popular SQL databases out of the box. You can learn more about it link:[here]
+The database package *(lucid)* supports all popular SQL databases out of the box. You can learn more about it link:database#_supported_databases[here]
 
 By default, the configuration file (config/database.js) makes use of `sqlite` database and needs a SQLite driver to be installed from npm.
 
@@ -86,7 +86,7 @@ class BlogPostSchema extends Schema {
     this.create('blog_posts', (table) => {
       table.increments()
       table.string('title')
-      table.longText('body')
+      table.text('body', 'longtext')
       table.timestamps()
     })
   }
@@ -102,7 +102,7 @@ module.exports = BlogPostSchema
 The migration file has two methods
 
 up::
-The `up` method is used to take the action on a table. It can be creating a new table or altering the existing up.
+The `up` method is used to take the action on a table. It can be creating a new table or altering the existing table.
 
 down::
 The `down` method is the reverse of the up action. When `up` method creates a table, you simply drop it inside the down method.
@@ -176,7 +176,7 @@ Now if you refresh the browser link:http://localhost:3333/posts[localhost:3333/p
 This guide was just an introduction to the Database provider, there is a lot you can do when it comes to data-driven applications. Consider learning more about
 
 [ol-shrinked]
-1. link:[Database query builder]
-2. link:[Lucid models]
-3. link:[Seeds & factories]
+1. link:query-builder[Database query builder]
+2. link:lucid[Lucid models]
+3. link:seeds-and-factories[Seeds & factories]
 

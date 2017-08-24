@@ -36,7 +36,7 @@ module.exports = User
 Now everytime we create a user, the `beforeCreate` hook closure will be executed with the current instance of the user and will hash the password.
 
 === Hook file
-It's always nice to keep extract pieces of code into their own files. AdonisJs comes with a dedicated directory `app/Models/Hooks` to store model hooks.
+It's always nice to keep extracted pieces of code into their own files. AdonisJs comes with a dedicated directory `app/Models/Hooks` to store model hooks.
 
 Let's use `adonis make:hook` command to create a hook for us.
 
@@ -110,4 +110,5 @@ Below is the list of life cycle events and their description
 | beforeDelete | Before removing a row.
 | afterDelete | After a row has been removed.
 | afterFind | After a single row is fetched from the database.
+| afterFetch | After the `fetch` method is executed. The hook method will receive an array of model instance.
 |====

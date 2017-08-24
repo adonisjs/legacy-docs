@@ -41,7 +41,7 @@ Whereas it is recommended to use `adonis serve --dev` in development.
 
 == The app directory
 
-The `app` directory is not created by default, but as you will start developing your application, all of the code will go inside this directory only.
+The `app` directory stores all of your application code like *Controllers*, *Models*, etc.
 
 AdonisJs has a concept of autoloading the `app` directory. Which means instead of requiring files with the relative path, you can require files with a namespace. For example:
 
@@ -66,4 +66,29 @@ With autoloading in place, it can be required as
 const UserService = use('App/Services/User')
 ----
 
-The benefit of the latter approach is that the *namespace* always remains same and you never have to deal with relative paths by typing `../`. Learn more about link:autoloading[autoloading]
+The benefit of the latter approach is that the *namespace* always remains same and you never have to deal with relative paths by typing `../`.
+// Learn more about link:autoloading[autoloading]
+
+== Views
+The application views are stored inside `resources/views` directory. Each view file ends with `.edge` and uses link:http://edge.adonisjs.com/[edge, window="_blank"] as the templating engine.
+
+You can create new views using the `adonis make:view` command.
+
+[source, bash]
+----
+adonis make:view welcome
+----
+
+Or nested views
+
+[source, bash]
+----
+adonis make:view users.list
+----
+
+== Static assets
+The `public` directory is your app is dedicated to store all of the frontend related assets like *css*, *images* or *javascript files*.
+
+You access the these files without adding `/public` to the URL. For example:
+
+The `public/style.css` file can be accessed by vising link:http://127.0.0.1:3333/style.css[127.0.0.1:3333/style.css]

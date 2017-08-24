@@ -45,7 +45,7 @@ const users = await User
   .fetch()
 ----
 
-At this point *Lucid* will load all the users and their posts, but doesn't care on how to present them in JSON format, but instead pass all that data for a serializer, which can be accessed from `users` constant.
+At this point *Lucid* will load all the users and their posts, but doesn't care on how to present them in JSON format, but instead pass all the data to the serializer, which can be accessed from `users` constant.
 
 Now when you will call `toJSON` on `users`. The vanilla serializer will format the data as follows.
 

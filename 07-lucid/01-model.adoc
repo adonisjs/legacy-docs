@@ -7,7 +7,7 @@ category: lucid
 
 toc::[]
 
-Lucid is an implementation of link:https://en.wikipedia.org/wiki/Active_record_pattern[Active Record] pattern in Javascript. If you are coming from the *Laravel* or the *Rails* world, then you will be quite familiar with it.
+Lucid is an implementation of link:https://en.wikipedia.org/wiki/Active_record_pattern[Active Record, window="_blank"] pattern in Javascript. If you are coming from the *Laravel* or the *Rails* world, then you will be quite familiar with it.
 
 == Introduction
 The reason behind using Models over writing plain database queries is the ease of use and the expressive API to drive the data flow. Lucid models under the hood, takes care of
@@ -172,7 +172,7 @@ class User extends Model {
 
 
 == Dates
-Dates are the hardest part of building data driver applications. We want to store them and differently and show them differently, which usually requires a lot of manual work.
+Dates are the hardest part of building data driver applications. We want to store them differently and show them differently, which usually requires a lot of manual work.
 
 Lucid handles dates gracefully, so that you have mimimal work to do.
 
@@ -186,8 +186,7 @@ But ofcourse you can define your own too.
 class User extends Model {
   static get dates () {
     const defaultFields = super.dates
-    defaultFields.push('dob')
-    return defaultFields
+    return defaultFields.concat(['dob'])
   }
 }
 ----
@@ -252,7 +251,7 @@ const adults = await User
 ----
 
 1. All of the query builder methods are fully supported.
-2. With lucid models, you are supposed to call `fetch` method in order to execute the query. This is required to get results back within an instance of `serializer` ( learn more about link:lucid-serializers[serializers] ).
+2. With lucid models, you are supposed to call `fetch` method in order to execute the query. This is required to get results back within an instance of `serializer` ( learn more about link:serializers[serializers] ).
 
 == Static methods
 Lucid models comes with a bunch of static methods to do common operations without using the query builder interface.
@@ -376,7 +375,7 @@ const users = await User.query().hasProfile().fetch()
 The idea of query scopes is to make your code more readable, as if you are reading plain text.
 
 1. The scopes are always defined with a keyword called `scope`, followed by the method name.
-2. When using the scope, you can call the method by dropping the `scope` keyword and calling the method in *Camelcase* form.
+2. When using the scope, you can call the method by dropping the `scope` keyword and calling the method in *camelCase* form.
 3. You can call all standard query builder methods inside a query scope.
 
 
@@ -447,7 +446,7 @@ Alternatively, you can also feed a bunch of data directly to the model instance,
 [source, js]
 ----
 const User = use('App/Models/User')
-const userData = request.only('username', 'email', 'age')
+const userData = request.only(['username', 'email', 'age'])
 
 // save and get instance back
 const user = await User.create(userData)
@@ -461,7 +460,7 @@ NOTE: The `createMany` method will make *n* number of queries instead of doing b
 [source, js]
 ----
 const User = use('App/Models/User')
-const usersData = request.collect('username' 'email', 'age')
+const usersData = request.collect(['username' 'email', 'age'])
 
 const users = await User.createMany(usersData)
 ----
