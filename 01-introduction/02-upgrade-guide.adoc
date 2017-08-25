@@ -468,7 +468,7 @@ Route.get('/', ({ session }) => {
   session.flashAll()
 
   // errors
-  yield session
+  await session
     .withErrors({ message: 'Some error' })
     .flashAll()
 })
