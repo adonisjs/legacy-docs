@@ -87,7 +87,7 @@ adonis make:view users.list
 ----
 
 == Static assets
-The `public` directory is your app is dedicated to store all of the frontend related assets like *css*, *images* or *javascript files*.
+The `public` directory in your app is dedicated to store all of the frontend related assets like *css*, *images* or *javascript files*.
 
 You access the these files without adding `/public` to the URL. For example:
 

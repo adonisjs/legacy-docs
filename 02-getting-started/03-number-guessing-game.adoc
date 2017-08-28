@@ -135,7 +135,7 @@ Now, all we need to do is, create the `game.edge` template file and write the lo
 
 === Creating template file
 
-Just like the controller, we can use of `make:view` command to create a new view for us.
+Just like the controller, we can use the `make:view` command to create a new view for us.
 
 [source, bash]
 ----

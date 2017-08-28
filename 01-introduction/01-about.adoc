@@ -19,7 +19,7 @@ Also, make sure to go through the link:installation[getting started] guide espec
 == Other sources
 Here are some other great places to find information about AdonisJs.
 
-1. The link:[discourse forum], where we talk about everything about AdonisJs from fixing bugs to discussing new features.
+1. The link:[discourse forum], where we talk about everything AdonisJs from fixing bugs to discussing new features.
 2. Twitter
 3. Github
 4. If you love the project, then please consider supporting us on link:[patreon].
