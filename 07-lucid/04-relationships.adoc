@@ -703,7 +703,7 @@ const user = await User.find(1)
 
 const post = await user
   .posts()
-  .create([
+  .createMany([
     { title: 'Adonis 101' },
     { title: 'Lucid 101' }
   ])
