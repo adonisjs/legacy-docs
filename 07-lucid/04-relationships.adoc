@@ -731,7 +731,7 @@ lucidPost.title = 'Lucid 101'
 
 await user
   .posts()
-  .saveMany(adonisPost, lucidPost)
+  .saveMany([adonisPost, lucidPost])
 ----
 
 ==== associate
