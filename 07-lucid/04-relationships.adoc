@@ -639,7 +639,7 @@ Let's say you want to pull the count of comments which have been approved.
 ----
 const posts = await Post
   .query()
-  .withCount('comments', (builder) ==> {
+  .withCount('comments', (builder) => {
     builder.where('is_approved', true)
   })
   .fetch()
@@ -731,7 +731,7 @@ lucidPost.title = 'Lucid 101'
 
 await user
   .posts()
-  .create(adonisPost, lucidPost)
+  .saveMany(adonisPost, lucidPost)
 ----
 
 ==== associate
