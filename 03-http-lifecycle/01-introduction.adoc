@@ -7,7 +7,7 @@ category: http-lifecycle
 
 toc::[]
 
-AdonisJs is primarily a web framework which deals over HTTP protocol. In this guide, we will learn how AdonisJs handles the HTTP requests through registered routes or middleware.
+AdonisJs is primarily a web framework which deals over HTTP protocol. In this guide, we learn how AdonisJs handles the HTTP requests through registered routes and middleware.
 
 == Request flow
 Below is a flow chart on how HTTP request flow works +
@@ -15,11 +15,11 @@ link:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502383746/Adonis-Ht
 
 [ol-spaced]
 1. The server level middleware stack includes a middleware to serve static resources from the `public` directory. You should only add server level middleware when they can override the URL's registered by routes.
-2. If a request is not intercepted by server level middleware, AdonisJs will look for a registered route, if a route is found, the global, named middleware and route action is executed.
+2. If a request is not intercepted by server level middleware, then AdonisJs looks for a registered route, if a route is found, the global, named middleware and route action is executed.
 3. Otherwise, a 404 exception is thrown.
 
 == Http context
-Since Node.js handles HTTP requests concurrently, each request needs to be identified and managed uniquely. AdonisJs will create a request *Context* which is a class instance containing all the request related data.
+Since Node.js handles HTTP requests concurrently, each request needs to be identified and managed uniquely. AdonisJs creates a request *Context* which is a class instance containing all the request related data.
 
 So when you bind a handler to the `Route`, that handler is executed for each request matching that URL and receives a unique `context` instance.
 
@@ -31,7 +31,7 @@ Route.get('/', (ctx) => {
 })
 ----
 
-Or you can make use of ES6 destructuring.
+Alternatively, you can make use of ES6 destructuring.
 
 [source, js]
 ----
@@ -44,12 +44,12 @@ Route.get('/', ({ request, response }) => {
 The best part of context object is that you can pull a lot more objects from it. For example: `auth`, `view` etc.
 
 == Public directory
-The `public` directory in the root of your application is registered to serve static resources like *css*, *images* and *fonts* etc.
+The `public` directory in the root of your application is registered to serve static resources like *css*, *images* and *fonts*, etc.
 
 All files inside the directory are available publicly without any authentication or restrictions.
 
 == Views
-There are a couple of ways to make use of views and it's really important to understand the difference between them. One way is to import the *View* provider and other is to use the HTTP specific view instance.
+There are a couple of ways to make use of views, and it is essential to understand the difference between them. One way is to import the *View* provider, and other is to use the HTTP specific view instance.
 
 === Import manually
 [source, js]
@@ -68,6 +68,6 @@ Route.get('/', async ({ view }) => {
 })
 ----
 
-The fundamental difference is that, the HTTP view instance contains a bunch of request specific locals like *request*, *authenticated user* etc.
+The fundamental difference is that the HTTP view instance contains a bunch of requests specific locals like *request*, the *authenticated user*, etc.
 
 So always make sure to use the HTTP view instance during request lifecycle.

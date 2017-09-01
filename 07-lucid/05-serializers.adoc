@@ -7,12 +7,12 @@ category: lucid
 
 toc::[]
 
-Serializers provides a clean abstractions towards structuring the database results. AdonisJs by default ships with a link:https://github.com/adonisjs/adonis-lucid/blob/develop/src/Lucid/Serializers/Vanilla.js[Vanilla serializer], but you are free to create/use other serializers too.
+Serializers provides clean abstractions towards structuring the database results. AdonisJs by default ships with a link:https://github.com/adonisjs/adonis-lucid/blob/develop/src/Lucid/Serializers/Vanilla.js[Vanilla serializer], but you are free to create/use other serializers too.
 
 For example: You can create a serializer to format data as per link:http://jsonapi.org/[jsonapi] specs.
 
 == Introduction
-Everytime you make a database query using *Lucid models*, the return value is always a serializer instance and calling `toJSON` to it returns a formatted output.
+Every time you make a database query using *Lucid models*, the return value is always a serializer instance and calling `toJSON` to it returns a formatted output.
 
 [source, js]
 ----
@@ -45,9 +45,9 @@ const users = await User
   .fetch()
 ----
 
-At this point *Lucid* will load all the users and their posts, but doesn't care on how to present them in JSON format, but instead pass all the data to the serializer, which can be accessed from `users` constant.
+At this point *Lucid* loads all the users and their posts, but doesn't care on how to present them in JSON format, but instead pass all the data to the serializer, which can be accessed from `users` constant.
 
-Now when you will call `toJSON` on `users`. The vanilla serializer will format the data as follows.
+Now when you call `toJSON` on `users`. The vanilla serializer formats the data as follows.
 
 [source, js]
 ----
@@ -69,7 +69,7 @@ users.toJSON()
 ]
 ----
 
-Also it will execute all the `getters`, `setters` and `computed properties` for you.
+Also, it executes all the `getters`, `setters` and `computed properties` for you.
 
 == Using Serializer
 The serializers can be defined on each model by overriding the `Serializer` getter.
@@ -85,7 +85,7 @@ class User extends Model {
 
 
 == Vanilla Serializer
-Here is the list of operations vanilla serializer will perform for you.
+Here is the list of operations vanilla serializer performs for you.
 
 1. Attach all relations next to the row as a property.
 2. Attach all `sideloaded` data to the `\___meta___` key. For example *posts counts* for a given user are represented as
@@ -114,12 +114,12 @@ Here is the list of operations vanilla serializer will perform for you.
 ----
 
 == Creating Serializer
-You can create your own serializer to get data back in your desired format. Intentionally the API of serializers is pretty small, so it should rather be easier to add and use new serializers.
+You can create your serializer to get data back in your desired format. Intentionally the API of serializers is pretty small, to make it easier to add and use new serializers.
 
-NOTE: Serializers should not be created for small amendments to the output, use `getters` and `computed properites` for that.
+NOTE: Serializers should not be created for small amendments to the output, use `getters` and `computed properties` for that.
 
 === API overview
-Below is the list of methods, which are must on a serializer.
+Below is the list of methods, which are required on a serializer.
 
 [source, js]
 ----
@@ -162,7 +162,7 @@ ioc.bind('MyApp/CustomSerializer', () => {
 })
 ----
 
-and then use it as
+Use it as
 
 [source, js]
 ----

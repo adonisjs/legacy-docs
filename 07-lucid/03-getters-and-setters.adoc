@@ -7,9 +7,9 @@ category: lucid
 
 toc::[]
 
-As the name suggests getters and setters help you transform data before saving or after fetching it from the database.
+As the name suggests, getters and setters help you transform data before saving or after fetching it from the database.
 
-In this guide we will learn about *getters*, *setters* and *computed properties*, with the use case of where and when to use them.
+In this guide, we learn about *getters*, *setters* and *computed properties*, with the uses case of where and when to use them.
 
 == Getters
 Defining *getters* can be helpful if you want to format the data for display only. For example: Converting the post title to title case.
@@ -37,16 +37,16 @@ const post = await Post.find(postId)
 return post.toJSON()
 ----
 
-Assuming the post title is saved as `title` field inside the database. AdonisJs will execute the `getTitle` method and uses the return value.
+Assuming the post title is saved as `title` field inside the database. AdonisJs executes the `getTitle` method and uses the return value.
 
 [ul-spaced]
-- Getters always starts with the `get` keyword followed by the *camelcase* version of the field name.
+- Getters always start with the `get` keyword followed by the *camel case* version of the field name.
 - Getters are synchronous, which means you cannot run asynchronous code inside them. You must use link:database-hooks[hooks] for that.
-- The return value is used over the actual value.
+- The return value is used instead of the actual value.
 - Getters are evaluated when you call `toJSON` on the model instance or the serializer instance.
 
 == Setters
-Setters are called when you set value on a model instance. This can be helpful in normalizing data before saving it to the database.
+Setters are called when you set a value to a model instance. It can be helpful in normalizing data before saving it to the database.
 
 [source, js]
 ----
@@ -68,13 +68,13 @@ await user.save()
 ----
 
 [ul-spaced]
-- Setters always starts with the `set` keyword followed by the *camelcase* version of the field name.
+- Setters always starts with the `set` keyword followed by the *camel case* version of the field name.
 - Setters are synchronous, which means you cannot run asynchronous code inside them. You must use link:database-hooks[hooks] for that.
-- Setters will receive the current value of a given field.
-- They are executed only when you *set/update* value of a given field on the model instance.
+- Setters receives the current value of a given field.
+- They are executed when you *set/update* value of a given field on the model instance.
 
 == Computed properties
-Computed properties are virtual properties which doesn't exists in your database but instead set on the JSON representation.
+Computed properties are virtual properties which don't exist in your database but instead set in the JSON representation.
 
 *For example:* Creating a full name property from the user first and the last name.
 

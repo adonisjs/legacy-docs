@@ -30,7 +30,7 @@ const decrypted = Encryption.decrypt('encrypted value')
 ----
 
 == Hashing Values
-AdonisJs hash provider makes use of link:https://en.wikipedia.org/wiki/Bcrypt[bcrypt, window="_blank"] to hash values which is a slow algorithm to hash/verify a value.
+AdonisJs hash provider makes use of link:https://en.wikipedia.org/wiki/Bcrypt[bcrypt, window="_blank"] to hash values, which is a slow algorithm to hash/verify a value.
 
 Bcrypt is commonly used to hash passwords, and since it is a slow algorithm, it makes it expensive(if not impossible) for attackers to crack a password. The slowness of the algorithm is based upon the number of *rounds* to be executed before returning the hashed value.
 

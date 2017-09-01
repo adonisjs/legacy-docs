@@ -14,7 +14,7 @@ Checkout link:database[database introduction] guide to check the list of *suppor
 == Introduction
 Writing SQL queries can be tedious in so many ways, even if you are good with SQL.
 
-Let's imagine you write all of your queries for MySQL and after some time your manager asks you to migrate everything to PostgreSQL. Now you will have to re-write/amend your MySQL queries to make sure they work well with PostgreSQL.
+Let's imagine you write all of your queries for MySQL, and after some time your manager asks you to migrate everything to PostgreSQL. Now you have to re-write/amend your MySQL queries to make sure they work well with PostgreSQL.
 
 Another issue can be of building incremental queries with conditional blocks.
 
@@ -58,7 +58,7 @@ class UserController {
 ----
 
 == Selects
-The `select` method will define the fields to be selected for a given query.
+The `select` method defines the fields to be selected for a given query.
 
 [source, javascript]
 ----
@@ -74,7 +74,7 @@ select `id`, `username` from `users`
 select * from `users`
 ----
 
-Also you can defining aliases
+Also, you can define aliases
 [source, js]
 ----
 await Database.select('username as uname')
@@ -85,7 +85,7 @@ Query builder offers a bunch of dynamic methods to add *where* clauses. Also, it
 
 Also make sure to reference the link:http://knexjs.org/#Builder-wheres[knex documentation, window="_blank"]
 
-NOTE: Passing `undefined` to the where clause will cause an error during SQL compilation. Make sure that dynamic values are not `undefined` before passing them.
+NOTE: Passing `undefined` to the where clause causes an error during SQL compilation. Make sure that dynamic values are not `undefined` before passing them.
 
 ==== where
 
@@ -106,7 +106,7 @@ const adults = await Database
 ----
 
 ==== where ( with callback )
-You can also add a callback to the *where* clause. Callback outputs a little different SQL query, and will group all where clauses inside a callback.
+You can also add a callback to the *where* clause. Callback outputs a little different SQL query by grouping all the where clauses.
 
 [source, javascript]
 ----
@@ -366,7 +366,7 @@ await Database
 ----
 
 == Inserts
-Insert operation will return the `id` of the inserted row. In the case of bulk inserts, the `id` of the first record will be returned, and it is more of a limitation with MYSQL itself. link:http://dev.mysql.com/doc/refman/5.6/en/information-functions.html#function_last-insert-id[LAST_INSERT_ID].
+Insert operation returns the `id` of the inserted row. In the case of bulk inserts, the `id` of the first record is returned, and it is more of a limitation with MYSQL itself. link:http://dev.mysql.com/doc/refman/5.6/en/information-functions.html#function_last-insert-id[LAST_INSERT_ID].
 
 ==== insert(values)
 [source, javascript]
@@ -392,7 +392,7 @@ const userId = await Database
 ----
 
 === PostgreSQL only
-For PostgreSQL, you will have to define the returning column explicitly. All other database clients will ignore this statement.
+For PostgreSQL, you have to define the returning column explicitly. All other database clients ignore this statement.
 
 [source, javascript]
 ----
@@ -403,7 +403,7 @@ const userId = await Database
 ----
 
 == Updates
-All update operations will return the number of affected rows.
+All update operations returns the number of affected rows.
 
 [source, javascript]
 ----
@@ -424,7 +424,7 @@ const affectedRows = await Database
 ----
 
 == Deletes
-Delete operations will also return the number of affected rows.
+Delete operations also returns the number of affected rows.
 
 ==== delete
 Also, you can make use of `del()`, since `delete` is a reserved keyword in Javascript.
@@ -438,7 +438,7 @@ const affectedRows = await Database
 ----
 
 ==== truncate
-Truncate will remove all the rows from a database and will set auto increment id back to *0*.
+Truncate removes all the rows from a database and set auto increment id back to *0*.
 
 [source, javascript]
 ----
@@ -482,7 +482,7 @@ NOTE: The output of the `paginate` method is different from the `forPage` method
 Database transactions are safe operations, which are not reflected in the database until and unless you explicitly commit your changes.
 
 ==== beginTransaction
-The `beginTransaction` method will return the transaction object, which can be used to perform any queries.
+The `beginTransaction` method returns the transaction object, which can be used to perform any queries.
 
 [source, javascript]
 ----
@@ -494,7 +494,8 @@ trx.rollback() // will not insert anything
 ----
 
 ==== transaction
-Also, you can wrap your transactions inside a *callback*. The major difference is, you will not have to call `commit or `rollback` manually if any of your queries throws an error, the transaction will rollback automatically. Otherwise, it will commit.
+Also, you can wrap your transactions inside a *callback*. The major difference is, you do not have to call `commit or `rollback` manually. If any of your queries throws an error, the transaction
+rolls back automatically. Otherwise, it is committed.
 
 [source, javascript]
 ----
@@ -609,7 +610,7 @@ const usersIds = await Database.from('users').pluck('id')
 ----
 
 ==== first
-The `first` method will add a *limit 1* clause to the query.
+The `first` method adds a *limit 1* clause to the query.
 
 [source, javascript]
 ----

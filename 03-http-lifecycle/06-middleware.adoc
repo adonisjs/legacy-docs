@@ -7,19 +7,19 @@ category: http-lifecycle
 
 toc::[]
 
-The HTTP middleware are a set of functions executed in sequence, one after the other. The concept of a sequential chain makes it really powerful to transform the request or end it at any stage.
+The HTTP middleware are a set of functions executed in sequence, one after the other. The concept of a sequential chain makes it powerful to transform the request or end it at any stage.
 
-Features like *sessions*, *authentication*, etc makes extensive use of the middleware to add features to the framework.
+Features like *sessions*, *authentication* make extensive use of the middleware to add features to the framework.
 
 Middleware can perform one/all of the following operations
 
 [ol-shrinked]
 1. Decorate HTTP context and add values to it.
 2. Respond to a given request, without reaching the route action.
-3. Or deny requests by throwing errors.
+3. Deny requests by throwing errors.
 
 == Using Middleware
-All of the middleware are registered inside `start/kernel.js` file and seperated into 2 different categories.
+All of the middleware are registered inside `start/kernel.js` file and separated into 2 different categories.
 
 === Global middleware
 The global middleware are executed for each request that has a registered route and defined under the `globalMiddleware` array.
@@ -45,7 +45,7 @@ const named = {
 }
 ----
 
-And later you can use the `auth` key on your Routes.
+Later you can use the `auth` key on your Routes.
 
 [source, js]
 ----
@@ -54,7 +54,7 @@ Route
   .middleware(['auth'])
 ----
 
-Also you can apply multiple middleware to a route and they will be executed in the sequence they are passed.
+Also, you can apply multiple middleware to a route, and they are executed in the sequence they are passed.
 
 === Middleware Props
 To keep middleware configurable at runtime. AdonisJs makes it possible to pass *props to named middleware*. For example: Using the auth middleware with different authentication scheme for different routes.
@@ -116,7 +116,7 @@ module.exports = CountryDetector
 ----
 
 === Registering middleware
-Let's register this as a global middleware, so that we can fetch country for all the users.
+Let's register this as a global middleware so that we can fetch country for all the users.
 
 .start/kernel.js
 [source, js]
@@ -126,4 +126,4 @@ const globalMiddleware = [
 ]
 ----
 
-That's all 😎 Now all of your requests will have the `country` property on it.
+That is all 😎 &nbsp; Now all of your requests have the `country` property on it.

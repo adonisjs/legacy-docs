@@ -7,16 +7,16 @@ category: database
 
 toc::[]
 
-Migrations are mutations to your database as you keep evolving your application. Think of them as step by step screenshot of your database schema, that you can rollback at any given point of time.
+Migrations are mutations to your database as you keep evolving your application. Think of them as step by step screenshot of your database schema, that you can roll back at any given point of time.
 
-Also migrations makes it easier to work as a team, where database changes from one developer are easily spotted and used by other developers in the team.
+Also, migrations make it easier to work as a team, where database changes from one developer are easily spotted and used by other developers in the team.
 
 == Creating migrations
-Let's start from beginning where we want to create a users table with the help of migrations.
+Let's start from the beginning where we want to create a users table with the help of migrations.
 
 NOTE: Make sure the link:database#_setup[migrations provider] is registered inside `aceProviders` array inside `start/app.js` file.
 
-We will make use of the `adonis make:migration` command to create a schema file for us.
+We make use of the `adonis make:migration` command to create a schema file for us.
 
 [source, bash]
 ----
@@ -59,18 +59,18 @@ class UsersSchema extends Schema {
 module.exports = UsersSchema
 ----
 
-As you can see, it is so simply to create/alter database tables using schema files, since you can chain different methods to define the field attributes.
+As you can see, it is so simple to create/alter database tables using schema files, since you can chain different methods to define the field attributes.
 
 The schema file is a Javascript ES6 class with two required methods called `up` and `down` on it.
 
 up::
-The `up` method is used to take the action on a table. It can be creating a new table or altering the existing table.
+The `up` method is used to take action on a table. It can be creating a new table or altering the existing table.
 
 down::
 The `down` method is the reverse of the up action. When `up` method creates a table, you simply drop it inside the down method.
 
 == Run migrations
-Finally we need to call another command to run the migrations, which will execute the `up` method on this class.
+Finally, we need to call another command to run the migrations, which executes the `up` method on this class.
 
 [source, bash]
 ----
@@ -85,7 +85,7 @@ Database migrated successfully in 117 ms
 ----
 
 == Migrations status
-Also you can check the migration status by running `migration:status` command.
+Also, you can check the migration status by running `migration:status` command.
 
 [source, bash]
 ----
@@ -95,18 +95,18 @@ adonis migration:status
 Output
 link:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502694030/migration-status_zajqib.jpg[image:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502694030/migration-status_zajqib.jpg[], window="_blank"]
 
-If you notice there is a *Batch* next to each migration. This is set, so that you can rollback to a given batch without manually altering the database tables.
+There is a *Batch* next to each migration so that you can rollback to a given batch without manually altering the database tables.
 
-This is how migrations works under the hood.
+That is how migrations work under the hood.
 
-1. Everytime you run `adonis migration:run`, a new batch will be created for all the pending schema files.
+1. Every time you run `adonis migration:run`, a new batch is for all the pending schema files.
 2. Files which are migrated once, are not executed again.
-3. Running `adonis migration:rollback` will rollback the last batch migrations in reverse order.
+3. Running `adonis migration:rollback`  rollbacks the last batch migrations in reverse order.
 
-TIP: Do not create all tables in a single schema file, instead create a new file for each database change. This way you will keep your database atomic and can rollback to any version.
+TIP: Do not create all tables in a single schema file, instead create a new file for each database change. This way you keep your database atomic and can roll back to any version.
 
 == Migrations commands
-Below is the list of available command with their description. Also make sure to append `--help` to the command name to see a list of available options. For example:
+Below is the list of available command with their description. Also, make sure to append `--help` to the command name to see a list of available options. For example:
 
 
 === Commands list
@@ -116,7 +116,7 @@ Below is the list of available command with their description. Also make sure to
 | make:migration | Create a new migration file,
 | migration:run | Run all pending migrations.
 | migration:rollback | Rollback last set of migrations.
-| migration:refresh | Rollback all migrations to the `0` batch and then re-run them from start.
+| migration:refresh | Rollback all migrations to the `0` batch and then re-run them from the start.
 | migration:reset | Rollback all migrations to the `0` batch.
 | migration:status | Get status of all the migrations.
 |====
@@ -144,7 +144,7 @@ About:
 ----
 
 == Table's API
-Below is the list of methods available to interact with databse tables.
+Below is the list of methods available to interact with database tables.
 
 ==== create
 Create a new database table
@@ -227,7 +227,7 @@ up () {
 ----
 
 ==== hasTable
-Tells whether a table exists or not. This is an `async` method.
+Tells whether a table exists or not. It is an `async` method.
 
 [source, js]
 ----

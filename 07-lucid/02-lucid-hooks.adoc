@@ -7,7 +7,7 @@ category: lucid
 
 toc::[]
 
-Hooks are the actions you perform before or after a specified database operation. Hooks plays a major role in keeping your codebase DRY and easy to reason about.
+Hooks are the actions you perform before or after a specified database operation. Hooks plays a major role in keeping your code base DRY and easy to reason about.
 
 For example: *Hashing* the user password before saving it to the database.
 
@@ -33,10 +33,10 @@ class User extends Model {
 module.exports = User
 ----
 
-Now everytime we create a user, the `beforeCreate` hook closure will be executed with the current instance of the user and will hash the password.
+Now every time we create a user, the `beforeCreate` hook closure is executed with the current instance of the user and hashes the password.
 
 === Hook file
-It's always nice to keep extracted pieces of code into their own files. AdonisJs comes with a dedicated directory `app/Models/Hooks` to store model hooks.
+It is always nice to keep extracted pieces of code into their files. AdonisJs comes with a dedicated directory `app/Models/Hooks` to store model hooks.
 
 Let's use `adonis make:hook` command to create a hook for us.
 
@@ -66,7 +66,7 @@ UserHook.hashPassword = async (user) => {
 }
 ----
 
-Which means we can now remove the inline code from the model and instead reference this file and method.
+Now we can remove the inline code from the model and instead reference this file and method.
 
 [source, js]
 ----
@@ -83,7 +83,7 @@ module.exports = User
 ----
 
 == Aborting Database Operations
-Hooks have the ability to abort the database operations by throwing exceptions.
+Hooks can also abort the database operations by throwing exceptions.
 
 .app/Models/Hooks/User.js
 [source, javascript]
@@ -108,7 +108,7 @@ Below is the list of life cycle events and their description
 | beforeSave | This event occurs before *creating* or *updating* a new record.
 | afterSave | After a new record has been *created* or *updated*.
 | beforeDelete | Before removing a row.
-| afterDelete | After a row has been removed.
+| afterDelete | After a row is removed.
 | afterFind | After a single row is fetched from the database.
-| afterFetch | After the `fetch` method is executed. The hook method will receive an array of model instance.
+| afterFetch | After the `fetch` method is executed. The hook method receives an array of the model instances.
 |====

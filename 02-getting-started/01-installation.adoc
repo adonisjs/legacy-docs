@@ -7,7 +7,7 @@ category: getting-started
 
 toc::[]
 
-This guide will get you started with AdonisJs by installing the framework and required dependencies. By the end of this guide, you will have a working AdonisJs web server with the *Hello world* page.
+This guide gets you started with AdonisJs by installing the framework and required dependencies. By the end of this guide, you will have a working AdonisJs web server with the *Hello world* page.
 
 If you face any troubles installing AdonisJs, please file an issue on link:https://github.com/adonisjs/adonis-framework/issues/new[github, window="_blank"].
 
@@ -92,10 +92,10 @@ image:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502292352/welcome-
 
 [ol-spaced]
 1. The `adonis new <PATH>` command creates the project directory and does `npm install` for you automatically. You can pass `--yarn` to make use of yarn over npm.
-2. By default link:https://github.com/adonisjs/adonis-fullstack-app[fullstack app, window="_blank"] blueprint will be cloned from Github, which can be customized by passing `--slim` or `--api-only` flag.
+2. By default link:https://github.com/adonisjs/adonis-fullstack-app[fullstack app, window="_blank"] blueprint is cloned from Github, which can be customized by passing `--slim` or `--api-only` flag.
 3. To make use of community created blueprints, you can pass `--blueprint=<github-org/repo>`.
 
 TIP: When in doubt, make use of the `adonis new --help` command to see the list of available options.
 
-== Next steps
-This guide was small and focused only on the installation part of the process. Going forward we will learn about more HTTP specific features and the link:folder-structure[folder structure].
+== Next Steps
+This guide was small and focused only on the installation part of the process. Going forward we will learn about the HTTP lifecycle and the link:folder-structure[folder structure].

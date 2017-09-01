@@ -7,7 +7,7 @@ category: getting-started
 
 toc::[]
 
-When getting started with any web framework, the first question one often ask is, *how to create data-driven applications?*. By the end of this guide, you will learn how easy AdonisJs makes to interact with SQL databases.
+When getting started with any web framework, the first question one often ask is, *how to create data-driven applications?*. By the end of this guide, you learn how easy AdonisJs makes to interact with SQL databases.
 
 // TIP: Watch this video on youtube, if you prefer a Screencast over text.
 
@@ -27,7 +27,7 @@ adonis install @adonisjs/lucid
 create: config/database.js
 ----
 
-Post installation, you would have seen a new web page getting popped up in your browser. That is the minimal instructions you need to follow in order to setup the installed package.
+Post installation, you would have seen a new web page getting popped up in your browser. That is the minimal instructions you need to follow to setup the installed package.
 
 Feel free to ignore the setup instructions and follow this guide instead.
 
@@ -102,12 +102,12 @@ module.exports = BlogPostSchema
 The migration file has two methods
 
 up::
-The `up` method is used to take the action on a table. It can be creating a new table or altering the existing table.
+The `up` method is used to take action on a table. It can be creating a new table or altering the existing table.
 
 down::
 The `down` method is the reverse of the up action. When `up` method creates a table, you simply drop it inside the down method.
 +
-The beauty of this approach makes it easier to rollback the database changes.
+The beauty of this approach makes it easier to roll back the database changes.
 
 
 Now finally we can run another command to create the table using the schema file we just updated.
@@ -143,22 +143,22 @@ Route.get('/posts', async () => {
 })
 ----
 
-Assuming the web server is running on `port=3333`. If you visit link:http://localhost:3333/posts[localhost:3333/posts], you will see an empty array is returned, that's because we have not saved any posts inside the database table.
+Assuming the web server is running on `port=3333`. If you visit link:http://localhost:3333/posts[localhost:3333/posts], you see an empty array is returned, that is because we have not saved any posts inside the database table.
 
 == Saving posts
-The ideal way is to have an HTML form to create the posts, but for the sake the simplicity, we will take a shortcut and use the *Adonis repl* to interact with the database.
+The ideal way is to have an HTML form to create the posts, but for the sake the simplicity, we take a shortcut and use the *Adonis repl* to interact with the database.
 
 === What is repl?
 AdonisJs has an inbuilt command line repl, which can be used to interact with your application from command line. Let's see it in action to create a post.
 
-The following command will start the repl session and you are free to run Node.js code inside it.
+The following command starts the repl session, and you are free to run Node.js code inside it.
 
 [source, bash]
 ----
 adonis repl
 ----
 
-And paste the following code inside it
+So paste the following code inside it
 
 [source, bash]
 ----
@@ -170,13 +170,12 @@ Check out the following gif to see it in action
 +
 image:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502354650/Adonis-repl_uiaar3.gif[]
 
-Now if you refresh the browser link:http://localhost:3333/posts[localhost:3333/posts] you will see the recently created blog post being returned as JSON.
+Now if you refresh the browser link:http://localhost:3333/posts[localhost:3333/posts] you see the recently created blog post being returned as JSON.
 
-== Next steps
-This guide was just an introduction to the Database provider, there is a lot you can do when it comes to data-driven applications. Consider learning more about
+== Next Steps
+This guide was just an introduction to the Database provider, and there is a lot you can do when it comes to data-driven applications. Consider learning more about
 
 [ol-shrinked]
 1. link:query-builder[Database query builder]
 2. link:lucid[Lucid models]
 3. link:seeds-and-factories[Seeds & factories]
-

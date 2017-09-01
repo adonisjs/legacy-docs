@@ -7,12 +7,12 @@ category: cookbooks
 
 toc::[]
 
-AdonisJs makes it so simple to validate the users input with the help of dedication validation provider. By the end of this guide you will know how to validate the data *manually* or via *route validators*.
+AdonisJs makes it so simple to validate the user's input with the help of dedicated validation provider. In this guide you learn how to validate the data *manually* or via *route validators*.
 
-NOTE: Adonisjs validator using link:http://indicative.adonisjs.com/[indicative] under the hood, so make sure to read the official documentation whenever required.
+NOTE: Adonisjs validator using link:http://indicative.adonisjs.com/[indicative, window="_blank"] under the hood, so make sure to read the official documentation whenever required.
 
 == Setup
-The validator is not installed by default, so follow the below instructions to get started.
+Follow the below instructions to setup the validation provider.
 
 === Install
 [source, bash]
@@ -30,10 +30,10 @@ const providers = [
 ]
 ----
 
-And that's all 🎉
+That is all 🎉
 
 == Validating user input
-Let's start the example of validating user input received via HTML form.
+Let's start with the example of validating user input received via HTML form.
 
 [source, edge]
 ----
@@ -86,14 +86,14 @@ class UserController {
 module.exports = UserController
 ----
 
-Let's understand the above piece of code into small steps.
+Let's understand the above piece of code in small steps.
 
-1. First we have defined the `rules` schema.
+1. First, we have defined the `rules` schema.
 2. Next, we make use of the `validate` method to validate the request data with our defined rules.
-3. If validation fails, we will redirect the user back to the form and flash all the errors back.
+3. If validation fails, we flash all the errors and redirect the user back to the form.
 
 === Showing flash errors
-Now quickly modify the HTML form to display the flash messages, which are set when validation fails.
+Quickly modify the HTML form to display the flash messages, which are set when validation fails.
 
 [source, edge]
 ----
@@ -116,7 +116,7 @@ Now quickly modify the HTML form to display the flash messages, which are set wh
 Below is the list of available methods.
 
 ==== validate(data, rules, [message])
-Validate data with defined rules. Optionally, you can define custom link:http://indicative.adonisjs.com/#indicative-basics-custom-messages[error messages].
+Validate data with defined rules. Optionally, you can define custom link:http://indicative.adonisjs.com/#indicative-basics-custom-messages[error messages, window="_blank"].
 
 [source, js]
 ----
@@ -138,7 +138,7 @@ const validation = await validateAll(data, rules)
 ----
 
 ==== sanitize(data, rules)
-Sanitize data, this method will return a new object with sanitized data.
+This method returns a new object with sanitized data.
 
 [source, js]
 ----
@@ -147,7 +147,7 @@ const data = sanitize(request.all(), rules)
 ----
 
 ==== is
-Returns a reference to link:http://indicative.adonisjs.com/#indicative-raw-validations[indicative raw validator].
+Returns a reference to link:http://indicative.adonisjs.com/#indicative-raw-validations[indicative raw validator, window="_blank"].
 
 [source, js]
 ----
@@ -158,7 +158,7 @@ if (is.email('foo@bar.com')) {
 ----
 
 ==== sanitizor
-Returns a reference to link:http://indicative.adonisjs.com/#indicative-sanitizor-raw-sanitizor[indicative raw sanitizor].
+Returns a reference to link:http://indicative.adonisjs.com/#indicative-sanitizor-raw-sanitizor[indicative raw sanitizor, window="_blank"].
 
 [source, js]
 ----
@@ -178,7 +178,7 @@ Route
   .validator('StoreUser')
 ----
 
-All validators lives inside `app/Validators` directory. Let's create the `StoreUser` validator by using the `adonis` command.
+All validators live inside `app/Validators` directory. Let's create the `StoreUser` validator by using the `adonis` command.
 
 [source, bash]
 ----
@@ -209,12 +209,12 @@ class StoreUser {
 module.exports = StoreUser
 ----
 
-That's all! If the validation will fail, the validator will flash the error message back to the form, like we did in our previous example.
+That is all! If the validation fails, the validator automatically set the errors as flash messages and redirects the user to the form.
 
-Not only that, it will detect if the request has `Accept: application/json` header set, it will return the errors back in JSON format.
+Whereas, it sends back the JSON response if request has `Accept: application/json` header set
 
 === Sanitizing user input
-Also you can sanitize the user input by defining the `sanitizationRules`. The sanitization happens before the validation.
+Also, you can sanitize the user input by defining the `sanitizationRules`. The sanitization happens before the validation.
 
 [source, js]
 ----
@@ -243,7 +243,7 @@ module.exports = StoreUser
 ----
 
 === Authorization
-Quite often you want to perform couple of checks to make sure that the user is authorized to take the desired action. Same can be done by defining `authorize` method on validator class.
+Quite often you want to perform a couple of checks to make sure that the user is authorized to take the desired action. Same can be done by defining `authorize` method on validator class.
 
 NOTE: It is important to return a `boolean` from the authorize method to tell the validator, where or not to forward the request to your controller.
 
