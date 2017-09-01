@@ -9,7 +9,7 @@ toc::[]
 
 Creating data driven apps is AdonisJs is comparatively simple with the help of rich Database query builder, link:lucid[Lucid ORM], link:migrations[migrations] and link:seeds-and-factories[database seeder].
 
-In this guide we will understand the basics of Database provider.
+In this guide, we understand the basics of Database provider.
 
 NOTE: AdonisJs makes use of link:http://knexjs.org[Knex.js, window="_blank"] internally, so make sure to read the knex docs whenever required.
 
@@ -52,14 +52,14 @@ const aceProviders = [
 ----
 
 === Configuration
-Lucid makes use of `sqlite` by default. But you can change the configuration from `config/database.js` file and choose from one of the available databases.
+Lucid makes use of `sqlite` by default. However, you can change the configuration from `config/database.js` file and choose from one of the available databases.
 
 All of the link:http://knexjs.org/#Installation-client[knex configuration, window="_blank"] options are supported as it is.
 
 == Basic Example
 Database query builder has fluent API, which means you can chain Javascript methods to create SQL queries.
 
-Let's see an example of selecting all users and returning them back as JSON.
+Let's see an example of selecting all users and returning them as JSON.
 [source, js]
 ----
 const Database = use('Database')
@@ -79,7 +79,7 @@ Database
   .where('age', '>', 18)
 ----
 
-A `orWhere` clause
+An `orWhere` clause
 
 [source, js]
 ----
@@ -94,7 +94,7 @@ Checkout the link:query-builder[query builder docs] for complete API reference.
 == Multiple connections
 By default, AdonisJs makes use of the connection defined inside `config/database.js` file for making all database queries.
 
-However, you can define multiple database connections inside `config/database.js` file and at runtime you can select any of the defined connections to make the queries.
+However, you can set multiple database connections inside `config/database.js` file, and at runtime, you can select any of the defined connections to make the queries.
 
 [source, js]
 ----
@@ -103,9 +103,9 @@ Database
   .table('users')
 ----
 
-Since, AdonisJs creates a pool of connections and re-uses them, all used connections will be maintained unless the process dies.
+Since AdonisJs creates a pool of connections and reuses them, all used connections are maintained unless the process dies.
 
-In order to close a connection manually, simply call the `close` method with connection name(s).
+To close a connection manually, simply call the `close` method with connection name(s).
 
 [source, js]
 ----
@@ -118,7 +118,7 @@ Database.close(['mysql'])
 ----
 
 == Table prefixing
-Database allows transparent table prefixing for all queries by defining a `prefix` inside the config file.
+The database provider allows transparent table prefixing for all queries by defining a `prefix` inside the config file.
 
 .config/database.js
 [source, js]
@@ -133,7 +133,7 @@ module.exports = {
 }
 ----
 
-Now all queries on the `sqlite` connection will prefix `my_` to the table name.
+Now all queries on the `sqlite` connection have `my_` as the table prefix.
 
 [source, js]
 ----
@@ -162,7 +162,7 @@ await Database
 Debugging database queries can be handy in development as well as in production. Let's go through the available strategies on debugging queries.
 
 === Globally
-By setting `debug: true` inside the config file will enable debugging for all queries globally.
+By setting `debug: true` inside the config file enables debugging for all queries globally.
 
 .config/database.js
 [source, js]
@@ -178,7 +178,7 @@ module.exports = {
 }
 ----
 
-Also you can turn on debugging by listening for the `query` event on Database provider. The best place to register a listener is under the `start/hooks.js` file.
+Also, you can turn on debugging by listening for the `query` event on Database provider. The best place to register a listener is under the `start/hooks.js` file.
 
 [source, js]
 ----
@@ -191,7 +191,7 @@ hooks.after.providersBooted(() => {
 ----
 
 === Individually
-Also you can listen for `query` event on a single query at runtime.
+Also, you can listen for `query` event on a single query at runtime.
 
 [source, js]
 ----

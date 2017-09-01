@@ -9,7 +9,9 @@ toc::[]
 
 This guide gives an outline on how to make use of the HTTP link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Request/index.js[Request, window="_blank"] object to read data for a request.
 
-AdonisJs passes the current HTTP request object as part of the `context` which is sent to all route handlers and middleware.
+TIP: The Node.js raw `req` object can be accessed as `request.request`.
+
+AdonisJs passes the current HTTP request object as part of the link:http-context#_http_context[context] which is sent to all route handlers and middleware.
 
 [source, js]
 ----
@@ -17,17 +19,15 @@ Route.get('/', ({ request }) => {
 })
 ----
 
-TIP: The Node.js raw `req` object can be accessed as `request.request`.
-
 We used link:https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment[ES6 destructuring, window="_blank"] to get the `request` object from context.
 
 == Request body
-The request object offers a bunch of helpful methods to read the request body. First, make sure that you have installed the bodyparser middleware.
+The request object offers a bunch of helpful methods to read the request body. First, make sure that you have installed the body-parser middleware.
 
 If not, follow the upcoming steps.
 
 === Setting up bodyparser
-NOTE: Fullstack and API only boilerplates comes with pre-configured bodyparser.
+NOTE: Fullstack and API only boilerplates comes with pre-configured body-parser.
 
 [source, js]
 ----
@@ -42,7 +42,7 @@ const providers = [
 ]
 ----
 
-Also register the global middleware inside `start/kernel.js` file.
+Also, register the global middleware inside `start/kernel.js` file.
 [source, js]
 ----
 const globalMiddleware = [
@@ -54,7 +54,7 @@ const globalMiddleware = [
 Following is the list of methods you can call to read the request body.
 
 ==== all
-Returns the entire request body as an object. This method will merge the `query params` with the `request body`.
+Returns the request body as an object. This method merges the `query params` with the `request body`.
 
 [source, js]
 ----
@@ -80,7 +80,7 @@ const body = request.post()
 ==== raw
 Get data posted as the raw body.
 
-NOTE: If raw data is JSON with `Content-type: application/json`, then the bodyparser will parse it smartly and returns it as part of `post` method.
+NOTE: If raw data is JSON with `Content-type: application/json`, then the bodyparser parses it smartly and returns it as part of `post` method.
 
 [source, js]
 ----
@@ -104,7 +104,7 @@ const body = request.except(['csrf_token', 'submit'])
 ----
 
 ==== input
-Get value for a given key only, and it doesn't exist, return the `default` value.
+Get value for a given key only, and it does not exist, return the `default` value.
 
 [source, js]
 ----
@@ -140,7 +140,7 @@ const users = request.only(['username', 'age'])
 { username: ['virk', 'nikk'], age: [26, 25] }
 ----
 
-The above piece of data is something that you cannot save to the database directly, since it is not in the right format.
+The above piece of data is something that you cannot save to the database directly since it is not in the right format.
 
 Using `request.collect` we can get it formatted out of the box.
 
@@ -159,7 +159,7 @@ await User.createMany(users)
 Also, you can read headers from the request using one of the following methods.
 
 ==== header
-The value for a given key. Also, this method will handle case inconsistencies.
+The header value for a given key.
 
 [source, js]
 ----
@@ -199,7 +199,7 @@ Returns an object of all the cookies
 const cookies = request.cookies()
 ----
 
-Since all cookies are *encrypted* and *signed* automatically. Use one of the following methods, in case you want to access a plain cookie set by some frontend code.
+Since all cookies are *encrypted* and *signed* automatically, you cannot read values for cookies set via Javascript on browser. Instead consider using one of the following methods.
 
 ==== plainCookie
 [source, js]
@@ -221,7 +221,7 @@ NOTE: Content negotiation can also be done on the basis on route formats. Learn 
 
 Since web servers do not only serve web pages, they have to deal with API response in *JSON*, or maybe in *XML*. Instead of creating separate URL's for each content type, the consumer can ask the server to return the response in a specific format.
 
-Now in order to construct the response in a specific format, the server needs to know it first. The same can be done using the `accepts` method.
+Now to construct the response in a specific format, the server needs to know it first. The same can be done using the `accepts` method.
 
 ==== accepts
 Reads the `Accept` header to know response format.
@@ -281,7 +281,7 @@ const method = request.intended()
 ----
 
 ==== ip
-Returns the most trusted ip address of the user.
+Returns the most trusted ip address for the user.
 
 [source, js]
 ----
@@ -289,7 +289,7 @@ const ip = request.ip()
 ----
 
 ==== ips
-Returns an array of ips from most to the least trusted one. It will remove the default ip address, which can be accessed via `ip` method.
+Returns an array of ips from most to the least trusted one. It removes the default ip address, which can be accessed via `ip` method.
 
 [source, js]
 ----
@@ -297,7 +297,7 @@ const ips = request.ips()
 ----
 
 ==== subdomains
-Returns a list of request subdomains, this method will remove `www` from the list.
+Returns a list of request subdomains, this method removes `www` from the list.
 
 [source, js]
 ----
@@ -305,7 +305,7 @@ const subdomains = request.subdomains()
 ----
 
 ==== ajax
-Is request an ajax request based upon `X-Requested-With` header.
+Checks for `X-Requested-With` header to determine if the request is ajax or not.
 
 [source, js]
 ----
@@ -352,7 +352,7 @@ request.match(['posts/:id']) // returns true
 ----
 
 ==== hasBody
-A boolean indicating if the request has post body.  This is mainly used by the bodyparser to know whether to parse the body or not.
+A boolean indicating if the request has post body.  It is mainly used by the bodyparser to know whether to parse the body or not.
 
 [source, js]
 ----
@@ -374,9 +374,9 @@ request.is(['application/*']) // returns - application/json
 ----
 
 == Method spoofing
-HTML forms are only capable of making `GET` and `POST` requests, which means you cannot utilize the REST conventions of using other HTTP methods like *PUT*, *DELETE* etc.
+HTML forms are only capable of making `GET` and `POST` requests, which means you cannot utilize the REST conventions of using other HTTP methods like *PUT*, *DELETE* and so on.
 
-AdonisJs makes it simpler by passing the request method as part of the query string and then it will execute the correct Route for you automatically.
+AdonisJs makes it simpler by passing the request method as part of the query string and then it executes the correct Route for you automatically.
 
 [source, js]
 ----
