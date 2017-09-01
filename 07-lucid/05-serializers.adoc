@@ -23,7 +23,7 @@ const users = await User.all()
 // users -> Vanilla Serializer instance
 ----
 
-The `users` object is an instance of Vanilla serializer and in order to get a plain array/object from it, you need to `toJSON()` method.
+The `users` object is an instance of Vanilla serializer and in order to get a plain array/object from it, you need to call `toJSON()` method.
 
 [source, js]
 ----
