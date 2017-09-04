@@ -7,22 +7,20 @@ category: introduction
 
 toc::[]
 
-AdonisJs 4.0, known as *(dawn)* is a major release of the framework after more than a year. Each major release comes with a handful of breaking changes, which is required to keep the framework fresh and address all issues reported during the year.
+AdonisJs 4.0, known as *(dawn)*, is a major release of the framework after more than a year. Each major release comes with a handful of breaking changes, which is required to keep the framework fresh and address all issues reported during the year.
 
 == Javascript movement
-This release is even special since much movement has happened in the ES6 world and Node.js 8.0 has implemented 99% of the link:http://node.green/[language features, window="_blank"].
+This release is very special since much movement has happened in the ES6 world, and Node.js 8.0 has implemented 99% of the link:http://node.green/[language features, window="_blank"]. Also, the link:https://v8project.blogspot.in/2017/08/v8-release-61.html[V8 engine, window="_blank"] has received lots of speed improvements.
 
-Also, link:https://v8project.blogspot.in/2017/08/v8-release-61.html[V8 engine, window="_blank"] has received lots of speed improvements.
-
-Finally, the time was to update the code base and start supporting latest features, so that we all can write simpler and expressive code while gaining all performance benefits.
+The time has finally come to update the code base and start supporting the latest features so that we can all write simpler and more expressive code while taking advantage of all the performance benefits.
 
 == Language changes
 Below is the list of changes made due to the availability of ES6 features.
 
 ==== Using async/await
-Generator functions using `yield` keyword is no more supported and instead, we make use of `async/await` now.
+Generator functions using the `yield` keyword are no longer supported, and instead, we make use of `async/await`.
 
-Which means all functions starting with `*` needs to be replaced with `async` and `yield` keyword is replaced with `await`.
+This means all functions starting with `*` need to be replaced with `async`, and `yield` keywords need to be replaced with `await`.
 
 Old way
 [source, js]
@@ -41,9 +39,9 @@ async index () {
 ----
 
 ==== Destructuring
-ES6 allows link:https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring[Object destructuring, window="_blank"] which can be used to pull selected values from an object. This feature is compelling and intuitive to build API around passing parameters.
+ES6 allows link:https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring[object destructuring, window="_blank"] which can be used to pull selected values from an object.
 
-In the newer version of AdonisJs, all route handlers and controller actions receive an object of values, instead of receiving multiple parameters with `request` and `response`.
+In the newer version of AdonisJs, all route handlers and controller actions receive an object of values instead of receiving multiple parameters with `request` and `response`.
 
 Old Way
 [source, js]
@@ -65,9 +63,9 @@ Route.get('/', async ({ request, response }) => {
 The directory structure has been tweaked a bit to keep it as flat as possible and also to make the upgrade path easier in upcoming versions.
 
 ==== bootstrap -> start
-The `bootstrap` directory has renamed to `start`, which means same but is simpler to understand.
+The `bootstrap` directory has been renamed to `start`, which performs the same function but is easier to understand.
 
-Also, the bunch of files like `http.js` and `kernel.js` has been removed since they contained the code to wire the app and boot the server. All this has been moved to a separate package called link:https://npmjs.org/package/@adonisjs/ignitor[@adonisjs/ignitor].
+Also, a bunch of files like `http.js` and `kernel.js` have been removed since they contained the code to wire the app and boot the server. All this has been moved to a separate package called link:https://npmjs.org/package/@adonisjs/ignitor[@adonisjs/ignitor].
 
 ==== Controllers
 The location of *Controllers* have been changed as follows
@@ -80,7 +78,7 @@ app/Http/Controllers → app/Controllers/Http
 Having a top level `Http` directory does not make sense, since the only thing we store inside it is the `Controllers`, so it is better to have `Controllers` as the top-level directory and keep WebSocket and Http controllers inside it.
 
 ==== Models
-The model's directory has been pluralized.
+The models' directory has been pluralized.
 
 [source, bash]
 ----
@@ -88,18 +86,18 @@ app/Model → app/Models
 ----
 
 ==== routes.js
-The `routes.js` file has been moved from `app/Http/routes.js` to `start/routes.js`. Since routes are starting point to your app, they should be in start directory.
+The `routes.js` file has been moved from `app/Http/routes.js` to `start/routes.js`. Since routes are the starting point to your app, they should be in the start directory.
 
 ==== kernel.js
-The `kernel.js`, which stores the list of Middleware has been moved from `app/Http/kernel.js` to `start/kernel.js`.
+The `kernel.js` file, which stores the list of Middleware, has been moved from `app/Http/kernel.js` to `start/kernel.js`.
 
 ==== storage -> tmp
-The job of `storage` directory was to hold files which are never committed to version control like Github. However, the name itself was not clear that the directory holds temporary files. The rename to `tmp` makes it more clear.
+The job of the `storage` directory was to hold files which are never committed to version control like Github. However, the name itself did not make it clear that the directory holds temporary files. The rename to `tmp` makes it more clear.
 
 == Routing
 
 ==== addCollection, addMember
-The `addCollection` and `addMember` methods have been removed from the routing resource. This is done in favor of keeping routes straightforward since it was never clear in which sequence a new *member* was added via `addMember` method. For example
+The `addCollection` and `addMember` methods have been removed from the routing resource. This is done in favor of keeping routes straightforward since it was never clear in which sequence a new *member* was added via the `addMember` method. For example
 
 [source, js]
 ----
@@ -108,7 +106,7 @@ Route
   .addMember('active')
 ----
 
-The resource creates a route called `users/:id` as part of the resourceful routes and adding a new member adds `users/active` route.
+The resource creates a route called `users/:id` as part of the resourceful routes and adding a new member adds the `users/active` route.
 
 It is unclear which action gets called first, since `users/:id` will catch all the routes including `users/active`.
 
@@ -205,7 +203,7 @@ Route.get('/',  ({ view }) => {
 ----
 
 == Auth
-The authentication engine is more or less the same, instead received a bunch of new additions. This section outlines some of the breaking changes.
+The authentication engine has more or less remained the same. This section outlines some of the breaking changes.
 
 ==== request.auth
 The `request.auth` method has been removed and instead a dedicated `auth` instance is passed to all HTTP requests.
@@ -250,15 +248,15 @@ Route.get('/', async ({ auth }) => {
 })
 ----
 
-Since the `tokens` table now keep all sort of tokens like *remember tokens*, *jwt refresh tokens*. It is more convenient to use the `User` model directly and revoke the required tokens.
+Since the `tokens` table now keep all sort of tokens like *remember tokens* and *jwt refresh tokens*, it is more convenient to use the `User` model directly and revoke the required tokens.
 
 == Models
-A bunch of changes had been made to link:https://github.com/adonisjs/adonis-lucid/blob/develop/CHANGELOG.md#400-2017-07-16[lucid, window="_blank"], the majority of them are improvements, bug fixes, and much-awaited features.
+A bunch of changes had been made to link:https://github.com/adonisjs/adonis-lucid/blob/develop/CHANGELOG.md#400-2017-07-16[lucid, window="_blank"], the majority of which are improvements, bug fixes, and much-awaited features.
 
 Here is the list of breaking changes.
 
 ==== extend
-All models used to fetch `Lucid` namespace to extend themselves. Going forward, you need to pull `Model` namespace.
+All models used to fetch the `Lucid` namespace to extend themselves. Going forward, you need to pull the `Model` namespace.
 
 Earlier
 [source, js]
@@ -352,7 +350,7 @@ User
   .with('posts')
 ----
 
-Now you have to call the `with` for multiple times to eagerload multiple relations. It is done since the `2nd param` to the with the method is a callback to add query constraints on the relationship.
+Now you have to call `with` multiple times to eagerload multiple relations. This is done since the `2nd param` to the `with` method is a callback to add query constraints on the relationship.
 
 Earlier
 [source, js]
@@ -392,13 +390,13 @@ await user.cars().attach([1], (pivotModel) => {
 })
 ----
 
-The new signature makes it easier to add conditional attributes. For example: When calling `attach` with 3 cars and want to set a different `current_owner` attribute to each car. The callback approach makes it easier to do that since the callback is invoked for `cars.length` number of times.
+The new signature makes it easier to add conditional attributes. For example: When calling `attach` with 3 cars and wanting to set a different `current_owner` attribute for each car. The callback approach makes it easier to do that since the callback is invoked for `cars.length` number of times.
 
 == Factories
 The database factories API is tweaked a little to make it more explicit.
 
 ==== create
-Earlier, the `create` method can create one or many rows based upon the number passed to it. Now you have to call `createMany` to create multiple rows.
+Earlier, the `create` method could create one or many rows based upon the number passed to it. Now you have to call `createMany` to create multiple rows.
 
 It makes sure that the `create` method always returns the created model instance and `createMany` always returns an array of created model instances.
 
@@ -423,7 +421,7 @@ Factory.model('App/Models/User').createMany(3)
 ----
 
 ==== make
-The `make` method has been changed accordingly, and `makeMany` method has been introduced.
+The `make` method has been changed accordingly, and the `makeMany` method has been introduced.
 
 == Sessions
 The way to interact with sessions has been changed too. All of the sessions related code has been extracted from core to an individual repo. Now API only servers can easily remove sessions from their app.
