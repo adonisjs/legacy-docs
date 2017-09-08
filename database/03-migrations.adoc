@@ -130,6 +130,30 @@ class UserSchema {
 }
 ----
 
+==== createExtension(extensionName)
+Create a database extension.
+
+[source, javascript]
+----
+class UserSchema {
+  up () {
+    this.createExtension('postgis')
+  }
+}
+----
+
+==== createExtensionIfNotExists(extensionName)
+Only creates the extension if it does not exists, otherwise silently ignores the *createExtension* command.
+
+[source, javascript]
+----
+class UserSchema {
+  up () {
+    this.createIfNotExists('postgis')
+  }
+}
+----
+
 ==== rename(from, to)
 Rename an existing database table.
 
@@ -162,6 +186,30 @@ Drop database table only if it exists, otherwise silently ignores the *drop* com
 class UserSchema {
   down () {
     this.dropIfExists('users')
+  }
+}
+----
+
+==== dropExtension(extensioName)
+Drop an existing database extension.
+
+[source, javascript]
+----
+class UserSchema {
+  down () {
+    this.dropExtension('postgis')
+  }
+}
+----
+
+==== dropExtensionIfExists(extensionName)
+Drop database extension only if it exists, otherwise silently ignores the *dropExtension* command.
+
+[source, javascript]
+----
+class UserSchema {
+  down () {
+    this.dropExtensionIfExists('postgis')
   }
 }
 ----
