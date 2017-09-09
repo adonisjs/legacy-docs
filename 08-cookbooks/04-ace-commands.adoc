@@ -48,7 +48,7 @@ NOTE: For convenience, the `adonis` command proxies all the commands for a given
 For example running `adonis migration:run` has the same result as running `node ace migration:run`.
 
 == Creating commands
-Let's quickly build a command to pull random quotes of *Paul Graham* using link:http://gophergala.github.io/wisdom[wistom API] and display it on the terminal.
+Let's quickly build a command to pull random quotes of *Paul Graham* using link:http://gophergala.github.io/wisdom[wisdom API] and display it on the terminal.
 
 === Setup
 [source, bash]
