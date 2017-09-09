@@ -242,10 +242,33 @@ class StoreUser {
 module.exports = StoreUser
 ----
 
+=== Custom data object
+At times you want to validate custom properties, which are not part of request body. For example validating some headers. Same can be done by defining `data` property on the validator instance.
+
+[source, js]
+----
+class StoreUser {
+  get rules () {
+    return {
+      sessionId: 'required'
+    }
+  }
+
+  get data () {
+    const requestBody = request.all()
+    const sessionId = request.header('X-Session-Id')
+
+    return Object.assign({}, requestBody, { sessionId })
+  }
+}
+
+module.exports = StoreUser
+----
+
 === Authorization
 Quite often you want to perform a couple of checks to make sure that the user is authorized to take the desired action. Same can be done by defining `authorize` method on validator class.
 
-NOTE: It is important to return a `boolean` from the authorize method to tell the validator, where or not to forward the request to your controller.
+NOTE: It is important to return a `boolean` from the authorize method to tell the validator whether or not to forward the request to the controller.
 
 [source, js]
 ----
