@@ -19,7 +19,16 @@ Make sure to install the `shield` provider and register the appropriate middlewa
 adonis install @adonisjs/shield
 ----
 
-Next, register the middleware inside `start/kernel.js` file.
+Next, register the provider inside `start/app.js` file.
+
+[source, js]
+----
+const providers = [
+  '@adonisjs/shield/providers/ShieldProvider'
+]
+----
+
+And, finally register the global middleware inside `start/kernel.js` file.
 
 NOTE: Shield middleware relies on link:sessions[sessions], so make sure they are setup correctly.
 

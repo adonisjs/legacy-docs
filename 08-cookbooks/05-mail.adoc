@@ -1,0 +1,353 @@
+---
+title: Mail
+permalink: mail
+category: cookbooks
+---
+= Mail
+
+toc::[]
+
+AdonisJs has first class support for sending emails. The mail provider comes with a handful of drivers to send emails, which includes.
+
+[ul-shrinked]
+- Smtp ( smtp )
+- Spark Post ( sparkpost )
+- Mailgun ( mailgun )
+- Amazon SES ( ses )
+
+== Setup
+The mail provider is not part of the default project structure and must be installed as defined in following steps.
+
+[source, bash]
+----
+adonis install @adonisjs/mail
+----
+
+Next, register the provider inside `start/app.js` file.
+
+[source, js]
+----
+const providers = [
+  '@adonisjs/mail/providers/MailProvider'
+]
+----
+
+The configuration is saved inside `config/mail.js` file. Make sure to update the settings as per your needs.
+
+== Basic Example
+Let's start with the basic example of sending email on user registration.
+
+[source, js]
+----
+Route.post('user', 'UserController.store')
+----
+
+[source, js]
+----
+const Mail = use('Mail')
+
+class UserController {
+
+  async store ({ request }) {
+    const data = request.only(['email', 'username', 'password'])
+    const user = await User.create(data)
+
+    await Mail.send('emails.welcome', user.toJSON(), (message) => {
+      message
+        .to(user.email)
+        .from('<from-email>')
+        .subject('Welcome to yardstick')
+    })
+
+    return 'Registered successfully'
+  }
+}
+
+module.exports = UserController
+----
+
+Finally, we need to create `emails/welcome.edge` view, which is the HTML body.
+
+[source, edge]
+----
+<h2> Hello {{ username }} </h2>
+<p>
+  Welcome to the yardstick club, here's your getting started guide
+</p>
+----
+
+== Mail API
+Below is the list of methods you can use to send emails.
+
+==== send(views, data, callback)
+Send email using one or multiple Edge views.
+
+[source, js]
+----
+await Mail.send('view', data, (message) => {
+  message
+    .from('')
+    .to('')
+})
+----
+
+The `views` can be a single view or an array of views for a specific content type.
+
+[source, js]
+----
+await Mail.send(['welcome', 'welcome.text'])
+----
+
+The view ending with `.text` is used as the plain text body of the email. In the same way, you can set the mail body for Apple watch.
+
+[source, js]
+----
+await Mail.send(['welcome', 'welcome.text', 'welcome.watch'])
+----
+
+==== raw(string, data, callback)
+Use raw string to send the mail. The string value is considered as the `plain text` email.
+
+[source, js]
+----
+await Mail.raw('Hello {{ username }}', user.toJSON(), (message) => {
+  message
+    .to(user.email)
+    .from('<from-email>')
+    .subject('Welcome to yardstick')
+})
+----
+
+== Message API
+Below is the list of methods you can use to build message using fluent message API.
+
+==== to(address, [name])
+Set `to` address.
+
+[source, js]
+----
+message.to(user.email)
+
+// with email and name both
+message.to(user.email, user.name)
+----
+
+==== from(address, [name])
+Set `from` address.
+
+[source, js]
+----
+message.from('team@yardstick.io')
+
+// with email and name both
+message.from('team@yardstick.io', 'Yardstick')
+----
+
+==== cc(address, [name])
+Add cc address on the email
+
+[source, js]
+----
+message.cc(user.email)
+
+// with email and name both
+message.cc(user.email, user.name)
+----
+
+==== bcc(address, [name])
+Add bcc address on the email.
+
+[source, js]
+----
+message.bcc(user.email)
+
+// with email and name both
+message.bcc(user.email, user.name)
+----
+
+Also, you can call the above methods for multiple times to defined multiple addresses.
+
+==== replyTo(address, [name])
+Set `replyTo` email address
+
+[source, js]
+----
+message.replyTo('noreply@yardstick.io')
+----
+
+==== inReplyTo(messageId)
+Set email message id
+
+[source, js]
+----
+message.inReplyTo(someThread.id)
+----
+
+==== subject(value)
+Set email subject
+
+[source, js]
+----
+message.subject('Welcome to yardstick')
+----
+
+==== text(value)
+Manually set the plain text body for the email.
+
+[source, js]
+----
+message.text('Email plain text version')
+----
+
+==== attach(filePath, options)
+Attach file(s) with email.
+
+[source, js]
+----
+message
+  .attach(Helpers.tmpPath('guides/getting-started.pdf'))
+----
+
+Set custom file name
+
+[source, js]
+----
+message
+  .attach(Helpers.tmpPath('guides/getting-started.pdf'), {
+    filename: 'Getting-Started.pdf'
+  })
+----
+
+==== attachData(data, filename, options)
+Attach raw data as a `String`, `Buffer` or `Stream`.
+
+[source, js]
+----
+message.attachData('hello', 'hello.txt')
+
+// buffer
+message.attachData(new Buffer('hello'), 'hello.txt')
+
+// stream
+message.attachData(fs.createReadStream('hello.txt'), 'hello.txt')
+----
+
+==== embed(filePath, cid, options)
+Embed image into HTML body using *content id*. Make sure the `cid` is unique for each image for a given email.
+
+[source, js]
+----
+message.embed(Helpers.publicPath('logo.png'), 'logo')
+----
+
+Later inside the template, you can say
+
+[source, edge]
+----
+<img src="cid:logo" />
+----
+
+==== driverExtras(extras)
+Pass an object of values to the current driver. The mail provider passes the object to the driver, and it is up to the driver to consume these values.
+
+[source, js]
+----
+message.driverExtras({ campaign_id: 20 })
+----
+
+== Switching connections
+Mail provider allows defining multiple connections inside `config/mail.js` file. Connections can be for same or a different driver.
+
+.config/mail.js
+[source, js]
+----
+{
+  connection: 'smtp',
+
+  smtp: {},
+
+  sparkpost: {
+    driver: 'sparkpost',
+    apiKey: Env.get('SPARKPOST_API_KEY'),
+    extras: {}
+  }
+}
+----
+
+Using the above config, you can switch to `sparkpost` connection using the `connection` method.
+
+[source, js]
+----
+await Mail
+  .connection('sparkpost')
+  .send('view', data, (message) => {
+  })
+----
+
+== Drivers
+Below sections are instructions related to specific drivers.
+
+=== SES
+The `ses` driver relies on link:https://npmjs.org/package/aws-sdk[aws-sdk, window="_blank"]. Make sure to install the dependencies from npm, since it is installed by default.
+
+[source, bash]
+----
+npm i aws-sdk
+----
+
+=== SparkPost
+You can pass following extra options when using sparkpost as the driver.
+
+Via config
+[source, js]
+----
+{
+  extras: {
+    campaign_id: '',
+    options: {}
+  }
+}
+----
+
+Check out sparkpost link:https://developer.sparkpost.com/api/transmissions.html#header-options-attributes[options attributes] docs to learn more about available options.
+
+Also, you can pass `extras` at runtime using the `driverExtras` method.
+
+[source, js]
+----
+await Mail.send('view', data, (message) => {
+  message.driverExtras({
+    campaign_id: '',
+    options: {}
+  })
+})
+----
+
+=== Mailgun
+You can pass following extra options when using mailgun as the driver.
+
+Via config
+[source, js]
+----
+{
+  extras: {
+    'o:tag': '',
+    'o:campaign': '',
+    ....
+  }
+}
+----
+
+Check out link:https://mailgun-documentation.readthedocs.io/en/latest/api-sending.html#sending[mailgun docs] to learn more about available options.
+
+Also, you can pass `extras` at runtime using the `driverExtras` method.
+
+[source, js]
+----
+await Mail.send('view', data, (message) => {
+  message.driverExtras({
+    'o:tag': '',
+    'o:campaign': ''
+  })
+})
+----
