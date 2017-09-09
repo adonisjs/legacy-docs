@@ -163,7 +163,7 @@ Outputs
 ----
 
 ==== cspMeta
-When using shield middleware, it will set the CSP headers for you. Whereas can also set CSP policy using the meta tag.
+When using shield middleware, the CSP headers are set automatically. However can also set them using HTML meta tag.
 
 [source, edge]
 ----
@@ -204,6 +204,105 @@ Render an SVG file inline inside the HTML. The tag expects the relative path to 
 
 == Templating
 The templating syntax is same as the Edge. So make sure to read the link:http://edge.adonisjs.com/docs/syntax-guide[edge documentation, window="_blank"].
+
+== Extending views
+You can also extend views by adding your view globals or tags. Globals and tags should only be added once, so make sure to use the `start/hooks.js` file to extend views.
+
+=== Globals
+[source, js]
+----
+const { hooks } = require('@adonisjs/ignitor')
+
+hooks.after.providersBooted(() => {
+  const View = use('View')
+
+  View.global('currentTime', function () {
+    return new Date().getTime()
+  })
+})
+----
+
+Above global returns the current time when you reference it inside the views.
+
+[source, edge]
+----
+{{ currentTime() }}
+----
+
+Of course, you can extract the code inside `providersBooted` to a different file and require it.
+
+=== Globals scope
+The value of `this` inside globals closure is bound to the view context so that you can access runtime values from it.
+
+[source, js]
+----
+View.global('button', function (text) {
+  return this.safe(`<button type="submit"> ${text} </button>`)
+})
+----
+
+The `safe` method makes sure that returned HTML is not escaped.
+
+To use other global methods or values, make use of the `this.resolve` method.
+
+[source, js]
+----
+View.global('messages', {
+  success: 'This is a success message',
+  warning: 'This is a warning message'
+})
+
+View.global('getMessage', function (type) {
+  const message = this.resolve('messages')
+  return messages[type]
+})
+----
+
+[source, edge]
+----
+{{ getMessage('success') }}
+----
+
+=== Tags
+The tags are registered the same way as globals inside `start/hooks.js` file. Learn more about tags from the link:http://edge.adonisjs.com/docs/tags[Edge docs, window="_blank"].
+
+[source, js]
+----
+const { hooks } = require('@adonisjs/ignitor')
+
+hooks.after.providersBooted(() => {
+  const View = use('View')
+
+  class MyTag extends View.engine.BaseTag {
+  }
+
+  View.engine.tag(new MyTag())
+})
+----
+
+=== Runtime values
+Quite often you want to share request specific values with your views, and same can be done by creating a middleware and sharing locals.
+
+[source, js]
+----
+class SomeMiddleware {
+
+  async handle ({ view }, next) {
+    view.share({
+      apiVersion: request.input('version')
+    })
+
+    await next()
+  }
+}
+----
+
+Moreover, inside your views, you can access it like any other value
+
+[source, edge]
+----
+{{ apiVersion }}
+----
 
 == Syntax highlighting
 The plugins for the following editors are available to get syntax highlighting support for Edge.

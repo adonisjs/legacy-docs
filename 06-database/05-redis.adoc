@@ -1,0 +1,216 @@
+---
+title: Redis
+permalink: redis
+category: database
+---
+= Redis
+
+toc::[]
+
+AdonisJs has first class support for redis built on top of link:https://github.com/luin/ioredis[ioredis, window="_blank"] with better pub/sub API.
+
+NOTE: Configuration, events API and all the methods from IoRedis are 100% supported. Make sure to read link:https://github.com/luin/ioredis[ioredis docs, window="_blank"] as well.
+
+== Setup
+Redis provider is not installed by default, so follow the given steps to install it from npm.
+
+[source, bash]
+----
+adonis install @adonisjs/redis
+----
+
+Next, register the provider inside `start/app.js` file.
+
+[source, js]
+----
+const providers = [
+  '@adonisjs/redis/providers/RedisProvider'
+]
+----
+
+The configuration file is saved as `config/redis.js`, make sure to define the connection settings before making use of the provider.
+
+== Basic example
+Let’s start with a basic example of caching users inside redis. The following example may not be the best way to cache data, but does gives you an idea on how to make use of redis.
+
+[source, js]
+----
+
+'use strict'
+
+const Redis = use('Redis')
+const User = use('App/Models/User')
+
+class UsersController {
+
+  async index () {
+    const cachedUsers = await Redis.get('users')
+    if (cachedUsers) {
+      return JSON.parse(cachedUsers)
+    }
+
+    const users = await User.all()
+    await Redis.set('users', JSON.stringify(users))
+    return users
+  }
+}
+----
+
+== Commands
+All link:http://redis.io/commands[redis commands, window="_blank"] are supported as Javascript functions. Also make sure to read link:https://github.com/luin/ioredis[ioredis, window="_blank"] documentation ( if required ).
+
+[source, js]
+----
+const Redis = use('Redis')
+
+const user = {
+  username: 'foo',
+  email: 'foo@bar.com'
+}
+
+// set user
+await Redis.hmset('users', user.username, JSON.stringify(user))
+
+// get user
+const user = await Redis.hmget('users', user.username)
+----
+
+== Pub/Sub
+Redis has built-in support for Pub/Sub to share messages on same or across multiple servers. AdonisJs offers a clean API on top of redis pub/sub to subscribe to different events and act upon them.
+
+All of the event listeners should go under `start/events.js` file and so does the redis subscribers.
+
+[source, js]
+----
+'use strict'
+
+const Redis = use('Redis')
+
+Redis.subscribe('music', async (track) => {
+  console.log('received track', track)
+})
+----
+
+Once a subscriber has been registered, you can publish data to this channel from the same or different server.
+
+[source, js]
+----
+const Redis = use('Redis')
+
+Redis.publish('music', track)
+----
+
+=== Available methods
+Below is the list of methods to interact with the pub/sub layer of redis.
+
+NOTE: You can only one one subscriber for a given channel.
+
+==== subscribe(channel, listener)
+[source, js]
+----
+Redis.subscribe('music', (track) {
+  console.log(track)
+})
+----
+
+A listener can also be a `file.method` reference from the `app/Listeners` directory.
+
+[source, js]
+----
+Redis.subscribe('music', 'Music.newTrack')
+----
+
+.app/Listeners/Music.js
+[source, js]
+----
+'use strict'
+
+const Music = exports = module.exports = {}
+
+Music.newTrack = (track) => {
+  console.log(track)
+}
+----
+
+==== psubscribe(pattern, listener)
+Subscribe to a pattern
+
+[source, js]
+----
+Redis.psubscribe('h?llo', function (message, channel, pattern) {
+})
+
+Redis.publish('hello')
+Redis.publish('hallo')
+----
+
+==== publish(channel, message)
+Publish message to a given channel
+
+[source, js]
+----
+Redis.publish('music', {
+  id: 1,
+  title: 'Love me like you do',
+  artist: 'Ellie goulding'
+})
+----
+
+==== unsubscribe(channel)
+Unsubscribe from a given channel
+
+[source, js]
+----
+Redis.unsubscribe('music')
+----
+
+==== punsubscribe(channel)
+Unsubscribe from a given pattern
+
+[source, js]
+----
+Redis.punsubscribe('h?llo')
+----
+
+== Multiple connections
+You can define the configuration for multiple connections inside the `config/redis.js` file, and you can use those connections by calling the connection method.
+
+.config/redis.js
+[source, js]
+----
+module.exports = {
+  connection: 'local',
+
+  local: {
+    ...
+  },
+
+  secondary: {
+    host: 'myhost.com',
+    port: 6379
+  }
+}
+----
+
+==== connection(name)
+Use a different connection to make redis queries.
+
+[source, js]
+----
+await Redis
+  .connection('secondary')
+  .get('users')
+
+// hold reference to connection
+const secondaryConnection = Redis.connection('secondary')
+await secondaryConnection.get('users')
+----
+
+==== quit(name)
+The redis provider creates a connections pool and reuses the existing connections. You can quit a connection by calling the quit method with a single or an array of connections.
+
+[source, js]
+----
+await Redis.quit('secondary')
+----
+
