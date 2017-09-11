@@ -17,14 +17,22 @@ Install the middleware provider from npm by executing the following command.
 adonis install @adonisjs/cors
 ----
 
-Next, register the global middleware
+Next, register the provider inside `start/app.js` file.
 
-.start/kernel.js
+.start/app.js
 [source, javascript]
 ----
 const providers = [
   '@adonisjs/cors/providers/CorsProvider'
 ]
+----
+
+The middleware will be registered inside `start/kernel.js` file.
+
+[source, js]
+----
+Server
+  .use(['Adonis/Middleware/Cors'])
 ----
 
 == Config
