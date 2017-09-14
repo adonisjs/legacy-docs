@@ -24,8 +24,8 @@ Following is the list of supported database and their equivalent drivers.
 `npm i mysql2`
 | SQLite3 | `npm i sqlite3`
 | MariaDB | `npm i mariasql`
-| Oracle | `npm i strong-oracle` or +
-`npm i oracle`
+| Oracle | `npm i oracledb` or +
+`npm i strong-oracle`
 | MSSQL | `npm i mssql`
 |====
 
