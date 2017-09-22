@@ -527,7 +527,7 @@ const count = await Database
   .from('users')
   .count('id as id') // returns array
 
-const total = count[0]['id'] // returns number
+const total = count[0].id // returns number
 ----
 
 ==== countDistinct
