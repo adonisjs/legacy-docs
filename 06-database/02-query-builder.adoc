@@ -525,9 +525,9 @@ const total = count[0]['count("id")'] // returns number
 // COUNT COLUMN AS NAME
 const count = await Database
   .from('users')
-  .count('id as id') // returns array
+  .count('* as total') // returns array
 
-const total = count[0].id // returns number
+const total = count[0].total // returns number
 ----
 
 ==== countDistinct
