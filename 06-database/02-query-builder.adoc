@@ -509,19 +509,25 @@ await Database.transaction(async (trx) => {
 ==== count()
 [source, javascript]
 ----
-const total = await Database
+const count = await Database
   .from('users')
-  .count()
+  .count() // returns array
+
+const total = count[0]['count(*)'] // returns number
 
 // COUNT A COLUMN
-const total = await Database
+const count = await Database
   .from('users')
-  .count('id')
+  .count('id') // returns array
+
+const total = count[0]['count("id")'] // returns number
 
 // COUNT COLUMN AS NAME
-const total = await Database
+const count = await Database
   .from('users')
-  .count('id as id')
+  .count('* as total') // returns array
+
+const total = count[0].total // returns number
 ----
 
 ==== countDistinct
@@ -529,9 +535,11 @@ The `countDistinct` is same as count, but adds distinct expression.
 
 [source, javascript]
 ----
-const total = await Database
+const count = await Database
   .from('users')
   .countDistinct('id')
+
+const total = count[0]['count(distinct "id")'] // returns number
 ----
 
 ==== min
