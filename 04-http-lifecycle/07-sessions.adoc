@@ -241,6 +241,20 @@ session.flashOnly(['username'])
 <input type="text" name="username" value="{{ old('username', '') }}" />
 ----
 
+You can also use old() to check for the existence of variables in the flash.
+
+[source, js]
+----
+session.flash({success: 'You have been logged out.'})
+----
+
+[source, edge]
+----
+@if(old('success'))
+  {{ old('success') }}
+@endif
+----
+
 ==== hasErrorFor(key)
 Find if there is an error for a given field inside the flash store.
 
