@@ -50,12 +50,12 @@ const aliases = {
 ----
 
 == Config
-Also, a configuration file needs to be saved as `config/mail.js`. You can download the sample configuration from link:https://raw.githubusercontent.com/adonisjs/adonis-mail/master/examples/mail.js[github, window="_blank"] or run the below bash command to save the file automatically.
+Also, a configuration file needs to be saved as `config/mail.js`. You can download the sample configuration from link:https://raw.githubusercontent.com/adonisjs/adonis-mail/master/examples/config.js[github, window="_blank"] or run the below bash command to save the file automatically.
 
 .Download using wget
 [source, bash]
 ----
-wget https://raw.githubusercontent.com/adonisjs/adonis-mail/master/examples/mail.js -O config/mail.js
+wget https://raw.githubusercontent.com/adonisjs/adonis-mail/master/examples/config.js -O config/mail.js
 ----
 
 == Basic Example
