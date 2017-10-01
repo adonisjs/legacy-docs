@@ -119,7 +119,7 @@ class UsersController {
       return
     }
 
-    response.unauthorized('Invalid credentails')
+    response.unauthorized('Invalid credentials')
   }
 
 }
