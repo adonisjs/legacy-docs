@@ -1,7 +1,7 @@
 ---
 title: File uploads
 permalink: file-uploads
-category: cookbooks
+category: http-lifecycle
 ---
 = File uploads
 
@@ -42,7 +42,7 @@ Route.post('upload', async ({ request }) => {
 ----
 
 [ol-spaced]
-1. The `request.file` method accepts two arguments, as *field name* and *an object of validations* to be performed, before moving the file.
+1. The `request.file` method accepts two arguments, a *field name* and *an object of validations* to be performed, before moving the file.
 2. Next, we call `profilePic.move` method, which attempts to move the file to the defined directory.
 3. Finally, we check whether the move operation was successful or not using `profilePic.moved()` method and return errors (if any).
 
@@ -152,10 +152,12 @@ Next thing we need to do is call the `process` method inside the controller/rout
 
 [source, js]
 ----
+const Drive = use('Drive')
+
 Route.post('upload', async ({ request }) => {
 
   request.multipart.file('profile_pic', {}, async (file) => {
-    file.stream // readable stream
+    await Drive.disk('s3').put(file.fileName, file.stream)
   })
 
   await request.multipart.process()
