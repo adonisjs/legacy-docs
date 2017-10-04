@@ -46,7 +46,7 @@ The best part of context object is that you can pull a lot more objects from it.
 == Public directory
 The `public` directory in the root of your application is registered to serve static resources like *css*, *images* and *fonts*, etc.
 
-All files inside the directory are available publicly without any authentication or restrictions.
+All files inside this directory are available publicly without any authentication or restrictions.
 
 == Views
 There are a couple of ways to make use of views, and it is essential to understand the difference between them. One way is to import the *View* provider, and other is to use the HTTP specific view instance.

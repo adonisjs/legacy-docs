@@ -1,0 +1,74 @@
+---
+title: Traits
+permalink: traits
+category: lucid
+---
+= Traits
+
+toc::[]
+
+Traits make it possible to add functionality to your Models from *outside-in*. Think of them as building blocks for your models.
+
+Using traits, you can
+
+[ol-shrinked]
+1. Add new methods to your model class.
+2. Listen for model hooks.
+3. Add methods to query builder instance for a given model.
+
+== Traits signature
+Traits are saved inside `app/Models/Traits` directory. Each trait must have a `register` method which receives the model class as the only parameter.
+
+.app/Models/Traits/Slugify.js
+[source, js]
+----
+class Slugify {
+
+  register (Model) {
+    Model.addHook('beforeCreate', function () {
+      // create slug
+    })
+  }
+}
+
+module.exports = Slugify
+----
+
+Now, you can register the trait as following.
+
+[source, js]
+----
+const Model = use('Model')
+
+class User extends Model {
+  static boot () {
+    super.boot()
+    this.addTrait('Slugify')
+  }
+}
+----
+
+== Extending query builder
+Also, you can add macros to the `QueryBuilder` for a given model.
+
+[source, js]
+----
+class Slugify {
+
+  register (Model) {
+    Model.queryMacro('whereSlug', function (value) => {
+      this.where('slug', value)
+      return this
+    })
+  }
+}
+
+module.exports = Slugify
+----
+
+Moreover, then use it as
+
+[source, js]
+----
+await User.query().whereSlug('some value')
+----

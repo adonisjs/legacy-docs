@@ -182,7 +182,9 @@ The `belongsToMany` relationship is quite powerful since it allows you to define
 2. Also a *car* can have many *owners* during its life span.
 
 When defining this relationship, there is no simple way to store a foreign key, and instead, we rely on a `3rd table`
-called *pivot table*. We learn about the pivot table shortly.
+called *pivot table*.
+
+NOTE: You have to create the `pivot_table` via migrations.
 
 === API
 [source, js]

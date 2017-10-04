@@ -12,7 +12,7 @@ AdonisJs routing favors *REST conventions*, but still, give enough room to creat
 All of the application routes are registered inside `start/routes.js` file. Also, you are free to create multiple files for routes and just require them inside the `routes.js` file.
 
 == Basic example
-The most basic route requires a URL path and closure to be executed. The returned value from the route is sent back as the response.
+The most basic route requires a URL path and closure to be executed. The returned value from the closure is sent back as the response.
 
 [source, js]
 ----
@@ -117,7 +117,7 @@ Same can be done by defining a wildcard route.
 Route.any('*', ({ view }) => view.render('main'))
 ----
 
-If you have any other specific routes, they should be defined before the wildcard route. For example:
+If you have any other specific routes, they are be defined before the wildcard route. For example:
 
 [source, js]
 ----
@@ -346,18 +346,15 @@ Route
   .middleware(['auth'])
 ----
 
-Since attaching auth middleware to all the routes is not desired, you can customize the behavior by passing a *Closure* which should return an array of middleware to applied to each route within the resource.
+Since attaching auth middleware to all the routes is not desired, you can customize the behavior by passing a map of values.
 
 [source, js]
 ----
 Route
   .resource('users', 'UsersController')
-  .middleware((route) => {
-    if (['users.store', 'users.update', 'users.delete'].indexOf(route.name) > -1) {
-      return ['auth']
-    }
-    return []
-  })
+  .middleware(new Map([
+    ['auth']: ['users.store', 'users.update', 'users.delete']
+  ]))
 ----
 
 Here we have defined the `auth` middleware on *store*, *update* and *delete* routes.
