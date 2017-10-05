@@ -7,7 +7,7 @@ category: introduction
 
 toc::[]
 
-AdonisJs is a Node.js MVC framework that runs on all the main operating systems. It offers you a stable eco-system to write web servers so that you can focus on business needs over finalizing which package to choose or not.
+AdonisJs is a Node.js MVC framework that runs on all the main operating systems. It offers a stable eco-system to write web servers so that you can focus on business needs over finalizing which package to choose or not.
 
 AdonisJs favors developer joy with consistent and expressive API to build full-stack web-servers or a micro API server.
 

@@ -7,7 +7,7 @@ category: internals
 
 toc::[]
 
-The ignitor is the package that powers the bootstrapping of an AdonisJs application. In this guide, we learn about some features and functionalities offered by this package to manage our code.
+Ignitor is the package that powers bootstrapping of an AdonisJs application. In this guide, we learn about some features and functionalities offered by this package to manage our code.
 
 == Hooks
 link:https://github.com/adonisjs/adonis-ignitor[Ignitor, window="_blank"] provides a bunch of hooks that you can use to customize the application behavior. The hooks are registered inside `start/hooks.js` file. Feel free to create this file, if it is missing.
