@@ -202,12 +202,12 @@ class User extends Model {
     if (field === 'dob') {
       return value.format('YYYY-MM-DD')
     }
-    return super.formatDate(field, value)
+    return super.formatDates(field, value)
   }
 }
 ----
 
-The `value` is an instance of link:https://momentjs.com/[moment.js, window="_blank"], which means you can call any moment methods to format the date.
+The `value` is the actual date given when setting the field.
 
 === Casting dates
 Now we have saved the dates to the database; we may want to format them differently when displaying it to the user. It can be done quite easily using the `castDates` method.
@@ -219,12 +219,12 @@ class User extends Model {
     if (field === 'dob') {
       return `${value.fromNow(true)} old`
     }
-    return super.formatDate(field, value)
+    return super.formatDates(field, value)
   }
 }
 ----
 
-Again the `value` is an instance of link:https://momentjs.com/[moment.js, window="_blank"]. Also, the `castDates` method is called when the model instance is *deserialized*, which happens after calling `toJSON`.
+The `value` is an instance of link:https://momentjs.com/[moment.js, window="_blank"], which means you can call any moment methods to format the date. Also, the `castDates` method is called when the model instance is *deserialized*, which happens after calling `toJSON`.
 
 [source, js]
 ----
