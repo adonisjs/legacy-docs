@@ -185,7 +185,7 @@ All we did is moved the actual `Queue` implementation to the `src` directory and
 
 Also we have to make following changes
 
-1. Since the `Queue/index.js` is in a different directory, we need to tweak the referene of this file inside our service provider.
+1. Since the `Queue/index.js` is in a different directory, we need to tweak the reference of this file inside our service provider.
 2. Rename `Bee/Queue` namespace to a more suited namespace, which has less changes of collision. For example, when creating this provider for AdonisJs, we will name it as `Adonis/Addons/Queue`.
 
 [source, js]
@@ -230,7 +230,7 @@ The tests can be executed by running the test file using `node` command.
 node test/example.spec.js
 ----
 
-But ofcourse, you want to run all the test files together and for that you can make use of `japa-cli`.
+But of course, you want to run all the test files together and for that you can make use of `japa-cli`.
 
 [source, js]
 ----
