@@ -59,7 +59,7 @@ class Config {
 }
 ----
 
-As you can see, each class is dependent on some other class. When using the `Session` class, we have to build them properly.
+As you can see, each class is dependent on the other class. When using the `Session` class, we have to build them properly.
 
 [source, js]
 ----
@@ -70,7 +70,7 @@ const session = new Session(redis)
 
 The dependencies list may increase, based on the requirements of the project.
 
-On the other hand, IoC container makes it the responsibility of the dependency itself to satisfy its dependencies.
+On the other hand, the IoC container makes itself responsible for dependencies.
 
 === Painful testing
 When not using an IoC container, you have to come up with different ways to mock dependencies or rely on libraries like link:http://sinonjs.org/[sinonjs, window="_blank"].
@@ -78,7 +78,7 @@ When not using an IoC container, you have to come up with different ways to mock
 Whereas, when using the IoC container, it is so simple to link:testing-fakes#_self_implementing_fakes[create fakes], since all dependencies are resolved from the IoC container and not the file-system directly.
 
 == Binding dependencies
-Let's say we want to bind the `Redis` library inside the IoC container, making sure that knows how to compose itself.
+Let's say we want to bind the `Redis` library inside the IoC container, making sure that it knows how to compose itself.
 
 NOTE: There is no secret sauce to the IoC container. It is a pretty simple idea that controls the composition and resolution of a module, which opens a whole new world of possibilities.
 
@@ -96,7 +96,7 @@ class Redis {
 module.exports = Redis
 ----
 
-The `Config` is a constructor dependency and not a hardcoded `require` statement. It makes sure that our `Redis` class works fine until the `Config` object passed to the class has same interface and output.
+The `Config` is a constructor dependency and not an hardcoded `require` statement. It makes sure that our `Redis` class works fine until the `Config` object passed to the class has the same interface and output.
 
 Let's bind our class to the IoC container
 [source, js]
@@ -125,7 +125,7 @@ const redis = ioc.use('My/Redis')
 3. Finally, we return a new instance of `Redis`, which is all configured and ready to be used.
 
 === Singletons
-There's one problem with the *Redis binding* we just created. Now every time we fetch it from the IoC container, it gives us a new instance of it, which in turn creates a new connection to the redis server.
+There's a problem with the *Redis binding* we just created. Now every time we fetch it from the IoC container, it gives us a new instance of it, which in turn creates a new connection to the redis server.
 
 To overcome this problem, IoC container let you define singletons.
 

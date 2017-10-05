@@ -97,7 +97,7 @@ The job of the `storage` directory was to hold files which are never committed t
 == Routing
 
 ==== addCollection, addMember
-The `addCollection` and `addMember` methods have been removed from the routing resource. This is done in favor of keeping routes straightforward since it was never clear in which sequence a new *member* was added via the `addMember` method. For example
+The `addCollection` and `addMember` methods have been removed from the resource routing. This is done in favor of keeping routes straightforward since it was never clear in which sequence a new *member* was added via the `addMember` method. For example
 
 [source, js]
 ----
@@ -179,7 +179,7 @@ Route.get('users/:id', function ({ params }) {
 == Views
 The view layer of AdonisJs now uses link:http://edge.adonisjs.com[Edge, window="_blank"] over link:https://mozilla.github.io/nunjucks/[nunjucks, window="_blank"] which is a home-grown template engine written for AdonisJs itself.
 
-Extending the core of nunjucks was so painful that adding new *tags* and *helpers* was becoming hard. Edge has a very minimal developer API, and it is pretty straightforward to extend the core.
+Extending the core of nunjucks was so painful that adding new *tags* and *helpers* was becoming hard. Edge has a very minimal developer API, and it is pretty straightforward to extend.
 
 Make sure to check link:http://edge.adonisjs.com/docs/getting-started[edge guides, window="_blank"] to learn more about it.
 
@@ -203,7 +203,7 @@ Route.get('/',  ({ view }) => {
 ----
 
 == Auth
-The authentication engine has more or less remained the same. This section outlines some of the breaking changes.
+The authentication engine has remained about the same. This section outlines some of the breaking changes.
 
 ==== request.auth
 The `request.auth` method has been removed and instead a dedicated `auth` instance is passed to all HTTP requests.
