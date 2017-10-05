@@ -43,7 +43,7 @@ Whereas in development it is recommended to use `adonis serve --dev`.
 
 The `app` directory stores all of your application code such as *Controllers*, *Models*, *Commands*.
 
-AdonisJs has a concept of autoloading the `app` directory. Which means instead of requiring files with the relative path, you can require files with a namespace. For example:
+AdonisJs has the concept of autoloading the `app` directory. This means that instead of requiring files with the relative path, you can require files with a namespace. For example:
 
 [source, bash]
 ----
