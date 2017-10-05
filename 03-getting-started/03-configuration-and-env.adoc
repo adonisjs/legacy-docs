@@ -7,7 +7,7 @@ category: getting-started
 
 toc::[]
 
-In this guide, we understand how AdonisJs handles the application configuration and environment variables. By the end of this guide, you will know how to keep sensitive information secure and avoid configuration debt.
+In this guide, we learn how AdonisJs handles the application configuration and environment variables. By the end of this guide, you will know how to keep sensitive information secure and avoid configuration debt.
 
 == Configuration debt
 Before getting started, let's understand the concept of configuration debt. Many Node.js applications face the issue of scattered configuration inside multiple files. For example:
@@ -86,7 +86,7 @@ ENV_SILENT=true node server.js
 ----
 
 === Testing variables
-If you are application is started with `NODE_ENV=testing`, AdonisJs attempts to load `.env.testing` file from the root of your application.
+If your application is started with `NODE_ENV=testing`, AdonisJs attempts to load `.env.testing` file from the root of your application.
 
 This file overrides the values from `.env` file, so that you can have slightly different configuration when running tests.
 
