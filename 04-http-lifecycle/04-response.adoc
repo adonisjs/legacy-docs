@@ -46,7 +46,7 @@ Route.get('/', async () => {
 ----
 
 === No callbacks please
-Since the request/response lifecycle allows you to return values, over calling dedicated methods, it discourages the usage of callbacks entirely.
+Since the request/response lifecycle allows you to return values and calling dedicated methods, it discourages the usage of callbacks entirely.
 
 Which means the following will not work.
 [source, js]
@@ -58,7 +58,7 @@ Route.get('/', async ({ response }) => {
 })
 ----
 
-The reason above code is not going to work, is as soon the route handler is executed, AdonisJs ends the response, and your callback gets executed later, results in an error.
+The reason why above code is not going to work, is that as soon the route handler is executed, AdonisJs ends the response, and your callback gets executed later, resulting in an error.
 
 It may *sound scary*, but it is done in favor of having a clean codebase, instead of sprinkling mixed API everywhere.
 
