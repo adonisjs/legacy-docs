@@ -129,7 +129,7 @@ Below is the list of available commands with their usage and description.
 |====
 | Command | Options | Description
 | adonis make:seed | None | Make a new seed file
-| adonis seed | `--files` | Execute seed files. Also, you can pass a comma separated files to be executed. Otherwise, all files get executed.
+| adonis seed | `--files` | Execute seed files. Also, you can pass a comma separated list of files to be executed. Otherwise, all files get executed.
 |====
 
 == Usage without Lucid
