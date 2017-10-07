@@ -49,7 +49,7 @@ The `public` directory in the root of your application is registered to serve st
 All files inside this directory are available publicly without any authentication or restrictions.
 
 == Views
-There are a couple of ways to make use of views, and it is essential to understand the difference between them. One way is to import the *View* provider, and other is to use the HTTP specific view instance.
+There are a couple of ways to make use of views, and it is essential to understand the difference between them. One way is to import the *View* provider, the other is to use HTTP specific view instance.
 
 === Import manually
 [source, js]

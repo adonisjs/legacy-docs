@@ -376,7 +376,7 @@ request.is(['application/*']) // returns - application/json
 == Method spoofing
 HTML forms are only capable of making `GET` and `POST` requests, which means you cannot utilize the REST conventions of using other HTTP methods like *PUT*, *DELETE* and so on.
 
-AdonisJs makes it simpler by passing the request method as part of the query string and then it executes the correct Route for you automatically.
+AdonisJs makes it simpler bypassing the request method as part of the query string and then it executes the correct Route for you automatically.
 
 [source, js]
 ----

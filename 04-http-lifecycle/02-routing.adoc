@@ -110,7 +110,7 @@ Route.get('make/:drink?', async ({ params }) => {
 == Routing for SPA's
 Quite often you find yourself creating a SPA ( single page application ), where you want to render a single view from the server and handle routing on front-end using your favorite front end framework.
 
-Same can be done by defining a wildcard route.
+This can be done by defining a wildcard route.
 
 [source, js]
 ----
@@ -205,7 +205,7 @@ Inside the template
 
 Now if you change your route path from `/users` to something else, you have to remember to come back and change it inside the template as-well.
 
-To overcome this problem, you can name your routes uniquely and reference them at other places.
+To overcome this problem, you can name your routes uniquely and reference them in other part of the program.
 
 [source, js]
 ----
@@ -346,7 +346,7 @@ Route
   .middleware(['auth'])
 ----
 
-Since attaching auth middleware to all the routes is not desired, you can customize the behavior by passing a map of values.
+Since attaching auth middleware to all the routes is not always desired, you can customize the behavior by passing a map of values.
 
 [source, js]
 ----

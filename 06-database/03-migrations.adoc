@@ -99,7 +99,7 @@ There is a *Batch* next to each migration so that you can rollback to a given ba
 
 That is how migrations work under the hood.
 
-1. Every time you run `adonis migration:run`, a new batch is for all the pending schema files.
+1. Every time you run `adonis migration:run`, a new batch is created for all the pending schema files.
 2. Files which are migrated once, are not executed again.
 3. Running `adonis migration:rollback`  rollbacks the last batch migrations in reverse order.
 
