@@ -241,6 +241,59 @@ async up () {
 }
 ----
 
+== Extensions
+Below is the list of extension methods you can execute when running migrations.
+
+NOTE: Extension only works with PostgreSQL database.
+
+==== createExtension(extensionName)
+Create a database extension.
+
+[source, javascript]
+----
+class UserSchema {
+  up () {
+    this.createExtension('postgis')
+  }
+}
+----
+
+==== createExtensionIfNotExists(extensionName)
+Only creates the extension if it does not exists, otherwise silently ignores the *createExtension* command.
+
+[source, javascript]
+----
+class UserSchema {
+  up () {
+    this.createIfNotExists('postgis')
+  }
+}
+----
+
+==== dropExtension(extensioName)
+Drop an existing database extension.
+
+[source, javascript]
+----
+class UserSchema {
+  down () {
+    this.dropExtension('postgis')
+  }
+}
+----
+
+==== dropExtensionIfExists(extensionName)
+Drop database extension only if it exists, otherwise silently ignores the *dropExtension* command.
+
+[source, javascript]
+----
+class UserSchema {
+  down () {
+    this.dropExtensionIfExists('postgis')
+  }
+}
+----
+
 == Schema builder API
 The schema builder API is exactly same as the link:http://knexjs.org/#Schema-Building[knex api], so make sure to read their documentation.
 
