@@ -1,0 +1,416 @@
+---
+title: Internationalization
+permalink: internationalization
+category: cookbooks
+---
+= Internationalization
+
+toc::[]
+
+AdonisJs has first class support for internationalization built on top of link:https://formatjs.io/[formatjs.io, window="_blank"] standards. You can easily translate *numbers*, *dates*, and *messages* for multiple languages.
+
+
+== Setup
+Since the provider to add *Intl* support is not installed by default. We need to pull it from npm.
+
+[source, bash]
+----
+adonis install @adonisjs/antl
+----
+
+Moreover, next, make sure to register the provider inside `start/app.js` file.
+
+[source, js]
+----
+const providers = [
+  '@adonisjs/antl/providers/AntlProvider'
+]
+----
+
+The configuration for locales is saved inside `config/app.js` file, with following options.
+
+[options="header", cols="10%,20%,70%"]
+|====
+| Option | Value | Description
+| locale | ISO 639 | The locale to be used as the default locale for the application. It must be one of the available locales from link:https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes[ISO 639 codes]
+| loader | database or file | The loader to be used for loading messages for different languages.
+|====
+
+== Locales storage
+
+=== File
+The locales for the `file` loader are stored inside `resources/locales` directory. Each language gets its directory with a *flat list of files* inside it.
+
+[source, bash]
+----
+└── resources
+  └── locales
+      ├── en
+      ├── fr
+      └── it
+----
+
+You can also create a directory named `fallback` to store messages which are used when the message for current language is missing.
+
+=== Database
+When making use of `database` loader, all the locales are fetched from the database table called `locales`.
+
+The `adonis install` command does create the migration for the table. However, you can always reference the latest schema file from link:https://github.com/adonisjs/adonis-antl/blob/develop/templates/locales-schema.js[github, window="_blank"]
+
+[options="header", cols="5%, 5%, 5%, 5%, 80%"]
+|====
+| id | locale | group | item | text
+| 1 | en | cart | total | Cart total is {total, number, usd}
+| 2 | fr | cart | total | Le panier est total {total, number, usd}
+|====
+
+NOTE: It is mandatory to define a `group` for each locale item.
+
+== ICU Message syntax
+AdonisJs uses link:http://userguide.icu-project.org/formatparse/messages[ICU Message syntax] ( industry standard ) to format messages.
+
+The following topics define the usage of ICU message syntax.
+
+=== Arguments
+You can pass dynamic arguments to the message, which replaces the placeholder values under `{ }` curly braces.
+
+.messages.json
+[source, json]
+----
+{
+  "greeting": "Hello {name}"
+}
+----
+
+[source, js]
+----
+Antl.formatMessage('messages.greeting', { name: 'virk' })
+----
+
+
+=== Formatted arguments
+The values passed to the message can also be formatted for a certain type. For example: When passing a number to the message, we can format it as a `currency`.
+
+.cart.json
+[source, json]
+----
+{
+  "total": "Cart total is {total, number, usd}"
+}
+----
+
+[ol-shrinked]
+1. Here `total` is the value to the passed in the message.
+2. The `number` is the type of the value.
+3. Finally, `usd` is the format for the `total` value.
+
+The *ICU message syntax* doesn't understand the formats directly, so we need to pass them manually when formatting the message.
+
+NOTE: You also have to register the formats before passing them to the message. Learn more about xref:_registering_formats[registering formats].
+
+[source, js]
+----
+const Antl = use('Antl')
+const Formats = use('Antl/Formats')
+
+Antl.formatMessage(
+  'cart.total',
+  { total: 20 },
+  [Formats.pass('usd', 'number')]
+)
+----
+
+All we are doing here is calling `formatMessage` with 3 arguments.
+
+[ol-shrinked]
+1. The first is the reference to the message to be formatted.
+2. Next the `data` to be passed
+3. Finally, we pass an *Array* of formats.
+
+=== Select format
+The `select` format makes it easy to choose an output by matching value to one of many choices.
+
+TIP: Try and edit the below message in your link:https://format-message.github.io/icu-message-format-for-translators/editor.html?m={gender%2C%20select%2C%0D%0A%20%20%20%20male%20{He}%0D%0A%20%20%20%20female%20{She}%0D%0A%20%20%20%20other%20{They}%0D%0A}%20will%20respond%20shortly&l=en-us&gender=male[browser, window="_blank"]
+
+[source, plain]
+----
+{gender, select,
+    male {He}
+    female {She}
+    other {They}
+} will respond shortly
+----
+
+=== Plural format
+Also, you define the options on how to pluralize the keywords inside a locale message.
+
+TIP: Try and edit the below message in your link:https://format-message.github.io/icu-message-format-for-translators/editor.html?m=%7B%20count%20%2C%20plural%20%2C%0A%C2%A0%C2%A0%C2%A0%3D0%20%7BNo%20candy%20left%7D%0A%C2%A0%C2%A0one%20%7BGot%20%23%20candy%20left%7D%0Aother%20%7BGot%20%23%20candies%20left%7D%20%7D[browser, window="_blank"]
+
+[source, plain]
+----
+{count, plural,
+   =0 {No candy left}
+   one {Got # candy left}
+   other {Got # candies left}
+}
+----
+
+== Formatting values
+Below is the list of methods you can use to format *messages* or *raw values*.
+
+==== formatMessage(key, data, [formats])
+The `formatMessage` method, takes the `key` to be formatted with an object of data and formats to be used.
+
+[source, js]
+----
+const Antl = use('Antl')
+
+Antl.formatMessage('response.eta', { gender: 'male' })
+----
+
+Also, you can pass an array of formats.
+
+[source, js]
+----
+const Antl = use('Antl')
+const Formats = use('Antl/Formats')
+
+Antl.formatMessage(
+  'cart.total',
+  { total: 20 },
+  [
+    Formats.pass('usd', 'number')
+  ]
+)
+----
+
+==== formatNumber(value, options)
+Format value as a number. It also takes an object of options defined link:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat[here, window="_blank"].
+
+[source, js]
+----
+Antl.formatNumber(10)
+
+// as currency
+Antl.formatNumber(10, {
+  style: 'currency',
+  currency: 'usd'
+})
+
+// as percentage
+Antl.formatNumber(10, {
+  style: 'percent'
+})
+----
+
+==== formatAmount(value, currency, options)
+Format value with `style` set to currency.
+
+[source, js]
+----
+Antl.formatAmount(100, 'usd')
+----
+
+==== formatDate(value, options)
+Format value as date.  It also takes an object of options defined link:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat[here, window="_blank"].
+
+[source, js]
+----
+Antl.formatDate(new Date())
+
+// pull weekday for the date
+Antl.formatDate(new Date(), {
+  weekday: 'long'
+})
+
+// pull day only
+Antl.formatDate(new Date(), {
+  day: '2-digit'
+})
+----
+
+==== formatRelative(value, options)
+Format a date relative to the current date/time. Here is the list of link:https://github.com/yahoo/intl-relativeformat#custom-options[available options, window="_blank"]
+
+[source, js]
+----
+Antl.formatRelative(new Date())
+
+// always in numeric style
+Antl.formatRelative(new Date(), {
+  style: 'numeric'
+})
+----
+
+== Registering formats
+The xref:_formatmessage_key_data_formats[formatMessage] method only takes an array of pre-registered formats. Here is how you can register your formats for a given type.
+
+[source, js]
+----
+const Formats = use('Antl/Formats')
+
+Formats.add('usd', {
+  style: 'currency',
+  currency: 'usd'
+})
+----
+
+Use it as follows
+
+[source, js]
+----
+Antl.formatMessage(
+  'cart.total'
+  { total: 20 },
+  [
+    Formats.pass('usd', 'number')
+  ]
+)
+----
+
+The `Formats.pass` takes 2 arguments.
+
+[ol-shrinked]
+1. The first argument is the format to be used
+2. 2nd is the `type` to which format should be passed.
+
+Also, you can pass multiple formats to a given type. For example:
+
+[source, json]
+----
+{
+  "total": "Usd total { total, number, usd } or in GBP { gbpTotal, number, gbp }"
+}
+----
+
+Next, register the `usd` and `gbp` formats.
+
+[source, js]
+----
+Formats.add('usd', {
+  style: 'currency',
+  currency: 'usd'
+})
+
+Formats.add('gbp', {
+  style: 'currency',
+  currency: 'gbp'
+})
+----
+
+Finally, you can format the message as follows:
+
+[source, js]
+----
+Antl.formatMessage(
+  'cart.total',
+  { total: 20, gbpTotal: 13 },
+  [
+    Formats.pass('usd', 'number'),
+    Formats.pass('gbp', 'number')
+  ]
+)
+----
+
+Output
+
+[source, plain]
+----
+Usd total $20.00 or in GBP £13.00
+----
+
+== Switch locale
+Antl makes it simple to format locale at runtime when formatting values.
+
+[source, js]
+----
+Antl
+  .forLocale('fr')
+  .formatMessage('response.eta')
+----
+
+== Switch loader
+You can also switch between available loaders at runtime by calling `loader` method.
+
+NOTE: Always make sure to call `bootLoader` before making use of it. Also `bootLoader` needs to be called only once.
+
+[source, js]
+----
+const Antl = use('Antl')
+
+// asynchronous
+await Antl.bootLoader()
+
+// get antl instance for a booted loader
+const AntlDb = Antl.loader('database')
+
+// all methods are available
+AntlDb.formatMessage()
+----
+
+== Http request locale
+The antl provider binds the `locale` property to the link:http-context[Http context] object.
+
+[source, js]
+----
+Route.get('/', ({ locale }) => {
+  return `User language is ${locale}`
+})
+----
+
+The locale property is resolved as follows.
+
+[ol-spaced]
+1. It looks for `Accept-Language` HTTP header or `lang` query parameter to detect the user language.
+2. Next, matches the user language with the list of available locales configured by your application. +
+The configured locales are determined by messages saved inside *database* or *file system* for given languages.
+3. If user language is not supported by your application, then it will fallback to the default locale defined inside `config/app.js` file.
+
+== Formatting messages for user language
+Since we can access the user `locale` based upon some standard conventions, you can format messages in one of the following ways.
+
+=== Import globally
+Import the `Antl` provider globally and manually call the `forLocale` method when formatting the values.
+
+[source, js]
+----
+const Antl = use('Antl')
+
+Route.get('/', ({ locale }) => {
+  return Antl
+    .forLocale(locale)
+    .formatNumber(20, { style: 'currency', currency: 'usd' })
+})
+----
+
+=== Context instance
+However, you can also make use of the `antl` object, which is passed to all route handlers like *request* and *response*.
+
+[source, js]
+----
+Route.get('/', ({ antl }) => {
+  return antl
+    .formatNumber(20, { style: 'currency', currency: 'usd' })
+})
+----
+
+== View global
+Also the xref:_context_instance[Context instance] is shared with all the views. So you can access all the available methods inside your view templates.
+
+NOTE: There is no way to switch loader inside templates.
+
+[source, edge]
+----
+{{ antl.formatNumber(20, currency = 'usd', style = 'currency')  }}
+----
+
+Alternatively, you can make use of the `@mustache` tag to write in multiple lines.
+
+[source, edge]
+----
+@mustache(antl.formatNumber(
+  20,
+  currency = 'usd',
+  style = 'currency'
+))
+----
