@@ -410,7 +410,6 @@ Alternatively, you can make use of the `@mustache` tag to write in multiple line
 ----
 @mustache(antl.formatNumber(
   20,
-  currency = 'usd',
-  style = 'currency'
+  { currency: 'usd', style: 'currency }
 ))
 ----
