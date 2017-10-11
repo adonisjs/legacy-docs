@@ -66,8 +66,17 @@ DB_HOST=
 DB_USER=
 ----
 
-1. The `.env` file is never committed to the source control system like Git or Svn.
-2. On production server, you keep a separate `.env` file.
+Now you can access those variable by using the `get()` method on the `Env` class.
+
+[source, js]
+----
+const Env = use('Env')
+Env.get('APP_SECRET')
+----
+
+NOTE: `Env.get()` always returns a string. If you want to get a boolean value you'll need to test it yourself with `Env.get('...') === 'true'`
+
+WARNING: The `.env` file should never be committed to a source control system like Git or Svn.
 
 === Different .env file
 At times you may want to load a different `.env` file stored on your server at a different location. Same can be done as follows.
