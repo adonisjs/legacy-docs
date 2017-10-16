@@ -29,7 +29,7 @@ AdonisJs is a modular framework that consists of multiple service providers. The
 
 In theory, they are like any other npm module with some code on top of it to play transparently with AdonisJs applications. For example, link:https://github.com/adonisjs/adonis-bodyparser[BodyParser] to parse HTTP request body or link:https://github.com/adonisjs/adonis-lucid[Lucid] which is a SQL ORM.
 
-== FQA's
+== FAQ's
 Below is the list of frequently asked questions, if you think a common question is missing in the list. Please create an issue link:[here]
 
 [ol-spaced]
