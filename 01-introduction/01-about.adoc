@@ -7,9 +7,9 @@ category: introduction
 
 toc::[]
 
-AdonisJs is a Node.js MVC framework that runs on all operating systems. It offers a stable eco-system to write a server side web application so that you can focus on business needs over finalizing which package to choose or not.
+AdonisJs is a Node.js MVC framework that runs on all operating systems. It offers a stable eco-system to write a server-side web application so that you can focus on business needs over finalizing which package to choose or not.
 
-AdonisJs favors developer joy with consistent and expressive API to build full-stack web application or a micro API server.
+AdonisJs favours developer joy with consistent and expressive API to build a full-stack web application or a micro API server.
 
 == Getting started
 They are no hard prerequisites to use AdonisJs but having a conventional understanding of JavaScript, Async programming and Node.js is great.
@@ -33,7 +33,7 @@ In theory, they are like any other npm module with some code on top of it to pla
 Below is the list of frequently asked questions, if you think a common question is missing in the list. Please create an issue link:https://github.com/adonisjs/docs[here]
 
 [ol-spaced]
-1. *How AdonisJs is different from Express or Koa?*
+1. *How is AdonisJs different from Express or Koa?*
 +
 Express and Koa are routing libraries with a thin layer of middleware on top of it. There are great for several use cases but falls apart when your project starts growing.
 +
