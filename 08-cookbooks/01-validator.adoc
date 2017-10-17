@@ -65,7 +65,7 @@ class UserController {
 
   async store ({ request, session, response }) {
     const rules = {
-      email: 'required|email|unique',
+      email: 'required|email|unique:users,email',
       password: 'required'
     }
 
