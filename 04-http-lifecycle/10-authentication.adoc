@@ -58,7 +58,7 @@ const providers = [
 === Registering middleware
 [source, js]
 ----
-const middleware = [
+const globalMiddleware = [
   'Adonis/Middleware/AuthInit'
 ]
 
