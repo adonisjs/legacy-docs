@@ -307,7 +307,7 @@ Route.resource('posts.comments', 'CommentsController')
 You can limit the number of routes a resource should create by chaining handful of methods.
 
 ==== apiOnly
-Limit the routes to only 5 by removing `users/create` and `users/:id/edit`. Since when writing an API server, you may want to render the forms using your Frontend Framework or within the Android app.
+Limit the routes to only 5 by removing `users/create` and `users/:id/edit`. Since when writing an API server, you may want to render the forms within the API consumer (e.g., a mobile app, frontend web framework, etc.).
 
 [source, js]
 ----
