@@ -437,6 +437,41 @@ await user.save()
 
 The `update` query only takes place if something has been changed. Calling `save` for multiple times, without updating the model attributes does not perform any queries.
 
+Rather than setting attributes manually, the `fill` or `merge` methods may be used.
+
+The `fill` method will override all existing key/pair values of the model instance.
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+const user = new User()
+user.username = 'virk'
+user.age = 22
+
+user.fill({ age: 23 }) // remove existing values, only set age.
+
+await user.save()
+
+// returns { age: 23, username: null }
+----
+
+The `merge` method only modifies the specified attributes
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+const user = new User()
+user.fill({ username: 'virk', age: 22 })
+
+user.merge({ age: 23 })
+
+await user.save()
+
+// returns { age: 23, username: 'virk' }
+----
+
 ==== create
 Alternatively, you can also feed a bunch of data directly to the model instance, instead of setting attributes manually.
 
