@@ -298,7 +298,7 @@ Wait until page is navigated properly to a new URL.
 [source, js]
 ----
 await page
-  .click('[a href="/there"]')
+  .click('a[href="/there"]')
   .waitForNavigation()
   .assertPath('/there')
 ----
