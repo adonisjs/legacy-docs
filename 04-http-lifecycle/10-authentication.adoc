@@ -233,14 +233,14 @@ The basic authentication is stateless, where the end-user is supposed to pass th
 ==== check
 Check to see if the user has passed `basic auth` credentials in the request header or not. Also, this method verifies the user existence and their password
 
-NOTE: Set the `Authorization = Bearer <credentails>`  header to authenticate the request.
+NOTE: Set the `Authorization = Bearer <credentials>`  header to authenticate the request.
 
 [source, js]
 ----
 try {
   await auth.check()
 } catch (error) {
-  response.send('Credentails missing')
+  response.send('Credentials missing')
 }
 ----
 
@@ -252,7 +252,7 @@ Calls `check` internally and returns the user details.
 try {
   return await auth.getUser()
 } catch (error) {
-  response.send('Credentails missing')
+  response.send('Credentials missing')
 }
 ----
 
