@@ -14,7 +14,7 @@ Below is the list of core features:
 [pretty-list]
 1. Powerful link:https://en.wikipedia.org/wiki/Object-relational_mapping[ORM, window="_blank"] to make secure SQL queries.
 2. API & Session based Authentication System.
-3. Easy way to send emails via SMTP or Web Service (Mailgun, Mandrill, etc.)
+3. Easy way to send emails via SMTP or Web Service (Mailgun, AWS SES, etc.)
 4. Validate & Sanitise every user's inputs.
 5. Strong emphasis on security.
 6. Extendable application layout.
