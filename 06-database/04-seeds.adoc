@@ -86,7 +86,7 @@ const usersArray = await Factory
 === Creating relationships
 It is so simple to use Lucid models and factories to setup associations. Let's say we want to create a post and associate it with a user.
 
-NOTE: Make sure to define the `posts` relationship on the User model for this to work. Learn more about relationships link:lucid-relations[here].
+NOTE: Make sure to define the `posts` relationship on the User model for this to work. Learn more about relationships link:relationships[here].
 
 Post blueprint
 [source, js]
