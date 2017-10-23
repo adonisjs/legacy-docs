@@ -19,6 +19,15 @@ Under the hood, Edge supports.
 == Basic example
 Let's start with the basic example of saying *Hello world* by rendering an edge template. All of the views are stored inside `resources/views` directory and ends with `.edge` extension.
 
+NOTE: Make sure that the `ViewProvider` is registered as a provider inside `start/app.js` file. +
++
+[source, js]
+----
+const providers = [
+  '@adonisjs/frameworks/providers/ViewProvider'
+]
+----
+
 As always you can use the `adonis` command to create the view.
 
 [source, bash]
