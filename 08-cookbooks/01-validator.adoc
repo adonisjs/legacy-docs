@@ -235,7 +235,7 @@ Since every application is structured differently, automatic failure handling ma
 ----
 class StoreUser {
   await fails (errorMessages) {
-    return this.ctx.response(errorMessages)
+    return this.ctx.response.send(errorMessages)
   }
 }
 
