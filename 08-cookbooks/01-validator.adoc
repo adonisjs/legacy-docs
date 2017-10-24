@@ -234,7 +234,7 @@ Since every application is structured differently, automatic failure handling ma
 [source, js]
 ----
 class StoreUser {
-  await fails (errorMessages) {
+  async fails (errorMessages) {
     return this.ctx.response.send(errorMessages)
   }
 }
@@ -273,7 +273,7 @@ NOTE: It is important to return a `boolean` from the authorize method to tell th
 [source, js]
 ----
 class StoreUser {
-  await authorize () {
+  async authorize () {
     if (!isAdmin) {
       this.ctx.response.unauthorized('Not authorized')
       return false
