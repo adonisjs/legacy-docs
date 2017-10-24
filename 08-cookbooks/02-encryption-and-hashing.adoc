@@ -38,10 +38,10 @@ Bcrypt is commonly used to hash passwords, and since it is a slow algorithm, it 
 [source, javascript]
 ----
 const Hash = use('Hash')
-const safePassword = yield Hash.make(request.input('password'))
+const safePassword = await Hash.make(request.input('password'))
 
 // or
-const safePassword = yield Hash.make(request.input('password'), 20)
+const safePassword = await Hash.make(request.input('password'), 20)
 ----
 
 ==== verify(value, hashedValue)
@@ -50,7 +50,7 @@ Since you cannot decrypt a hash, you can verify the user input against the previ
 [source, javascript]
 ----
 const Hash = use('Hash')
-const isSame = yield Hash.verify('plain-value', 'hashed-value')
+const isSame = await Hash.verify('plain-value', 'hashed-value')
 
 if (isSame) {
   // ...
