@@ -1,0 +1,99 @@
+---
+permalink: dev-domains
+title: Using .dev domains
+category: recipes
+---
+= Using .dev domains
+
+toc::[]
+
+We all love to use pretty `.dev` domains when developing our apps in development. In this recipe, we learn how to bind custom domains to your app instead of accessing them via `localhost`.
+
+NOTE: This technique has no technical advantage or disadvantage and instead used as a personal preference towards pretty domains.
+
+
+== Setup hotel
+The first step is to set up an external tool called link:https://www.npmjs.com/package/hotel[hotel, window="_blank"]. It allows you to register domains for an app or a URL.
+
+[source, bash]
+----
+npm install -g hotel
+----
+
+Next, we need to start it as a daemon on `port=2000` using the following command.
+
+[source, bash]
+----
+hotel start
+----
+
+Once it is running, you can run `hotel ls` command to see the list of registered apps/domains. Which is empty with the new installation.
+
+== Setup proxy
+Let's understand how this works in theory. We need to tell our *browser* or *system network* to pass through a proxy, which serves our `.dev` apps or pass the request to the actual URL.
+
+The entire process of proxy is very lightweight and doesn't impact your system performance or speed.
+
+Now as we know, that all magic is done via the proxy, let's update the settings of the browser/system to pass via link:https://github.com/typicode/hotel/blob/master/docs/README.md#browser-configuration[hotel proxy, window="_blank"].
+
+=== System configuration
+We need to point the network to link:http://localhost:2000/proxy.pac[http://localhost:2000/proxy.pac] file.
+
+==== Osx
+
+[source, bash]
+----
+Network Preferences > Advanced > Proxies > Automatic Proxy Configuration
+----
+
+
+==== Windows
+
+[source, bash]
+----
+Settings > Network and Internet > Proxy > Use setup script
+----
+
+
+==== Linux ( ubuntu )
+[source, bash]
+----
+System Settings > Network > Network Proxy > Automatic
+----
+
+=== Browser configuration
+Browser configuration just proxy the request for that browser only and not for the entire system.
+
+==== Chrome ( exit chrome first )
+[source, bash]
+----
+# Linux
+google-chrome --proxy-pac-url=http://localhost:2000/proxy.pac
+
+# OS X
+open -a "Google Chrome" --args --proxy-pac-url=http://localhost:2000/proxy.pac
+----
+
+==== Firefox
+[source, bash]
+----
+Preferences > Advanced > Network > Connection > Settings > Automatic proxy URL configuration
+----
+
+== Integrate with AdonisJs
+Now that hotel is configured, we can use it independently of AdonisJs for any application. However, the problem is all apps registered with `hotel` are mapped forever unless you remove them manually.
+
+This behavior can cause issues, where you want your *disposable domains* which lives till your app is running.
+
+Adonis cli `adonis serve` command accepts a flag which registers a disposable domain with the *hotel* and removes it when you stop your app.
+
+[source, bash]
+----
+adonis serve --domain=yardstick@http://localhost:3333
+----
+
+The `--domain` flag takes the *domain* and the *URL*. In this case
+
+- `domain=yardstick`
+- `url=http://localhost:3333`
+
