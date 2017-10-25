@@ -1,0 +1,74 @@
+---
+permalink: nginx-proxy
+title: Nginx proxy
+category: recipes
+---
+= Nginx proxy
+
+toc::[]
+
+This recipe shares the minimally required steps to serve AdonisJs app using `nginx` proxy.
+
+== First steps
+Before getting started, make sure you can run your application on the defined port. Also, it is recommended to make use of a process manager like `pm2` to start your Node.js server.
+
+[source, bash]
+----
+pm2 start server.js
+----
+
+Verify it is working
+
+[source, js]
+----
+pm2 list
+----
+
+To check application logs, you can run the following command
+
+[source, js]
+----
+pm2 logs
+----
+
+== Nginx proxy
+
+Open the `default` server configuration file.
+
+[source, bash]
+----
+# empty the file
+echo > /etc/nginx/sites-available/default
+
+# open in editor
+vi /etc/nginx/sites-available/default
+----
+
+Moreover, paste the following code inside it.
+
+[source, nginx]
+----
+server {
+  listen 80;
+
+  server_name myapp.com;
+
+  location / {
+      proxy_pass http://localhost:3333;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host $host;
+      proxy_cache_bypass $http_upgrade;
+  }
+}
+----
+
+=== Points to note
+
+1. It is assumed that `nginx` is installed and working as expected.
+2. Your app is running on `PORT 3333`. If not, then do change `proxy_pass` block inside the nginx file and define the appropriate port.
+3. Do replace `myapp.com` with the actual domain of your app.
+4. Change value of `trustProxy` to *true* inside link:https://github.com/adonisjs/adonis-slim-app/blob/develop/config/app.js#L43[config/app.js] file.
+
+Now visiting `myapp.com` shows your Adonisjs application, since `nginx` is proxying all the requests to the application running on a specified port.
