@@ -1,0 +1,155 @@
+---
+permalink: frontend-assets
+title: Managing frontend assets
+category: recipes
+---
+= Managing frontend assets
+
+toc::[]
+
+AdonisJs does not make any assumptions, neither provide tools on how to bundle your frontend assets. The goal of the framework is to provide a productive workflow for backend applications only.
+
+Whereas, in this recipe, we discuss some ways on how you can go about managing and bundling your frontend code.
+
+== Webpack
+There are so many build tools in the frontend eco-system that it is quite easy to feel overwhelming. However, link:https://webpack.js.org/concepts/[webpack, window="_blank"] *(as of now)* does manage everything gracefully and is the popular choice for many devs.
+
+Let's see how to go about storing your assets and then bundling them.
+
+=== Directory structure
+[source, bash]
+----
+└── resources
+    └── assets
+        └── sass
+        └── scripts
+        └── images
+----
+
+We should keep all `source assets` inside the `resources` directory. This directory is already used by Adonis to store the views.
+
+All compiled assets from this directory are placed inside the `public` directory.
+
+=== Webpack base config
+First, make sure to install webpack as a dev dependency and create the config file.
+
+[source, bash]
+----
+npm i --save-dev webpack
+
+touch webpack.config.js
+----
+
+.webpack.config.js
+[source, js]
+----
+module.exports = {
+}
+----
+
+Run `./node_modules/.bin/webpack` to build your files. Also `--watch` flag can be passed to start a watcher.
+
+== Sass setup
+
+[source, bash]
+----
+npm i --save-dev css-loader extract-text-webpack-plugin node-sass sass-loader
+----
+
+Add following code to your webpack.config.js file.
+
+[source, js]
+----
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
+const extractSass = new ExtractTextPlugin({
+  filename: 'public/app.css'
+})
+
+function sassRules () {
+  return [
+    {
+      test: /\.(sass|scss)$/,
+      loader: extractSass.extract(['css-loader', 'sass-loader'])
+    }
+  ]
+}
+
+module.exports = {
+  entry: [
+    './resources/assets/sass/app.scss'
+  ],
+  output: {
+    filename: 'public/app.js'
+  },
+  module: {
+    rules: sassRules()
+  },
+  plugins: [
+    extractSass
+  ]
+}
+----
+
+Here we make use of `sass-loader` and some related dependencies to compile `resources/assets/sass/app.scss -> public/app.css`.
+
+Require css file from `edge` templates.
+
+[source, edge]
+----
+<head>
+  {{ css('app') }}
+</head>
+----
+
+
+== Scripts setup
+The scripts setup is done to bundle your frontend Javascript into a single file. I assume that you want to compile code to ES5 to target all major browsers.
+
+NOTE: We use babel for ES6 to ES5 transpilation. Also *AdonisJs itself does not need babel*, it is just for the Javascript you are writing for the browser.
+
+[source, bash]
+----
+npm i --save-dev babel-loader babel-core babel-preset-env
+----
+
+[source, js]
+----
+function scriptRules () {
+  return [
+    {
+      test: /\.js$/,
+      exclude: [/node_modules/],
+      loader: 'babel-loader',
+      options: { presets: ['env'] }
+    }
+  ]
+}
+
+module.exports = {
+  entry: [
+    './resources/assets/sass/app.scss',
+    './resources/assets/scripts/app.js'
+  ],
+  output: {
+    filename: 'public/app.js'
+  },
+  module: {
+    rules: sassRules().concat(scriptRules())
+  },
+  plugins: [
+    extractSass
+  ]
+}
+----
+
+This time we compile `resources/assets/scripts/app.js -> public/app.js`
+
+Require js file from `edge` templates.
+
+[source, edge]
+----
+<head>
+  {{ script('app') }}
+</head>
+----
