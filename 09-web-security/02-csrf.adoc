@@ -65,9 +65,11 @@ csrf: {
 
 [ol-spaced]
 1. AdonisJs creates a *CSRF secret* for each user visiting your website.
-2. A corresponding token for the secret is generated for each request and passed to all views as `csrfToken` and `csrfField()`.
+2. A corresponding token for the secret is generated for each request and passed to all views as `csrfToken` and `csrfField()` globals.
 3. Also, the same token is set to a cookie with key `XSRF-TOKEN`. Frontend Frameworks like *AngularJs* automatically reads this cookie and send it along with each Ajax request.
 4. Whenever a *POST*, *PUT* or *DELETE* requests comes, the middleware verifies the token with the secret to make sure it is valid.
+
+NOTE: If you are using the `XSRF-TOKEN` cookie value, then do make sure the header key is `X-XSRT-TOKEN`
 
 == View Helpers
 You can access the CSRF token using one of the following view helpers and make sure to set them inside your forms.
