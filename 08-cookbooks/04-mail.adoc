@@ -105,16 +105,15 @@ The view ending with `.text` is used as the plain text body of the email. In the
 await Mail.send(['welcome', 'welcome.text', 'welcome.watch'])
 ----
 
-==== raw(string, data, callback)
-Use raw string to send the mail. The string value is considered as the `plain text` email.
+==== raw(body, callback)
+Use raw string to send the mail. The body value is considered as the `plain text` email.
 
 [source, js]
 ----
-await Mail.raw('Hello {{ username }}', user.toJSON(), (message) => {
-  message
-    .to(user.email)
-    .from('<from-email>')
-    .subject('Welcome to yardstick')
+await Mail.raw('... everyone who got this message.', (message) => {
+  message.subject('Hello ...')
+  message.from('foo@bar.com')
+  message.to('baz@bar.com')
 })
 ----
 
