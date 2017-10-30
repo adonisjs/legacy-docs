@@ -344,6 +344,16 @@ const User = use('App/Models/User')
 const users = await User.all()
 ----
 
+==== reset
+Delete all rows (truncate table)
+
+[source, js]
+----
+const User = use('App/Models/User')
+const users = await User.reset()
+----
+
+
 == Query scopes
 Query scopes are convenient methods to extract query constraints to useable and powerful methods. For example, we want to fetch all those users, who have a profile
 
