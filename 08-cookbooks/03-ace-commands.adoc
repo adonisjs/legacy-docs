@@ -509,6 +509,13 @@ When you use database access (Lucid or directly), you must remember to manually 
 
 [source, js]
 ----
+Database.close()
+----
+
+A more complete example:
+
+[source, js]
+----
 const Database = use('Database')
 
 class Quote extends Command {
