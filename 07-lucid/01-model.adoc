@@ -354,7 +354,7 @@ const users = await User.reset()
 ----
 
 == Aggregate helpers
-Lucid aggregate helpers provide shortcut access to common aggregate queries. These same queries can be written long-form using the query builder interface.  come with a bunch of static methods to do common operations without using the query builder interface. Short and long-form examples are provided for each helper method.
+Lucid aggregate helpers provide shortcut access to common aggregate queries without using the query builder interface. These same queries can be written long-form using the query builder interface. Short and long-form examples are provided for each helper method.
 
 There is no need to call `fetch` when using one of the following static methods. These methods end the query builder chaining and return a value.
 
