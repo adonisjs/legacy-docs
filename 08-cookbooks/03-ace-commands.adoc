@@ -503,3 +503,30 @@ Move file/directory from one location to other
 ----
 await this.move(src, dest)
 ----
+
+== Database management
+When you use database access (Lucid or directly), you must remember to manually close the database connection.
+
+[source, js]
+----
+const Database = use('Database')
+
+class Quote extends Command {
+  static get signature () {
+    return 'quote'
+  }
+
+  static get description () {
+    return 'Shows inspirational quote from Paul Graham'
+  }
+
+  async handle (args, options) {
+    let quote = await Quote.query().orderByRaw('rand()').first()
+    console.log(quote.content)
+    
+    // This is the important line. Without it, the command runner will not exit.
+    Database.close()
+  }
+}
+----
+
