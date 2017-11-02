@@ -504,7 +504,7 @@ Move file/directory from one location to other
 await this.move(src, dest)
 ----
 
-== Database management
+== Database connection management
 When you use database access (Lucid or directly), you must remember to manually close the database connection.
 
 [source, js]
