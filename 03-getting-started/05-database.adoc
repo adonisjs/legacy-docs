@@ -162,7 +162,7 @@ So paste the following code inside it
 
 [source, bash]
 ----
-await ('Database').table('blog_posts').insert({ title: 'Adonis 101', body: 'some description' })
+await use('Database').table('blog_posts').insert({ title: 'Adonis 101', body: 'some description' })
 ----
 
 Animated Gif::
