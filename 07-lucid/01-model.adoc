@@ -379,7 +379,7 @@ await User.query().where('is_active', '=', 1).rowsCount()
 (await User.query().where('is_active', '=', 1).count('* as total'))[0].total
 ----
 
-==== sum(columnName)
+==== rowsSum(columnName)
 Return a sum of records in a given result set.
 
 [source, js]
