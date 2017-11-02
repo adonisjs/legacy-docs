@@ -356,9 +356,11 @@ const users = await User.reset()
 == Aggregate helpers
 Lucid aggregate helpers provide shortcut access to common aggregate queries without using the query builder interface. These same queries can be written long-form using the query builder interface. Short and long-form examples are provided for each helper method.
 
-There is no need to call `fetch` when using one of the following static methods. These methods end the query builder chaining and return a value.
+These methods end the query builder chaining and return a value. There is no need to call `fetch()`. 
 
 All helpers accept a column name to be used for aggregation. When possible Lucid will choose a default for the column name. Some methods, such as `sum()`, require a column name.
+
+The knex query builder underlying Lucid defines methods `count()`, `avg()`, `sum()`, `min()`, and `max()`. To avoid confusion and naming collisions, Lucid prefixes its aggregate helper methods with `rows`.
 
 ==== rowsCount(columnName = '*')
 Return a count of records in a given result set.
@@ -370,11 +372,11 @@ const User = use('App/Models/User')
 // Return count of all records in table
 await User.rowsCount()
 
-// Return count of selected records
-await User.query().rowsCount()
+// Return count of selected records (active users, for example)
+await User.query().where('is_active', '=', 1).rowsCount()
 
 // Return count of selected records (long form)
-(await User.query().count('* as total'))[0].total
+(await User.query().where('is_active', '=', 1).count('* as total'))[0].total
 ----
 
 ==== sum(columnName)
@@ -385,15 +387,65 @@ Return a sum of records in a given result set.
 const User = use('App/Models/User')
 
 // Return sum of all records in table
-await User.sum('friends_count')
+await User.rowsSum('friends_count')
 
 // Return sum of selected records
-await User.query().sum('friends_count')
+await User.query().where('is_active', '=', 1).rowsSum('friends_count')
 
 // Return sum of selected records (long form)
-(await User.query().sum('friends_count as total'))[0].total
+(await User.query().where('is_active', '=', 1).sum('friends_count as total'))[0].total
 ----
 
+==== min(columnName)
+Return the minimum value of `columnName`.
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+// Return sum of all records in table
+await User.rowsMin('friends_count')
+
+// Return sum of selected records
+await User.query().where('is_active', '=', 1).rowsMin('friends_count')
+
+// Return sum of selected records (long form)
+(await User.query().where('is_active', '=', 1).sum('friends_count as total'))[0].total
+----
+
+==== max(columnName)
+Return the maximum value of `columnName`.
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+// Return sum of all records in table
+await User.rowsMax('friends_count')
+
+// Return sum of selected records
+await User.query().where('is_active', '=', 1).rowsMax('friends_count')
+
+// Return sum of selected records (long form)
+(await User.query().where('is_active', '=', 1).sum('friends_count as total'))[0].total
+----
+
+==== avg(columnName)
+Return the average (mean) value of `columnName`.
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+// Return sum of all records in table
+await User.rowsAvg('friends_count')
+
+// Return sum of selected records
+await User.query().where('is_active', '=', 1).rowsAvg('friends_count')
+
+// Return sum of selected records (long form)
+(await User.query().where('is_active', '=', 1).sum('friends_count as total'))[0].total
+----
 
 == Query scopes
 Query scopes are convenient methods to extract query constraints to useable and powerful methods. For example, we want to fetch all those users, who have a profile
