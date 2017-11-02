@@ -396,7 +396,7 @@ await User.query().where('is_active', '=', 1).rowsSum('friends_count')
 (await User.query().where('is_active', '=', 1).sum('friends_count as total'))[0].total
 ----
 
-==== min(columnName)
+==== rowsMin(columnName)
 Return the minimum value of `columnName`.
 
 [source, js]
@@ -413,7 +413,7 @@ await User.query().where('is_active', '=', 1).rowsMin('friends_count')
 (await User.query().where('is_active', '=', 1).sum('friends_count as total'))[0].total
 ----
 
-==== max(columnName)
+==== rowsMax(columnName)
 Return the maximum value of `columnName`.
 
 [source, js]
@@ -430,7 +430,7 @@ await User.query().where('is_active', '=', 1).rowsMax('friends_count')
 (await User.query().where('is_active', '=', 1).sum('friends_count as total'))[0].total
 ----
 
-==== avg(columnName)
+==== rowsAvg(columnName)
 Return the average (mean) value of `columnName`.
 
 [source, js]
