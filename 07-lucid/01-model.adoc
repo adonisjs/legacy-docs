@@ -248,7 +248,7 @@ const adults = await User
 ----
 
 1. All of the query builder methods are fully supported.
-2. With lucid models, you are supposed to call `fetch` method to execute the query. It is required to get results back within an instance of `serializer` ( learn more about link:serializers[serializers] ).
+2. With Lucid models, you are supposed to call `fetch` method to execute the query. It is required to get results back within an instance of `serializer` ( learn more about link:serializers[serializers] ).
 
 == Static methods
 Lucid models come with a bunch of static methods to do common operations without using the query builder interface.
@@ -354,13 +354,11 @@ const users = await User.reset()
 ----
 
 == Aggregate helpers
-Lucid aggregate helpers provide shortcut access to common aggregate queries without using the query builder interface. These same queries can be written long-form using the query builder interface. Short and long-form examples are provided for each helper method.
+link:query-builder#_aggregate_helpers[Query Builder aggregate helpers] provide shortcut access to common aggregate queries. Static model methods can be used when you wish to aggregate the entire table. 
 
-These methods end the query builder chaining and return a value. There is no need to call `fetch()`. 
+These methods end the query builder chaining and return a value. There is no need to call `link:#_query_builder[fetch()]`. 
 
 All helpers accept a column name to be used for aggregation. When possible Lucid will choose a default for the column name. Some methods, such as `sum()`, require a column name.
-
-The knex query builder underlying Lucid defines methods `count()`, `avg()`, `sum()`, `min()`, and `max()`. To avoid confusion and naming collisions, Lucid prefixes its aggregate helper methods with `get`.
 
 ==== getCount(columnName = '*')
 Return a count of records in a given result set.
@@ -377,6 +375,23 @@ await User.query().where('is_active', '=', 1).getCount()
 
 // Return count of selected records (long form)
 (await User.query().where('is_active', '=', 1).count('* as total'))[0].total
+----
+
+==== getCountDistinct(columnName)
+Return a count of distinct values for a given attribute.
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+// Return count of all unique status values
+await User.getCountDistinct('status')
+
+// Return count of selected status values (status values for active users, for example)
+await User.query().where('is_active', '=', 1).getCountDistinct('status')
+
+// Return count of selected status values (long form)
+(await User.query().where('is_active', '=', 1).countDistinct('status as total'))[0].total
 ----
 
 ==== getSum(columnName)
@@ -396,6 +411,23 @@ await User.query().where('is_active', '=', 1).getSum('friends_count')
 (await User.query().where('is_active', '=', 1).sum('friends_count as total'))[0].total
 ----
 
+==== getSumDistinct(columnName)
+Return a sum of distinct values for a given attribute.
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+// Return count of all unique status values
+await User.getSumDistinct('login_count')
+
+// Return count of selected status values (status values for active users, for example)
+await User.query().where('is_active', '=', 1).getSumDistinct('login_count')
+
+// Return count of selected status values (long form)
+(await User.query().where('is_active', '=', 1).sumDistinct('login_count as total'))[0].total
+----
+
 ==== getMin(columnName)
 Return the minimum value of `columnName`.
 
@@ -410,7 +442,7 @@ await User.getMin('friends_count')
 await User.query().where('is_active', '=', 1).getMin('friends_count')
 
 // Return sum of selected records (long form)
-(await User.query().where('is_active', '=', 1).sum('friends_count as total'))[0].total
+(await User.query().where('is_active', '=', 1).min('friends_count as total'))[0].total
 ----
 
 ==== getMax(columnName)
@@ -427,7 +459,7 @@ await User.getMax('friends_count')
 await User.query().where('is_active', '=', 1).getMax('friends_count')
 
 // Return sum of selected records (long form)
-(await User.query().where('is_active', '=', 1).sum('friends_count as total'))[0].total
+(await User.query().where('is_active', '=', 1).max('friends_count as total'))[0].total
 ----
 
 ==== getAvg(columnName)
@@ -444,7 +476,24 @@ await User.getAvg('friends_count')
 await User.query().where('is_active', '=', 1).getAvg('friends_count')
 
 // Return sum of selected records (long form)
-(await User.query().where('is_active', '=', 1).sum('friends_count as total'))[0].total
+(await User.query().where('is_active', '=', 1).avg('friends_count as total'))[0].total
+----
+
+==== getAvgDistinct(columnName)
+Return the average (mean) of distinct values of `columnName`.
+
+[source, js]
+----
+const User = use('App/Models/User')
+
+// Return sum of all records in table
+await User.getAvgDistinct('friends_count')
+
+// Return sum of selected records
+await User.query().where('is_active', '=', 1).getAvgDistinct('friends_count')
+
+// Return sum of selected records (long form)
+(await User.query().where('is_active', '=', 1).avgDistinct('friends_count as total'))[0].total
 ----
 
 == Query scopes
