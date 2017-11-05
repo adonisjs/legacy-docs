@@ -342,7 +342,7 @@ await Database
 ----
 await Database
   .table('users')
-  .orderBy('col NULLS LAST DESC')
+  .orderByRaw('col NULLS LAST DESC')
 ----
 
 ==== having(column, operator, value)
