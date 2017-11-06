@@ -268,9 +268,19 @@ session
   .flashAll()
 ----
 
+==== flashMessage(key, defaultValue)
+Returns the flash message for a given key
+
+[source, js]
+----
+session.flash({ notification: 'Update successful!' })
+----
+
 [source, edge]
 ----
-<span> {{ getErrorFor('username') }} </span>
+@if(flashMessage('notification'))
+  <span> {{ flashMessage('notification') }} </span>
+@endif
 ----
 
 == Session persistence
