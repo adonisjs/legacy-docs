@@ -9,7 +9,7 @@ toc::[]
 
 AdonisJs makes it so simple to validate the user's input with the help of dedicated validation provider. In this guide you learn how to validate the data *manually* or via *route validators*.
 
-NOTE: Adonisjs validator using link:http://indicative.adonisjs.com/[indicative, window="_blank"] under the hood, so make sure to read the official documentation whenever required.
+NOTE: Adonisjs validator using link:http://indicative.adonisjs.com/[indicative] under the hood, so make sure to read the official documentation whenever required.
 
 == Setup
 Follow the below instructions to setup the validation provider.
@@ -288,3 +288,113 @@ module.exports = StoreUser
 
 === Request context
 All route validators can access the current request context via `this.ctx`.
+
+== Custom Rules
+AdonisJs supports all the validation rules by Indicative, but also adds a few who are specific to AdonisJs only. Below is the list of custom rules.
+
+==== unique(tableName, [fieldName])
+Makes sure a given value is unique in a given database table.
+
+[source, js]
+.app/Model/User
+----
+'use strict'
+
+class StoreUser {
+
+  static get rules () {
+    return {
+      email: 'unique:users,email'
+    }
+  }
+
+}
+----
+
+Now when trying to update a user, you would never want to run the unique validation for the same user. Same can be achieved by defining a `whereNot` clause.
+
+[source, js]
+----
+const { validate } = use('Validator')
+
+class UserController {
+
+  async update ({ request, session, response, params }) {
+    const userId = params.id
+
+    const rules = {
+      email: `unique:users,email,id,${userId}` <1>
+    }
+
+    const validation = await validate(request.all(), rules)
+
+    if (validation.fails()) {
+      session
+        .withErrors(validation.messages())
+        .flashAll()
+
+      return response.redirect('back')
+    }
+
+    return 'Validation passed'
+  }
+}
+----
+<1> When fetching the rules from the *User Model*, we pass along the user id which gets ignored when checking the email uniqueness.
+
+== Extending Validator
+Quite often you have the requirement of extending the *Validator Provider* by adding new validation rules. You can make use of the `extend` method provided by link:http://indicative.adonisjs.com/#indicative-extending[Indicative].
+
+==== Application Specific
+For application specific rules you can make use of `app/hooks.js` file to listen for the *providersBooted* event and register your custom rules.
+
+.app/hooks.js
+[source, js]
+----
+import { hooks } from '@adonisjs/ignitor'
+
+const adult = async function(data, field, message, args, get) {
+  const fieldValue = get(data, field)
+  if (fieldValue < 18) {
+    throw message
+  }
+}
+
+hooks.after.providersBooted(() => {
+  const Validator = use('Validator')
+  Validator.extend('adult', adult, 'You must be an adult')
+})
+----
+
+==== Via Provider
+If you are writing a module/addon for AdonisJs, you can add your custom rules inside the `boot` method of your service provider.
+
+[source, js]
+----
+'use strict'
+
+const { ServiceProvider } = require('@adonisjs/fold')
+
+class ExtendsValidatorProvider extends ServiceProvider {
+  async exists (data, field, message, args, get) {
+    const Database = use('Database')
+
+    const value = get(data, field)
+    const [table, column] = args
+
+    const result = await Database.table(table).where(column, value).first()
+    if (!result) {
+      throw message
+    }
+  }
+
+  async boot () {
+    // register bindings
+    const Validator = use('Validator')
+    Validator.extend('exists', this.exists, '{{field}} does not exist in database')
+  }
+}
+
+module.exports = ExtendsValidatorProvider
+----
+Don't forget register your provider in `app/start.js` then you can make use of the above defined `exists` like any other validation rule.
