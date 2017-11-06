@@ -508,28 +508,30 @@ await Database.transaction(async (trx) => {
 
 == Aggregates
 
+The Lucid Query Builder exposes the full power of link:http://knexjs.org/#Builder-count[knex's aggregate methods]. 
+
 ==== count()
 [source, javascript]
 ----
 const count = await Database
   .from('users')
-  .count() // returns array
+  .count()                                      // returns array
 
-const total = count[0]['count(*)'] // returns number
+const total = count[0]['count(*)']              // returns number
 
 // COUNT A COLUMN
 const count = await Database
   .from('users')
-  .count('id') // returns array
+  .count('id')                                  // returns array
 
-const total = count[0]['count("id")'] // returns number
+const total = count[0]['count("id")']           // returns number
 
 // COUNT COLUMN AS NAME
 const count = await Database
   .from('users')
-  .count('* as total') // returns array
+  .count('* as total')                          // returns array
 
-const total = count[0].total // returns number
+const total = count[0].total                    // returns number
 ----
 
 ==== countDistinct
@@ -539,53 +541,51 @@ The `countDistinct` is same as count, but adds distinct expression.
 ----
 const count = await Database
   .from('users')
-  .countDistinct('id')
+  .countDistinct('id')                          // Returns array
 
-const total = count[0]['count(distinct "id")'] // returns number
+const total = count[0]['count(distinct "id")']  // returns number
 ----
 
 ==== min
-
 [source, javascript]
 ----
-await Database.from('users').min('age')
-await Database.from('users').min('age as a')
+await Database.from('users').min('age')         // returns array
+await Database.from('users').min('age as a')    // returns array
 ----
 
 ==== max
-
 [source, javascript]
 ----
-await Database.from('users').max('age')
-await Database.from('users').max('age as a')
+await Database.from('users').max('age')         // returns array
+await Database.from('users').max('age as a')    // returns array
 ----
 
 ==== sum
 [source, javascript]
 ----
-await Database.from('cart').sum('total')
-await Database.from('cart').sum('total as t')
+await Database.from('cart').sum('total')        // returns array
+await Database.from('cart').sum('total as t')   // returns array
 ----
 
 ==== sumDistinct
 [source, javascript]
 ----
-await Database.from('cart').sumDistinct('total')
-await Database.from('cart').sumDistinct('total as t')
+await Database.from('cart').sumDistinct('total')      // returns array
+await Database.from('cart').sumDistinct('total as t') // returns array
 ----
 
 ==== avg
 [source, javascript]
 ----
-await Database.from('users').avg('age')
-await Database.from('users').avg('age as age')
+await Database.from('users').avg('age')         // returns array
+await Database.from('users').avg('age as age')  // returns array
 ----
 
 ==== avgDistinct
 [source, javascript]
 ----
-await Database.from('users').avgDistinct('age')
-await Database.from('users').avgDistinct('age as age')
+await Database.from('users').avgDistinct('age')         // returns array
+await Database.from('users').avgDistinct('age as age')  // returns array
 ----
 
 ==== increment
@@ -609,6 +609,67 @@ await Database
   .where('id', 1)
   .decrement('balance', 10)
 ----
+
+=== Aggregate Helpers
+
+Query Builder also extends knex's query aggregates with helpful shortcut methods for common aggregate queries.
+
+Helper methods end the query builder chaining and return a value. All helpers accept a column name to be used for aggregation. When possible Lucid will choose a default for the column name. Some methods, such as `sum()`, require a column name.
+
+The knex query builder underlying Lucid defines methods `count()`, `countDistinct()`, `avg()`, `avgDistinct()`, `sum()`, `sumDistinct()`, `min()`, and `max()`. To avoid confusion and naming collisions, Lucid prefixes its aggregate helper methods with `get`.
+
+==== getCount(columnName = '*')
+[source, javascript]
+----
+const total = await Database
+  .from('users')
+  .getCount()                                   // returns number
+----
+
+==== getCountDistinct(columnName)
+[source, javascript]
+----
+const total = await Database
+  .from('users')
+  .countDistinct('id')                          // returns number
+----
+
+==== getMin(columnName)
+[source, javascript]
+----
+await Database.from('users').getMin('age')      // returns a number
+----
+
+==== getMax(columnName)
+[source, javascript]
+----
+await Database.from('users').getMax('age')      // returns number
+----
+
+==== getSum(columnName)
+[source, javascript]
+----
+await Database.from('cart').getSum('total')     // returns number
+----
+
+==== getSumDistinct(columnName)
+[source, javascript]
+----
+await Database.from('cart').getSumDistinct('total')   // returns number
+----
+
+==== getAvg(columnName)
+[source, javascript]
+----
+await Database.from('users').getAvg('age')      // returns number
+----
+
+==== getAvgDistinct(columnName)
+[source, javascript]
+----
+await Database.from('users').getAvgDistinct('age')      // returns number
+----
+
 
 == Helpers
 
