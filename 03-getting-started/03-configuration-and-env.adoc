@@ -19,7 +19,7 @@ Before getting started, let's understand the concept of configuration debt. Many
 For a new user working on the code base for the first time, it becomes a nightmare to find all the configuration, and they keep juggling within multiple files/directories.
 
 == Getting started
-In AdonisJs, we store all the configuration inside a separate directory called `config`. All of the configuration files are loaded at boot time, and nested values can be accessed using the *Config provider*.
+In AdonisJs, we store all the configuration inside a separate directory called `config`. All of the configuration files are loaded at boot time, and values can be accessed using the *Config provider*.
 
 Let's say we want to read the `appSecret` from `config/app.js` file.
 
@@ -41,7 +41,7 @@ The values are fetched by defining the `fileName.key`. Nested values can be fetc
 }
 ----
 
-Moreover, access it as
+Now, access it as
 
 [source, js]
 ----
@@ -54,9 +54,9 @@ Config.get('database.mysql.host', '127.0.0.1')
 == Environment variables
 Quite often you want to have a different configuration based upon the environment your code is running in. For example: Using *sandbox secrets* for a 3rd party service in development.
 
-Also from the data integrity point of view, you should never share your production credentials with all of the developers working on a codebase. Instead, these credentials are stored as environment variables, which gets replaced with the actual values on the production server.
+Also from the data integrity point of view, you should never share your production credentials with all of the developers working on a codebase.
 
-AdonisJs creates `.env` file in the root of all the applications, this file stores key/value pairs which are subjected to get changed across environments.
+Instead, these credentials are stored as environment variables on your production server and defined inside `.env` file when developing the app locally.
 
 .env
 [source, env]
@@ -66,7 +66,7 @@ DB_HOST=
 DB_USER=
 ----
 
-Now you can access those variable by using the `get()` method on the `Env` class.
+Now you can access those variable by using the `Env` provider.
 
 [source, js]
 ----
@@ -76,9 +76,7 @@ Env.get('APP_SECRET')
 
 NOTE: `Env.get()` always returns a string. If you want to get a boolean value you'll need to test it yourself with `Env.get('...') === 'true'`
 
-WARNING: The `.env` file should never be committed to a source control system like Git or Svn.
-
-=== Different .env file
+==== Different .env file
 At times you may want to load a different `.env` file stored on your server at a different location. Same can be done as follows.
 
 [source, bash]
@@ -86,7 +84,7 @@ At times you may want to load a different `.env` file stored on your server at a
 ENV_PATH=/user/.env node server.js
 ----
 
-=== Disabling .env file
+==== Disabling .env file
 If `.env` file is missing, AdonisJs throws an exception by default. However, you turn off the exception as follows.
 
 [source, bash]
@@ -94,7 +92,7 @@ If `.env` file is missing, AdonisJs throws an exception by default. However, you
 ENV_SILENT=true node server.js
 ----
 
-=== Testing variables
+==== Testing variables
 If your application is started with `NODE_ENV=testing`, AdonisJs attempts to load `.env.testing` file from the root of your application.
 
 This file overrides the values from `.env` file, so that you can have slightly different configuration when running tests.
