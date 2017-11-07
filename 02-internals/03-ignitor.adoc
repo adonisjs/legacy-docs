@@ -48,7 +48,7 @@ new Ignitor(require('@adonisjs/fold'))
   .catch(console.error)
 ----
 
-The `preLoad` method takes a relative path from the application or an absolute path to any *.js* file. To load multiple files, just call the `preLoad` method for multiple times.
+The `preLoad` method takes a relative path from the application path or an absolute path to any *.js* file. To load multiple files, just call the `preLoad` method for multiple times.
 
 [source, js]
 ----
