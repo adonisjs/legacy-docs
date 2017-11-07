@@ -16,15 +16,15 @@ Using traits, you can
 2. Listen for model hooks.
 3. Add methods to query builder instance for a given model.
 
-== Traits signature
-Traits are saved inside `app/Models/Traits` directory. Each trait must have a `register` method which receives the model class as the only parameter.
+== Creating a Trait
+Traits are saved inside `app/Models/Traits`. Each trait must have a `register` method which receives the model class and an `options` object as its parameters.
 
 .app/Models/Traits/Slugify.js
 [source, js]
 ----
 class Slugify {
 
-  register (Model) {
+  register (Model, options) {
     Model.addHook('beforeCreate', function () {
       // create slug
     })
@@ -34,7 +34,8 @@ class Slugify {
 module.exports = Slugify
 ----
 
-Now, you can register the trait as following.
+== Registering a Trait
+Register your trait with a Lucid model as follows:
 
 [source, js]
 ----
@@ -48,14 +49,53 @@ class User extends Model {
 }
 ----
 
-== Extending query builder
+== Registering a Trait with Options
+Sometimes, it may be useful to pass initialization options to your trait. The options you supply will be passed
+directly to the `register()` method. If you do not supply options, and empty `options = {}` will be passed
+for you.
+
+[source, js]
+----
+const Model = use('Model')
+
+class User extends Model {
+  static boot () {
+    super.boot()
+    this.addTrait('Slugify', {useCamelCase: true})
+  }
+}
+----
+
+If you supply options, it is strongly recommended that you also supply default options in your trait:
+
+.app/Models/Traits/Slugify.js
+[source, js]
+----
+const _ = require('lodash')
+
+class Slugify {
+
+  register (Model, options) {
+    let defaultOptions = {useCamelCase: false}
+    _.extend(defaultOptions, options)
+
+    Model.addHook('beforeCreate', function () {
+      // create slug
+    })
+  }
+}
+
+module.exports = Slugify
+----
+
+== Extending QueryBuilder
 Also, you can add macros to the `QueryBuilder` for a given model.
 
 [source, js]
 ----
 class Slugify {
 
-  register (Model) {
+  register (Model, options) {
     Model.queryMacro('whereSlug', function (value) => {
       this.where('slug', value)
       return this
