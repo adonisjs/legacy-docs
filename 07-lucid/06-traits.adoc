@@ -17,6 +17,16 @@ Using traits, you can
 3. Add methods to query builder instance for a given model.
 
 == Creating a Trait
+The `adonis` CLI provides a trait generator command.
+
+[source, bash]
+----
+adonis make:trait Slugify
+----
+
+You will find your new trait in `app/Models/Traits/Slugify.js`.
+
+== Manually Creating a Trait
 Traits are saved inside `app/Models/Traits`. Each trait must have a `register` method which receives the model class and an `options` object as its parameters.
 
 .app/Models/Traits/Slugify.js
@@ -25,9 +35,6 @@ Traits are saved inside `app/Models/Traits`. Each trait must have a `register` m
 class Slugify {
 
   register (Model, options) {
-    Model.addHook('beforeCreate', function () {
-      // create slug
-    })
   }
 }
 
@@ -75,11 +82,47 @@ const _ = require('lodash')
 
 class Slugify {
 
-  register (Model, options) {
-    let defaultOptions = {useCamelCase: false}
-    _.extend(defaultOptions, options)
+  register (Model, customOptions) {
+    const defaultOptions = {useCamelCase: false}
+    const options = _.extend({}, defaultOptions, customOptions)
+  }
+}
 
-    Model.addHook('beforeCreate', function () {
+module.exports = Slugify
+----
+
+== Extending a Model's Methods
+
+[source, js]
+----
+class Slugify {
+
+  register (Model, options) {
+    // Add an instance method
+    Model.prototype.printUsername = function () {
+      console.log(this.username)
+    }
+
+    // Add a static method
+    Model.newAdminUser = function () {
+      let m = new Model()
+      m.isAdmin = true
+      return m
+    }
+  }
+}
+
+module.exports = Slugify
+----
+
+== Using Model Hooks
+
+[source, js]
+----
+class Slugify {
+
+  register (Model, options) {
+    Model.addHook('beforeCreate', function (modelInstance) {
       // create slug
     })
   }
@@ -106,7 +149,7 @@ class Slugify {
 module.exports = Slugify
 ----
 
-Moreover, then use it as
+Then use it as:
 
 [source, js]
 ----
