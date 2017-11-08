@@ -17,7 +17,7 @@ Using traits, you can
 3. Add methods to query builder instance for a given model.
 
 == Creating a Trait
-The `adonis` CLI provides a trait generator command.
+Create a new file inside `app/Models/Traits` directory or use the following ace command to do it for you.
 
 [source, bash]
 ----
