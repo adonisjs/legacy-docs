@@ -1,0 +1,31 @@
+---
+permalink: why-adonis-install
+title: Why Adonis install?
+category: recipes
+---
+= Why Adonis install?
+
+toc::[]
+
+AdonisJs ships with a command called `adonis install <package>`, which is same as `npm install` or `yarn add`.
+
+In fact behind the scenes `adonis install` uses npm or yarn to install the package, but also performs an extra step after the install.
+
+== Command execution
+
+link:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1509020167/adonis-install-flow.png[image:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1509020167/adonis-install-flow.png[width="400px"]]
+
+Every provider can have two files link:https://github.com/adonisjs/adonis-lucid/blob/develop/instructions.js[instructions.js, window="_blank"] and link:https://github.com/adonisjs/adonis-lucid/blob/develop/instructions.md[instructions.md, window="_blank"], which are used by adonis to perform `post install` steps.
+
+
+=== instructions.js
+The `.js` file exports a function. This function can be used to perform any steps since you can write functional code inside it.
+
+Most commonly performed steps are
+
+[ul-shrinked]
+- Copy config files.
+- Create entities like controllers, models and so on.
+
+=== instructions.md
+The `.md` files are the small set of instructions to be followed by hand from the user of the provider. So it is a nice place to drop some usage and setup instructions written in Github flavored markdown.
