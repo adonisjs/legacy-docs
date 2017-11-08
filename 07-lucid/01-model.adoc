@@ -354,9 +354,9 @@ const users = await User.reset()
 ----
 
 == Aggregate helpers
-link:query-builder#_aggregate_helpers[Query Builder aggregate helpers] provide shortcut access to common aggregate queries. Static model methods can be used when you wish to aggregate the entire table. 
+link:query-builder#_aggregate_helpers[Query Builder aggregate helpers] provide shortcut access to common aggregate queries. Static model methods can be used when you wish to aggregate the entire table.
 
-These methods end the query builder chaining and return a value. There is no need to call `link:#_query_builder[fetch()]`. 
+These methods end the query builder chaining and return a value. There is no need to call `link:#_query_builder[fetch()]`.
 
 All helpers accept a column name to be used for aggregation. When possible Lucid will choose a default for the column name. Some methods, such as `sum()`, require a column name.
 
