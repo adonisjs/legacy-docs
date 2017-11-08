@@ -173,9 +173,18 @@ The route validator makes the process of manual validation a bit easier, by defi
 
 [source, js]
 ----
+// For a single route
 Route
   .post('users', 'UserController.store')
   .validator('StoreUser')
+
+// For a resourceful route
+Route
+  .resource('users', 'UserController')
+  .validator(new Map([
+    ['users.store', 'StoreUser'],
+    ['users.update', 'UpdateUser']
+  ]))
 ----
 
 All validators live inside `app/Validators` directory. Let's create the `StoreUser` validator by using the `adonis` command.
