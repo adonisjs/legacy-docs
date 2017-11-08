@@ -508,7 +508,7 @@ await Database.transaction(async (trx) => {
 
 == Aggregates
 
-The Lucid Query Builder exposes the full power of link:http://knexjs.org/#Builder-count[knex's aggregate methods]. 
+The Lucid Query Builder exposes the full power of link:http://knexjs.org/#Builder-count[knex's aggregate methods].
 
 ==== count()
 [source, javascript]
