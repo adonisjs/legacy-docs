@@ -77,7 +77,7 @@ module.exports = {
   session: {
     serializer: 'Lucid',
     scheme: 'session',
-    model: 'App/Model/User',
+    model: 'App/Models/User',
     uid: 'email',
     password: 'password'
   }
@@ -233,14 +233,14 @@ The basic authentication is stateless, where the end-user is supposed to pass th
 ==== check
 Check to see if the user has passed `basic auth` credentials in the request header or not. Also, this method verifies the user existence and their password
 
-NOTE: Set the `Authorization = Bearer <credentials>`  header to authenticate the request.
+NOTE: Set the `Authorization = Basic <credentials>`  header to authenticate the request. The credentials are a `base64` encoded string of `uid:password` where `uid` is the `uid` database field designated in the auth config.
 
 [source, js]
 ----
 try {
   await auth.check()
 } catch (error) {
-  response.send('Credentials missing')
+  response.send(error.message)
 }
 ----
 
