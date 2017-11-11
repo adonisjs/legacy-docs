@@ -32,7 +32,7 @@ Route.post('upload', async ({ request }) => {
     size: '2mb'
   })
 
-  await profilePic.move(Helpers.tmpPath('uploads'))
+  await profilePic.move(Helpers.tmpPath('uploads'), {name: 'custom-name.jpg})
 
   if (!profilePic.moved()) {
     return profilePic.error()
@@ -43,7 +43,7 @@ Route.post('upload', async ({ request }) => {
 
 [ol-spaced]
 1. The `request.file` method accepts two arguments, a *field name* and *an object of validations* to be performed, before moving the file.
-2. Next, we call `profilePic.move` method, which attempts to move the file to the defined directory.
+2. Next, we call `profilePic.move` method, which attempts to move the file to the defined directory. You can call it with options to save file with new name. 
 3. Finally, we check whether the move operation was successful or not using `profilePic.moved()` method and return errors (if any).
 
 == Multiple file uploads
