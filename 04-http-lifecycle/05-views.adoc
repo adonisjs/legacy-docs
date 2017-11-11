@@ -24,7 +24,7 @@ NOTE: Make sure that the `ViewProvider` is registered as a provider inside `star
 [source, js]
 ----
 const providers = [
-  '@adonisjs/frameworks/providers/ViewProvider'
+  '@adonisjs/framework/providers/ViewProvider'
 ]
 ----
 
