@@ -1,0 +1,64 @@
+---
+permalink: using-https
+title: Using Https
+category: recipes
+---
+toc::[]
+
+The HTTPs server of Node.js can be used with AdonisJs as follows. The idea is use the Node.js `https` module inside `server.js` file. +
+&nbsp;
+[source, js]
+----
+const { Ignitor } = require('@adonisjs/ignitor')
+const path = require('path')
+const https = require('https')
+const fs = require('fs')
+
+// Certificate
+const options = {
+  key: fs.readFileSync(path.join(__dirname, './server.key')),
+  cert: fs.readFileSync(path.join(__dirname, './server.crt'))
+}
+
+new Ignitor(require('@adonisjs/fold'))
+  .appRoot(__dirname)
+  .fireHttpServer((handler) => {
+    return https.createServer(options, handler)
+  })
+  .catch(console.error)
+----
+
+The real work happens inside `fireHttpServer` method. This function takes a single argument as the callback, and the return value must be the instance of Node.js server.
+
+== Self-signed certificate
+In development, you can also make use of the self-signed certificate. It requires an additional dependency from npm.
+
+[source, bash]
+----
+npm i pem
+----
+
+[source, js]
+----
+const { Ignitor } = require('@adonisjs/ignitor')
+const https = require('https')
+const pem = require('pem')
+
+pem.createCertificate({ days: 1, selfSigned: true }, (error, keys) => {
+  if (error) {
+    return console.log(error)
+  }
+
+  const options = {
+    key: keys.serviceKey,
+    cert: keys.certificate
+  }
+
+  new Ignitor(require('@adonisjs/fold'))
+    .appRoot(__dirname)
+    .fireHttpServer((handler) => {
+      return https.createServer(options, handler)
+    })
+    .catch(console.error)
+})
+----
