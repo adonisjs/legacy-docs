@@ -32,7 +32,9 @@ Route.post('upload', async ({ request }) => {
     size: '2mb'
   })
 
-  await profilePic.move(Helpers.tmpPath('uploads'), { name: 'custom-name.jpg' })
+  await profilePic.move(Helpers.tmpPath('uploads'), {
+    name: 'custom-name.jpg'
+  })
 
   if (!profilePic.moved()) {
     return profilePic.error()
@@ -43,7 +45,7 @@ Route.post('upload', async ({ request }) => {
 
 [ol-spaced]
 1. The `request.file` method accepts two arguments, a *field name* and *an object of validations* to be performed, before moving the file.
-2. Next, we call `profilePic.move` method, which attempts to move the file to the defined directory. You can call it with options to save file with new name. 
+2. Next, we call `profilePic.move` method, which attempts to move the file to the defined directory. You can call it with options to save file with new name.
 3. Finally, we check whether the move operation was successful or not using `profilePic.moved()` method and return errors (if any).
 
 == Multiple file uploads
@@ -102,6 +104,8 @@ if (!profilePics.movedAll()) {
 == Errors
 Following is the list of formats in which error(s) are returned.
 
+NOTE: When using link:https://github.com/adonisjs/adonis-bodyparser/blob/develop/src/Multipart/FileJar.js[FileJar, window="_blank"] the `errors` method returns an array of following errors.
+
 .Type error
 [source, js]
 ----
@@ -125,6 +129,22 @@ Following is the list of formats in which error(s) are returned.
 ----
 
 Also, multiple file uploads `errors` method returns an array of errors in the same format.
+
+== File properties
+Below is the list of file properties you can access on the file instance.
+
+[role="resource-table", options="header", cols="45, 20, 20, 15"]
+|====
+| Property | Unprocessed | Inside tmp | Moved
+| clientName [description]#File name on client machine# | `String` | `String` | `String`
+| fileName [description]#File name after move operation# | `null` | `null` | `String`
+| fieldName [description]#Form field name# | `String` | `String` | `String`
+| tmpPath [description]#Temporary path#| `null` | `String` | `String`
+| size [description]#File size in bytes#| `0` | `Number` | `Number`
+| type [description]#File primary type#| `String` | `String` | `String`
+| subtype [description]#File sub type#| `String` | `String` | `String`
+| status [description]#File status. Set to `error` when fails#| `pending` | `consumed` | `moved`
+|====
 
 == Streaming files
 Majority of file uploading libraries/frameworks process the files for multiple times when you want to stream them to an external service like *s3*.
