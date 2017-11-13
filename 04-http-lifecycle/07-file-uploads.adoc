@@ -32,7 +32,7 @@ Route.post('upload', async ({ request }) => {
     size: '2mb'
   })
 
-  await profilePic.move(Helpers.tmpPath('uploads'), {name: 'custom-name.jpg})
+  await profilePic.move(Helpers.tmpPath('uploads'), {name: 'custom-name.jpg' })
 
   if (!profilePic.moved()) {
     return profilePic.error()
