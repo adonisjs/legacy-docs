@@ -701,6 +701,41 @@ await User
   .delete()
 ----
 
+== Transactions
+Majority of Lucid methods has support for transactions. The first step is always to obtain the `trx` object using the Database provider.
+
+[source, js]
+----
+const trx = await Database.beginTransaction()
+
+const user = new User()
+
+// pass the trx object and lucid will use it
+await user.save(trx)
+
+// once done commit the transaction
+trx.commit()
+----
+
+Just like with `save`, you can pass the `trx` object to the `create` method as well.
+
+[source, js]
+----
+const trx = await Database.beginTransaction()
+
+await User.create({ username: 'virk' }, trx)
+
+// once done commit the transaction
+trx.commit()
+----
+
+[source, js]
+----
+await User.createMany([
+  { username: 'virk' }
+], trx)
+----
+
 == Boot cycle
 Each model has a boot cycle where it gets booted, and that happens only for once. So if you want to perform something that should occur only once, consider writing it inside the `boot` method.
 
