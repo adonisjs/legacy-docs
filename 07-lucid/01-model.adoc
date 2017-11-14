@@ -168,6 +168,31 @@ class User extends Model {
 }
 ----
 
+== Hidding Fields
+Quite often you will find yourself omitting fields from the database results. For example: Hiding the user’s password from the JSON output. Doing this manually can be tedious in many ways.
+
+1. You will have manually loop over the rows and delete the key/value pair.
+2. When you fetch relationships, you will have to loop through all the parent records and then their child records to delete the key/value pair.
+
+AdonisJs makes it simpler by defining the visible or hidden (one at a time) on your model.
+
+[source, js]
+----
+class User extends Model {
+  static get hidden () {
+    return ['password']
+  }
+}
+----
+
+[source, js]
+----
+class Post extends Model {
+  static get visible () {
+    return ['title', 'body']
+  }
+}
+----
 
 == Dates
 Dates are the hardest part of building data driver applications. We want to store them differently and show them differently, which usually requires much manual work.
