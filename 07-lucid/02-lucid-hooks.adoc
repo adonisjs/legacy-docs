@@ -111,4 +111,5 @@ Below is the list of life cycle events and their description
 | afterDelete | After a row is removed.
 | afterFind | After a single row is fetched from the database.
 | afterFetch | After the `fetch` method is executed. The hook method receives an array of the model instances.
+| afterPaginate | After the `paginate` method is executed. The hook receives 2 arguments, where the first is the array of model instances and 2nd the pagination meta data.
 |====
