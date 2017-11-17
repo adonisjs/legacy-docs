@@ -166,6 +166,18 @@ const { sanitizor } = use('Validator')
 const slug = sanitizor.slug('My first blog post')
 ----
 
+==== formatters
+Returns a reference to link:http://indicative.adonisjs.com/#indicative-formatters[formatters, window="_blank"]
+
+[source, js]
+----
+const { formatters } = use('Validator')
+formatters.default('jsonapi')
+
+// adding new formatter
+formatters.register('custom', CustomImplementation)
+----
+
 == Route validator
 Majority of times the data validation happens during the normal HTTP request/response lifecycle, where you end up writing the same amount of code inside each controller.
 
@@ -272,6 +284,18 @@ class StoreUser {
 }
 
 module.exports = StoreUser
+----
+
+=== Formatter
+Just like any other property, you can also define the link:http://indicative.adonisjs.com/#indicative-formatters[indicative formatter, window="_blank"] as a property on the validator class.
+
+[source, js]
+----
+class StoreUser {
+  get formatter () {
+    return 'jsonapi'
+  }
+}
 ----
 
 === Authorization
