@@ -369,13 +369,13 @@ const User = use('App/Models/User')
 const users = await User.all()
 ----
 
-==== truncated
+==== truncate
 Delete all rows (truncate table)
 
 [source, js]
 ----
 const User = use('App/Models/User')
-const users = await User.truncated()
+const users = await User.truncate()
 ----
 
 == Aggregate helpers
