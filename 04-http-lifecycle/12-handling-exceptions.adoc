@@ -97,8 +97,6 @@ Output
 ✔ create  app/Exceptions/CustomException.js
 ----
 
-NOTE: Make sure to install `@adonisjs/generic-exceptions` since it is not installed by default.
-
 [source, js]
 ----
 const GE = require('@adonisjs/generic-exceptions')
