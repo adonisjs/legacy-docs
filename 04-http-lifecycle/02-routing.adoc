@@ -353,7 +353,7 @@ Since attaching auth middleware to all the routes is not always desired, you can
 Route
   .resource('users', 'UsersController')
   .middleware(new Map([
-    ['auth']: ['users.store', 'users.update', 'users.delete']
+    ['auth'], ['users.store', 'users.update', 'users.delete']
   ]))
 ----
 
