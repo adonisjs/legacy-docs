@@ -69,6 +69,30 @@ The `up` method is used to take action on a table. It can be creating a new tabl
 down::
 The `down` method is the reverse of the up action. When `up` method creates a table, you simply drop it inside the down method.
 
+== Multiple connections
+The schema files can also make use of a different connection by defining a `connection` property on them. Also make sure that the same connection is defined inside `config/database.js` file.
+
+NOTE: A table `adonis_schema` is created to manage the lifecycle of migrations. This table will always be created inside the primary connection database and there is no option to override it.
+
+[source, js]
+----
+const Schema = use('Schema')
+
+class UsersSchema extends Schema {
+  static get connection () {
+    return 'mysql'
+  }
+
+  up () {
+  }
+
+  down () {
+  }
+}
+
+module.exports = UsersSchema
+----
+
 == Run migrations
 Finally, we need to call another command to run the migrations, which executes the `up` method on this class.
 
@@ -136,8 +160,9 @@ Usage:
   migration:run [options]
 
 Options:
-  -f, --force Forcefully run migrations in production
-  --log       Log SQL queries instead of executing them
+  -f, --force   Forcefully run migrations in production
+  -s, --silent  Silent the migrations output
+  --log         Log SQL queries instead of executing them
 
 About:
   Run all pending migrations
