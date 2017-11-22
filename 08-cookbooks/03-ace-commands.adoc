@@ -367,7 +367,7 @@ Log message in green color
 
 [source, js]
 ----
-this.warn('All went fine')
+this.success('All went fine')
 ----
 
 ==== completed(action, message)
