@@ -83,8 +83,24 @@ The route handler code has been changed a bit in case of multiple file uploads.
 1. Instead of using `move`, we make use of `moveAll` method. Which parallelly moves all of the uploaded files to a given directory.
 2. Also, other methods have been changed as `moved -> movedAll` and `error -> errors`.
 
+=== Changing file names
+When moving a single file, you can pass an object with `name` property on it. However, it can get tricky with multiple files.
+
+AdonisJs allows you to pass a callback to `moveAll` method, which is executed for each file inside the `fileJar`.
+
+[source, js]
+----
+profilePics.moveAll(Helpers.tmpPath('uploads'), (file) => {
+  return {
+    name: `${new Date().getTime()}.${file.subtype}`
+  }
+})
+----
+
 === Moved list
-Since some files have been moved successfully, we can optimize our workflow by processing those file or deleting them, so that there are no duplicate files.
+In case of multiple file uploads, it's possible that only few files are successfully moved and other are rejected due to validation failures.
+
+In that case you can make use of `movedAll()` and `movedList()` methods, to optimize your workflow.
 
 [source, js]
 ----
