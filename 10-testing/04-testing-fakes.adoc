@@ -124,7 +124,7 @@ Mail.restore()
 ----
 
 == Events fake
-Just like `Mail` provider, `Email` provider also comes with an in-built faker object to store events inside an in-memory array and use them later for assertions.
+Just like `Mail` provider, `Event` provider also comes with an in-built faker object to store events inside an in-memory array and use them later for assertions.
 
 [source, js]
 ----
