@@ -714,7 +714,7 @@ user.id = 1 // throws exception
 === Bulk deletes
 Bulk deletes can be done with the help of query builder.
 
-*Bulk deletes never executes any model hooks.*
+*Bulk deletes never execute any model hooks.*
 
 [source, js]
 ----
