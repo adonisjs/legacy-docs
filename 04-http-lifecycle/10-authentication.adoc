@@ -455,7 +455,7 @@ Route
 The auth provider does add a couple of helpers to the view instance so that you can write HTML around the state of a logged-in user.
 
 ==== auth
-Refrence to the `auth` object
+Reference to the `auth` object
 
 [source, edge]
 ----
