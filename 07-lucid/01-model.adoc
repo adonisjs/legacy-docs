@@ -145,7 +145,7 @@ class User extends Model {
 ----
 
 ==== createdAtColumn
-The field name to be used for setting created at the time stamp.
+The field name to be used for setting the created at time stamp. You can return `null` to disable it.
 
 [source, js]
 ----
@@ -157,7 +157,7 @@ class User extends Model {
 ----
 
 ==== updatedAtColumn
-The field name to be used for setting updated at the time stamp.
+The field name to be used for setting the updated at time stamp. You can return `null` to disable it.
 
 [source, js]
 ----
