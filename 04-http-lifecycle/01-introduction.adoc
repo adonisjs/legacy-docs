@@ -36,8 +36,8 @@ Alternatively, you can make use of ES6 destructuring.
 [source, js]
 ----
 Route.get('/', ({ request, response }) => {
-  // ctx.request
-  // ctx.response
+  // request
+  // response
 })
 ----
 
