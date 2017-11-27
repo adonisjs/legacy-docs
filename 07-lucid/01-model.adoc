@@ -35,7 +35,7 @@ class User extends Model {
 6. Manage date formats.
 7. and much more.
 
-NOTE: Lucid models are not tied to your database schema and instead manages everything of their own. +
+NOTE: Lucid models are not tied to your database schema and instead manages everything on their own. +
 *For example*: There is no need to define associations in SQL when using lucid relationships.
 
 The lucid models are stored as ES6 classes inside `app/Models` directory, where each model represents a database table. For example
@@ -168,7 +168,7 @@ class User extends Model {
 }
 ----
 
-== Hidding Fields
+== Hiding Fields
 Quite often you will find yourself omitting fields from the database results. For example: Hiding the user’s password from the JSON output. Doing this manually can be tedious in many ways.
 
 1. You will have manually loop over the rows and delete the key/value pair.
@@ -200,7 +200,7 @@ Dates are the hardest part of building data driver applications. We want to stor
 Lucid handles date gracefully so that you have minimal work to do.
 
 === Defining date fields
-The first step is to tell Lucid, which all fields are supposed to be treated as dates. By default, the timestamps `created_at` and `updated_at` are marked as dates.
+The first step is to tell Lucid, which fields are supposed to be treated as dates. By default, the timestamps `created_at` and `updated_at` are marked as dates.
 
 However, you can define your own too.
 
@@ -213,7 +213,7 @@ class User extends Model {
 }
 ----
 
-So here we pull the fields which are marked as dates by default and push a new date field to it and finally returns it.
+So here we pull the fields which are marked as dates by default and push a new date field to it and finally return it.
 
 === Formatting date fields
 Lucid formats all dates as `YYYY-MM-DD HH:mm:ss` by default, which is a valid format for all database engines. Also, it gives you a way to conditionally format certain or all date fields.
@@ -610,7 +610,7 @@ user.age = 22
 await user.save()
 ----
 
-The `update` query only takes place if something has been changed. Calling `save` for multiple times, without updating the model attributes does not perform any queries.
+The `update` query only takes place if something has been changed. Calling `save` multiple times, without updating the model attributes does not perform any queries.
 
 Rather than setting attributes manually, the `fill` or `merge` methods may be used.
 
@@ -675,7 +675,7 @@ const users = await User.createMany(usersData)
 === Bulk updates
 The bulk updates can be done with the help of query builder. Lucid makes sure to format dates accordingly when doing bulk updates.
 
-*Bulk updates never executes any model hooks*.
+*Bulk updates never execute any model hooks*.
 
 [source, js]
 ----
@@ -714,7 +714,7 @@ user.id = 1 // throws exception
 === Bulk deletes
 Bulk deletes can be done with the help of query builder.
 
-*Bulk deletes never executes any model hooks.*
+*Bulk deletes never execute any model hooks.*
 
 [source, js]
 ----
@@ -762,7 +762,7 @@ await User.createMany([
 ----
 
 == Boot cycle
-Each model has a boot cycle where it gets booted, and that happens only for once. So if you want to perform something that should occur only once, consider writing it inside the `boot` method.
+Each model has a boot cycle where it gets booted, and that happens only once. So if you want to perform something that should occur only once, consider writing it inside the `boot` method.
 
 [source, js]
 ----
