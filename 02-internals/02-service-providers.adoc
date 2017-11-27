@@ -122,7 +122,7 @@ Following are the steps performed by the get method
 3. Create a new `bee-queue` instance and store inside an object for future use.
 4. Finally, return the instance.
 
-The `Queue` class is pure, since it does not have any hard dependencies on the framework and instead rely on *Dependency Injection* to provider the *Config provider*.
+The `Queue` class is pure, since it does not have any hard dependencies on the framework and instead rely on *Dependency Injection* to provide the *Config provider*.
 
 === Service provider
 Now let's create a service provider who does the instantiation of this class and binds it to be IoC container. The code lives inside `providers/Queue/Provider.js`
