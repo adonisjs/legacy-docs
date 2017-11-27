@@ -31,7 +31,7 @@ const providers = [
 The configuration file is saved as `config/redis.js`, make sure to define the connection settings before making use of the provider.
 
 == Basic example
-Let’s start with a basic example of caching users inside redis. The following example may not be the best way to cache data, but does gives you an idea on how to make use of redis.
+Let’s start with a basic example of caching users inside redis. The following example may not be the best way to cache data, but does give you an idea on how to make use of redis.
 
 [source, js]
 ----
