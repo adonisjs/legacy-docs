@@ -264,8 +264,8 @@ class StoreUser {
   }
 
   get data () {
-    const requestBody = request.all()
-    const sessionId = request.header('X-Session-Id')
+    const requestBody = this.ctx.request.all()
+    const sessionId = this.ctx.request.header('X-Session-Id')
 
     return Object.assign({}, requestBody, { sessionId })
   }
