@@ -149,11 +149,11 @@ Publish message to a given channel
 
 [source, js]
 ----
-Redis.publish('music', {
+Redis.publish('music', JSON.stringify({
   id: 1,
   title: 'Love me like you do',
   artist: 'Ellie goulding'
-})
+}))
 ----
 
 ==== unsubscribe(channel)
