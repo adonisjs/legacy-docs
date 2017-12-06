@@ -210,7 +210,7 @@ Persist and return model instance
 [source, js]
 ----
 await Factory
-  .model('App/Model/User')
+  .model('App/Models/User')
   .create()
 ----
 
@@ -220,7 +220,7 @@ Persist and return many model instances
 [source, js]
 ----
 await Factory
-  .model('App/Model/User')
+  .model('App/Models/User')
   .createMany()
 ----
 
@@ -230,7 +230,7 @@ Return model instance with prefilled dummy data and do not persist it to the dat
 [source, js]
 ----
 await Factory
-  .model('App/Model/User')
+  .model('App/Models/User')
   .make()
 ----
 
@@ -240,7 +240,7 @@ Return an array of model instances with prefilled dummy data and do not persist 
 [source, js]
 ----
 await Factory
-  .model('App/Model/User')
+  .model('App/Models/User')
   .makeMany(3)
 ----
 
