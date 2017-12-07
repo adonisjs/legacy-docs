@@ -103,6 +103,8 @@ class LoginController {
     }
   }
 }
+
+module.exports = LoginController
 ----
 
 We have a fully working login system in a few lines of code. The API is consistent across all the drivers, so it is easier to swap `facebook` with `google` or some other one.
