@@ -104,7 +104,7 @@ Below is the list of life cycle events and their description
 | beforeCreate | Before creating a new row.
 | afterCreate | After a new record is created.
 | beforeUpdate | Before updating a row.
-| afterUpdate | After a row has been created.
+| afterUpdate | After a row has been updated.
 | beforeSave | This event occurs before *creating* or *updating* a new record.
 | afterSave | After a new record has been *created* or *updated*.
 | beforeDelete | Before removing a row.
