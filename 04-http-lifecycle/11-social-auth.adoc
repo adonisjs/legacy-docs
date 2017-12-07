@@ -80,7 +80,7 @@ class LoginController {
 
   callback ({ ally, auth }) {
     try {
-      const fbUser = ally.driver('facebook').getUser()
+      const fbUser = await ally.driver('facebook').getUser()
 
       // user details to be saved
       const userDetails = {
