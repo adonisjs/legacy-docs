@@ -78,7 +78,7 @@ class LoginController {
     await ally.driver('facebook').redirect()
   }
 
-  callback ({ ally, auth }) {
+  async callback ({ ally, auth }) {
     try {
       const fbUser = await ally.driver('facebook').getUser()
 
