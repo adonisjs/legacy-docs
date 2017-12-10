@@ -485,6 +485,22 @@ If you ever have a security breach, feel free to set `is_revoked = true`, to rev
 
 After revoking the tokens, some users may logout unexpectedly, but that is better than giving bad access to a hacker.
 
+NOTE: Make sure the route that revokes the user token is protected with the `auth` middleware. Otherwise, you will not get the token in the request header.
+
+```js
+class UserController {
+  async revokeUserToken ({ auth }) {
+    const user = auth.current.user
+    const token = auth.getAuthHeader()
+
+    await user
+      .tokens()
+      .where('token', token)
+      .update({ is_revoked: true })
+  }
+}
+```
+
 == Tokens encryption
 The tokens are saved in plain format inside the database, whereas these tokens are sent in `encrypted` form to the end-user.
 
