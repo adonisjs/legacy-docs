@@ -139,7 +139,7 @@ Also, you can add macros to the `QueryBuilder` for a given model.
 class Slugify {
 
   register (Model, options) {
-    Model.queryMacro('whereSlug', function (value) => {
+    Model.queryMacro('whereSlug', function (value) {
       this.where('slug', value)
       return this
     })
