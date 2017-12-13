@@ -351,6 +351,18 @@ await User.first()
 await User.firstOrFail()
 ----
 
+==== findOrCreate (whereAttributes, values)
+Find a record, if not found a new record will be created and returned back on the fly.
+
+[source, js]
+----
+const User = use('App/Models/User')
+const user = await User.findOrCreate(
+  { username: 'virk' },
+  { username: 'virk', email: 'virk@adonisjs.com' }
+)
+----
+
 ==== pick(rows = 1)
 Pick `x` number of rows from the database table. By default it only selects `1` row.
 
