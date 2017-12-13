@@ -51,7 +51,7 @@ Config.get('database.mysql.host')
 Config.get('database.mysql.host', '127.0.0.1')
 ----
 
-If you need change config value, you make it as
+Also you can update the in-memory config value for a key as shown below.
 
 [source, js]
 ----
