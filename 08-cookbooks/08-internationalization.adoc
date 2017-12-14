@@ -394,6 +394,16 @@ Route.get('/', ({ antl }) => {
 })
 ----
 
+For example, you can switch locale for renderer view as:
+
+[source, js]
+----
+Route.get('/', ({ antl, view }) => {
+  antl.switchLocale('fr')
+  return view.render('some-view')
+}
+----
+
 == View global
 Also the xref:_context_instance[Context instance] is shared with all the views. So you can access all the available methods inside your view templates.
 

@@ -151,14 +151,6 @@ If you are using the auth provider, then you can access the current logged in us
 {{ auth.user }}
 ----
 
-==== antl
-If you are using the link:internationalization[antl provider] and you need switch locale in view, you can do it as:
-
-[source, edge]
-----
-{{ antl.switchLocale('en-us') }}
-----
-
 ==== csrfField
 If you are using the `shield` middleware, you can access the csrfToken and field using one of the following methods.
 
