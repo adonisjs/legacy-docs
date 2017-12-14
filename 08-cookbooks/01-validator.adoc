@@ -241,8 +241,10 @@ Also, you can sanitize the user input by defining the `sanitizationRules`. The s
 ----
 class StoreUser {
   get sanitizationRules () {
-    email: 'normalize_email',
-    age: 'to_int'
+    return {
+      email: 'normalize_email',
+      age: 'to_int'
+    }
   }
 }
 
