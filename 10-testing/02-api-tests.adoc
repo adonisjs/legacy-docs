@@ -7,7 +7,7 @@ category: testing
 
 toc::[]
 
-In this guide, we learn how to write tests against an API server. If you are new testing with AdonisJs or in general, make sure to read the link:testing[getting started] guide.
+In this guide, we learn how to write tests against an API server. If you are new to testing with AdonisJs or in general, make sure to read the link:testing[getting started] guide.
 
 == Basic example
 Let's get started with a basic example to test an endpoint that returns a list of posts in JSON.
