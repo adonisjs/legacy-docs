@@ -14,6 +14,8 @@ All changes made within a project can also be seen here: link:https://github.com
 == Installing
 Let's start by installing laravel mix in our project as an development dependency.
 [source, bash]
+
+Installing
 ----
 npm install laravel-mix  --save-dev
 ----
@@ -22,7 +24,12 @@ or
 ----
 yarn add laravel-mix --dev
 ----
+
+Copy the `webpack.mix.js` file
+[source, bash]
+----
 cp -r node_modules/laravel-mix/setup/webpack.mix.js ./
+----
 
 == Setting up our frontend assets
 We will start with creating the files for the stylesheet and script. These files later will be compiled by Laravel Mix. We will move and create files inside the `resources/assets` directory described by the recipe: link:https://adonisjs.com/recipes/4.0/frontend-assets[Managing frontend assets].
