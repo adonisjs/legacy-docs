@@ -1,9 +1,9 @@
 ---
 permalink: laravel-mix
-title: Implementing laravel-mix
+title: Implementing Laravel Mix
 category: recipes
 ---
-= Implementing laravel-mix
+= Implementing Laravel Mix
 
 toc::[]
 
