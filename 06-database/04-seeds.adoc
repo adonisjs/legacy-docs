@@ -7,7 +7,7 @@ category: database
 
 toc::[]
 
-Once you have got your database schema ready with link:migrations[migrations], the next step is to add some data to get started. It is where *database seeds* and *factories* comes into the picture.
+Once you have your database schema ready with link:migrations[migrations], the next step is to add some data. This is where *database seeds* and *factories* come into the picture.
 
 == Seeds
 Seeds are Javascript classes with a `run` method on them. You are free to write any database related operation inside this method.
@@ -44,7 +44,7 @@ module.exports = UserSeeder
 
 Run the seed file by calling `adonis seed`. It executes the `run` method on all the seed files.
 
-Since you can write any database related code inside your seed files and execute them from the command line is helpful in off loading some tasks from your actual application code.
+Since you can write any database related code inside your seed files and execute them from the command line, they are helpful in offloading some tasks from your actual application code.
 
 However, the real power of seeds is unlocked when you combine them with *Factories*.
 
@@ -120,7 +120,7 @@ const post = await Factory.model('App/Models/Post').make()
 await user.posts().save(post)
 ----
 
-If you would have noticed, we used the `make` method on the `Post` blueprint, this method does not persist the post inside the database and instead gives us an instance of `Post` model with pre-filled dummy data.
+You may have noticed that we used the `make` method on the `Post` blueprint. This method does not persist the post inside the database and instead gives us an instance of the `Post` model with pre-filled dummy data.
 
 == Available commands
 Below is the list of available commands with their usage and description.
