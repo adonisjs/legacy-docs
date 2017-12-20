@@ -168,7 +168,7 @@ Use it as
 ----
 class User extends Model {
   static get Serializer () {
-    return 'MyApp/CustomSerializer'
+    return use('MyApp/CustomSerializer')
   }
 }
 ----
