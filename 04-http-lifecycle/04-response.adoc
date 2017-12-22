@@ -79,7 +79,7 @@ Route.get('/', async ({ response }) => {
 See how cleaner the code is now. Javascript has a rich eco-system, and it is *100% possible* to write code without callbacks just by promisfying them, and as a community, we want to encourage it.
 
 === I need callbacks
-Even if you think using callbacks are great, we got a way for you to use them. Simply instruct `response` object not to end `implicitly`.
+If you think using callbacks is great, we have a way for you to use them. Simply instruct the `response` object not to end `implicitly`.
 
 [source, js]
 ----
