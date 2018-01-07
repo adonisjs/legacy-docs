@@ -1,0 +1,145 @@
+---
+permalink: laravel-mix
+title: Implementing Laravel Mix
+category: recipes
+---
+= Implementing Laravel Mix
+
+toc::[]
+
+This recipe explains the steps to use link:https://github.com/JeffreyWay/laravel-mix[Laravel Mix] for compiling front-end assets. Laravel Mix provides a clean and easy way to use Webpack, without configuring Webpack with loaders (which can be quiet complex for some users). Do not let the name confuse you, Laravel Mix is not constrained to Laravel. You should have an link:https://adonisjs.com/docs/4.0/installation#_creating_new_app[adonis application created] and a terminal pointed to that directory.
+
+All changes made within a project can also be seen here: link:https://github.com/vincevannoort/adonis-laravel-mix[vincevannoort/adonis-laravel-mix].
+
+== Installing
+Let's start by installing laravel mix in our project as an development dependency.
+[source, bash]
+
+Installing
+----
+npm install laravel-mix  --save-dev
+----
+or
+[source, bash]
+----
+yarn add laravel-mix --dev
+----
+
+Copy the `webpack.mix.js` file
+[source, bash]
+----
+cp -r node_modules/laravel-mix/setup/webpack.mix.js ./
+----
+
+== Setting up our frontend assets
+We will start with creating the files for the stylesheet and script. These files later will be compiled by Laravel Mix. We will move and create files inside the `resources/assets` directory described by the recipe: link:https://adonisjs.com/recipes/4.0/frontend-assets[Managing frontend assets].
+
+[source, bash]
+----
+mv -v public/* resources/assets/images
+mv -v resources/assets/images/style.css resources/assets/sass/app.scss
+sed -i '' 's/url("/url("..\/images/g' resources/assets/sass/app.scss
+touch resources/assets/scripts/app.js
+----
+
+After this our `resources` directory should look like:
+
+[source, bash]
+----
+└── resources
+    └── assets
+        └── sass
+            └── app.scss
+        └── scripts
+            └── app.js
+        └── images
+----
+
+== Customizing Laravel Mix config file
+Now that the files are in place, it's time to customize the Laravel Mix config file to correctly build our resource files. The config file is located at the root and named `webpack.mix.js`. At this time, the mix functions point to the wrong files. Let's change the location at which the function points at.
+
+Before:
+[source, js]
+---
+mix.js('src/app.js', 'dist/')
+   .sass('src/app.scss', 'dist/')
+   .setPublicPath('public')
+   .copyDirectory('resources/assets/images', 'public/images');
+---
+
+After:
+[source, js]
+---
+mix.js('resources/assets/scripts/app.js', 'public/')
+   .sass('resources/assets/sass/app.scss', 'public/')
+   .setPublicPath('public')
+   .copyDirectory('resources/assets/images', 'public/images');
+---
+
+Another option is to also use browserSync while developing. Everytime a change is made the browser is reloaded, no more refreshing the browser after a change.
+
+Optional (browerSync):
+[source, js]
+---
+mix.js('resources/assets/scripts/app.js', 'public/')
+   .sass('resources/assets/sass/app.scss', 'public/')
+   .setPublicPath('public')
+   .copyDirectory('resources/assets/images', 'public/images')
+   .browserSync('localhost:3333');
+---
+
+Now the Laravel Mix config file should point correctly at the created files. Laravel Mix provides alot more functionality
+
+== Creating NPM scripts
+To make development easier npm scripts are used which set the NODE_ENV value for optimized builds within Webpack. Add these scripts to `package.json`:
+
+[source, bash]
+----
+"development": "cross-env NODE_ENV=development webpack --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+"production": "cross-env NODE_ENV=production webpack --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+----
+
+== Prepare .edge file
+Now that we are able to compile stylesheets and scripts with webpack, our view should utilize these files. Change the old references from `{{ css('style') }}` to `{{ css('app') }}` and add an script to the bottom of the file `{{ script('app') }}`.
+
+[source, html]
+----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello Adonis</title>
+  {{ css('app') }} <!-- compiled build/app.css file -->
+</head>
+<body>
+  <section>
+    <div class="logo"></div>
+    <div class="title"></div>
+    <div class="subtitle"><p>AdonisJs simplicity will make you feel confident about your code</p></div>
+  </section>
+  {{ script('app') }} <!-- compiled build/app.js file -->
+</body>
+</html>
+----
+
+== Running Adonis and Laravel Mix
+It's time! Let's serve adonis and run laravel mix. For ease of use we will use 2 terminals to make debugging easier.
+
+Serve adonis server:
+[source, bash]
+----
+adonis serve --dev
+----
+
+Run laravel mix:
+[source, bash]
+----
+npm run development
+----
+or
+[source, bash]
+----
+yarn run development
+----
+
+You should now see the same welcome view, setup with Laravel Mix, yeah!
