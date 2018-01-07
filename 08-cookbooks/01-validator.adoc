@@ -194,8 +194,8 @@ Route
 Route
   .resource('users', 'UserController')
   .validator(new Map([
-    [['users.store'], ['StoreUser'],
-    [['users.update'], ['UpdateUser']
+    [['users.store'], ['StoreUser']],
+    [['users.update'], ['UpdateUser']]
   ]))
 ----
 
