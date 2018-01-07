@@ -261,6 +261,38 @@ The link:https://jwt.io/[jwt authentication, window="_blank"] is an industry sta
 
 NOTE: Set the `Authorization = Bearer <token>`  header to authenticate the request.
 
+.config/auth.js
+[source, javascript]
+----
+{
+  authenticator: 'jwt',
+  jwt: {
+    serializer: 'Lucid',
+    model: 'App/Model/User',
+    scheme: 'jwt',
+    uid: 'email',
+    password: 'password',
+    options: {
+      secret: Config.get('app.appKey'),
+      // Options to be used while generating token
+    }
+  }
+}
+----
+
+.Additional Options
+
+[options="header"]
+|====
+| Key | Available Values | Default Value | Description
+| algorithm | HS256, HS384 | HS256 | Algorithm to be used for generating token
+| expiresIn | valid time in seconds or link:https://github.com/rauchg/ms.js[ms string] | null |  When to expire the token
+| notBefore | valid time in seconds or link:https://github.com/rauchg/ms.js[ms string] | null | Till when at least to keep the token valid
+| audience |  String | null  | A value to be checked against the `aud`
+| issuer |  Array or String | null | Value to be used for `iss`.
+| subject | String | null | A value to be checked against the `sub`.
+|====
+
 ==== attempt(uid, password, [jwtPayload])
 Validate the user credentials and generate a JWT token in exchange.
 
