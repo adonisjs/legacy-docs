@@ -319,6 +319,32 @@ class UserSchema {
 }
 ----
 
+== Executing arbitrary code
+Commands written inside `up` and `down` methods are scheduled to be executed later inside a migration. In case you want to execute *arbitrary* database commands, you can wrap them inside the `schedule` function.
+
+NOTE: The `schedule` method receives the *transaction object* and it is important to run all database commands inside the same transaction, otherwise queries will hang forever.
+
+
+[source, javascript]
+----
+class UserSchema {
+  up () {
+    // create new table
+    this.create('new_users', (table) => {
+    })
+
+    // copy data
+    this.schedule(async (trx) => {
+      const users = await Database.table('users').transacting(trx)
+      await Database.table('new_users').transacting(trx).insert(users)
+    })
+
+    // copy old table
+    this.drop('users')
+  }
+}
+----
+
 == Schema builder API
 The schema builder API is exactly same as the link:http://knexjs.org/#Schema-Building[knex api], so make sure to read their documentation.
 
