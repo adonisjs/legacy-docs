@@ -178,7 +178,7 @@ The config file `config/bodyparser.js` has a section to disable auto-processing 
 
 [source, js]
 ----
-processManually: ['upload']
+processManually: ['/upload']
 ----
 
 The `processManually` option takes an array of routes or route patterns, for which files should not be processed automatically.
