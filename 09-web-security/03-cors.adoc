@@ -54,4 +54,4 @@ origin: function (currentOrigin) {
 }
 ----
 
-For all other options, go through the comments inside the link:https://github.com/adonisjs/adonis-cors/blob/develop/example/cors.js#L3[config file, window="_blank"].
+For all other options, go through the comments inside the link:https://github.com/adonisjs/adonis-cors/blob/develop/config/cors.js#L3[config file, window="_blank"].
