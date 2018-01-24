@@ -158,7 +158,7 @@ Once done, you can import this serializer manually using `require` statement or 
 const { ioc } = require('@adonisjs/fold')
 
 ioc.bind('MyApp/CustomSerializer', () => {
-  require('./CustomSerializer')
+  return require('./CustomSerializer')
 })
 ----
 
