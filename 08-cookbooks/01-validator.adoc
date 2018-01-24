@@ -123,7 +123,8 @@ Validate data with defined rules. Optionally, you can define custom link:http://
 const { validate } = use('Validator')
 
 const validation = await validate(data, rules)
-if (!validation.fails()) {
+
+if (validation.fails()) {
   return validation.messages()
 }
 ----
