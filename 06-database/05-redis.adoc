@@ -103,7 +103,7 @@ Redis.publish('music', track)
 === Available methods
 Below is the list of methods to interact with the pub/sub layer of redis.
 
-NOTE: You can only one one subscriber for a given channel.
+NOTE: You can have only one subscriber for a given channel.
 
 ==== subscribe(channel, listener)
 [source, js]
