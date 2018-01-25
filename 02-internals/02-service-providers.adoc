@@ -26,7 +26,7 @@ class MyProvider extends ServiceProvider {
   }
 
   boot () {
-    // optionally do some intial setup
+    // optionally do some initial setup
   }
 }
 
