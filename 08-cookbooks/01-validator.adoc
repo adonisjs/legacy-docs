@@ -116,14 +116,15 @@ Quickly modify the HTML form to display the flash messages, which are set when v
 Below is the list of available methods.
 
 ==== validate(data, rules, [message])
-Validate data with defined rules. Optionally, you can define custom link:http://indicative.adonisjs.com/#indicative-basics-custom-messages[error messages, window="_blank"].
+Validate data with defined rules. Optionally, you can define custom link:http://indicative.adonisjs.com/docs/custom-messages[error messages, window="_blank"].
 
 [source, js]
 ----
 const { validate } = use('Validator')
 
 const validation = await validate(data, rules)
-if (!validation.fails()) {
+
+if (validation.fails()) {
   return validation.messages()
 }
 ----
