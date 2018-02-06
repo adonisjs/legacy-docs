@@ -1,0 +1,144 @@
+---
+permalink: extending-adonisjs
+title: Extending AdonisJs
+category: cookbooks
+---
+= Extending AdonisJs
+
+toc::[]
+
+AdonisJs is fully extendible to the core. In this guide we learn about the ways, you can transparently extend parts of the framework
+
+== Where to write code?
+The easiest way to get started is to make use of link:ignitor#_hooks[applications hooks] and later move code inside a provider if you want to share your code as a package.
+
+The hooks lives inside `start/hooks.js` file and bunch of pre-existing hooks can be used to execute the code at a specific time.
+
+NOTE: Hooks callbacks are synchronous. You must create a provider and use the `boot` method to write async code.
+
+.start/hooks.js
+[source, js]
+----
+const { hooks } = require('@adonisjs/ignitor')
+
+hooks.after.providersRegistered(() => {
+  // execute your code
+})
+----
+
+Providers lives inside the `providers` directory in the project root. Always make sure to register the provider inside the `start/app.js` file.
+
+[source, bash]
+----
+├── providers
+  ├── AppProvider.js
+----
+
+.start/app.js
+[source, js]
+----
+const path = require('path')
+
+const providers = [
+  path.join(__dirname, '..', 'providers/AppProvider')
+]
+----
+
+Generally providers are used to add functionality to your application by binding namespaces to the IoC container. However, you can use the providers to run some code when it has been booted.
+
+[source, js]
+----
+const { ServiceProvider } = require('@adonisjs/fold')
+
+class AppProvider extends ServiceProvider {
+  async boot () {
+    // execute code
+  }
+}
+----
+
+== Adding macros/getters
+Macros let you add methods to the existing classes. A class must extend link:https://www.npmjs.com/package/macroable[Macroable] class in order to be extended.
+
+TIP: You can use hooks or the provider `boot` method to add macros.
+
+[source, js]
+----
+const Response = use('Adonis/Src/Response')
+const Request = use('Adonis/Src/Request')
+
+Response.macro('sendStatus', (status) => {
+  this.status(status).send(status)
+})
+----
+
+And use it as follows.
+
+[source, js]
+----
+Route.get('/', ({ response }) => {
+  response.sendStatus(200)
+})
+----
+
+In same way you can also add `getters` to the macroable classes.
+
+[source, js]
+----
+Request.getter('time', function () {
+  return new Date().getTime()
+})
+
+// Or add a singleton getter
+Request.getter('id', function () {
+  return uuid.v4()
+}, true)
+----
+
+Below is the list of classes you can add getters/macros on.
+
+[ol-shrinked]
+1. link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Context/index.js[Adonis/Src/HttpContext, window="_blank"]
+2. link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Request/index.js[Adonis/Src/Request, window="_blank"]
+3. link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Response/index.js[Adonis/Src/Response, window="_blank"]
+4. link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Route/index.js[Adonis/Src/Route, window="_blank"]
+
+== Extending providers
+Some existing providers let you extend them by adding new functionality. For example: **Session provider** allows new drivers to be added and **Auth provider** allows new serializers and schemes.
+
+NOTE: Make sure to refer the documentation of individual providers to understand the extending capabilities.
+
+To keep the extend interface simple and unified, you make use of `Ioc.extend` method to add new drivers or serializers.
+
+[source, js]
+----
+const { ioc } = require('@adonisjs/fold')
+const { hooks } = require('@adonisjs/ignitor')
+
+hooks.after.providersRegistered(() => {
+  ioc.extend('Adonis/Src/Session', 'mongo', function () {
+    return class MongoDriver {
+    }
+  })
+})
+----
+
+If you are developing a provider, and want to use the same interface for exposing extending capabilities, make sure to bind a `Manager` object as follows.
+
+[source, js]
+----
+const { ServiceProvider } = require('@adonisjs/fold')
+
+class MyProvider extends ServiceProvider {
+  register () {
+    this.app.manager('MyApp/Provider', {
+      extend: function () {
+      }
+    })
+  }
+}
+----
+
+1. The manager object must have a extend method on it. The values passed to `ioc.extend` will be forwaded to this method.
+2. The `namespace` must be same as the binding namespace.
+3. You have to manage the registeration/lifecycle of a driver.
