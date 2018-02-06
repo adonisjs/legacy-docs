@@ -106,12 +106,16 @@ await Mail.send(['welcome', 'welcome.text', 'welcome.watch'])
 ----
 
 ==== raw(body, callback)
-Use raw string to send the mail. The body value is considered as the `plain text` email.
+Use raw string to send the mail. The email *HTML body* will be set when the string is HTML, otherwise plain text email will be sent.
 
 [source, js]
 ----
-await Mail.raw('... everyone who got this message.', (message) => {
-  message.subject('Hello ...')
+await Mail.raw('plain text email', (message) => {
+  message.from('foo@bar.com')
+  message.to('baz@bar.com')
+})
+
+await Mail.raw('<h1> HTML email </h1>', (message) => {
   message.from('foo@bar.com')
   message.to('baz@bar.com')
 })

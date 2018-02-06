@@ -18,6 +18,8 @@ Before getting started, let's understand the concept of configuration debt. Many
 
 For a new user working on the code base for the first time, it becomes a nightmare to find all the configuration, and they keep juggling within multiple files/directories.
 
+To avoid this behavior a dedicated directory `config` is used to store configuration at one place.
+
 == Getting started
 In AdonisJs, we store all the configuration inside a separate directory called `config`. All of the configuration files are loaded at boot time, and values can be accessed using the *Config provider*.
 
@@ -61,16 +63,16 @@ Config.set('database.mysql.host', 'db.example.com')
 == Environment variables
 Quite often you want to have a different configuration based upon the environment your code is running in. For example: Using *sandbox secrets* for a 3rd party service in development.
 
-Also from the data integrity point of view, you should never share your production credentials with all of the developers working on a codebase.
+Also from the security point of view, you should never share your production credentials with all of the developers working on a codebase.
 
 Instead, these credentials are stored as environment variables on your production server and defined inside `.env` file when developing the app locally.
 
 .env
 [source, env]
 ----
-APP_SECRET=
-DB_HOST=
-DB_USER=
+APP_SECRET=F7op5n9vx1nAkno0DsNgZm5vjNXpOLIq
+DB_HOST=127.0.0.1
+DB_USER=root
 ----
 
 Now you can access those variable by using the `Env` provider.
@@ -81,7 +83,8 @@ const Env = use('Env')
 Env.get('APP_SECRET')
 ----
 
-NOTE: `Env.get()` always returns a string. If you want to get a boolean value you'll need to test it yourself with `Env.get('...') === 'true'`
+NOTE: `Env.get` always returns a string. If you want to get a boolean value you'll need to check it as follows. +
+  `Env.get('...') === 'true'`
 
 ==== Different .env file
 At times you may want to load a different `.env` file stored on your server at a different location. Same can be done as follows.

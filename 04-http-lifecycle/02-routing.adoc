@@ -158,7 +158,7 @@ Finally, we need to create the `index` method on the controller class.
 
 class PostController {
   index () {
-    return 'Dummy response'
+    return 'Hello world'
   }
 }
 
@@ -353,7 +353,7 @@ Since attaching auth middleware to all the routes is not always desired, you can
 Route
   .resource('users', 'UsersController')
   .middleware(new Map([
-    [['users.store', 'users.update', 'users.delete'], ['auth']]
+    [['store', 'update', 'delete'], ['auth']]
   ]))
 ----
 
@@ -393,8 +393,8 @@ Quite often your application routes share common logic/configuration around them
 Not desired
 [source, js]
 ----
-Route.get('/api/v1/users', 'UserController.index')
-Route.post('/api/v1/users', 'UserController.store')
+Route.get('api/v1/users', 'UserController.index')
+Route.post('api/v1/users', 'UserController.store')
 ----
 
 Instead, we can make use of the route's group here.
@@ -444,7 +444,7 @@ Route
   .formats(['json', 'html'])
 ----
 
-== Route Renderer
+== Route renderer
 Route renderer is a one liner to render a view without creating a controller method or binding a closure.
 
 Instead of following
@@ -462,3 +462,54 @@ We can write
 ----
 Route.on('/').render('welcome')
 ----
+
+## Extending routes
+AdonisJs makes it possible to extend routes by adding your own methods to it known as *macros*.
+
+NOTE: Since the code to extend the routes needs to be executed once, you can make use of providers or ignitor hooks. Make sure to read link:[how to extend] guide before continuing.
+
+[source, js]
+----
+const Route = use('Route')
+const Server = use('Server')
+
+// middleware function
+async function bindMiddleware (ctx, next, [model, identifier, key]) {
+  const identifierValue = ctx.params[identifier]
+
+  if (identifierValue) {
+    ctx[key] = await use(model).findBy(identifier, identifierValue)
+  }
+
+  await next()
+}
+
+// Pre register middleware with a name
+Server.registerNamed({ bm: bindMiddleware })
+
+// Add macro
+Route.Route.macro('bind', function (model, identifier, key) {
+  this.middleware(`bm:${model},${identifier},${key}`)
+  return this
+})
+----
+
+The `bind` method can be used as follows.
+
+[source, js]
+----
+Route
+  .get('user/:id', ({ user }) => {
+    return user
+  })
+  .bind('App/Models/User', 'id', 'user')
+----
+
+Here we added the `bind` method to the link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Route/index.js[Route class] prototype. This method internally adds a middleware to the route, which fetches a record from the database, using a model.
+
+Also you can add macros to the following classes.
+
+[ol-shrinked]
+1. link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Route/Group.js[RouteGroup]
+2. link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Route/Resource.js[RouteResource]
+3. link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Route/Brisk.js[BriskRoute]

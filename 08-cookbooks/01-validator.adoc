@@ -14,16 +14,14 @@ NOTE: Adonisjs validator using link:http://indicative.adonisjs.com/[indicative] 
 == Setup
 Follow the below instructions to setup the validation provider.
 
-=== Install
 [source, bash]
 ----
 adonis install @adonisjs/validator
 ----
 
-=== Registering provider
 Next, you need to register the provider inside `start/app.js` file.
 
-[source, bash]
+[source, js]
 ----
 const providers = [
   '@adonisjs/validator/providers/ValidatorProvider'
@@ -35,7 +33,7 @@ That is all 🎉
 == Validating user input
 Let's start with the example of validating user input received via HTML form.
 
-[source, edge]
+[source, html]
 ----
 <form method="POST" action="{{ route('UserController.store') }}">
   <div>
@@ -115,7 +113,7 @@ Quickly modify the HTML form to display the flash messages, which are set when v
 == Validator methods
 Below is the list of available methods.
 
-==== validate(data, rules, [message])
+==== validate(data, rules, [message], [formatter])
 Validate data with defined rules. Optionally, you can define custom link:http://indicative.adonisjs.com/docs/custom-messages[error messages, window="_blank"].
 
 [source, js]
@@ -129,7 +127,7 @@ if (validation.fails()) {
 }
 ----
 
-==== validateAll
+==== validateAll(data, rules, [message], [formatter])
 Same as `validate` but validate's all the fields, whereas the validate method stops on first error.
 
 [source, js]
@@ -147,19 +145,8 @@ const { sanitize } = use('Validator')
 const data = sanitize(request.all(), rules)
 ----
 
-==== is
-Returns a reference to link:http://indicative.adonisjs.com/#indicative-raw-validations[indicative raw validator, window="_blank"].
-
-[source, js]
-----
-const { is } = use('Validator')
-
-if (is.email('foo@bar.com')) {
-}
-----
-
 ==== sanitizor
-Returns a reference to link:http://indicative.adonisjs.com/#indicative-sanitizor-raw-sanitizor[indicative raw sanitizor, window="_blank"].
+Returns a reference to link:http://indicative.adonisjs.com/docs/api/extend#_adding_sanitization_rules[indicative raw sanitizor, window="_blank"].
 
 [source, js]
 ----
@@ -168,15 +155,12 @@ const slug = sanitizor.slug('My first blog post')
 ----
 
 ==== formatters
-Returns a reference to link:http://indicative.adonisjs.com/#indicative-formatters[formatters, window="_blank"]
+Returns a reference to link:http://indicative.adonisjs.com/docs/formatters[formatters, window="_blank"]
 
 [source, js]
 ----
 const { formatters } = use('Validator')
-formatters.default('jsonapi')
-
-// adding new formatter
-formatters.register('custom', CustomImplementation)
+validate(data, rules, messages, formatters.JsonApi)
 ----
 
 == Route validator
@@ -233,7 +217,23 @@ module.exports = StoreUser
 
 That is all! If the validation fails, the validator automatically set the errors as flash messages and redirects the user to the form.
 
-Whereas, it sends back the JSON response if request has `Accept: application/json` header set
+Whereas, it sends back the JSON response if request has `Accept: application/json` header set.
+
+=== Validate All
+To validate all the fields, set `validateAll` to true on the class prototype.
+
+[source, js]
+----
+'use strict'
+
+class StoreUser {
+  get validateAll () {
+    return true
+  }
+}
+
+module.exports = StoreUser
+----
 
 === Sanitizing user input
 Also, you can sanitize the user input by defining the `sanitizationRules`. The sanitization happens before the validation.
@@ -290,13 +290,15 @@ module.exports = StoreUser
 ----
 
 === Formatter
-Just like any other property, you can also define the link:http://indicative.adonisjs.com/#indicative-formatters[indicative formatter, window="_blank"] as a property on the validator class.
+Just like any other property, you can also define the link:http://indicative.adonisjs.com/docs/formatters#_available_formatters[indicative formatter, window="_blank"] as a property on the validator class.
 
 [source, js]
 ----
+const { formatters } = use('Validator')
+
 class StoreUser {
   get formatter () {
-    return 'jsonapi'
+    return formatters.JsonApi
   }
 }
 ----
@@ -364,39 +366,32 @@ class StoreUser {
 == Extending Validator
 Let's start by adding a rule which makes sure that the *Post* exists when we are adding a new *Comment* to the database. We call it the `exists` rule.
 
-NOTE: The API is same as the link:http://indicative.adonisjs.com/#indicative-extending[Indicative] extend API. It is just you add rules via the `Validator` provider.
-
-=== Application specific
-If your application just uses the rule, then consider adding it to the `start/hooks.js` file.
+NOTE: Since the code to extend the routes needs to be executed once, you can make use of providers or ignitor hooks. Make sure to read link:[how to extend] guide before continuing.
 
 [source, js]
 ----
-const { hooks } = require('@adonisjs/ignitor')
+const Validator = use('Validator')
+const Database = use('Database')
 
-hooks.after.providersBooted(() => {
-  const Validator = use('Validator')
-  const Database = use('Database')
-
-  const existsFn = async (data, field, message, args, get) => {
-    const value = get(data, field)
-    if (!value) {
-      /**
-       * skip validation if value is not defined. `required` rule
-       * should take care of it.
-       */
-      return
-    }
-
-    const [table, column] = args
-    const row = await Database.table(table).where(column, value).first()
-
-    if (!row) {
-      throw message
-    }
+const existsFn = async (data, field, message, args, get) => {
+  const value = get(data, field)
+  if (!value) {
+    /**
+     * skip validation if value is not defined. `required` rule
+     * should take care of it.
+    */
+    return
   }
 
-  Validator.extend('exists', existsFn)
-})
+  const [table, column] = args
+  const row = await Database.table(table).where(column, value).first()
+
+  if (!row) {
+    throw message
+  }
+}
+
+Validator.extend('exists', existsFn)
 ----
 
 Now we can use this rule as follows.
@@ -409,49 +404,3 @@ get rules () {
   }
 }
 ----
-
-== Via Provider
-If you are planning to bundle this rule and share it with other as an npm module, then consider wrapping the code inside a *provider*.
-
-.Directory structure
-[source, bash]
-----
-.
-└── providers
-    ├── ExistsRuleProvider.js
-----
-
-.ExistsRuleProvider.js
-[source, js]
-----
-const { ServiceProvider } = require('@adonisjs/fold')
-
-class ExistsRuleProvider extends ServiceProvider {
-  existsFn (data, field, message, args, get) {
-    const value = get(data, field)
-    if (!value) {
-      /**
-       * skip validation if value is not defined. `required` rule
-       * should take care of it.
-       */
-      return
-    }
-
-    const [table, column] = args
-
-    const row = await Database.table(table).where(column, value).first()
-    if (!row) {
-      throw message
-    }
-  }
-
-  boot () {
-    const Validator = use('Validator')
-    Validator.extend('exists', this.existsFn.bind(this))
-  }
-}
-
-module.exports = ExistsRuleProvider
-----
-
-The `exists` rule is added to the `Validator` when someone registers your provider to the `providers` array.
