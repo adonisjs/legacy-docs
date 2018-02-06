@@ -11,11 +11,14 @@ In this guide, we learn how AdonisJs apps are structured and how gracefully it s
 
 The philosophy of AdonisJs is always to start lean and grow big on demand. The `adonis` command-line comes with a bunch of *commands* to create new directories/files whenever you need them.
 
-== Slim structure
+TIP: Run `adonis --help` to see list of available commands
 
-[source, bash]
-----
-.
+== Slim structure
+Slim structure is the bare minimum you need in order to work with AdonisJs.
+
+++++
+<pre class="highlight line-numbers language-bash" data-line="2,5">
+<code>.
 ├── ace
 ├── package.json
 ├── public
@@ -24,7 +27,9 @@ The philosophy of AdonisJs is always to start lean and grow big on demand. The `
     ├── app.js
     ├── kernel.js
     └── routes.js
-----
+</code>
+</pre>
+++++
 
 [options="header", cols="5,95"]
 |====
@@ -67,7 +72,8 @@ const UserService = use('App/Services/User')
 ----
 
 The benefit of the latter approach is that the *namespace* always remains same and you never have to deal with relative paths by typing `../`.
-// Learn more about link:autoloading[autoloading]
+
+NOTE: The autoloading namespace is defined inside the link:https://github.com/adonisjs/adonis-slim-app/blob/master/package.json#L24[package.json, window="_blank"] file. You are free to define more/unique namespaces.
 
 == Views
 The application views are stored inside `resources/views` directory. Each view file ends with `.edge` and uses link:http://edge.adonisjs.com/[edge, window="_blank"] as the templating engine.
@@ -92,3 +98,26 @@ The `public` directory in your app is dedicated to store all of the frontend rel
 You access these files without adding `/public` to the URL. For example:
 
 The `public/style.css` file can be accessed by visiting link:http://127.0.0.1:3333/style.css[127.0.0.1:3333/style.css]
+
+== Config
+To keep your applications away from configuration debt, AdonisJs gives you a dedicated directory `/config` to store all of the application configuration.
+
+It is recommended to keep configuration at one place and make use of *Environment* variables for manging secrets. link:configuration-and-env[Learn more]
+
+== Tests
+All of the application tests are stored inside in the `test` directory. The testing package is not included by default and hence you can install it as defined link:testing#_setup[here].
+
+Once the package has been setup, you can run the following command(s).
+
+[source, bash]
+----
+adonis make:test user
+----
+
+And run tests as follows.
+
+[source, bash]
+----
+adonis test
+----
+

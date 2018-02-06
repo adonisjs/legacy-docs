@@ -199,7 +199,7 @@ Returns an object of all the cookies
 const cookies = request.cookies()
 ----
 
-Since all cookies are *encrypted* and *signed* automatically, you cannot read values for cookies set via Javascript on browser. Instead consider using one of the following methods.
+You are supposed to use the following methods to read the cookies set on client side.
 
 ==== plainCookie
 [source, js]
@@ -216,8 +216,6 @@ const plainCookies = request.plainCookies()
 
 == Content negotiation
 link:https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation[Content negotiation, window="_blank"] is a way for server and client to decide upon the best response type to be returned from the server.
-
-NOTE: Content negotiation can also be done on the basis on route formats. Learn more about it link:routing#_route_formats[here]
 
 Since web servers do not only serve web pages, they have to deal with API response in *JSON*, or maybe in *XML*. Instead of creating separate URL's for each content type, the consumer can ask the server to return the response in a specific format.
 
@@ -390,50 +388,19 @@ Route.put('users', 'UserController.update')
 
 The above works in following cases.
 
-1. The original request method has to be `POST`.
+1. The original request method is `POST`.
 2. `allowMethodSpoofing` is enabled inside `config/app.js` file.
 
 == Extending Request
 Quite often you have the requirement of extending the `Request` prototype by attaching new methods. Same can be done by defining a macro on the Request class.
 
-==== Application Specific
-If your macros are specific to your application only, you can add the macro inside `start/hooks.js` file after the providers have been booted.
+NOTE: Since the code to extend the `Request` needs to be executed once, you can make use of providers or ignitor hooks. Make sure to read link:[how to extend] guide before continuing.
 
-.start/hooks.js
 [source, javascript]
 ----
-const { hooks } = require('@adonisjs/ignitor')
+const Request = use('Adonis/Src/Request')
 
-hooks.after.providersBooted(() => {
-  const Request = use('Adonis/Src/Request')
-
-  Request.macro('cartValue', function () {
-    return this.cookie('cartValue', 0)
-  })
+Request.macro('cartValue', function () {
+  return this.cookie('cartValue', 0)
 })
-----
-
-==== Via Provider
-If you are writing a module/addon for AdonisJs, you can add a macro inside the `boot` method of your service provider.
-
-[source, javascript]
-----
-const { ServiceProvider } = require('@adonisjs/fold')
-
-class MyServiceProvider extends ServiceProvider {
-  boot () {
-    const Request = use('Adonis/Src/Request')
-
-    Request.macro('cartValue', function () {
-      return this.cookie('cartValue', 0)
-    })
-  }
-}
-----
-
-Defined macros can be used like any other `request` method.
-
-[source, javascript]
-----
-const cartValue = request.cartValue()
 ----

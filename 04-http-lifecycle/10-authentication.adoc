@@ -507,31 +507,67 @@ The `loggedIn` tag can be used to write `if/else` around the loggedin user.
 ----
 
 == Revoking tokens
-Almost every scheme stores some tokens in the database. These tokens are mainly used for extended authentication. For example:
+The `jwt` and `api` schemes exposes methods to revoke tokens using the `auth` interface.
 
-1. *Refresh tokens* when the actual token has been expired.
-2. *Remember me token* when actual user session has expired, this token is used to re-login them transparently.
-3. *API tokens* which are sort of like passwords.
+NOTE: For jwt scheme only refresh tokens are revoked, since actual tokens are never saved in the database
 
-If you ever have a security breach, feel free to set `is_revoked = true`, to revoke all the tokens for a given or all the users.
+==== revokeTokens(tokens, delete = false)
+The following method will revoke the token by setting the flag inside the `tokens` table. However, you can pass `true` for the 2nd argument and row will be deleted from the database.
 
-After revoking the tokens, some users may logout unexpectedly, but that is better than giving bad access to a hacker.
+[source, js]
+----
+const refreshToken = '' // get it from user
 
-NOTE: Make sure the route that revokes the user token is protected with the `auth` middleware. Otherwise, you will not get the token in the request header.
+await auth
+  .scheme('jwt')
+  .revokeTokens([refreshToken])
+----
 
-```js
-class UserController {
-  async revokeUserToken ({ auth }) {
-    const user = auth.current.user
-    const token = auth.getAuthHeader()
+Delete instead of setting the `is_revoked` flag.
 
-    await user
-      .tokens()
-      .where('token', token)
-      .update({ is_revoked: true })
-  }
-}
-```
+[source, js]
+----
+const refreshToken = '' // get it from user
+
+await auth
+  .scheme('jwt')
+  .revokeTokens([refreshToken], true)
+----
+
+Revoke all
+
+[source, js]
+----
+await auth
+  .scheme('jwt')
+  .revokeTokens()
+----
+
+When revoking the `api` token for the currently loggedin user, you can access the value from the request header.
+
+[source, js]
+----
+// for currently loggedin user
+const apiToken = auth.getAuthHeader()
+
+await auth
+  .scheme('api')
+  .revokeTokens([apiToken])
+----
+
+
+==== revokeTokensForUser(user, tokens, delete = false)
+This method works same as the `revokeTokens` method, but instead you can specify the user yourself.
+
+[source, js]
+----
+const user = await User.find(1)
+
+await auth
+  .scheme('jwt')
+  .revokeTokensForUser(user)
+----
+
 
 == Tokens encryption
 The tokens are saved in plain format inside the database, whereas these tokens are sent in `encrypted` form to the end-user.

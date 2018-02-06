@@ -223,6 +223,18 @@ class Post extends Model {
 }
 ----
 
+==== setVisible/setHidden
+Also you can define `hidden/visible` fields for a single query using following methods.
+
+[source, js]
+----
+User.query().setVisible(['title', 'body']).fetch()
+
+// or set hidden
+User.query().setHidden(['password']).fetch()
+----
+
+
 == Dates
 Dates are the hardest part of building data driver applications. We want to store them differently and show them differently, which usually requires much manual work.
 
