@@ -240,36 +240,12 @@ response.attachment(
 == Extending Response
 It is also possible to extend the `Response` prototype by adding your own methods, known as macros.
 
-=== Application specific
-If your macros are specific to your application only, you can add the macro inside `start/hooks.js` file after the providers have been booted.
+NOTE: Since the code to extend the `Response` needs to be executed once, you can make use of providers or ignitor hooks. Make sure to read link:[how to extend] guide before continuing.
 
 [source, js]
 ----
-const { hooks } = require('@adonisjs/ignitor')
-
-hooks.after.providersBooted(() => {
-  const Response = use('Adonis/Src/Response')
-
-  Response.macro('sendStatus', function (status) {
-    this.status(status).send(status)
-  })
+const Response = use('Adonis/Src/Response')
+Response.macro('sendStatus', function (status) {
+  this.status(status).send(status)
 })
-----
-
-=== Via Provider
-If you are writing a module/addon for AdonisJs, you can add a macro inside the boot method of your service provider.
-
-[source, js]
-----
-const { ServiceProvider } = require('@adonisjs/fold')
-
-class MyServiceProvider extends ServiceProvider {
-  boot () {
-    const Response = use('Adonis/Src/Response')
-
-    Response.macro('sendStatus', function (status) {
-      this.status(status).send(status)
-    })
-  }
-}
 ----

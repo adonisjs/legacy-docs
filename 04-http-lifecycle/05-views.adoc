@@ -19,8 +19,7 @@ Under the hood, Edge supports.
 == Basic example
 Let's start with the basic example of saying *Hello world* by rendering an edge template. All of the views are stored inside `resources/views` directory and ends with `.edge` extension.
 
-NOTE: Make sure that the `ViewProvider` is registered as a provider inside `start/app.js` file. +
-+
+NOTE: Make sure that the `ViewProvider` is registered as a provider inside `start/app.js` file.
 [source, js]
 ----
 const providers = [
@@ -215,19 +214,16 @@ Render an SVG file inline inside the HTML. The tag expects the relative path to 
 The templating syntax is same as the Edge. So make sure to read the link:http://edge.adonisjs.com/docs/syntax-guide[edge documentation, window="_blank"].
 
 == Extending views
-You can also extend views by adding your view globals or tags. Globals and tags should only be added once, so make sure to use the `start/hooks.js` file to extend views.
+You can also extend views by adding your view globals or tags.
+
+NOTE: Since the code to extend the `View` needs to be executed once, you can make use of providers or ignitor hooks. Make sure to read link:[how to extend] guide before continuing.
 
 === Globals
 [source, js]
 ----
-const { hooks } = require('@adonisjs/ignitor')
-
-hooks.after.providersBooted(() => {
-  const View = use('View')
-
-  View.global('currentTime', function () {
-    return new Date().getTime()
-  })
+const View = use('View')
+View.global('currentTime', function () {
+  return new Date().getTime()
 })
 ----
 
@@ -237,8 +233,6 @@ Above global returns the current time when you reference it inside the views.
 ----
 {{ currentTime() }}
 ----
-
-Of course, you can extract the code inside `providersBooted` to a different file and require it.
 
 === Globals scope
 The value of `this` inside globals closure is bound to the view context so that you can access runtime values from it.
@@ -273,20 +267,16 @@ View.global('getMessage', function (type) {
 ----
 
 === Tags
-The tags are registered the same way as globals inside `start/hooks.js` file. Learn more about tags from the link:http://edge.adonisjs.com/docs/tags[Edge docs, window="_blank"].
+Learn more about tags from the link:http://edge.adonisjs.com/docs/tags[Edge docs, window="_blank"].
 
 [source, js]
 ----
-const { hooks } = require('@adonisjs/ignitor')
+const View = use('View')
 
-hooks.after.providersBooted(() => {
-  const View = use('View')
+class MyTag extends View.engine.BaseTag {
+}
 
-  class MyTag extends View.engine.BaseTag {
-  }
-
-  View.engine.tag(new MyTag())
-})
+View.engine.tag(new MyTag())
 ----
 
 === Runtime values
