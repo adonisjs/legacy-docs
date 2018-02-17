@@ -14,12 +14,12 @@ Below is a flow chart on how HTTP request flow works +
 link:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502383746/Adonis-Http-Request-Flow_grqcfd.jpg[image:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502383746/Adonis-Http-Request-Flow_grqcfd.jpg[width="400px"], window="_blank"]
 
 [ol-spaced]
-1. The server level middleware stack includes a middleware to serve static resources from the `public` directory. You should only add server level middleware when they can override the URL's registered by routes.
+1. The server level middleware stack includes a middleware to serve static resources from the `public` directory. You should only add server level middleware when you want it to be executed even when no routes for the current URL have been registered.
 2. If a request is not intercepted by server level middleware, then AdonisJs looks for a registered route, if a route is found, the global, named middleware and route action is executed.
 3. Otherwise, a 404 exception is thrown.
 
 == Http context
-Since Node.js handles HTTP requests concurrently, each request needs to be identified and managed uniquely. AdonisJs creates a request *Context* which is a class instance containing all the request related data.
+Since Node.js handles HTTP requests concurrently, each request needs to be identified and managed uniquely. AdonisJs passes a *Context* object to all route handlers, this object holds everything you need to handle an HTTP request.
 
 So when you bind a handler to the `Route`, that handler is executed for each request matching that URL and receives a unique `context` instance.
 

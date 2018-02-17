@@ -37,12 +37,12 @@ Output
 ✔ create  app/Exceptions/Handler.js
 ----
 
-Once you create this file, AdonisJs hands over all the exceptions occurred during HTTP lifecycle to it. It should have the `handle` method with an optional `report` method on it.
-
+Once you create this file, AdonisJs hands over all the exceptions occurred during HTTP lifecycle to it.
 [source, js]
 ----
-class ExceptionHandler {
+const BaseExceptionHandler = use('BaseExceptionHandler')
 
+class ExceptionHandler extends BaseExceptionHandler {
   async handle (error, { response, session }) {
     if (error.name === 'ValidationException') {
       session.withErrors(error.messages).flashAll()
@@ -51,7 +51,7 @@ class ExceptionHandler {
       return
     }
 
-    response.status(error.status).send(error.message)
+    return super.handle(...arguments)
   }
 }
 
@@ -59,8 +59,6 @@ module.exports = ExceptionHandler
 ----
 
 The `handle` method in this class handles the `ValidationException` differently by flashing the errors back to the form.
-
-Also, the `report` method may be used to report the exception to a 3rd party service like *Bugsnag* for logging purposes.
 
 === Individual exceptions
 Also, you can hook into individual exceptions by defining an inline exception handler for them. The same can be done inside the `start/hooks.js` file.
