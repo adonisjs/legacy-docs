@@ -7,7 +7,7 @@ category: getting-started
 
 toc::[]
 
-When getting started with any web framework, the first question one often ask is, *how to create data-driven applications?*. By the end of this guide, you learn how easy AdonisJs makes to interact with SQL databases.
+When getting started with any web framework, the first question one often ask is: "*How to create data-driven applications?*". By the end of this guide, you learn how easy AdonisJs makes to interact with SQL databases.
 
 // TIP: Watch this video on youtube, if you prefer a Screencast over text.
 
