@@ -193,7 +193,7 @@ const Drive = use('Drive')
 Route.post('upload', async ({ request }) => {
 
   request.multipart.file('profile_pic', {}, async (file) => {
-    await Drive.disk('s3').put(file.fileName, file.stream)
+    await Drive.disk('s3').put(file.clientName, file.stream)
   })
 
   await request.multipart.process()
