@@ -422,6 +422,18 @@ Route
   .middleware(['auth'])
 ----
 
+==== namespace
+Often we have multiple controllers grouped inside the same folder. With the namespace directive you can specify the folder on the groupe.
+
+[source, js]
+----
+Route
+  .group(() => {
+    Route.resource('/users', 'UserController')
+  })
+  .namespace('Api/v1')
+----
+
 ==== domain
 Specify routes on a group of routes.
 
