@@ -846,6 +846,22 @@ const mercedes = await Car.findBy('reg_no', '39020103')
 await user.cars().detach([mercedes.id])
 ----
 
+==== sync
+The `sync` method is a shortcut for calling `detach` and then `attach` methods. It can be used for updating pivot table.
+
+[source, js]
+----
+const mercedes = await Car.findBy('reg_no', '39020103')
+const user = await User.find(1)
+
+// Behave the same way as: 
+// await user.cars().detach()
+// await user.cars().attach([mercedes.id])
+
+await user.cars().sync([mercedes.id])
+----
+
+
 ==== update
 The `update` method is used to make bulk updates on related rows. You can make use of the query builder methods to update specific fields only.
 
