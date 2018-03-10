@@ -32,7 +32,7 @@ const providers = [
 The only available drivers shipped by default are:
 
 [ol-shrinked]
-1. S3 ( s3 )
+1. S3 ( s3 ) (You need to install `aws-sdk` package to be able to use this driver)
 2. Local ( local )
 
 == Basic Example
