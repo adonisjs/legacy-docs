@@ -57,7 +57,7 @@ Route
 Also, you can apply multiple middleware to a route, and they are executed in the sequence they are passed.
 
 === Middleware Props
-To keep middleware configurable at runtime. AdonisJs makes it possible to pass *props to named middleware*. For example: Using the auth middleware with different authentication scheme for different routes.
+To keep middleware configurable at runtime, AdonisJs makes it possible to pass *props to named middleware*. For example: Using the auth middleware with different authentication scheme for different routes. Props will be available as the third argument in middleware's `handle` method.
 
 TIP: Middleware uses the link:https://www.npmjs.com/package/haye#pipe-expression[pipe expression, window="_blank"] to define props.
 
