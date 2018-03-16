@@ -422,6 +422,45 @@ Route
   .middleware(['auth'])
 ----
 
+==== namespace
+Often we have multiple controllers grouped inside the same folder. With the `namespace` method you can specify the folder on the group. For example with the following folder structure:
+
+[source, bash]
+----
+├── app
+│   └── Controller
+│       └── Http
+|           └──Api
+|              └── v1
+|                  ├── UserController.js
+|                  └── RoleController.js
+----
+
+Normally you would define the resource as follows:
+
+[source, js]
+----
+Route.
+  group(() => {
+    Route.resource('/users', 'Api/v1/UserController')
+    Route.resource('/roles', 'Api/v1/RoleController')
+  })
+  .prefix('api/v1')
+----
+
+Using the `namespace` method you can simplify this group to the this:
+
+[source, js]
+----
+Route
+  .group(() => {
+    Route.resource('/users', 'UserController')
+    Route.resource('/roles', 'RoleController')
+  })
+  .prefix('api/v1')
+  .namespace('Api/v1')
+----
+
 ==== domain
 Specify routes on a group of routes.
 
