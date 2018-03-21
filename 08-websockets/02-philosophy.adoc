@@ -1,0 +1,74 @@
+---
+title: Philosophy
+permalink: websocket-philosophy
+category: websockets
+---
+= Philosophy
+
+toc::[]
+
+This guide covers the philosophy of the Websocket server. By the end of this guide, you will know about *channels*, *topic subscriptions* and *multiplexing*.
+
+== Pure websockets
+AdonisJs makes use of pure Websockets and does not support any other transports like polling. Websockets are widely supported by all the major browsers and by removing extra overhead of multiple transports, we make it easier to scale the server.
+
+The websocket server *scales naturally on Node.js cluster* without any 3rd party dependencies like Redis. Also there is no need of sticky sessions.
+
+== Multiplexing
+Multiplexing is a way of re-using the same TCP connection, but seperating the *events* and *authentication* layer between channels.
+
+This way only one connection is maintained from client to server, but Adonis gives you clean abstraction layer to manage channel subscriptions and exchange messages on that.
+
+== Channels & topics
+Once a client makes a Websocket connection, they are required to subscribe to a *topic* in order to exchange messages.
+
+Channels and topics are inter related, so let's write some code to understand them.
+
+[source, js]
+----
+Ws.channel('chat', ({ socket }) => {
+  console.log(socket.topic)
+})
+----
+
+- Above we registered a channel called `chat`.
+- All subscriptions to the `chat` channel, will have a static topic called `chat`. In short the channel and the topic name are same.
+
+[source, js]
+----
+Ws.channel('chat:*', ({ socket }) => {
+  console.log(socket.topic)
+})
+----
+
+This time we extend the possibility of accepting dynamic topics. For example: A user can subscribe to topic `chat:watercooler`, `chat:intro` and so on.
+
+The wildcard approach, opens up a new world of possibilities. For example: you can create dynamic topics for private a chat between two users.
+
+== Data encoders
+Websocket server makes use of data encoders while passing messages over the network. By default is makes use of `JSON` encoder, which has limitations when you want to pass binary data.
+
+However, you can make use of link:https://www.npmjs.com/package/@adonisjs/msgpack-encoder[@adonisjs/msgpack-encoder, window="_blank"] if your app wants to pass binary data.
+
+== Message packets
+It's impossible to build a multiplexing layer without having a standard around data packets.
+
+As a consumer of the package, you never have to worry about the packets type, but when writing a client for Adonis websocket server, it's really important to understand them.
+
+Once the network data is decoded by an encoder, you will end up with an *Object (or equalvent data type for your programming language)* similar to be following structure.
+
+[source, js]
+----
+{
+  t: 7,
+  d: {
+    topic: 'chat',
+    data: 'hello world'
+  }
+}
+----
+
+1. There property `t` is the type of the packet. We use numbers over strings, since it's less data to transfer.
+2. The `d` is the data associated to that packet.
+
+You can learn more about packets and helpers libraries link:https://github.com/adonisjs/adonis-websocket-protocol[here, window="_blank"]

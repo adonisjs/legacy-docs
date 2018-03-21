@@ -1,0 +1,51 @@
+---
+title: Websocket client
+permalink: websocket-client
+category: websockets
+---
+= Websocket client
+
+toc::[]
+
+This guide covers the documentation around the Javascript client used for connecting to the websocket server.
+
+== Installation
+You can install the package from npm and then bundle it using Webpack or rollup.
+
+[source, bash]
+----
+npm i @adonisjs/websocket-client
+----
+
+and then import it as follows
+
+[source, js]
+----
+import Ws from '@adonisjs/websocket-client'
+const ws = Ws('ws://localhost:3333')
+----
+
+Also you can grab the UMD bundle from unpkg.
+[source, html]
+----
+<script src="https://unpkg.com/@adonisjs/websocket-client"></script>
+<scrip>
+  const ws = adonis.Ws('ws://localhost:3333')
+</script>
+----
+
+== Polyfill
+The module build requires link:https://babeljs.io/docs/plugins/transform-regenerator[regenerator-runtime] polyfill, so make sure to add it via babel.
+
+== Production builds
+The development build contains a bunch of log statements, so it is recommended to use link:https://webpack.js.org/plugins/define-plugin/[Webpack DefinePlugin] or link:https://github.com/rollup/rollup-plugin-replace[rollup-plugin-replace] in order to define `NODE_ENV`.
+
+== Getting started
+Let's get started by connecting to the Websocket server and make some subscriptions.
+
+[source, js]
+----
+const ws = Ws(url, options)
+----
+
+If `url` is not defined, it will fallback to the current hostname.
