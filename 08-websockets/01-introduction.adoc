@@ -29,7 +29,7 @@ const providers = [
 ]
 ----
 
-Next step is to tell `ignitor` to boot the Websocket server along with the HTTP server. Same needs to be done with `server.js` file.
+Next step is to tell `ignitor` to boot the Websocket server along with the HTTP server. Same needs to be done within `server.js` file.
 
 [source, diff]
 ----
@@ -48,6 +48,32 @@ Also, the addon will attempt to create the following files inside your project.
 1. `config/socket.js` file contains the server configuration.
 2. `start/socket.js` is used to boot the socket server and register *Channels*.
 3. `start/wsKernel.js` is used to register middleware to be executed on channel subscriptions.
+
+=== Cluster support
+When running a Node.js cluster, you need to write one line of code inside the master
+node to hook the pub/sub between workers.
+
+The following code will go inside `start/server.js` file.
+
+[source, js]
+----
+const cluster = require('cluster')
+
+if (cluster.isMaster) {
+  for (let i=0; i < 4; i ++) {
+    cluster.fork()
+  }
+  require('@adonisjs/websocket-client/clusterPubSub')()
+  return
+}
+
+const { Ignitor } = require('@adonisjs/ignitor')
+new Ignitor(require('@adonisjs/fold'))
+ .appRoot(__dirname)
+ .wsServer()
+ .fireHttpServer()
+ .catch(console.error)
+----
 
 == Basic example
 Let's build a single room chat server, where users can exchange messages with each other. To keep the code simple, we will not store messages anywhere and just exchange them over websocket.
@@ -179,31 +205,35 @@ class ChatController {
 
 The `onMessage` method just replays the same message to all the connected clients using `broadcastToAll` method.
 
-== Tooling
-The following client libraries are available to connect to the Adonis Websocket server.
+== Controllers
+The controllers let you keep your code structured by defining a seperate class for each channel. Controllers lives inside `app/Controllers/Ws` directory.
 
-=== Vanilla Javascript
-The vanilla Javascript libary is available to be installed from npm or use it from CDN.
+A new instance of controller is created for each subscription and the `context` is passed to the constructor.
 
-[source, bash]
+[source, js]
 ----
-npm i @adonisjs/websocket-client
-----
-
-[source, html]
-----
-<script src="https://unpkg.com/@adonisjs/websocket-client"></script>
+class ChatController {
+  constructor ({ socket }) {
+    this.socket = socket
+  }
+}
 ----
 
-=== Vue
-A plugin for Vue can be used as follows.
+Also you can bind to different events by creating methods with the same name. Also all the methods, must be prefixed with the `on` keyword.
 
-[source, bash]
+[source, js]
 ----
-npm i @adonisjs/vue-websocket-client
-----
+class ChatController {
+  onMessage () {
+    // same as: socket.on('message')
+  }
 
-[source, html]
-----
-<script src="https://unpkg.com/@adonisjs/vue-websocket-client"></script>
+  onClose () {
+    // same as: socket.on('close')
+  }
+
+  onError () {
+    // same as: socket.on('error')
+  }
+}
 ----

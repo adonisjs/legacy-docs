@@ -48,7 +48,7 @@ The wildcard approach, opens up a new world of possibilities. For example: you c
 == Data encoders
 Websocket server makes use of data encoders while passing messages over the network. By default is makes use of `JSON` encoder, which has limitations when you want to pass binary data.
 
-However, you can make use of link:https://www.npmjs.com/package/@adonisjs/msgpack-encoder[@adonisjs/msgpack-encoder, window="_blank"] if your app wants to pass binary data.
+However, you can make use of link:https://www.npmjs.com/package/@adonisjs/msgpack-encoder[@adonisjs/msgpack-encoder, window="_blank"] which works great with *ArrayBuffers* and *Blobs*.
 
 == Message packets
 It's impossible to build a multiplexing layer without having a standard around data packets.
@@ -68,7 +68,7 @@ Once the network data is decoded by an encoder, you will end up with an *Object 
 }
 ----
 
-1. There property `t` is the type of the packet. We use numbers over strings, since it's less data to transfer.
+1. The property `t` is the type of the packet. We use numbers over strings, since it's less data to transfer.
 2. The `d` is the data associated to that packet.
 
 You can learn more about packets and helpers libraries link:https://github.com/adonisjs/adonis-websocket-protocol[here, window="_blank"]
