@@ -99,6 +99,38 @@ class CustomMiddleware {
 }
 ----
 
+== Broadcast from anywhere
+Websocket communication is not always within the socket lifecycle. Quite often, you want to emit events during the HTTP lifecycle.
+
+This is quite simple, since you can access pre-registered channels anywhere inside your code.
+
+[source, js]
+----
+const Ws = use('Ws')
+
+class UserController {
+  async register () {
+    Ws
+      .getChannel('subscriptions')
+      .topic('subscriptions')
+      .broadcast('new:user')
+  }
+}
+----
+
+You start by selecting a channel using `getChannel(name)` method. Now inside that channel, you can broadcast messages to any topic using `topic(name)` method.
+
+After calling `.topic` you get an object which has following methods.
+
+[source, js]
+----
+const chat = Ws.getChannel('chat:*')
+const { broadcast, emitTo } = chat.topic('chat:watercooler')
+
+// broadcast: send to everyone
+// emitTo: send to selected socket ids
+----
+
 == Socket API
 
 === Events
@@ -133,7 +165,15 @@ Emit event to the connected client. This method will only send message to your o
 socket.emit('id', socket.id)
 ----
 
-==== broadcast(event, data, [ackCallback])
+==== emitTo(event, data, socketIds[])
+Emit messages to an array of socket ids
+
+[source, js]
+----
+socket.emitTo('greeting', 'hello', [someIds])
+----
+
+==== broadcast(event, data)
 Emit event to everyone except yourself
 
 [source, js]
@@ -141,7 +181,7 @@ Emit event to everyone except yourself
 socket.broadcast('message', 'hello everyone!')
 ----
 
-==== broadcastToAll(event, data, [ackCallback])
+==== broadcastToAll(event, data)
 Emit event to everyone including yourself
 
 [source, js]
