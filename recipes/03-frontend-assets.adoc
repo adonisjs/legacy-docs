@@ -35,7 +35,7 @@ First, make sure to install webpack as a dev dependency and create the config fi
 
 [source, bash]
 ----
-npm i --save-dev webpack
+npm i --save-dev webpack@3
 
 touch webpack.config.js
 ----
