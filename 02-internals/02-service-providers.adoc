@@ -150,7 +150,7 @@ Finally, we need to register this provider like any other provider inside the `s
 [source, js]
 ----
 const providers = [
-  path.join(__dirname, '..', 'providers', 'Queue/provider')
+  path.join(__dirname, '..', 'providers', 'Queue/Provider')
 ]
 ----
 
