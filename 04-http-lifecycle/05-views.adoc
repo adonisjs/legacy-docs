@@ -216,7 +216,7 @@ The templating syntax is same as the Edge. So make sure to read the link:http://
 == Extending views
 You can also extend views by adding your view globals or tags.
 
-NOTE: Since the code to extend the `View` needs to be executed once, you can make use of providers or ignitor hooks. Make sure to read link:[how to extend] guide before continuing.
+NOTE: Since the code to extend the `View` needs to be executed once, you can make use of providers or ignitor hooks. Make sure to read link:extending-adonisjs[how to extend] guide before continuing.
 
 === Globals
 [source, js]
