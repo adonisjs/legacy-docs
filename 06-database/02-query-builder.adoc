@@ -480,6 +480,8 @@ NOTE: The output of the `paginate` method is different from the `forPage` method
 }
 ----
 
+NOTE: The `total` key will be a string, if you are using **PostgreSQL** due to the fact that JavaScript is unable to handle `bigint` natively. See link:https://github.com/adonisjs/adonis-lucid/issues/339#issuecomment-387399508[this issue] for a recommended way to solve this.
+
 == Database Transactions
 Database transactions are safe operations, which are not reflected in the database until and unless you explicitly commit your changes.
 
