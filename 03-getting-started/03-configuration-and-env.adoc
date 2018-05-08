@@ -86,6 +86,8 @@ Env.get('APP_SECRET')
 NOTE: `Env.get` always returns a string. If you want to get a boolean value you'll need to check it as follows. +
   `Env.get('...') === 'true'`
 
+It is highly recommended to contain access to environment variables to configuration files and not to use `Env` provider anywhere else in the app.
+
 ==== Failing fast if environment variable does not exist
 
 When you have an environment variable that is essential for running the application, you may use a `getOrFail` method which will throw an Error at application boot time, if the variable is not set.
