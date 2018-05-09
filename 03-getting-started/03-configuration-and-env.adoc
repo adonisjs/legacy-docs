@@ -86,6 +86,26 @@ Env.get('APP_SECRET')
 NOTE: `Env.get` always returns a string. If you want to get a boolean value you'll need to check it as follows. +
   `Env.get('...') === 'true'`
 
+==== Raising errors if required environment variable does not exist
+
+When you have an environment variable that is required for running the application, you may use a `getOrFail` method which will throw an error, if the variable is not set.
+
+NOTE: If you want your application to fail quickly at boot time, if environment variable is missing, then limit access to environment variables from inside the configuration files only and do not to use `Env` provider anywhere else in the app. This is a highly recommended approach.
+
+[source, js]
+----
+const Env = use('Env')
+Env.getOrFail('APP_SECRET')
+----
+
+If `APP_SECRET` is not set, then an error will be thrown:
+
+.Error
+[source, bash]
+----
+Make sure to define APP_SECRET inside .env file.
+----
+
 ==== Different .env file
 At times you may want to load a different `.env` file stored on your server at a different location. Same can be done as follows.
 
