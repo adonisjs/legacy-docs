@@ -30,18 +30,35 @@ const decrypted = Encryption.decrypt('encrypted value')
 ----
 
 == Hashing Values
-AdonisJs hash provider makes use of link:https://en.wikipedia.org/wiki/Bcrypt[bcrypt, window="_blank"] to hash values, which is a slow algorithm to hash/verify a value.
+AdonisJs hash provider comes with multiple drivers to hash user data. By default it makes use of link:https://en.wikipedia.org/wiki/Bcrypt[bcrypt, window="_blank"], however support Argon via link:https://npm.im/argon2[argon2 npm package, window="_blank"].
 
-Bcrypt is commonly used to hash passwords, and since it is a slow algorithm, it makes it expensive(if not impossible) for attackers to crack a password. The slowness of the algorithm is based upon the number of *rounds* to be executed before returning the hashed value.
+NOTE: `@adonisjs/framework` version `>=5.0.8` supports multiple drivers. So make sure to upgrade the package for desired results.
 
-==== make(value, [rounds=10])
+=== Config
+The config is defined inside `config/hash.js` file and allows following values.
+
+NOTE: You will have to install link:https://npm.im/argon2[argon2 npm package, window="_blank"] package from npm if using `argon` driver.
+
+[source, js]
+----
+module.exports = {
+  driver: 'bcrypt',
+  bcrypt: {
+    rounds: 10
+  },
+  argon: {
+    type: 1
+  }
+}
+----
+
+==== make(value, [config])
+Hash a plain string value. Optionally inline config can be passed to override the defaults inside config file.
+
 [source, javascript]
 ----
 const Hash = use('Hash')
 const safePassword = await Hash.make(request.input('password'))
-
-// or
-const safePassword = await Hash.make(request.input('password'), 20)
 ----
 
 ==== verify(value, hashedValue)
