@@ -132,7 +132,10 @@ You can serve static files, for example the ones generated from create-react-app
 ----
 const Helpers = use(‘Helpers’)
 // ...
-Route.any('*', ({response}) => response.download(Helpers.publicPath('dist')))
+Route.any('*', ({response}) => {
+  let pathToDist = Helpers.publicPath('dist')
+  return response.download(pathToDist)
+}
 ----
 
 == Binding controllers
