@@ -83,13 +83,13 @@ Add `link` tag to a CSS file. The file name should be relative from the `public`
 
 [source, edge]
 ----
-{{ css('style') }}
+{{ style('style') }}
 ----
 
 Or
 [source, edge]
 ----
-{{ css('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css') }}
+{{ style('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css') }}
 ----
 
 ==== script
