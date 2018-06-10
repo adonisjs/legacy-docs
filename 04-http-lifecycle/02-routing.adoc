@@ -127,6 +127,17 @@ Route.get('/api/v1/users', 'UserController.index')
 Route.any('*', ({ view }) => view.render('main'))
 ----
 
+You can serve static files, for example the ones generated from create-react-app or vue-cli, like this:
+[source, js]
+----
+const Helpers = use(‘Helpers’)
+// ...
+Route.any('*', ({ response }) => {
+  const pathToDist = Helpers.publicPath('dist')
+  return response.download(pathToDist)
+}
+----
+
 == Binding controllers
 Defining closures as the route actions are not scalable, since writing all the code inside a single file is never desired and neither practical.
 
