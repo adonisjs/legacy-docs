@@ -100,6 +100,8 @@ await Mail.send(['welcome', 'welcome.text'])
 
 The view ending with `.text` is used as the plain text body of the email. In the same way, you can set the mail body for Apple watch.
 
+If you're using edge as template engine, you can algo use `-text` instead of `.text` as the plain text body template.
+
 [source, js]
 ----
 await Mail.send(['welcome', 'welcome.text', 'welcome.watch'])
