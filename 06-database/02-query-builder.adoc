@@ -470,13 +470,11 @@ NOTE: The output of the `paginate` method is different from the `forPage` method
 [source, javascript]
 ----
 {
-  pages: {
-    total: 0,
-    currentPage: 2,
-    perPage: 10,
-    lastPage: 0,
-  },
-  rows: [{...}]
+  total: '',
+  perPage: '',
+  lastPage: '',
+  page: '',
+  data: [{...}]
 }
 ----
 
