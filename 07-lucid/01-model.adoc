@@ -512,7 +512,7 @@ The return value of `paginate` is not an array of users. Instead, it is an objec
   perPage: '',
   lastPage: '',
   page: '',
-  data: []
+  data: [{...}]
 }
 ----
 
