@@ -240,7 +240,7 @@ response.attachment(
 == Extending Response
 It is also possible to extend the `Response` prototype by adding your own methods, known as macros.
 
-NOTE: Since the code to extend the `Response` needs to be executed once, you can make use of providers or ignitor hooks. Make sure to read link:[how to extend] guide before continuing.
+NOTE: Since the code to extend the `Response` needs to be executed once, you can make use of providers or ignitor hooks. Make sure to read link:extending-adonisjs[how to extend] guide before continuing.
 
 [source, js]
 ----
