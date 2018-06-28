@@ -102,7 +102,7 @@ The `public/style.css` file can be accessed by visiting link:http://127.0.0.1:33
 == Config
 To keep your applications away from configuration debt, AdonisJs gives you a dedicated directory `/config` to store all of the application configuration.
 
-It is recommended to keep configuration at one place and make use of *Environment* variables for manging secrets. link:configuration-and-env[Learn more]
+It is recommended to keep configuration at one place and make use of *Environment* variables for managing secrets. link:configuration-and-env[Learn more]
 
 == Tests
 All of the application tests are stored inside in the `test` directory. The testing package is not included by default and hence you can install it as defined link:testing#_setup[here].
