@@ -9,6 +9,8 @@ toc::[]
 
 This guide gets you started with AdonisJs by installing the framework and required dependencies. By the end of this guide, you will have a working AdonisJs web server with the *Hello world* page.
 
+NOTE: If you are new to JavaScript or unfamiliar with recent progress in ES6. We recommend to watch link:https://goo.gl/ox3uSc[Wesbos ES6 course, window="_blank"].
+
 If you face any troubles installing AdonisJs, please file an issue on link:https://github.com/adonisjs/adonis-framework/issues/new[github, window="_blank"].
 
 == Requirements

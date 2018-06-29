@@ -14,6 +14,8 @@ AdonisJs favours developer joy with consistent and expressive API to build a ful
 == Getting started
 They are no hard prerequisites to use AdonisJs but having a conventional understanding of JavaScript, Async programming and Node.js is great.
 
+If you are new to Javascript or un-familiar with recent progress in ES6. We recommend to watch link:https://goo.gl/ox3uSc[Wesbos ES6 course, window="_blank"].
+
 Also, make sure to go through the link:installation[getting started] guide especially if this is your first time using AdonisJs.
 
 == Other sources
