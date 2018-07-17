@@ -219,6 +219,36 @@ That is all! If the validation fails, the validator automatically set the errors
 
 Whereas, it sends back the JSON response if request has `Accept: application/json` header set.
 
+=== Custom error messages
+Default error messages can be confusing for the end user so you might want to create your custom validation error messages.
+Adonis provides you a very simple way to do this. 
+You just have to declare a `messages` method on your route validator and return an object with your messages per rule like so:
+
+[source, js]
+----
+'use strict'
+
+class StoreUser {
+  get rules () {
+    return {
+      email: 'required|email|unique:users',
+      password: 'required'
+    }
+  }
+
+  get messages () {
+    return {
+      'email.required': 'You must provide a email address.',
+      'email.email': 'You must provide a valid email address.',
+      'email.unique': 'This email is already registered.',
+      'password.required': 'You must provide a password'
+    }
+  }
+}
+
+module.exports = StoreUser
+----
+
 === Validate All
 To validate all the fields, set `validateAll` to true on the class prototype.
 
