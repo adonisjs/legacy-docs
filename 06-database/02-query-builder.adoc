@@ -491,8 +491,8 @@ The `beginTransaction` method returns the transaction object, which can be used 
 const trx = await Database.beginTransaction()
 await trx.insert({username: 'virk'}).into('users')
 
-trx.commit() // insert query will take place on commit
-trx.rollback() // will not insert anything
+await trx.commit() // insert query will take place on commit
+await trx.rollback() // will not insert anything
 ----
 
 ==== transaction
