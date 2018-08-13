@@ -47,8 +47,10 @@ module.exports = {
 }
 ----
 
-Run `./node_modules/.bin/webpack` to build your files. Use the flag `--mode` to choose between production and development.
-Also `--watch` flag can be passed to start a watcher.
+Run `./node_modules/.bin/webpack` to build your files.
+
+- Use the flag `--mode` to choose between production and development.
+- To start the watcher, make use of `--watch` flag.
 
 example
 [source, bash]
