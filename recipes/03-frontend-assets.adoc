@@ -35,7 +35,7 @@ First, make sure to install webpack as a dev dependency and create the config fi
 
 [source, bash]
 ----
-npm i --save-dev webpack@3
+npm i --save-dev webpack webpack-cli
 
 touch webpack.config.js
 ----
@@ -47,13 +47,22 @@ module.exports = {
 }
 ----
 
-Run `./node_modules/.bin/webpack` to build your files. Also `--watch` flag can be passed to start a watcher.
+Run `./node_modules/.bin/webpack` to build your files.
+
+- Use the flag `--mode` to choose between production and development.
+- To start the watcher, make use of `--watch` flag.
+
+example
+[source, bash]
+----
+./node_modules/.bin/webpack --mode development
+----
 
 == Sass setup
 
 [source, bash]
 ----
-npm i --save-dev css-loader extract-text-webpack-plugin node-sass sass-loader
+npm i --save-dev style-loader css-loader extract-text-webpack-plugin@next node-sass sass-loader
 ----
 
 Add following code to your webpack.config.js file.
@@ -70,7 +79,11 @@ function sassRules () {
   return [
     {
       test: /\.(sass|scss)$/,
-      loader: extractSass.extract(['css-loader', 'sass-loader'])
+      use: ExtractTextPlugin.extract(
+        {
+          fallback: 'style-loader',
+          use: ['css-loader', 'sass-loader']
+        })
     }
   ]
 }
