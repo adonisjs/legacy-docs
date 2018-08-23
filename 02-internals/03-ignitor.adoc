@@ -69,6 +69,16 @@ ignitor
   .appRoot(__dirname)
 ----
 
+==== modulesRoot(location)
+Define absolute path to the application's modules root. This path contains the `node_modules` directory with the application's dependencies.
+By default the path set in `appRoot()` is used.
+
+[source, js]
+----
+ignitor
+  .modulesRoot(path.join(__dirname, '..'))
+----
+
 ==== appFile(location)
 Relative path to the app file. By default `start/app.js` file is used.
 
