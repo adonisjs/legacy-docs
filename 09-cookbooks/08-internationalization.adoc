@@ -66,6 +66,17 @@ The `adonis install` command does create the migration for the table. However, y
 
 NOTE: It is mandatory to define a `group` for each locale item.
 
+== Accessing Locales
+You can access the current and default locale from the `Antl` object
+[source, js]
+----
+Antl.currentLocale()
+----
+[source, js]
+----
+Antl.defaultLocale()
+----
+
 == ICU Message syntax
 AdonisJs uses link:http://userguide.icu-project.org/formatparse/messages[ICU Message syntax] ( industry standard ) to format messages.
 
