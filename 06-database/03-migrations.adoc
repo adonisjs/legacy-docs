@@ -162,6 +162,7 @@ Usage:
 Options:
   -f, --force   Forcefully run migrations in production
   -s, --silent  Silent the migrations output
+  --seed        Seed the database after migration finished
   --log         Log SQL queries instead of executing them
 
 About:
