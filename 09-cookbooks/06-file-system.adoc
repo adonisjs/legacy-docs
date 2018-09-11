@@ -28,6 +28,19 @@ const providers = [
 ]
 ----
 
+In `config/drive.js` you can view the required parameters for AWS s3 setup. Make sure to add these environment variables to your `.env` file if you wish to use s3 storage.
+
+[source, js]
+----
+s3: {
+  driver: 's3',
+  key: Env.get('S3_KEY'),
+  secret: Env.get('S3_SECRET'),
+  bucket: Env.get('S3_BUCKET'),
+  region: Env.get('S3_REGION')
+}
+----
+
 == Available drivers
 The only available drivers shipped by default are:
 
