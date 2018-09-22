@@ -63,7 +63,8 @@ const globalMiddleware = [
 ]
 
 const namedMiddleware = {
-  auth: 'Adonis/Middleware/Auth'
+  auth: 'Adonis/Middleware/Auth',
+  guest: 'Adonis/Middleware/AllowGuestOnly'
 }
 ----
 
@@ -105,7 +106,9 @@ Route
   .get('users/:id', 'UserController.show')
   .middleware('auth')
 
-Route.post('login', 'UserController.login')
+Route
+  .post('login', 'UserController.login')
+  .middleware('guest')
 ----
 
 Let's create the `UserController` using the `adonis` command.
