@@ -486,6 +486,25 @@ Route
   .middleware(['auth'])
 ----
 
+== Guest middleware
+The `guest` middleware verify that you are not authenticated. The middleware is registered as a name middleware inside `start/kernel.js`
+
+[source, javascript]
+----
+const namedMiddleware = {
+  guest: 'Adonis/Middleware/AllowGuestOnly'
+}
+----
+
+Usage
+[source, javascript]
+----
+// We don't want our logged-in user to access this view
+Route
+  .get('login', 'AuthController.login')
+  .middleware(['guest'])
+----
+
 == Helpers
 The auth provider does add a couple of helpers to the view instance so that you can write HTML around the state of a logged-in user.
 
