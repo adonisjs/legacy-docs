@@ -306,6 +306,22 @@ Assert plain cookie
 response.assertPlainCookie('key', 'value')
 ----
 
+==== assertCookieExists
+Assert that the server set a cookie with the given name
+
+[source, js]
+----
+response.assertCookieExists('key')
+----
+
+==== assertPlainCookieExists
+Assert that the plain cookie given exists
+
+[source, js]
+----
+response.assertPlainCookieExists('key')
+----
+
 ==== assertHeader
 Assert that the server sent a header.
 
