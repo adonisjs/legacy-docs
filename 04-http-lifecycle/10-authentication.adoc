@@ -63,7 +63,8 @@ const globalMiddleware = [
 ]
 
 const namedMiddleware = {
-  auth: 'Adonis/Middleware/Auth'
+  auth: 'Adonis/Middleware/Auth',
+  guest: 'Adonis/Middleware/AllowGuestOnly'
 }
 ----
 
@@ -105,7 +106,9 @@ Route
   .get('users/:id', 'UserController.show')
   .middleware('auth')
 
-Route.post('login', 'UserController.login')
+Route
+  .post('login', 'UserController.login')
+  .middleware('guest')
 ----
 
 Let's create the `UserController` using the `adonis` command.
@@ -481,6 +484,25 @@ Usage
 Route
   .get('users/profile', 'UserController.profile')
   .middleware(['auth'])
+----
+
+== Guest middleware
+The `guest` middleware verify that you are not authenticated. The middleware is registered as a name middleware inside `start/kernel.js`
+
+[source, javascript]
+----
+const namedMiddleware = {
+  guest: 'Adonis/Middleware/AllowGuestOnly'
+}
+----
+
+Usage
+[source, javascript]
+----
+// We don't want our logged-in user to access this view
+Route
+  .get('login', 'AuthController.login')
+  .middleware(['guest'])
 ----
 
 == Helpers
