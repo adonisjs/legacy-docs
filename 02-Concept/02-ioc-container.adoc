@@ -1,0 +1,230 @@
+---
+permalink: ioc-container
+title: IoC container
+category: concept
+---
+= IoC container
+
+toc::[]
+
+So far you have seen a bunch of examples using the IoC container and registering providers. In this guide, we take a step further and understand how exactly the IoC container works.
+
+== Introduction
+Before understanding the IoC container usage and benefits, we need to step back a bit and understand the dependency management issues faced by large code bases.
+
+=== Useless abstractions
+Quite often you run into a situation, where you have to create useless abstractions for a library to manage its lifecycle.
+
+For example: To make sure database is only connected once, you move all database setup code to its file and `require` it everywhere inside your application.
+
+.lib/database.js
+[source, js]
+----
+const knex = require('knex')
+const connection = knex({
+  client: 'mysql',
+  connection: {}
+})
+
+module.exports = connection
+----
+
+Moreover, now instead of requiring `knex` directly, you require `lib/database.js` file.
+
+It is fine for a single dependency, but as the application grows, you find a bunch of these files inside your code base.
+
+=== Dependency management
+The biggest problem large codebase suffers from is the management of dependencies. Since each dependency does not know about each other, the developer using them has to link them together.
+
+Let's take an example of using *sessions* which are stored in a *redis database*.
+
+[source, js]
+----
+class Session {
+  constructor (redis) {
+    // needs redis
+  }
+}
+
+class Redis {
+  constructor (config) {
+    // needs config
+  }
+}
+
+class Config {
+  constructor (configDirectory) {
+    // needs config directory
+  }
+}
+----
+
+As you can see, each class is dependent on the other class. When using the `Session` class, we have to build them properly.
+
+[source, js]
+----
+const config = new Config(configDirectory)
+const redis = new Redis(config)
+const session = new Session(redis)
+----
+
+The dependencies list may increase, based on the requirements of the project.
+
+On the other hand, the IoC container makes itself responsible for dependencies.
+
+=== Painful testing
+When not using an IoC container, you have to come up with different ways to mock dependencies or rely on libraries like link:http://sinonjs.org/[sinonjs, window="_blank"].
+
+Whereas, when using the IoC container, it is so simple to link:testing-fakes#_self_implementing_fakes[create fakes], since all dependencies are resolved from the IoC container and not the file-system directly.
+
+== Binding dependencies
+Let's say we want to bind the `Redis` library inside the IoC container, making sure that it knows how to compose itself.
+
+NOTE: There is no secret sauce to the IoC container. It is a pretty simple idea that controls the composition and resolution of a module, which opens a whole new world of possibilities.
+
+The first step is to create the actual implementation and define all dependencies as `constructor` parameters.
+
+[source, js]
+----
+class Redis {
+  constructor (Config) {
+    const redisConfig = Config.get('redis')
+    // connect to redis server
+  }
+}
+
+module.exports = Redis
+----
+
+The `Config` is a constructor dependency and not an hardcoded `require` statement. It makes sure that our `Redis` class works fine until the `Config` object passed to the class has the same interface and output.
+
+Let's bind our class to the IoC container
+[source, js]
+----
+const Redis = require('./Redis')
+const { ioc } = require('@adonisjs/fold')
+
+ioc.bind('My/Redis', function (app) {
+  const Config = app.use('Adonis/Src/Config')
+  return new Redis(Config)
+})
+----
+
+So use it as
+
+[source, js]
+----
+const redis = ioc.use('My/Redis')
+----
+
+[ol-spaced]
+1. The `ioc.bind` method takes two parameters. +
+  - First is the name of the binding.
+  - Other is a *factory* function, which is executed everytime you access the binding and should return the final value for the binding.
+2. Since we are using the IoC container, we can pull the existing bindings ( which is *Config* ) and pass it to the `Redis` class.
+3. Finally, we return a new instance of `Redis`, which is all configured and ready to be used.
+
+=== Singletons
+There's a problem with the *Redis binding* we just created. Now every time we fetch it from the IoC container, it gives us a new instance of it, which in turn creates a new connection to the redis server.
+
+To overcome this problem, IoC container let you define singletons.
+
+[source, js]
+----
+ioc.singleton('My/Redis', function (app) {
+  const Config = app.use('Adonis/Src/Config')
+  return new Redis(Config)
+})
+----
+
+Instead of using `ioc.bind`, We make use of `ioc.singleton` method, which caches the first time return value and re-uses it for future returns.
+
+== Resolving dependencies
+Resolving dependencies are pretty straightforward. You make use of `use` method and give it a namespace to resolve.
+
+[source, js]
+----
+const redis = ioc.use('My/Redis')
+----
+
+Also, you can use the global `use` method.
+
+[source, js]
+----
+const redis = use('My/Redis')
+----
+
+Here are the steps performed ( ordered top to bottom ) when resolving a dependency from the IoC container.
+
+1. Look a registered fake.
+2. Next, find the actual binding.
+3. Look for an alias, and if found, repeat the entire process with the actual binding name.
+4. Resolve as an autoloaded path.
+5. Fallback to Node.js native `require` method.
+
+=== Aliases
+Since Ioc container bindings have to be unique, we follow a pattern for binding names. `ProjectName/Scope/Module`. For example `Adonis/Src/Config`.
+
+[ul-spaced]
+- `Adonis` is the project name ( Can be your company name too ).
+- `Src` is the scope, since this binding is part of the core. For 1st party packages, we use `Addon` keyword.
+- `Config` is the actual module name.
+
+It is quite hard to remember and type big namespaces. Instead, IoC container allows you to define *aliases* for them. The aliases are defined inside `start/app.js` file under the `aliases`.
+
+NOTE: AdonisJs pre-register aliases for inbuilt modules like `Route`, `View`, `Model` and so on. However, you can always override them as shown below.
+
+[source, js]
+----
+aliases: {
+  MyRoute: 'Adonis/Src/Route'
+}
+----
+
+[source, js]
+----
+const Route = use('MyRoute')
+----
+
+=== Autoloading
+Instead of only binding dependencies to the IoC container, you can also define a directory to be autoloaded by the IoC container.
+
+*Don't worry*, it does not load all the files from the directory but instead considers the directory paths as part of the resolving dependencies process.
+
+For example, the `app` directory of AdonisJs is autoloaded under `App` namespace, which means you can require all files from the `app` directory without typing relative paths.
+
+For example:
+
+.app/Services/Foo.js
+[source, js]
+----
+class FooService {
+}
+
+module.exports = FooService
+----
+
+Can be required as
+
+.app/Controllers/Http/UserController.js
+[source, js]
+----
+const Foo = use('App/Services/Foo')
+----
+
+If we require it normally, it has to be `require('../../Services/Foo')`
+
+So think of autoloading as a more readable and consistent way to require files. Also, you get a chance to define `fakes` for them too.
+
+== FAQ's
+
+[ol-spaced]
+1. *Do I have to bind everything inside IoC container?* +
+  No, IoC container bindings should only be used, when you want to abstract the setup of a library/module to its own thing. +
+  Also consider using link:service-providers[service providers] when you want to distribute dependencies and want them to play nice with AdonisJs eco-system.
+
+2. *How do I mock bindings?* +
+  There's no need to mock bindings since AdonisJs allows you to implement *fakes*. Learn more about fakes link:testing-fakes#_events_fake[here]
+
+3. *How do I wrap an npm module as a service provider?* +
+  link:service-providers[Here's] the complete guide for that.

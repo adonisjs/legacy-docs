@@ -1,9 +1,10 @@
 ---
 permalink: browser-tests
-title: Browser tests
+title: Browser Tests
 category: testing
 ---
-= Browser tests
+
+= Browser Tests
 
 toc::[]
 
