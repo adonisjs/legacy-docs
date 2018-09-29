@@ -28,7 +28,7 @@ You must terminate the request in your route handler. When it’s done, Adonis w
 
 ## HTTP Context
 
-Since Node.js handles HTTP requests in a concurrently, they need to be identified and managed uniquely. To help you do so, Adonis provide a `Context` object to each route handler. This object contains everything you need to handle the request, like the `request` or `response` class, and can be easily extended via **Provider** or **Middleware**.
+Since Node.js handles HTTP requests concurrently, they need to be identified and managed uniquely. To help you do so, Adonis provide a `Context` object to each route handler. This object contains everything you need to handle the request, like the `request` or `response` class, and can be easily extended via **Provider** or **Middleware**.
 
 .start/routes.js
 [source, js]
