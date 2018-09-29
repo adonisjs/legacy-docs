@@ -49,7 +49,9 @@ This can be achieved by using `Router.route()`.
 
 [source, js]
 ----
-Route.route(url, closure, [...verbs])
+Route.route('/', () => {
+  //
+}, ['GET', 'POST', 'PUT']))
 ----
 
 For static pages, you don't necessarily need logic and directly want to render a view.
@@ -57,7 +59,8 @@ This can be achieved by using `Router.on().render()`.
 
 [source, js]
 ----
-Route.on(url).render(view)
+// resources/view/welcome.edge
+Route.on('/').render('welcome')
 ----
 
 == Route Parameters
@@ -113,7 +116,9 @@ Route.any('*', ({ view }) => view.render('...'))
 
 == Named Route
 
-Named routes will help you to keep your code DRY. You can name your routes by chaining the function `as()`.
+Though routes are defined inside the `start/routes.js` file, they are referenced everywhere else in the application. For example: Using the views route helper to make URL for a given route.
+
+By using the `as()` method, you can give your route a unique name and reference it by it's name vs the URL.
 
 .start/routes.js
 [source, js]
@@ -300,7 +305,7 @@ Route.group(() => {
 }).domain(':user.myapp.com')
 ----
 
-If you visit `virk.myapp.com` you will retrieve `The username is virk`.
+If you visit `virk.myapp.com` you will see `The username is virk`.
 
 == Route Groups
 

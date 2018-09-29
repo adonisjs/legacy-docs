@@ -10,7 +10,7 @@ toc::[]
 
 Middleware are a way to hook in the request lifecycle of your application. They are a set of functions executed in sequence and let you transform the request or the response.
 
-As an example, Adonis provide in its [authentication provider]() an `auth` middleware that verifies if the user of your application is authenticated. If the user is not authenticated and exception will be thrown and the request will never reach your route handler.
+As an example, Adonis provide in its link:authentication#_auth_middleware[authentication provider] an `auth` middleware that verifies if the user of your application is authenticated. If the user is not authenticated and exception will be thrown and the request will never reach your route handler.
 
 == Creating Middleware
 

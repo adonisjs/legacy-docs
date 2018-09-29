@@ -20,7 +20,7 @@ Having a good high-level overview of the request lifecycle is a must-have. The f
 
 All HTTP requests you sent from a client (browser, mobile, etc.) are handled by Adonis `Server` module. It will execute all [server level middleware](), like the `StaticFileMiddleware` that serve all static file from the `public` directory.
 
-If the request has’t been terminated by one of them, the `Router` of Adonis will come into play and try to found a route that match the URL requested. If the `Router` cannot find a match, a `RouteNotFound` exception will be thrown.
+If the request has’t been terminated by one of them, the `Router` of Adonis will come into play and try to find a route that match the URL requested. If the `Router` cannot find a match, a `RouteNotFound` exception will be thrown.
 
 After finding the route, **global middleware** are executed followed by **named middleware** that you’ve defined for this specific route. If none of then terminate the request, the route handler is called.
 

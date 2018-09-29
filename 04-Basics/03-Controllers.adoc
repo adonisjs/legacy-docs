@@ -8,9 +8,13 @@ permalink: controllers
 
 toc::[]
 
-It may be enough to write closure to handle your route for a small application, but when you start growing it could be useful to organise them. This is where Controller enter in the dancefloor.
+It may be enough to write closure to handle your route for a small application, but when your application starts growing it could be useful to organise them. This is where Controllers enter in the dance floor.
 
 Controllers are attached to one or many routes and are the common point of interaction between your models, views and any other services you may need.
+
+[NOTE]
+Controllers only job is to respond to an HTTP request. Do not use them internally by requiring them inside different files.
+[/NOTE]
 
 == Creating Controllers
 
@@ -25,7 +29,7 @@ To create a new controller, make use of the `make:controller` command.
 
 This command will create a file in the `App/Controllers/{TYPE}` folder with some boilerplate code.
 
-TIP: You can use the `--resource` flag to create a [resourceful controller]().
+TIP: You can use the `--resource` flag to create a resourceful controller.
 
 .app/Controllers/Http/UserController.js
 [source, js]
@@ -61,7 +65,7 @@ Route.post(url, 'Admin/UserController.store')
 Route.post(url, 'App/MyOwnController/UserController.index')
 ----
 
-Since these methods are route handler, they will receive as an argument the [HTTP Context]().
+Since these methods are route handlers, they will receive as an argument the link:http-context#_http_context[HTTP Context].
 
 [source, js]
 ----

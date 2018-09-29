@@ -1,6 +1,6 @@
 ---
 title: Validator
-permalink: validation
+permalink: validator
 category: basics
 ---
 

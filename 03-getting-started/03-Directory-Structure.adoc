@@ -51,13 +51,13 @@ The `app` directory is the home of your code. It's autoloaded under the namespac
 The `config` directory is used to define the configuration of your application.
 AdonisJs ships with a bunch of config files but feel free to create your own.
 
-link:https://adonisjs.com/docs/configuration-and-env[Read more about configuration].
+link:configuration-and-env[Read more about configuration].
 
 === The Database Directory
 
 The `database` directory is used to store all database related files.
 
-link:https://adonisjs.com/docs/database[Read more about database].
+link:database[Read more about database].
 
 === The Public Directory
 
@@ -77,13 +77,13 @@ It means views, un-compiled assets like LESS, SASS, JavaScript or even images.
 
 === The Start Directory
 
-The `start` directory is used to store files that are runned at the boot of your application.
+The `start` directory is used to store files that are loaded at the boot of your application.
 By default, you'll find `app.js`, `kernel.js` and `routes.js`.
 
 === The Test Directory
 
 The `test` directory is used to store all the tests of your application.
-The testing package is not included by default and hence you can install it as defined [here]().
+The testing package is not included by default and hence you can install it as defined link:testing[here].
 
 == The App Directory
 
@@ -120,4 +120,4 @@ This directory is automatically created when you run `adonis make:model <name>`.
 === The Validators Directory
 
 The `app/Validators` directory is used to store all your route's validators.
-This directory is automatically created when you run `adonis make:validator <name>` (You need to have installed the link:https://adonisjs.com/docs/validator[Validator Provider] to use this commands).
+This directory is automatically created when you run `adonis make:validator <name>` (You need to have installed the link:validator[Validator Provider] to use this commands).

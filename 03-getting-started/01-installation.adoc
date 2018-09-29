@@ -31,7 +31,7 @@ Adonis CLI is a command line tool to help you install AdonisJs.
 > npm i -g @adonisjs/cli
 ----
 
-NOTE: You can also use `npx` to avoid installing the CLI globally.
+TIP: You can also use `npx` to avoid installing the CLI globally.
 
 Make sure to setup `npm` system-wide `node_modules/.bin` directory in your `$PATH` to be able to access the installed binary.
 
