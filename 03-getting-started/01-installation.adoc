@@ -8,17 +8,17 @@ permalink: getting-started
 
 toc::[]
 
-Installing AdonisJs is a relatively straightforward process and will only take few minutes.
+Installing AdonisJs is a relatively straightforward process and will only take a few minutes.
 
 == System Requirements
 
 The only dependencies of the framework are `Node.js` and `npm`.
-Ensure that the version of those tools meet the following.
+Ensure that the version of those tools meets the following.
 
 - Node.js >= 8.0.0
 - npm >= 3.0.0
 
-TIP: You can make use of tools like link:https://github.com/creationix/nvm[nvm, window="_blank"] to help you managing multiple version of Node.js and npm at the same time.
+TIP: You can make use of tools like link:https://github.com/creationix/nvm[nvm, window="_blank"] to help you manage multiple version of Node.js and npm at the same time.
 
 == Installing AdonisJs
 

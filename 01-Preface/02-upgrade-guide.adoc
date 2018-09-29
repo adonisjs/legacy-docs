@@ -1,24 +1,25 @@
 ---
 title: Upgrading from 4.0
 permalink: upgrade-guide
-category: introduction
+category: preface
 ---
+
 = Upgrading from 4.0
 
 toc::[]
 
-The 4.1 release contains bunch of *bug fixes* and *API improvements* to keep the code base simple and less magical. I tried to keep the breaking changes as few as possible, however cannot eliminate them completely.
+The 4.1 release contains a bunch of *bug fixes* and *API improvements* to keep the code base simple and less magical. I tried to keep the breaking changes as few as possible, however, cannot eliminate them entirely.
 
 == Getting started
 
-The first step is to get the latest version of all dependencies. I personally use link:https://www.npmjs.com/package/npm-check[npm-check] to pull latest versions of packages.
+The first step is to get the latest version of all dependencies. We use link:https://www.npmjs.com/package/npm-check[npm-check] to pull the latest versions of packages.
 
 [source, bash]
 ----
 npm install -g npm-check
 ----
 
-Run the following command to interactively update dependencies.
+Run the following command to update dependencies interactively.
 
 [source, bash]
 ----
@@ -26,7 +27,7 @@ npm-check -u
 ----
 
 == Exception handling
-One of the biggest changes have been done in the link:https://github.com/adonisjs/adonis-framework/issues/718[Global exception handler].
+One of the most significant changes has been done in the link:https://github.com/adonisjs/adonis-framework/issues/718[Global exception handler].
 
 Make the following changes inside `app/Exceptions/Handler.js` file. Feel free to ignore this section, if you never created the global exception handler.
 
@@ -56,13 +57,13 @@ class ExceptionHandler extends BaseExceptionHandler {
 }
 ----
 
-3. At last you can remove `Exception.bind` calls from your codebase, since all exceptions will be routed to the global exception handler.
+3. At last, you can remove `Exception.bind` calls from your codebase, since all exceptions will be routed to the global exception handler.
 
 == Routing
 
 ==== Route.url
 
-The `Route.url` generates a fully qualified URL to a pre-registered route. Earlier the `domain` was passed as a string literal and now it is accepted as an object.
+The `Route.url` generates a fully qualified URL to a pre-registered route. Earlier the `domain` was passed as a string literal, and now it is accepted as an object.
 
 Earlier
 [source, js]
@@ -77,10 +78,10 @@ Route.url('posts/:id', { id: 1 }, { domain: 'blog.adonisjs.com' })
 ----
 
 == Validator
-The validator provider now uses latest version of Indicative. Here's the list of breaking changes due to API changes done in Indicative.
+The validator provider now uses the latest version of Indicative. Here's the list of breaking changes due to API changes done in Indicative.
 
 ==== formatters
-There is no concept of named formatters anymore. If you want to use a pre-existing formatter, you pass it as a reference, instead of passing it's name.
+There is no concept of named formatters anymore. If you want to use a pre-existing formatter, you pass it as a reference, instead of passing its name.
 
 Earlier
 [source, js]
@@ -121,7 +122,7 @@ class StoreUser {
 ----
 
 ==== configure
-New version of Indicative exposes the link:http://indicative.adonisjs.com/docs/api/configure[configure] method to define library wide defaults. They same can be used with Validator provider too.
+The new version of Indicative exposes the link:http://indicative.adonisjs.com/docs/api/configure[configure] method to define library-wide defaults. The same can be used with Validator provider too.
 
 [source, js]
 ----
@@ -136,7 +137,7 @@ configure({
 Date formatting was inconsistent with newly created records and already existing records. Same has been fixed in the newer release with a *small breaking change*. Make sure to read the link:https://github.com/adonisjs/adonis-lucid/issues/245[related issue].
 
 ==== dates
-The date fields will longer be casted to `moment` instances on the model instance. For example
+The date fields will longer be cast to `moment` instances on the model instance. For example
 
 Earlier
 [source, js]
@@ -154,7 +155,7 @@ user.created_at instanceof moment // false
 
 This change prevents you from mutating the date on the model instance directly and instead make use of `castDates` hook to mutate the date when you serialize the model properties.
 
-The `castDates` hook will work as earlier
+The `castDates` hook will work as earlier.
 
 [source, js]
 ----
@@ -169,13 +170,13 @@ class User extends Model {
 ----
 
 == Goodies
-Bunch of bug fixes have been done to keep the codebase reliable. Also a handful of perfomance improvements have been done.
+Bunch of bug fixes has been done to keep the codebase reliable. Also, a handful of performance improvements have been done.
 
 ==== Validator
-Since indicative is written from groundup, the new version is `2x faster` than the old one.
+Since indicative is written from the ground up, the new version is `2x faster` than the old one.
 
 ==== Middleware
-The middleware parsing layer now resolves all middleware at the time of booting the app and just instantiates a new instance of them for each request. Whereas earlier the *resolve* process was done for each request.
+The middleware parsing layer now resolves all middleware at the time of booting the app and instantiates a new instance of them for each request. Whereas earlier the *resolve* process was done for each request.
 
 ==== Betters errors
 The errors will appear in a nice formatted way on your terminal as shown in the screenshot.

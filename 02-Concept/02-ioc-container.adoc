@@ -3,11 +3,12 @@ permalink: ioc-container
 title: IoC container
 category: concept
 ---
+
 = IoC container
 
 toc::[]
 
-So far you have seen a bunch of examples using the IoC container and registering providers. In this guide, we take a step further and understand how exactly the IoC container works.
+So far you have seen a bunch of examples using the IoC container and registering providers. In this guide, we take a step further and understand how precisely the IoC container works.
 
 == Introduction
 Before understanding the IoC container usage and benefits, we need to step back a bit and understand the dependency management issues faced by large code bases.
@@ -15,7 +16,7 @@ Before understanding the IoC container usage and benefits, we need to step back 
 === Useless abstractions
 Quite often you run into a situation, where you have to create useless abstractions for a library to manage its lifecycle.
 
-For example: To make sure database is only connected once, you move all database setup code to its file and `require` it everywhere inside your application.
+For example: To make sure the database is only connected once, you move all database setup code to its file and `require` it everywhere inside your application.
 
 .lib/database.js
 [source, js]
@@ -59,7 +60,7 @@ class Config {
 }
 ----
 
-As you can see, each class is dependent on the other class. When using the `Session` class, we have to build them properly.
+As you can see, each class is dependent on the other class. When using the `Session` class, we have to build them correctly.
 
 [source, js]
 ----
@@ -96,7 +97,7 @@ class Redis {
 module.exports = Redis
 ----
 
-The `Config` is a constructor dependency and not an hardcoded `require` statement. It makes sure that our `Redis` class works fine until the `Config` object passed to the class has the same interface and output.
+The `Config` is a constructor dependency and not a hardcoded `require` statement. It makes sure that our `Redis` class works fine until the `Config` object passed to the class has the same interface and output.
 
 Let's bind our class to the IoC container
 [source, js]
@@ -127,7 +128,7 @@ const redis = ioc.use('My/Redis')
 === Singletons
 There's a problem with the *Redis binding* we just created. Now every time we fetch it from the IoC container, it gives us a new instance of it, which in turn creates a new connection to the redis server.
 
-To overcome this problem, IoC container let you define singletons.
+To overcome this problem, the IoC container let you define singletons.
 
 [source, js]
 ----
@@ -170,7 +171,7 @@ Since Ioc container bindings have to be unique, we follow a pattern for binding 
 - `Src` is the scope, since this binding is part of the core. For 1st party packages, we use `Addon` keyword.
 - `Config` is the actual module name.
 
-It is quite hard to remember and type big namespaces. Instead, IoC container allows you to define *aliases* for them. The aliases are defined inside `start/app.js` file under the `aliases`.
+It is quite hard to remember and type significant namespaces. Instead, IoC container allows you to define *aliases* for them. The aliases are defined inside `start/app.js` file under the `aliases`.
 
 NOTE: AdonisJs pre-register aliases for inbuilt modules like `Route`, `View`, `Model` and so on. However, you can always override them as shown below.
 
@@ -212,7 +213,7 @@ Can be required as
 const Foo = use('App/Services/Foo')
 ----
 
-If we require it normally, it has to be `require('../../Services/Foo')`
+If we require it usually, it has to be `require('../../Services/Foo')`
 
 So think of autoloading as a more readable and consistent way to require files. Also, you get a chance to define `fakes` for them too.
 

@@ -8,7 +8,7 @@ permalink: controllers
 
 toc::[]
 
-It may be enough to write closure to handle your route for a small application, but when your application starts growing it could be useful to organise them. This is where Controllers enter in the dance floor.
+It may be enough to write closure to handle your route for a small application, but when your application starts growing it could be useful to organize them. This is where Controllers enter in the dance floor.
 
 Controllers are attached to one or many routes and are the common point of interaction between your models, views and any other services you may need.
 

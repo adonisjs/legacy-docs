@@ -83,7 +83,7 @@ By default, you'll find `app.js`, `kernel.js` and `routes.js`.
 === The Test Directory
 
 The `test` directory is used to store all the tests of your application.
-The testing package is not included by default and hence you can install it as defined link:testing[here].
+The testing package is not included by default, and hence you can install it as defined link:testing[here].
 
 == The App Directory
 

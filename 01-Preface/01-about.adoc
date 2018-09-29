@@ -3,29 +3,21 @@ title: About AdonisJs
 permalink: about
 category: preface
 ---
+
 = About AdonisJs
 
 toc::[]
 
 AdonisJs is a Node.js MVC framework that runs on all major operating systems. It offers a stable eco-system to write a server-side web application so that you can focus on business needs over finalizing which package to choose or not.
 
-AdonisJs favours developer joy with consistent and expressive API to build a full-stack web application or a micro API server.
+AdonisJs favors developer joy with consistent and expressive API to build a full-stack web application or a micro API server.
 
 == Getting started
 They are no hard prerequisites to use AdonisJs but having a conventional understanding of JavaScript, Async programming and Node.js is great.
 
-If you are new to Javascript or un-familiar with recent progress in ES6. We recommend to watch link:https://goo.gl/ox3uSc[Wesbos ES6 course, window="_blank"].
+If you are new to Javascript or un-familiar with recent progress in ES6. We recommend watching link:https://goo.gl/ox3uSc[Wesbos ES6 course, window="_blank"].
 
 Also, make sure to go through the link:installation[getting started] guide especially if this is your first time using AdonisJs.
-
-== Other sources
-Here are some other great places to find information about AdonisJs.
-
-1. The link:https://forum.adonisjs.com[discourse forum, window="_blank"], where we talk about everything about AdonisJs from fixing bugs to discussing new features.
-2. A list of link:/screencasts[screencasts] created by community members
-2. Twitter
-3. Github
-4. If you love the project, then please consider supporting us on link:https://www.patreon.com/adonisframework[patreon, window="_blank"].
 
 == Providers
 AdonisJs is a modular framework that consists of multiple service providers. The service providers are the building blocks of AdonisJs applications.
@@ -40,7 +32,7 @@ Below is the list of frequently asked questions, if you think a common question 
 +
 Express and Koa are routing libraries with a thin layer of middleware on top of it. There are great for several use cases but falls apart when your project starts growing.
 +
-Also, it becomes harder to hire someone, since your project has its own standards and conventions. Whereas AdonisJs follows a set of standardized conventions, making it easier to hire people and make them work on existing AdonisJs apps.
+Also, it becomes harder to hire someone, since your project has its standards and conventions. Whereas AdonisJs follows a set of standardized conventions, making it easier to hire people and make them work on existing AdonisJs apps.
 
 2. *Is AdonisJs for monolithic apps?*
 +

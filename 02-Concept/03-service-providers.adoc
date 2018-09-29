@@ -3,6 +3,7 @@ permalink: service-providers
 title: Service providers
 category: concept
 ---
+
 = Service providers
 
 toc::[]
@@ -12,7 +13,7 @@ So far we learned link:ioc-container#_binding_dependencies[how to bind] dependen
 == Introduction
 We know that `ioc.bind` method can be used to register bindings. However, there are no clear guidelines on where to call this method.
 
-It is where *service providers* comes into the picture. Service providers are simple ES6 classes with lifecycle methods that are used to register and bootstrap bindings.
+It is where *service providers* comes into the picture. Service providers are pure ES6 classes with lifecycle methods that are used to register and bootstrap bindings.
 
 For example
 
@@ -115,7 +116,7 @@ module.exports = Queue
 
 The above class only has one method called `get`, which returns an instance of the queue for a given *queue name*.
 
-Following are the steps performed by the get method
+Following are the steps performed by the get method.
 
 1. Look for an instance of a given queue name.
 2. If an instance does not exist, read the configuration using the *Config provider*.
@@ -167,7 +168,7 @@ Queue
 ----
 
 == Distributing as a package
-The xref:_npm_package_as_a_service_provider[bee queue] provider we created lives in the same project struture. However, we can extract it into it's own package.
+The xref:_npm_package_as_a_service_provider[bee queue] provider we created lives in the same project structure. However, we can extract it into its own package.
 
 Let's create a new directory with following directory structure.
 
@@ -183,10 +184,10 @@ Let's create a new directory with following directory structure.
 
 All we did is moved the actual `Queue` implementation to the `src` directory and renamed the provider file to `QueueProvider.js`
 
-Also we have to make following changes
+Also, we have to make the following changes.
 
 1. Since the `Queue/index.js` is in a different directory, we need to tweak the reference of this file inside our service provider.
-2. Rename `Bee/Queue` namespace to a more suited namespace, which has less changes of collision. For example, when creating this provider for AdonisJs, we will name it as `Adonis/Addons/Queue`.
+2. Rename `Bee/Queue` namespace to a more suited namespace, which has fewer chances of collision. For example, when creating this provider for AdonisJs, we will name it as `Adonis/Addons/Queue`.
 
 [source, js]
 ----
@@ -204,12 +205,12 @@ class QueueProvider extends ServiceProvider {
 module.exports = QueueProvider
 ----
 
-NOTE: Make sure you do not include `@adonisjs/fold` as a dependency for your provider. This should be installed by the main app only. For testing you can install it as a *dev dependency*.
+NOTE: Make sure you do not include `@adonisjs/fold` as a dependency for your provider. This should be installed by the main app only. For testing, you can install it as a *dev dependency*.
 
 === Writing provider tests
-You can use any testing engine you want. However we officially use link:https://github.com/thetutlage/japa[japa, window="_blank"] as the testing engine to write tests for any providers.
+You can use any testing engine you want. However, we officially use link:https://github.com/thetutlage/japa[japa, window="_blank"] as the testing engine to write tests for any providers.
 
-Setting up japa is simple as shown below.
+Setting up japa is straightforward as shown below.
 
 [source, bash]
 ----
@@ -230,7 +231,7 @@ The tests can be executed by running the test file using `node` command.
 node test/example.spec.js
 ----
 
-But of course, you want to run all the test files together and for that you can make use of `japa-cli`.
+But of course, you want to run all the test files together, and for that, you can make use of `japa-cli`.
 
 [source, js]
 ----
@@ -249,4 +250,4 @@ And run tests as
 1. *Why not install `@adonisjs/fold` as a dependency?* +
   If you have ever worked with gulp, they also link:https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/guidelines.md[recommend (p:14)] not to install gulp as the dependency when creating plugins. +
   &nbsp; +
-  It is required so that always the main application version of `@adonisjs/fold` is installed and your provider makes use of it. Otherwise, each provider will end up shipping it's own version of IoC container.
+  It is required so that always the main application version of `@adonisjs/fold` is installed and your provider makes use of it. Otherwise, each provider will end up shipping its own version of IoC container.

@@ -10,7 +10,7 @@ toc::[]
 
 Middleware are a way to hook in the request lifecycle of your application. They are a set of functions executed in sequence and let you transform the request or the response.
 
-As an example, Adonis provide in its link:authentication#_auth_middleware[authentication provider] an `auth` middleware that verifies if the user of your application is authenticated. If the user is not authenticated and exception will be thrown and the request will never reach your route handler.
+As an example, Adonis provide in its link:authentication#_auth_middleware[authentication provider] an `auth` middleware that verifies if the user of your application is authenticated. If the user is not authenticated and an exception will be thrown, and the request will never reach your route handler.
 
 == Creating Middleware
 
@@ -47,7 +47,7 @@ In this example. We are using the library `geoip-lite` and adding the country of
 
 When creating your middleware, you'll decide if it runs before or after the request hit your route handler. This is done by defining the code before or after the `await next()` call.
 
-NOTE: Your middleware can also runs before **and** after the request hit your route handler.
+NOTE: Your middleware can also run before **and** after the request hit your route handler.
 
 [source, js]
 ----
@@ -64,7 +64,7 @@ class UpstreamMiddleware {
 module.exports = UpstreamMiddleware
 ----
 
-To access the `response` object for a downstream middleware you need to unpack it from the link:https://adonisjs.com/docs/request-lifecycle#http-context[HTTP Context].
+To access the `response` object for a downstream middleware, you need to unpack it from the link:https://adonisjs.com/docs/request-lifecycle#http-context[HTTP Context].
 
 [source, js]
 ----
@@ -87,9 +87,9 @@ All of the middleware are registered inside the file `start/kernel.js`. They are
 
 === Server Middleware
 
-Those middleware are executed before the request reach the Routing system of Adonis. That means if the requested route isn't registered it will still execute all middleware defined here.
+Those middleware are executed before the request reaches the Routing system of Adonis. That means if the requested route isn't registered, it will still execute all middleware defined here.
 
-It is generaly used for static assets or CORS control.
+It is generally used for static assets or CORS control.
 
 .start/kernel.js
 [source, js]
@@ -102,7 +102,7 @@ const serverMiddleware = [
 
 === Global Middleware
 
-Those middleware are executed after the route has been found. They are runned in the sequence they have been defined so you must be careful when a middleware require another one.
+Those middleware are executed after the route has been found. They are run in the sequence they have been defined so you must be careful when a middleware requires another one.
 
 .start/kernel.js
 [source, js]
@@ -114,7 +114,7 @@ const globalMiddleware = [
 
 === Named Middleware
 
-Those middleware are linked to a specific route or route groups. They are runned in the sequence they have been defined in the route.
+Those middleware are linked to a specific route or route groups. They are run in the sequence they have been defined in the route.
 
 .start/kernel.js
 [source, js]
@@ -133,7 +133,7 @@ Route.get(url, closure).middleware(['auth'])
 
 Middleware can be configurable at runtime. Adonis make use of the []link:https://www.npmjs.com/package/haye#pipe-expression[pipe expression, window="_blank"] to define properties.
 
-A good example could be the `auth` named middleware. This middleware accept a different authentication scheme as a prop.
+A good example could be the `auth` named middleware. This middleware accepts a different authentication scheme as a prop.
 
 [source, js]
 ----

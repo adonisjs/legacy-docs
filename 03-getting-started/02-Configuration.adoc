@@ -43,7 +43,7 @@ If you aren't sure that the key is defined in your configuration you can supply 
 Config.get('database.mysql.host', '127.0.0.1')
 ----
 
-If you want to change the in-memory configuration values you should make use of `Config.set()`.
+If you want to change the in-memory configuration values, you should make use of `Config.set()`.
 
 [source, js]
 ----
@@ -54,15 +54,15 @@ WARNING: This only change the value in-memory. It will not write the new value o
 
 == Env Provider
 
-When you are building an application, it happens quite often that you want to have different configuration based upon the environement your code is running in.
+When you are building an application, it happens quite often that you want to have a different configuration based upon the environment your code is running in.
 
-To fullfil this requirement, AdonisJs make use of the library link:https://github.com/motdotla/dotenv[dotenv, window="_blank"].
-Inside the root of every brand new AdonisJs project, you will find an `.env.example` file.
+To fulfill this requirement, AdonisJs make use of the library link:https://github.com/motdotla/dotenv[dotenv, window="_blank"].
+Inside the root of every brand new AdonisJs project, you will find a `.env.example` file.
 If you used Adonis CLI to install your application, this file has been automatically copied to `.env`. Otherwise, you should copy it manually.
 
 WARNING: The `.env` file should never be committed to your source control or shared with other people.
 
-Those file have a simple `key=value` syntax.
+This file has a simple `key=value` syntax.
 
 .env
 [source, env]
@@ -133,7 +133,7 @@ This can be done by using the `ENV_SILENT` environment variable.
 > ENV_SILENT=true adonis serve
 ----
 
-=== Testing Environement
+=== Testing Environment
 
-If you are starting your application with the environement variable `NODE_ENV` with `testing`, AdonisJs will load the file `.env.testing` that will merge values set in `.env`.
+If you are starting your application with the environment variable `NODE_ENV` with `testing`, AdonisJs will load the file `.env.testing` that will merge values set in `.env`.
 This could be useful if you want to use different credentials while testing your codebase.
