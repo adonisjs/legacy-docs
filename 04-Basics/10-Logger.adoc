@@ -50,7 +50,7 @@ Logger.info('request details %j', {
 })
 ----
 
-The logger follows link:https://tools.ietf.org/html/rfc5424#page-11[RFC5424] levels to log messages. Also, it exposes readable methods for each level.
+The logger follows link:https://tools.ietf.org/html/rfc5424#page-11[RFC5424] levels to log messages. Also, it exposes simple methods for each level.
 
 [options="header", cols="20%,20%,60%"]
 |====

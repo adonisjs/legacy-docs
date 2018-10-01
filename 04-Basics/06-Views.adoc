@@ -52,7 +52,7 @@ Route.get('/', ({ view }) => {
 
 The `view.render` method takes the relative path to the view file. There is no need to type `.edge` extension, since that is obvious.
 
-Also, you can render views from the sub folders with dot notation.
+Also, you can render views from the subfolders with dot notation.
 
 [source, js]
 ----
@@ -112,7 +112,7 @@ Returns path of a file relative from the `public` directory.
 ==== route
 Get actual URL for a route
 
-Expecting the route to be registered as following
+Expecting the route to be registered as follows
 
 [source, js]
 ----
@@ -281,7 +281,7 @@ View.engine.tag(new MyTag())
 ----
 
 === Runtime values
-Quite often you want to share request specific values with your views, and same can be done by creating a middleware and sharing locals.
+Quite often you want to share request specific values with your views, and the same can be done by creating middleware and sharing locals.
 
 [source, js]
 ----
