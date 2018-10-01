@@ -51,7 +51,7 @@ The locales for the `file` loader are stored inside `resources/locales` director
       └── it
 ----
 
-You can also create a directory named `fallback` to store messages which are used when the message for current language is missing.
+You can also create a directory named `fallback` to store messages which are used when the message for the current language is missing.
 
 === Database
 When making use of `database` loader, all the locales are fetched from the database table called `locales`.
@@ -132,12 +132,12 @@ Antl.formatMessage(
 )
 ----
 
-All we are doing here is calling `formatMessage` with 3 arguments.
+All we are doing here is calling `formatMessage` with three arguments.
 
 [ol-shrinked]
 1. The first is the reference to the message to be formatted.
 2. Next the `data` to be passed
-3. Finally, we pass an *Array* of formats.
+3. Finally, we give an *Array* of formats.
 
 === Select format
 The `select` format makes it easy to choose an output by matching value to one of many choices.
@@ -280,7 +280,7 @@ Antl.formatMessage(
 )
 ----
 
-The `Formats.pass` takes 2 arguments.
+The `Formats.pass` takes two arguments.
 
 [ol-shrinked]
 1. The first argument is the format to be used

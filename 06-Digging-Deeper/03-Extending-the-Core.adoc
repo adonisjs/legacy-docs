@@ -8,12 +8,12 @@ category: digging-deeper
 
 toc::[]
 
-AdonisJs is fully extendible to the core. In this guide we learn about the ways, you can transparently extend parts of the framework
+AdonisJs is fully extendible to the core. In this guide we learn about the ways, you can transparently extend parts of the framework.
 
 == Where to write code?
 The easiest way to get started is to make use of link:ignitor#_hooks[applications hooks] and later move code inside a provider if you want to share your code as a package.
 
-The hooks lives inside `start/hooks.js` file and bunch of pre-existing hooks can be used to execute the code at a specific time.
+The hooks live inside `start/hooks.js` file and bunch of pre-existing hooks can be used to execute the code at a specific time.
 
 NOTE: Hooks callbacks are synchronous. You must create a provider and use the `boot` method to write async code.
 
@@ -27,7 +27,7 @@ hooks.after.providersRegistered(() => {
 })
 ----
 
-Providers lives inside the `providers` directory in the project root. Always make sure to register the provider inside the `start/app.js` file.
+Providers live inside the `providers` directory in the project root. Always make sure to register the provider inside the `start/app.js` file.
 
 [source, bash]
 ----
@@ -45,7 +45,7 @@ const providers = [
 ]
 ----
 
-Generally providers are used to add functionality to your application by binding namespaces to the IoC container. However, you can use the providers to run some code when it has been booted.
+Generally, providers are used to adding functionality to your application by binding namespaces to the IoC container. However, you can use the providers to run some code when it has been booted.
 
 [source, js]
 ----
@@ -59,7 +59,7 @@ class AppProvider extends ServiceProvider {
 ----
 
 == Adding macros/getters
-Macros let you add methods to the existing classes. A class must extend link:https://www.npmjs.com/package/macroable[Macroable] class in order to be extended.
+Macros let you add methods to the existing classes. A class must extend link:https://www.npmjs.com/package/macroable[Macroable] class to be extended.
 
 TIP: You can use hooks or the provider `boot` method to add macros.
 
@@ -82,7 +82,7 @@ Route.get('/', ({ response }) => {
 })
 ----
 
-In same way you can also add `getters` to the macroable classes.
+In the same way you can also add `getters` to the macroable classes.
 
 [source, js]
 ----
@@ -109,7 +109,7 @@ Some existing providers let you extend them by adding new functionality. For exa
 
 NOTE: Make sure to refer the documentation of individual providers to understand the extending capabilities.
 
-To keep the extend interface simple and unified, you make use of `Ioc.extend` method to add new drivers or serializers.
+To keep the extend interface unified and simplistic, you make use of `Ioc.extend` method to add new drivers or serializers.
 
 [source, js]
 ----
@@ -140,6 +140,6 @@ class MyProvider extends ServiceProvider {
 }
 ----
 
-1. The manager object must have a extend method on it. The values passed to `ioc.extend` will be forwaded to this method.
+1. The manager object must have a method `extend` on it. The values passed to `ioc.extend` will be forwarded to this method.
 2. The `namespace` must be same as the binding namespace.
-3. You have to manage the registeration/lifecycle of a driver.
+3. You have to manage the registration/lifecycle of a driver.
