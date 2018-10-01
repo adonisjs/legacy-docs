@@ -8,7 +8,7 @@ category: digging-deeper
 
 toc::[]
 
-The Helpers Provider gives a handful of convenient methods to get *absolute paths* to certain directories of your application. It is helpful for the 3rd party *Service providers* since relying on relative paths is not very useful.
+The Helpers Provider gives a handful of convenient methods to get *absolute paths* to specific directories of your application. It is helpful for the 3rd party *Service providers* since relying on relative paths is not very useful.
 
 == Basic Example
 Anywhere inside your application, you can make use of Helper's provider to get paths to different directories.

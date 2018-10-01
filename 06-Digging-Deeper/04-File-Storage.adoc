@@ -13,7 +13,7 @@ AdonisJs has a 1st party provider built on top of link:https://github.com/Slynov
 == Setup
 Since the drive provider is not installed by default, we need to pull it from npm.
 
-NOTE: Installing the provider via `adonis` command will setup the config file for you automatically.
+NOTE: Installing the provider via `adonis` command will set up the config file for you automatically.
 
 [source, bash]
 ----
@@ -80,7 +80,7 @@ await Drive.put('hello.txt', Buffer.from('Hello world!'))
 ==== prepend(relativePath, content, options = {})
 Prepend content to an exisiting file. If file is missing, this method will create a new file.
 
-NOTE: Only works with local driver
+NOTE: Only works with the local driver
 
 [source, js]
 ----
@@ -90,7 +90,7 @@ await Drive.prepend('hello.txt', Buffer.from('Hello everyone!'))
 ==== append(relativePath, content, options = {})
 Append content to an exisiting file. If file is missing, this method will create a new file.
 
-NOTE: Only works with local driver
+NOTE: Only works with the local driver
 
 [source, js]
 ----

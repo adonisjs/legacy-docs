@@ -101,7 +101,7 @@ await Mail.send(['welcome', 'welcome.text'])
 
 The view ending with `.text` is used as the plain text body of the email. In the same way, you can set the mail body for Apple watch.
 
-If you're using edge as template engine, you can also use `-text` instead of `.text` as the plain text body template suffix.
+If you're using edge as the template engine, you can also use `-text` instead of `.text` as the plain text body template suffix.
 
 [source, js]
 ----
@@ -171,7 +171,7 @@ message.bcc(user.email)
 message.bcc(user.email, user.name)
 ----
 
-Also, you can call the above methods for multiple times to defined multiple addresses.
+Also, you can call the above methods for multiple times to defined various addresses.
 
 ==== replyTo(address, [name])
 Set `replyTo` email address
@@ -302,7 +302,7 @@ npm i aws-sdk
 ----
 
 === SparkPost
-You can pass following extra options when using sparkpost as the driver.
+You can pass the following extra options when using sparkpost as the driver.
 
 Via config
 [source, js]
@@ -330,7 +330,7 @@ await Mail.send('view', data, (message) => {
 ----
 
 === Mailgun
-You can pass following extra options when using mailgun as the driver.
+You can pass the following extra options when using mailgun as the driver.
 
 Via config
 [source, js]

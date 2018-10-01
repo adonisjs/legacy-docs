@@ -15,7 +15,7 @@ In this guide, we learn about the internals of Ace and how to create commands.
 == Introduction
 Every AdonisJs project has an `ace` file in the project root, which is a regular Javascript file but without the `.js` extension.
 
-The `ace` file is used to execute project specific commands, and for reusable commands, you must bundle them as npm packages.
+The `ace` file is used to execute project-specific commands, and for reusable commands, you must bundle them as npm packages.
 
 Let's run the following code to see the list of available commands.
 
@@ -108,7 +108,7 @@ Running `adonis quote` prints the quote from the terminal.
 
 
 == Command signature
-The command signature defines the command name, required/optional options and flags. The signature is defined as an expression string.
+The command signature defines the command name, required/optional options, and flags. The signature is defined as an expression string.
 
 [source, js]
 ----
@@ -137,7 +137,7 @@ static get signature () {
 
 
 ==== Optional arguments
-The arguments can be optional by passing `?` to the name.
+The arguments can be optional by appending `?` to the name.
 
 [source, js]
 ----
@@ -266,7 +266,7 @@ const lunch = await this
   ])
 ----
 
-Also, you can pass an array of pre selected values
+Also, you can pass an array of preselected values.
 
 [source, js]
 ----
@@ -291,7 +291,7 @@ const client = await this
   ])
 ----
 
-Also can also be an object
+Also can also be an object.
 
 [source, js]
 ----
@@ -308,7 +308,7 @@ const client = await this
   ])
 ----
 
-Also, you can pre select one of the available options.
+Also, you can pre-select one of the available options.
 
 [source, js]
 ----
@@ -335,7 +335,7 @@ const message = this
 ----
 
 == Colorful logs
-Ace uses link:https://npmjs.org/package/chalk[chalk, window="_blank"] to output colorful messages on the terminal, you can access the instance of chalk as `this.chalk`.
+Ace uses link:https://npmjs.org/package/chalk[chalk, window="_blank"] to colorful output messages on the terminal, you can access the instance of chalk as `this.chalk`.
 
 Also, there are some helper methods to log consistently styled messages.
 
@@ -532,7 +532,7 @@ class Quote extends Command {
     let quote = await Quote.query().orderByRaw('rand()').first()
     console.log(quote.content)
 
-    // This is the important line. Without it, the command runner will not exit.
+    // This is the crucial line. Without it, the command runner will not exit.
     Database.close()
   }
 }

@@ -25,7 +25,7 @@ Event.on('new::user', async (user) => {
 Event.on('new::user', 'User.registered')
 ----
 
-3. The `app/Listeners` directory is dedicated for storing Event listeners.
+3. The `app/Listeners` directory is storing Event listeners.
 4. When binding listeners to the events, you are not required to enter the entire namespace. For example, A listener stored as `app/Listeners/User.js` is referenced as `User.<method>`.
 5. Make use of `make:listener` command to create a new event listener.
 +
@@ -92,7 +92,7 @@ As you can see, AdonisJs makes it easier to use the `await` keyword inside the E
 Below is the list of methods that can be used to interact with the *Event provider*.
 
 ==== on(event, listener)
-Bind a single or multiple listeners for a given event. The `listener` can be a function or reference to the IoC container binding.
+Bind single or multiple listeners for a given event. The `listener` can be a function or reference to the IoC container binding.
 
 [source, js]
 ----

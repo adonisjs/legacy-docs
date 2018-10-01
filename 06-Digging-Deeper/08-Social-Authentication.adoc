@@ -8,7 +8,7 @@ category: digging-deeper
 
 toc::[]
 
-Adonis Ally is a social authentication provider for AdonisJs. It makes it super easy to authenticate users via 3rd party websites like *Facebook*, *Twitter*, *Google*, so on, with minimum efforts.
+Adonis Ally is a social authentication provider for AdonisJs. It makes it super easy to authenticate users via 3rd party websites like *Facebook*, *Twitter*, *Google*, etc., with minimum efforts.
 
 Here is the list of supported drivers
 
@@ -157,9 +157,9 @@ await ally
 Get user profile of an authenticated user. An instance of link:https://github.com/adonisjs/adonis-ally/blob/develop/src/AllyUser.js[AllyUser, window="_blank"] is returned.
 
 ==== getUserByToken(accessToken, [accessSecret])
-Returns the user details using the `accessToken`. This is helpful, when you make use of Client side code to perform the Oauth action and have access to the  `accessToken`.
+Returns the user details using the `accessToken`. This is helpful when you make use of Client side code to perform the OAuth action and have access to the  `accessToken`.
 
-NOTE: `accessSecret` is required when OAuth 1 protocol is used. For example: Twitter relies on OAuth 1.
+NOTE: `accessSecret` is required when OAuth 1 protocol is used. For example Twitter relies on OAuth 1.
 
 [source, js]
 ----
