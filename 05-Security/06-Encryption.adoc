@@ -54,7 +54,7 @@ module.exports = {
 ----
 
 ==== make(value, [config])
-Hash a plain string value. Optionally inline config can be passed to override the defaults inside config file.
+Hash a plain string value. Optionally inline config can be passed to override the defaults inside the config file.
 
 [source, javascript]
 ----

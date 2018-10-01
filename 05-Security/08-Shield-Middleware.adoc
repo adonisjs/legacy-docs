@@ -29,9 +29,9 @@ const providers = [
 ]
 ----
 
-And, finally register the global middleware inside `start/kernel.js` file.
+And finally, register the global middleware inside `start/kernel.js` file.
 
-NOTE: Shield middleware relies on link:sessions[sessions], so make sure they are setup correctly.
+NOTE: Shield middleware relies on link:sessions[sessions], so make sure they are set up correctly.
 
 [source, js]
 ----
@@ -67,7 +67,7 @@ csp: {
 [options="header", cols="15,20,65"]
 |====
 | Key | Value | Description
-| directives | Object  | Directives helps you in defining policies to be applied on different resource types. You can get the list of all directives from link:http://content-security-policy.com[http://content-security-policy.com, window="_blank"].
+| directives | Object  | Directives helps you in defining policies to be applied to different resource types. You can get the list of all directives from link:http://content-security-policy.com[http://content-security-policy.com, window="_blank"].
 | reportOnly | Boolean | Do not stop the execution of the page, instead, log a warning that some rules are violated.
 | setAllHeaders | Boolean | Shield sets different HTTP headers for different browsers. Set the value to `true` to set all fallback headers, regardless of the browser.
 | disableAndroid | Boolean | Android is buggy with CSP you can disable it for Android in case you face any troubles.

@@ -40,11 +40,11 @@ Server
 The configuration for CORS is defined inside `config/cors.js` file and accepts following options.
 
 ==== origin
-The origin(s) to be allowed for making cross domain requests. You can return one of the following values.
+The origin(s) to be allowed for making cross-domain requests. You can return one of the following values.
 
 [ul-spaced]
 - A boolean `true` or `false` to deny the current request origin.
-- A comma separated strings of domains to be allowed.
+- A comma-separated strings of domains to be allowed.
 - An array of domains to be allowed.
 - A function, which receives current request origin. Here you can compute whether or not the origin is allowed by returning true or false.
 +
