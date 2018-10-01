@@ -10,7 +10,7 @@ toc::[]
 
 Migrations are mutations to your database as you keep evolving your application. Think of them as step by step screenshot of your database schema, that you can roll back at any given point of time.
 
-Also, migrations make it easier to work as a team, where database changes from one developer are easily spotted and used by other developers in the team.
+Also, migrations make it easier to work as a team, where database changes from one developer are easily spotted and used by other developers in the organization.
 
 == Creating migrations
 Let's start from the beginning where we want to create a users table with the help of migrations.
@@ -68,12 +68,12 @@ up::
 The `up` method is used to take action on a table. It can be creating a new table or altering the existing table.
 
 down::
-The `down` method is the reverse of the up action. When `up` method creates a table, you simply drop it inside the down method.
+The `down` method is the reverse of the up action. When `up` method creates a table, you drop it inside the `down` method.
 
 == Multiple connections
-The schema files can also make use of a different connection by defining a `connection` property on them. Also make sure that the same connection is defined inside `config/database.js` file.
+The schema files can also make use of a different connection by defining a `connection` property on them. Also, make sure that the same connection is defined inside `config/database.js` file.
 
-NOTE: A table `adonis_schema` is created to manage the lifecycle of migrations. This table will always be created inside the primary connection database and there is no option to override it.
+NOTE: A table `adonis_schema` is created to manage the lifecycle of migrations. This table will always be created inside the primary connection database, and there is no option to override it.
 
 [source, js]
 ----
@@ -322,9 +322,9 @@ class UserSchema {
 ----
 
 == Executing arbitrary code
-Commands written inside `up` and `down` methods are scheduled to be executed later inside a migration. In case you want to execute *arbitrary* database commands, you can wrap them inside the `schedule` function.
+Commands are written inside `up` and `down` methods are scheduled to be executed later inside a migration. In case you want to execute *arbitrary* database commands, you can wrap them inside the `schedule` function.
 
-NOTE: The `schedule` method receives the *transaction object* and it is important to run all database commands inside the same transaction, otherwise queries will hang forever.
+NOTE: The `schedule` method receives the *transaction object* and it is important to run all database commands inside the same transaction; otherwise queries will hang forever.
 
 
 [source, javascript]
@@ -348,7 +348,7 @@ class UserSchema {
 ----
 
 == Schema builder API
-The schema builder API is exactly same as the link:http://knexjs.org/#Schema-Building[knex api], so make sure to read their documentation.
+The schema builder API is the same as the link:http://knexjs.org/#Schema-Building[knex api], so make sure to read their documentation.
 
 ==== fn.now()
 Knex has a method called link:http://knexjs.org/#Schema-timestamp[knex.fn.now()], which is used to set the current timestamp on the database field.

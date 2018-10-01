@@ -404,7 +404,7 @@ const userId = await Database
 ----
 
 == Updates
-All update operations returns the number of affected rows.
+All update operations return the number of affected rows.
 
 [source, javascript]
 ----
@@ -425,7 +425,7 @@ const affectedRows = await Database
 ----
 
 == Deletes
-Delete operations also returns the number of affected rows.
+Delete operations also return the number of affected rows.
 
 ==== delete
 Also, you can make use of `del()`, since `delete` is a reserved keyword in Javascript.
@@ -479,7 +479,7 @@ NOTE: The output of the `paginate` method is different from the `forPage` method
 }
 ----
 
-NOTE: The `total` key will be a string, if you are using **PostgreSQL** due to the fact that JavaScript is unable to handle `bigint` natively. See link:https://github.com/adonisjs/adonis-lucid/issues/339#issuecomment-387399508[this issue] for a recommended way to solve this.
+NOTE: The `total` key will be a string if you are using **PostgreSQL** since that JavaScript is unable to handle `bigint` natively. See link:https://github.com/adonisjs/adonis-lucid/issues/339#issuecomment-387399508[this issue] for a recommended way to solve this.
 
 == Database Transactions
 Database transactions are safe operations, which are not reflected in the database until and unless you explicitly commit your changes.
