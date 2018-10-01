@@ -1,0 +1,41 @@
+---
+title: About AdonisJs
+permalink: about
+category: preface
+---
+
+= About AdonisJs
+
+toc::[]
+
+AdonisJs is a Node.js MVC framework that runs on all major operating systems. It offers a stable eco-system to write a server-side web application so that you can focus on business needs over finalizing which package to choose or not.
+
+AdonisJs favors developer joy with consistent and expressive API to build a full-stack web application or a micro API server.
+
+== Getting started
+They are no hard prerequisites to use AdonisJs but having a conventional understanding of JavaScript, Async programming and Node.js is great.
+
+If you are new to Javascript or un-familiar with recent progress in ES6. We recommend watching link:https://goo.gl/ox3uSc[Wesbos ES6 course, window="_blank"].
+
+Also, make sure to go through the link:installation[getting started] guide especially if this is your first time using AdonisJs.
+
+== Providers
+AdonisJs is a modular framework that consists of multiple service providers. The service providers are the building blocks of AdonisJs applications.
+
+In theory, they are like any other npm module with some code on top of it to play transparently with AdonisJs applications. For example, link:https://github.com/adonisjs/adonis-bodyparser[BodyParser] to parse HTTP request body or link:https://github.com/adonisjs/adonis-lucid[Lucid] which is a SQL ORM.
+
+== FAQ's
+Below is the list of frequently asked questions, if you think a common question is missing in the list. Please create an issue link:https://github.com/adonisjs/docs[here]
+
+[ol-spaced]
+1. *How is AdonisJs different from Express or Koa?*
++
+Express and Koa are routing libraries with a thin layer of middleware on top of it. There are great for several use cases but falls apart when your project starts growing.
++
+Also, it becomes harder to hire someone, since your project has its standards and conventions. Whereas AdonisJs follows a set of standardized conventions, making it easier to hire people and make them work on existing AdonisJs apps.
+
+2. *Is AdonisJs for monolithic apps?*
++
+No. AdonisJs as a framework is a combination of multiple packages that gracefully integrates with the rest of your app.
++
+The framework provides a robust *Dependency injection* layer, which is leveraged by all official and 3rd party packages to offer functionality without manually wiring up each part of the application.

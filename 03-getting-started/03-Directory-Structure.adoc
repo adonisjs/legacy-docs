@@ -1,0 +1,123 @@
+---
+title: Directory Structure
+category: getting-started
+permalink: folder-structure
+---
+
+= Directory Structure
+
+toc::[]
+
+Directory structure may feel overwhelming at first glance since there are a handful of pre-configured directories. Gradually you will understand the benefit of dividing the logical entities into multiple directories since it keeps your code maintainable and easy to search.
+
+++++
+<pre class="highlight line-numbers language-bash" data-line="2,5">
+<code>.
+├── app/
+  ├── ...
+├── config/
+  ├── app.js
+  ├── auth.js
+  └── ...
+├── database/
+  ├── migrations/
+  ├── seeds/
+  └── factory.js
+├── public/
+├── resources/
+  ├── ...
+  └── views/
+├── storage/
+├── start/
+  ├── app.js
+  ├── kernel.js
+  └── routes.js
+├── test/
+├── ace
+├── server.js
+└── package.json
+</code>
+</pre>
+++++
+
+== The Root Directories
+
+=== The App Directory
+
+The `app` directory is the home of your code. It's autoloaded under the namespace `App`.
+
+=== The Config Directory
+
+The `config` directory is used to define the configuration of your application.
+AdonisJs ships with a bunch of config files but feel free to create your own.
+
+link:configuration-and-env[Read more about configuration].
+
+=== The Database Directory
+
+The `database` directory is used to store all database related files.
+
+link:database[Read more about database].
+
+=== The Public Directory
+
+The `public` directory is used to serve static assets over HTTP.
+This directory is mapped to the root of your website.
+
+[source, html]
+----
+<!-- file is in /public/style.css -->
+<link rel="stylesheet" href="/style.css" />
+----
+
+=== The Resources Directory
+
+The `resources` directory is used to store presentational files for your application.
+It means views, un-compiled assets like LESS, SASS, JavaScript or even images.
+
+=== The Start Directory
+
+The `start` directory is used to store files that are loaded at the boot of your application.
+By default, you'll find `app.js`, `kernel.js` and `routes.js`.
+
+=== The Test Directory
+
+The `test` directory is used to store all the tests of your application.
+The testing package is not included by default, and hence you can install it as defined link:testing[here].
+
+== The App Directory
+
+=== The Commands Directory
+
+The `app/Commands` directory is used to store all your CLI commands.
+This directory is automatically created when you run `adonis make:command <name>`.
+
+=== The Controllers Directory
+
+The `app/Controllers` directory is used to store all your `Http` and `WebSocket` controllers.
+This directory is automatically created when you run `adonis make:controller <name>`.
+
+=== The Exceptions Directory
+
+The `app/Exceptions` directory is used to store the global exception handler and all of your custom exception.
+This directory is automatically created when you run `adonis make:ehandler` or `adonis make:exception <name>`.
+
+=== The Listeners Directory
+
+The `app/Listeners` directory is used to store all event's listeners.
+This directory is automatically created when you run `adonis make:listener <name>`.
+
+=== The Middleware Directory
+
+The `app/Middleware` directory is used to store all your middleware.
+This directory is automatically created when you run `adonis make:middleware <name>`.
+
+=== The Models Directory
+
+The `app/Models` directory is used to store all your models.
+This directory is automatically created when you run `adonis make:model <name>`.
+
+=== The Validators Directory
+
+The `app/Validators` directory is used to store all your route's validators.
+This directory is automatically created when you run `adonis make:validator <name>` (You need to have installed the link:validator[Validator Provider] to use this commands).

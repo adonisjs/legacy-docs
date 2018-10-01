@@ -1,0 +1,161 @@
+---
+title: Middleware
+category: basics
+permalink: middleware
+---
+
+= Middleware
+
+toc::[]
+
+Middleware are a way to hook in the request lifecycle of your application. They are a set of functions executed in sequence and let you transform the request or the response.
+
+As an example, Adonis provide in its link:authentication#_auth_middleware[authentication provider] an `auth` middleware that verifies if the user of your application is authenticated. If the user is not authenticated and an exception will be thrown, and the request will never reach your route handler.
+
+== Creating Middleware
+
+To create a new middleware, make use of the `make:middleware` command.
+
+[source, bash]
+----
+> adonis make:middleware CountryDetector
+----
+
+This command will create a file in the `App/Middleware` folder with some boilerplate code. In our example middleware, we want to detect the country of the user from its ip address.
+
+[source, js]
+----
+'use strict'
+
+const geoip = require('geoip-lite')
+
+class CountryDetector {
+  async handle ({ request }, next) {
+    const ip = request.ip()
+    request.country = geoip.lookup(ip).country
+
+    await next()
+  }
+}
+
+module.exports = CountryDetector
+----
+
+In this example. We are using the library `geoip-lite` and adding the country of the user inside the `request` object of the link:https://adonisjs.com/docs/request-lifecycle#http-context[HTTP Context].
+
+=== Upstream & Downstream Middleware
+
+When creating your middleware, you'll decide if it runs before or after the request hit your route handler. This is done by defining the code before or after the `await next()` call.
+
+NOTE: Your middleware can also run before **and** after the request hit your route handler.
+
+[source, js]
+----
+'use strict'
+
+class UpstreamMiddleware {
+  async handle ({ request }, next) {
+    // Code...
+
+    await next()
+  }
+}
+
+module.exports = UpstreamMiddleware
+----
+
+To access the `response` object for a downstream middleware, you need to unpack it from the link:https://adonisjs.com/docs/request-lifecycle#http-context[HTTP Context].
+
+[source, js]
+----
+'use strict'
+
+class DownstreamMiddleware {
+  async handle ({ response }, next) {
+    await next()
+
+    // Code...
+  }
+}
+
+module.exports = DownstreamMiddleware
+----
+
+== Registering Middleware
+
+All of the middleware are registered inside the file `start/kernel.js`. They are separated into 3 categories.
+
+=== Server Middleware
+
+Those middleware are executed before the request reaches the Routing system of Adonis. That means if the requested route isn't registered, it will still execute all middleware defined here.
+
+It is generally used for static assets or CORS control.
+
+.start/kernel.js
+[source, js]
+----
+const serverMiddleware = [
+  'Adonis/Middleware/Static',
+  'Adonis/Middleware/Cors',
+]
+----
+
+=== Global Middleware
+
+Those middleware are executed after the route has been found. They are run in the sequence they have been defined so you must be careful when a middleware requires another one.
+
+.start/kernel.js
+[source, js]
+----
+const globalMiddleware = [
+  'Adonis/Middleware/BodyParser',
+]
+----
+
+=== Named Middleware
+
+Those middleware are linked to a specific route or route groups. They are run in the sequence they have been defined in the route.
+
+.start/kernel.js
+[source, js]
+----
+const namedMiddleware = {
+  auth: 'Adonis/Middleware/Auth'
+}
+----
+
+[source, js]
+----
+Route.get(url, closure).middleware(['auth'])
+----
+
+== Middleware Properties
+
+Middleware can be configurable at runtime. Adonis make use of the []link:https://www.npmjs.com/package/haye#pipe-expression[pipe expression, window="_blank"] to define properties.
+
+A good example could be the `auth` named middleware. This middleware accepts a different authentication scheme as a prop.
+
+[source, js]
+----
+// We are using the Session Scheme for this route
+Route.post(url, closure).middleware(['auth:session'])
+
+// We are using the JWT Scheme for this route
+Route.post(url, closure).middleware(['auth:jwt'])
+----
+
+You can also pass multiple props by chaining them with a comma.
+
+[source, js]
+----
+Route.post(url, closure).middleware(['auth:session,jwt'])
+----
+
+Those properties are available as the third argument in your middleware `handle` method.
+
+[source, js]
+----
+async handle (context, next, properties) {
+  //
+}
+----

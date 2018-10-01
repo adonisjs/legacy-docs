@@ -1,0 +1,390 @@
+---
+permalink: routing
+title: Routing
+category: basics
+---
+
+= Routing
+
+toc::[]
+
+HTTP routes open the gateway for outside world to interact with your application using URLs.
+All of the application's routes are registered inside `start/routes.js` file.
+
+== Basic Routing
+
+The most basic route requires a URL and a closure.
+The value returned by the closure will be sent back to the client.
+
+.start/routes.js
+[source, js]
+----
+Route.get('/', () => 'Hello Adonis')
+----
+
+Instead of using a closure for all your routes, you can bind a controller using its namespace.
+
+.start/routes.js
+[source, js]
+----
+// It will look for App/Controllers/Http/PostController and call the method index()
+Route.get('posts', 'PostController.index')
+----
+
+=== Available Router Methods
+
+Resourceful routes make use of different HTTP verbs to indicate the type of request.
+
+[source, js]
+----
+Route.get(url, closure)
+Route.post(url, closure)
+Route.put(url, closure)
+Route.patch(url, closure)
+Route.delete(url, closure)
+----
+
+Sometimes, you need to register a route that can respond to multiple verbs.
+This can be achieved by using `Router.route()`.
+
+[source, js]
+----
+Route.route('/', () => {
+  //
+}, ['GET', 'POST', 'PUT']))
+----
+
+For static pages, you don't necessarily need logic and directly want to render a view.
+This can be achieved by using `Router.on().render()`.
+
+[source, js]
+----
+// resources/view/welcome.edge
+Route.on('/').render('welcome')
+----
+
+== Route Parameters
+
+=== Required Parameters
+
+Your application may need to have dynamic routes. The same is achieved by defining route parameters.
+
+.start/routes.js
+[source, js]
+----
+Route.get('posts/:id', ({ params }) => {
+  return `Post ${params.id}`
+})
+----
+
+The `:id` is a route parameter. It's passed as part of the `params` object.
+
+=== Optional Parameters
+
+Occasionally, you may want to use optional parameters. You may do so by adding a `?` to the definition of the parameter.
+
+.start/routes.js
+[source, js]
+----
+Route.get('make/:drink?', ({ params }) => {
+  // use Coffee as fallback when drink is not defined
+  const drink = params.drink || 'Coffee'
+
+  return `Will make ${drink} for you`
+})
+----
+
+== Wildcard Route
+
+Sometimes, you want to render a single view from the server and handle routing on front-end using your favorite front-end framework.
+
+.start/routes.js
+[source, js]
+----
+Route.any('*', ({ view }) => view.render('...'))
+----
+
+Any other specific routes need to be defined before the wildcard route.
+
+.start/routes.js
+[source, js]
+----
+Route.get('api/v1/users', closure)
+
+Route.any('*', ({ view }) => view.render('...'))
+----
+
+== Named Route
+
+Though routes are defined inside the `start/routes.js` file, they are referenced everywhere else in the application. For example: Using the views route helper to make URL for a given route.
+
+By using the `as()` method, you can give your route a unique name and reference it by its name vs. the URL.
+
+.start/routes.js
+[source, js]
+----
+Route.get('users', closure).as('users.index')
+----
+
+Doing so will let you use helpers in your template and your code.
+
+[source, html]
+----
+<!-- before -->
+<a href="/users">List of users</a>
+
+<!-- after -->
+<a href="{{ route('users.index') }}">List of users</a>
+----
+
+[source, js]
+----
+foo ({ response }) {
+  return response.route('users.index')
+}
+----
+
+Those helpers have the same signature and take as second argument an object to define parameters.
+
+[source, js]
+----
+Route.get('posts/:id', closure).as('posts.show')
+
+route('posts.show', { id: 1 })
+----
+
+== Route Formats
+
+Route formats open up a new way for link:https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation[Content negotiation, window="_blank"], where you can accept the response format as part of the URL.
+
+Route format is a contract between the client and the server on which type of response to be created.
+
+.start/routes.js
+[source, js]
+----
+Route.get('users', async ({ request, view }) => {
+  const users = await User.all()
+
+  if (request.format() === 'json') {
+    return users
+  }
+
+  return view.render('users.index', { users })
+}).formats(['json'])
+----
+
+The `users` endpoint will be able to respond in multiple formats based upon the URL.
+
+[source, bash]
+----
+GET /users.json # Returns an array of users in JSON
+GET /users      # Returns the view in HTML
+----
+
+You can also disable the default URL and always force the client to define the format.
+
+.start/routes.js
+[source, js]
+----
+Route.get('users', closure).formats(['json', 'html'], true)
+----
+
+Using `true` as the second argument makes sure that the client specifies one of the expected formats. Otherwise, an error 404 is thrown.
+
+== Route Resources
+
+Quite often you will create resourceful routes to do CRUD operation on a resource.
+
+WARNING: This feature is only available when you bind your route to a [Controller](basics/controllers).
+
+.start/routes.js
+[source, js]
+----
+Route.resource('users', 'UserController')
+
+// Equivalent of
+Route.get('users', 'UserController.index').as('users.index')
+Route.post('users', 'UserController.store').as('users.store')
+Route.get('users/create', 'UserController.create').as('users.create')
+Route.get('users/:id', 'UserController.show').as('users.show')
+Route.put('users/:id', 'UserController.update').as('users.update')
+Route.patch('users/:id', 'UserController.update')
+Route.get('users/:id/edit', 'UserController.edit').as('users.edit')
+Route.delete('users/:id', 'UserController.destroy').as('users.destroy')
+----
+
+You can also define nested resources.
+
+.start/routes.js
+[source, js]
+----
+Route.resource('posts.comments', 'PostCommentController')
+----
+
+=== Filtering Resources
+
+You may not need to define all those routes for a resource. You can limit them by chaining some handful of methods.
+
+==== apiOnly
+
+It limits the route to only 5 endpoints by removing `resource/create` and `resource/:id/edit`.
+Those routes are used to display a form to the user. This is not useful when you are building an API.
+
+.start/routes.js
+[source, js]
+----
+Route.resource('users', 'UserController').apiOnly()
+----
+
+==== only
+
+It removes all routes and keeps only the one given.
+
+.start/routes.js
+[source, js]
+----
+Route.resource('users', 'UserController').only(['index', 'show'])
+----
+
+==== except
+
+It keeps all routes and removes only the one given.
+
+.start/routes.js
+[source, js]
+----
+Route.resource('users', 'UserController').except(['index', 'show'])
+----
+
+=== Resource Middleware
+
+You can attach a middleware to any resource as you do with a single route.
+
+.start/routes.js
+[source, js]
+----
+Route.resource('users', 'UserController').middleware(['auth'])
+----
+
+Occasionally you don't want to attach the middleware to all routes generated by the resource. You can customize this behavior by passing a `Map`.
+
+.start/routes.js
+[source, js]
+----
+// The auth middleware is only defined on store, update & destroy route
+Route.resource('users', 'UserController')
+  .middleware(new Map([
+    [['store', 'update', 'destroy'], ['auth']]
+  ]))
+----
+
+=== Resource Formats
+
+You can define the formats for all resourceful routes with the `.formats()` method.
+
+.start/routes.js
+[source, js]
+----
+Route.resource('users', 'UserController').formats(['json'])
+----
+
+== Routing Domains
+
+Your application may be used by multiple domains. AdonisJs make it super easy to deal with this use-case.
+Domains can be a static endpoint, like `blog.adonisjs.com`, or dynamic endpoint, like `:user.adonisjs.com`.
+
+NOTE: You can define the domain on a single route as well.
+
+.start/routes.js
+[source, js]
+----
+Route.group(() => {
+  Route.get('/', ({ subdomains }) => {
+    return `The username is ${subdomains.user}`
+  })
+}).domain(':user.myapp.com')
+----
+
+If you visit `virk.myapp.com` you will see `The username is virk`.
+
+== Route Groups
+
+Your application routes may share common logic/configuration. So instead of re-defining the configuration on each route, you can group them.
+
+.start/routes.js
+[source, js]
+----
+// Not desired
+Route.get('api/v1/users', closure)
+Route.post('api/v1/users', closure)
+
+// Better
+Route.group(() => {
+  Route.get('users', closure)
+  Route.post('users', closure)
+}).prefix('api/v1')
+----
+
+=== Prefix
+
+As shown in the example, the `.prefix()` method will prefix all route's URLs defined in the group.
+
+.start/routes.js
+[source, js]
+----
+Route.group(() => {
+  Route.get('users', closure)   // GET /api/users/users
+  Route.post('users', closure)  // POST /api/users/users
+}).prefix('api/v1')
+----
+
+=== Middleware
+
+Assign one or many middleware on the group of routes.
+
+NOTE: Those are executed before middleware defined on a single route.
+
+.start/routes.js
+[source, js]
+----
+Route.group(() => {
+  //
+}).middleware(['auth'])
+----
+
+=== Namespace
+
+Prefix the namespace of the bound controller.
+
+.start/routes.js
+[source, js]
+----
+Route.group(() => {
+  // It will look for App/Controllers/Http/Admin/UserController
+  Route.resource('/users', 'UserController')
+}).namespace('Admin')
+----
+
+=== Formats
+
+Defines formats for all routes in the group.
+
+.start/routes.js
+[source, js]
+----
+Route.group(() => {
+  //
+}).formats(['json', 'html'], true)
+----
+
+=== Domain
+
+Specify for which domain those routes are.
+
+.start/routes.js
+[source, js]
+----
+Route.group(() => {
+  //
+}).domain('blog.adonisjs.com')
+----

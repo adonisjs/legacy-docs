@@ -1,0 +1,313 @@
+---
+permalink: views
+title: Views
+category: basics
+---
+
+= Views
+
+toc::[]
+
+AdonisJs makes use link:http://edge.adonisjs.com/[Edge.js, window="_blank"] as the templating engine, which is blazing fast and comes with an elegant API to create dynamic views.
+
+Under the hood, Edge supports.
+[ol-shrinked]
+1. Layouts & partials
+2. Components
+3. Runtime debugging using chrome dev tools
+4. Logical tags and everything in between.
+
+== Basic example
+Let's start with the basic example of saying *Hello world* by rendering an edge template. All of the views are stored inside `resources/views` directory and ends with `.edge` extension.
+
+NOTE: Make sure that the `ViewProvider` is registered as a provider inside `start/app.js` file.
+[source, js]
+----
+const providers = [
+  '@adonisjs/framework/providers/ViewProvider'
+]
+----
+
+As always you can use the `adonis` command to create the view.
+
+[source, bash]
+----
+adonis make:view home
+----
+
+Output
+[source, bash]
+----
+✔ create  resources/views/home.edge
+----
+
+So let's create a route to render the `home.edge` view.
+
+[source, js]
+----
+Route.get('/', ({ view }) => {
+  return view.render('home')
+})
+----
+
+The `view.render` method takes the relative path to the view file. There is no need to type `.edge` extension, since that is obvious.
+
+Also, you can render views from the sub folders with dot notation.
+
+[source, js]
+----
+// file path - users/list.edge
+
+view.render('users.list')
+----
+
+== Request information
+All views have access to the current `request` object, and you can call request methods inside your templates as well.
+
+[source, edge]
+----
+The request URL is {{ request.url() }}
+----
+
+Also, there is a helper to get the URL.
+
+[source, edge]
+----
+The request URL is {{ url }}
+----
+
+== Globals
+All of the edge.js link:http://edge.adonisjs.com/docs/globals[globals] are supported as it is. Here is the list of globals specific to AdonisJs only.
+
+==== css
+Add `link` tag to a CSS file. The file name should be relative from the `public` directory.
+
+[source, edge]
+----
+{{ style('style') }}
+----
+
+Or
+[source, edge]
+----
+{{ style('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css') }}
+----
+
+==== script
+Adds a script tag to the document
+
+[source, edge]
+----
+{{ script('app') }}
+----
+
+==== assetsUrl
+Returns path of a file relative from the `public` directory.
+
+[source, edge]
+----
+<img src="{{ assetsUrl('logo.png') }}" />
+----
+
+==== route
+Get actual URL for a route
+
+Expecting the route to be registered as following
+
+[source, js]
+----
+Route.get('users/:id', 'UserController.show').as('profile')
+----
+
+[source, edge]
+----
+<a href="{{ route('profile', { id: 1 }) }}">
+  View profile
+</a>
+----
+
+Also, you can use the controller method name.
+
+[source, edge]
+----
+<a href="{{ route('UserController.show', { id: 1 }) }}">
+  View profile
+</a>
+----
+
+==== url
+The current request url
+
+[source, edge]
+----
+The request URL is {{ url }}
+----
+
+==== auth
+If you are using the auth provider, then you can access the current logged in user using the `auth` object.
+
+[source, edge]
+----
+{{ auth.user }}
+----
+
+==== csrfField
+If you are using the `shield` middleware, you can access the csrfToken and field using one of the following methods.
+
+[source, edge]
+----
+{{ csrfToken }}
+----
+
+[source, edge]
+----
+{{ csrfField() }}
+----
+
+Outputs
+
+[source, html]
+----
+<input type="hidden" name="_csrf" value="..." />
+----
+
+==== cspMeta
+When using shield middleware, the CSP headers are set automatically. However can also set them using HTML meta tag.
+
+[source, edge]
+----
+<head>
+  {{ cspMeta() }}
+</head>
+----
+
+== Tags
+link:http://edge.adonisjs.com/docs/tags[Tags, window="_blank"] are building blocks for edge templates. For example: `@if`, `@each` all are the tags shipped with the edge by default.
+
+Also, edge exposes a very powerful API to add new tags to it. Here is a list of the `tags` specific to AdonisJs only.
+
+==== loggedIn
+The `loggedIn` tag allows you to write `if/else` clause around the logged in user. For example:
+
+[source, edge]
+----
+@loggedIn
+  <h2> You are logged in </h2>
+@else
+  <p> <a href="/login">Click here</a> to login </p>
+@endloggedIn
+----
+
+Everything inside `@loggedIn` tag gets executed when the user is logged in.
+
+==== inlineSvg
+Render an SVG file inline inside the HTML. The tag expects the relative path to the file from the `public` directory.
+
+[source, edge]
+----
+<a href="/login">
+  @inlineSvg('lock')
+  Login
+</a>
+----
+
+== Templating
+The templating syntax is same as the Edge. So make sure to read the link:http://edge.adonisjs.com/docs/syntax-guide[edge documentation, window="_blank"].
+
+== Extending views
+You can also extend views by adding your view globals or tags.
+
+NOTE: Since the code to extend the `View` needs to be executed once, you can make use of providers or ignitor hooks. Make sure to read link:extending-adonisjs[how to extend] guide before continuing.
+
+=== Globals
+[source, js]
+----
+const View = use('View')
+View.global('currentTime', function () {
+  return new Date().getTime()
+})
+----
+
+Above global returns the current time when you reference it inside the views.
+
+[source, edge]
+----
+{{ currentTime() }}
+----
+
+=== Globals scope
+The value of `this` inside globals closure is bound to the view context so that you can access runtime values from it.
+
+[source, js]
+----
+View.global('button', function (text) {
+  return this.safe(`<button type="submit"> ${text} </button>`)
+})
+----
+
+The `safe` method makes sure that returned HTML is not escaped.
+
+To use other global methods or values, make use of the `this.resolve` method.
+
+[source, js]
+----
+View.global('messages', {
+  success: 'This is a success message',
+  warning: 'This is a warning message'
+})
+
+View.global('getMessage', function (type) {
+  const message = this.resolve('messages')
+  return messages[type]
+})
+----
+
+[source, edge]
+----
+{{ getMessage('success') }}
+----
+
+=== Tags
+Learn more about tags from the link:http://edge.adonisjs.com/docs/tags[Edge docs, window="_blank"].
+
+[source, js]
+----
+const View = use('View')
+
+class MyTag extends View.engine.BaseTag {
+}
+
+View.engine.tag(new MyTag())
+----
+
+=== Runtime values
+Quite often you want to share request specific values with your views, and same can be done by creating a middleware and sharing locals.
+
+[source, js]
+----
+class SomeMiddleware {
+
+  async handle ({ view }, next) {
+    view.share({
+      apiVersion: request.input('version')
+    })
+
+    await next()
+  }
+}
+----
+
+Moreover, inside your views, you can access it like any other value
+
+[source, edge]
+----
+{{ apiVersion }}
+----
+
+== Syntax highlighting
+The plugins for the following editors are available to get syntax highlighting support for Edge.
+
+[ol-shrinked]
+1. For link:https://github.com/poppinss/edge-sublime-syntax[Sublime text, window="_blank"].
+2. For link:https://github.com/poppinss/edge-atom-syntax[Atom, window="_blank"].
+3. For link:https://github.com/duyluonglc/vscode-edge[Vscode, window="_blank"].

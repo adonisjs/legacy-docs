@@ -1,0 +1,239 @@
+---
+title: Getting Started
+permalink: websocket
+category: websockets
+---
+
+= Getting Started
+
+toc::[]
+
+AdonisJs offers a robust Websocket server to develop realtime applications by staying expressive with your code. The server works on pure *Websocket* connection (supported by all major browsers) and scales naturally with Node.js cluster.
+
+== Setup
+Since, the websocket addon is not installed by default, we need to install it from Npm as follows.
+
+[source, bash]
+----
+adonis install @adonisjs/websocket
+
+# yarn
+adonis install @adonisjs/websocket --yarn
+----
+
+Once installed, register the provider inside `start/app.js` file.
+[source, js]
+----
+const providers = [
+  '@adonisjs/websocket/providers/WsProvider'
+]
+----
+
+Next step is to tell `ignitor` to boot the Websocket server along with the HTTP server. Same needs to be done within `server.js` file.
+
+[source, diff]
+----
+const { Ignitor } = require('@adonisjs/ignitor')
+
+new Ignitor(require('@adonisjs/fold'))
+   .appRoot(__dirname)
++  .wsServer()
+   .fireHttpServer()
+   .catch(console.error)
+----
+
+Also, the addon will attempt to create the following files inside your project.
+
+[ol-shrinked]
+1. `config/socket.js` file contains the server configuration.
+2. `start/socket.js` is used to boot the socket server and register *Channels*.
+3. `start/wsKernel.js` is used to register middleware to be executed on channel subscriptions.
+
+=== Cluster support
+When running a Node.js cluster, you need to write one line of code inside the master
+node to hook the pub/sub between workers.
+
+The following code will go inside `start/server.js` file.
+
+[source, js]
+----
+const cluster = require('cluster')
+
+if (cluster.isMaster) {
+  for (let i=0; i < 4; i ++) {
+    cluster.fork()
+  }
+  require('@adonisjs/websocket/clusterPubSub')()
+  return
+}
+
+const { Ignitor } = require('@adonisjs/ignitor')
+new Ignitor(require('@adonisjs/fold'))
+ .appRoot(__dirname)
+ .wsServer()
+ .fireHttpServer()
+ .catch(console.error)
+----
+
+== Basic example
+Let's build a single room chat server, where users can exchange messages with each other. To keep the code simple, we will not store messages anywhere and just exchange them over websocket.
+
+Open `start/socket.js` file and paste following code inside it.
+
+[source, js]
+----
+const Ws = use('Ws')
+
+Ws.channel('chat', 'ChatController')
+----
+
+NOTE: We can also bind a closure to `Ws.channel` method, but having a seperate controller is more convenient.
+
+Next, step is to create the `ChatController` using the following command.
+
+[source, bash]
+----
+adonis make:controller Chat --type=ws
+----
+
+Once done, open `app/Controllers/Ws/ChatController.js` file. The default controller looks similar to the following code snippet.
+
+[source, js]
+----
+'use strict'
+
+class ChatController {
+  constructor ({ socket, request }) {
+    this.socket = socket
+    this.request = request
+  }
+}
+
+module.exports = ChatController
+----
+
+=== Client side code
+Now let's switch from the server side to the client side code and subscribe to the `chat` channel. To get started, you can grab the css and the HTML template from link:https://gist.github.com/thetutlage/7f0f2252b4d22dad13753ced890051e2[this gist].
+
+-  The template will be saved inside `resources/views/chat.edge`.
+-  Css is saved inside inside `public/style.css`.
+- Also make sure to serve the template by defining a route.
+
+Finally, let's get started by writing the Javascript code to connect to the websocket server. Also to keep things simple, we are using jQuery.
+
+.public/chat.js
+[source, js]
+----
+let ws = null
+
+$(function () {
+  if (window.username) {
+    startChat()
+  }
+})
+
+function startChat () {
+  ws = adonis.Ws().connect()
+
+  ws.on('open', () => {
+    $('.connection-status').addClass('connected')
+    subscribeToChannel()
+  })
+
+  ws.on('error', () => {
+    $('.connection-status').removeClass('connected')
+  })
+}
+----
+
+The startup code is simple, we make the Websocket connection when `window.username` is available.
+
+Next step is to make a subscription on the `chat` topic and bind listeners to receive messages.
+[source, js]
+----
+function subscribeToChannel () {
+  const chat = ws.subscribe('chat')
+
+  chat.on('error', () => {
+    $('.connection-status').removeClass('connected')
+  })
+
+  chat.on('message', (message) => {
+    $('.messages').append(`
+      <div class="message"><h3> ${message.username} </h3> <p> ${message.body} </p> </div>
+    `)
+  })
+}
+----
+
+Finally, let's write the code to send the message when we press enter.
+
+[source, js]
+----
+$('#message').keyup(function (e) {
+  if (e.which === 13) {
+    e.preventDefault()
+
+    const message = $(this).val()
+    $(this).val('')
+
+    ws.getSubscription('chat').emit('message', {
+      username: window.username,
+      body: message
+    })
+    return
+  }
+})
+----
+
+=== Server code
+Since we are done with the frontend code, let's open the `ChatController` again and write the code to replay messages.
+
+[source, diff]
+----
+class ChatController {
+  constructor ({ socket, request }) {
+    this.socket = socket
+    this.request = request
+  }
+
++  onMessage (message) {
++    this.socket.broadcastToAll('message', message)
++  }
+}
+----
+
+The `onMessage` method just replays the same message to all the connected clients using `broadcastToAll` method.
+
+== Controllers
+The controllers let you keep your code structured by defining a seperate class for each channel. Controllers lives inside `app/Controllers/Ws` directory.
+
+A new instance of controller is created for each subscription and the `context` is passed to the constructor.
+
+[source, js]
+----
+class ChatController {
+  constructor ({ socket }) {
+    this.socket = socket
+  }
+}
+----
+
+Also you can bind to different events by creating methods with the same name. Also all the methods, must be prefixed with the `on` keyword.
+
+[source, js]
+----
+class ChatController {
+  onMessage () {
+    // same as: socket.on('message')
+  }
+
+  onClose () {
+    // same as: socket.on('close')
+  }
+
+  onError () {
+    // same as: socket.on('error')
+  }
+}
+----

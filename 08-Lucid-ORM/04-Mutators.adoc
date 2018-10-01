@@ -1,0 +1,112 @@
+---
+permalink: database-getters-setters
+title: Mutators
+category: lucid-orm
+---
+
+= Mutators
+
+toc::[]
+
+As the name suggests, getters and setters help you transform data before saving or after fetching it from the database.
+
+In this guide, we learn about *getters*, *setters* and *computed properties*, with the uses case of where and when to use them.
+
+== Getters
+Defining *getters* can be helpful if you want to format the data for display only. For example: Converting the post title to title case.
+
+[source, js]
+----
+'use strict'
+
+const Model = use('Model')
+
+class Post extends Model {
+  getTitle (title) {
+    return title.replace(/^(.)|\s(.)/g, ($1) => {
+      return $1.toUpperCase()
+    })
+  }
+}
+----
+
+[source, js]
+----
+const post = await Post.find(postId)
+
+// getters are called automatically
+return post.toJSON()
+----
+
+Assuming the post title is saved as `title` field inside the database. AdonisJs executes the `getTitle` method and uses the return value.
+
+[ul-spaced]
+- Getters always start with the `get` keyword followed by the *camel case* version of the field name.
+- Getters are synchronous, which means you cannot run asynchronous code inside them. You must use link:database-hooks[hooks] for that.
+- The return value is used instead of the actual value.
+- Getters are evaluated when you call `toJSON` on the model instance or the serializer instance.
+
+== Setters
+Setters are called when you set a value to a model instance. It can be helpful in normalizing data before saving it to the database.
+
+[source, js]
+----
+'use strict'
+
+const Model = use('Model')
+
+class User extends Model {
+  setAccess (access) {
+    return access === 'admin' ? 1 : 0
+  }
+}
+
+const user = new User()
+user.access = 'admin'
+
+console.log(user.access) // will return 1
+await user.save()
+----
+
+[ul-spaced]
+- Setters always starts with the `set` keyword followed by the *camel case* version of the field name.
+- Setters are synchronous, which means you cannot run asynchronous code inside them. You must use link:database-hooks[hooks] for that.
+- Setters receives the current value of a given field.
+- They are executed when you *set/update* value of a given field on the model instance.
+
+== Computed properties
+Computed properties are virtual properties which don't exist in your database but instead set in the JSON representation.
+
+*For example:* Creating a full name property from the user first and the last name.
+
+[source, js]
+----
+'use strict'
+
+const Model = use('Model')
+
+class User extends Model {
+  static get computed () {
+    return ['fullname']
+  }
+
+  getFullname ({ firstname, lastname }) {
+    return `${firstname} ${lastname}`
+  }
+}
+----
+
+Now whenever you call `toJSON` on the user instance, a `fullname` property gets added to the return value.
+
+[source, js]
+----
+const user = await User.find(1)
+
+const json = user.toJSON()
+console.log(json.fullname) // firstname + lastname
+----
+
+[ul-spaced]
+- Computed properties must be returned as an array from the `computed` getter.
+- Computed methods are defined same as the `getters`.
+- They receive the existing attributes as an object.
