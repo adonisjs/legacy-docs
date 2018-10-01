@@ -335,7 +335,7 @@ const message = this
 ----
 
 == Colorful logs
-Ace uses link:https://npmjs.org/package/chalk[chalk, window="_blank"] to colorful output messages on the terminal, you can access the instance of chalk as `this.chalk`.
+Ace uses link:https://npmjs.org/package/kleur[kleur, window="_blank"] to colorful output messages on the terminal, you can access the instance of kleur as `this.chalk`.
 
 Also, there are some helper methods to log consistently styled messages.
 
