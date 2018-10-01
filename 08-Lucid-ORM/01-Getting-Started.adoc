@@ -11,7 +11,7 @@ toc::[]
 Lucid is an implementation of link:https://en.wikipedia.org/wiki/Active_record_pattern[Active Record, window="_blank"] pattern in Javascript. If you are coming from the *Laravel* or the *Rails* world, then you may be quite familiar with it.
 
 == Introduction
-The reason behind using Models over writing plain database queries is the ease of use and the powerful API to drive the data flow. Lucid models under the hood takes care of
+The reason behind using Models over writing plain database queries is the ease of use and the powerful API to drive the data flow. Lucid models under the hood take care of
 
 1. Fetching, persisting model instance transparently.
 2. Expressive API to manage relationships.
@@ -171,7 +171,7 @@ class User extends Model {
 ----
 
 ==== incrementing
-Lucid assumes that each table associated with a Model has an auto incrementing primary key. You can disable this flag by return `false` from the incrementing getter.
+Lucid assumes that each table associated with a Model has an auto-incrementing primary key. You can disable this flag by return `false` from the incrementing getter.
 
 NOTE: When you set `incrementing = false`, you have to make sure to set the `primaryKeyValue` manually.
 
@@ -365,7 +365,7 @@ await User.firstOrFail()
 ----
 
 ==== findOrCreate (whereAttributes, values)
-Find a record, if not found a new record will be created and returned back on the fly.
+Find a record, if not found a new record will be created and returned on the fly.
 
 [source, js]
 ----
@@ -435,7 +435,7 @@ const users = await User.truncate()
 == Aggregate helpers
 link:query-builder#_aggregate_helpers[Query Builder aggregate helpers] provide shortcut access to common aggregate queries. Static model methods can be used when you wish to aggregate the entire table.
 
-NOTE: These methods end the query builder chaining and returns a value. There is no need to call `link:#_query_builder[fetch()]`.
+NOTE: These methods end the query builder chaining and return a value. There is no need to call `link:#_query_builder[fetch()]`.
 
 ==== getCount(columnName = '*')
 Return a count of records in a given result set.
@@ -600,7 +600,7 @@ const user = await User.create(userData)
 ----
 
 ==== createMany
-Just like `create` you can persist multiple instances of a model using the createMany method.
+Just like `create` you can persist multiple instances of a model at the same time using the createMany method.
 
 NOTE: The `createMany` method makes *n* number of queries instead of doing a bulk insert, where *n* is the number of rows.
 

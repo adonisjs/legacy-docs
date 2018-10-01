@@ -8,7 +8,7 @@ category: lucid-orm
 
 toc::[]
 
-Hooks are the actions you perform before or after a specified database operation. Hooks plays a major role in keeping your code base DRY and easy to reason about.
+Hooks are the actions you perform before or after a specified database operation. Hooks plays a significant role in keeping your code base DRY and comfortable to reason about.
 
 For example: *Hashing* the user password before saving it to the database.
 
@@ -97,7 +97,7 @@ UserHook.validate = async (user) => {
 ----
 
 == Lifecycle Events
-Below is the list of life cycle events and their description
+Below is the list of lifecycle events and their description
 
 [options="header"]
 |====
@@ -112,5 +112,5 @@ Below is the list of life cycle events and their description
 | afterDelete | After a row is removed.
 | afterFind | After a single row is fetched from the database.
 | afterFetch | After the `fetch` method is executed. The hook method receives an array of the model instances.
-| afterPaginate | After the `paginate` method is executed. The hook receives 2 arguments, where the first is the array of model instances and 2nd the pagination meta data.
+| afterPaginate | After the `paginate` method is executed. The hook receives two arguments, where the first is the array of model instances and 2nd the pagination metadata.
 |====

@@ -108,5 +108,5 @@ console.log(json.fullname) // firstname + lastname
 
 [ul-spaced]
 - Computed properties must be returned as an array from the `computed` getter.
-- Computed methods are defined same as the `getters`.
+- Computed methods are defined the same as the `getters`.
 - They receive the existing attributes as an object.

@@ -8,7 +8,7 @@ category: lucid-orm
 
 toc::[]
 
-Relationships are the backbone of data driven apps. Whether it is about maintaining *posts* written by a given *author* or *cars* from a given *company*.
+Relationships are the backbone of data-driven apps. Whether it is about maintaining *posts* written by a given *author* or *cars* from a given *company*.
 
 Lucid expressive API makes the process of associating and fetching these relations so straightforward and intuitive, without even touching the SQL schema.
 
@@ -34,7 +34,7 @@ module.exports = User
 
 So we create a method on the `User` model, which returns a `hasOne` relationship with the profile model. Also let's create the `Profile` model too, to make this work.
 
-NOTE: There is no need to define relationship on both the models. Defining it on a single model works as expected. Also, lucid relationships are not bound to SQL schema.
+NOTE: There is no need to define relationship on both the models. Setting it on a single model works as expected. Also, lucid relationships are not bound to SQL schema.
 
 [source, bash]
 ----
@@ -180,7 +180,7 @@ The `belongsToMany` relationship is quite powerful since it allows you to define
 
 [ol-shrinked]
 1. A *user* can have many *cars*.
-2. Also a *car* can have many *owners* during its life span.
+2. Also a *car* can have many *owners* during its lifespan.
 
 When defining this relationship, there is no simple way to store a foreign key, and instead, we rely on a `3rd table`
 called *pivot table*.
@@ -273,7 +273,7 @@ cars () {
 ==== pivotModel
 If you want more control over the queries made to the pivot table, you can bind a pivot model. With pivot model in place, you can use *lifecycle hooks*, *define getters/setters*, etc.
 
-NOTE: After defining `pivotModel`, you cannot call `pivotTable` and `withTimestamps` methods. Instead, you are required to define these values on the pivot model.
+NOTE: After defining `pivotModel`, you cannot call `pivotTable` and `withTimestamps` methods. Instead, you are required to set these values on the pivot model.
 
 [source, js]
 ----
@@ -375,7 +375,7 @@ const posts = await user.posts().fetch()
 
 The above method fetches all the posts for the user with `id=1`.
 
-You can also add runtime constraints by calling query builder methods as you would do with a normal query.
+You can also add runtime constraints by calling query builder methods as you would do with a typical query.
 
 [source, js]
 ----
@@ -537,7 +537,7 @@ const user = await User.find(1)
 await user.loadMany(['posts', 'profiles'])
 ----
 
-In order to pass query constraints, you must pass an object.
+In order to pass query constraints, you must give an object.
 
 [source, js]
 ----
@@ -796,7 +796,7 @@ await profile.user().dissociate()
 ----
 
 ==== attach
-The `attach` method works with the belongsToMany relationship to attach a relationship inside the `pivot` table.
+The `attach` method works with the belongsToMany relationship to attach a relationship to the `pivot` table.
 
 [source, js]
 ----
@@ -848,7 +848,7 @@ await user.cars().detach([mercedes.id])
 ----
 
 ==== sync
-The `sync` method is a shortcut for calling `detach` and then `attach` methods. It can be used for updating pivot table.
+The `sync` method is a shortcut for calling `detach` and then `attach` methods. It can be used for updating a pivot table.
 
 [source, js]
 ----
@@ -876,7 +876,7 @@ await user
   .update({ is_published: true })
 ----
 
-In case of updating the pivot table, you can fetch the `query` instance for pivot table only.
+In the case of updating the pivot table, you can fetch the `query` instance for pivot table only.
 
 [source, js]
 ----

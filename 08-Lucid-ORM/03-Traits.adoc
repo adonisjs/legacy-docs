@@ -57,8 +57,7 @@ class User extends Model {
 ----
 
 == Registering a Trait with Options
-Sometimes, it may be useful to pass initialization options to your trait. The options you supply will be passed
-directly to the `register()` method. If you do not supply options, and empty `options = {}` will be passed
+Sometimes, it may be useful to pass initialization options to your trait. The options you supply will be given directly to the `register()` method. If you do not supply options, and empty `options = {}` will be passed
 for you.
 
 [source, js]
