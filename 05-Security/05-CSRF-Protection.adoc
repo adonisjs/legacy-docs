@@ -10,7 +10,7 @@ toc::[]
 
 link:https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)[Cross-Site Request Forgery ( CSRF )] allows an attacker to perform actions on behalf of another user without their knowledge or permission.
 
-AdonisJs protects your application from CSRF attacks by denying unidentified requests. HTTP requests with *POST, PUT and DELETE* methods are checked to make sure that these requests are invoked by right people from right place.
+AdonisJs protects your application from CSRF attacks by denying unidentified requests. HTTP requests with *POST, PUT and DELETE* methods are checked to make sure that right people from right place invoke these requests.
 
 == Setup
 Make sure to install the `shield` provider and register the appropriate middleware.
@@ -29,9 +29,9 @@ const providers = [
 ]
 ----
 
-And, finally register the global middleware inside `start/kernel.js` file.
+And finally, register the global middleware inside `start/kernel.js` file.
 
-NOTE: Shield middleware relies on link:sessions[sessions], so make sure they are setup correctly.
+NOTE: Shield middleware relies on link:sessions[sessions], so make sure they are set up correctly.
 
 [source, js]
 ----

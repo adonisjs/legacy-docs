@@ -10,7 +10,7 @@ toc::[]
 
 Being a Web framework, AdonisJs provides a handful of tools to keep your websites secure from common web attacks. In this guide, we learn about the best practices to keep your AdonisJs applications secure.
 
-NOTE: If you find any security bug, make sure to share it via mailto:virk@adonisjs.com[email]. Please do not create a GitHub issue, since it may impact the applications running in production. We disclose the issue after pushing the patch for the bug.
+NOTE: If you find any security bug, make sure to share it via mailto:virk@adonisjs.com[email]. Please do not create a GitHub issue, since it may impact the applications running in production. We disclose the problem after pushing the patch for the bug.
 
 == Session Security
 Sessions can leak important information if not handled with care. AdonisJs encrypts and signs all the cookies using the `appKey` defined in `config/app.js` file. Make sure to keep it secret, never share it with anyone and never push it to version control systems like Github.
@@ -61,7 +61,7 @@ Attackers often try to upload malicious files to the server and later execute th
 
 Not only files are uploaded to acquire the server access; often you find people trying to upload huge files so that your server stays busy in uploading files and start throwing *TIMEOUT* errors for other requests.
 
-To overcome this situation, AdonisJs let you define the *maximum upload size* to be processed by the server which means any file greater than the specified size are denied without processing and keeps your server in a healthy state.
+To overcome this situation, AdonisJs let you define the *maximum upload size* to be processed by the server which means any file larger than the specified size are denied without processing and keeps your server in a healthy state.
 
 [ul-spaced]
 * Make sure to set `maxSize` inside `config/bodyParser.js` file.
@@ -74,7 +74,7 @@ uploads: {
 ----
 * Never store uploaded files inside the `public` directory, since files in `public` directory can be accessed directly.
 * Always rename files before uploading.
-* Never share the actual location of the file with the end users. Instead, try to save the file reference inside the database with a *unique id* and setup a route to serve the file using the `id`.
+* Never share the actual location of the file with the end users. Instead, try to save the file reference inside the database with a *unique id* and set up a route to serve the file using the `id`.
 +
 
 .Example

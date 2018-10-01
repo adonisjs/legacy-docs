@@ -31,7 +31,7 @@ Each authenticator is a combination of serializers and an authentication scheme.
 
 [ol-spaced]
 1. Authentication is divided into two broad categories of *Stateful authentication* and *Stateless authentication*.
-2. Session based authentication is considered *Stateful Authentication* since once logged in the user can navigate to different areas of the application without resending the credentials.
+2. Session-based authentication is considered *Stateful Authentication* since once logged in the user can navigate to different areas of the application without resending the credentials.
 3. *Stateless Authentication* requires the end-user to send the credentials on each HTTP request which is very common with REST API's.
 4. AdonisJs provides necessary tooling & helpers to manage both types of authentication with ease.
 5. Authentication provider makes use of the link:encryption-and-hashing#_hashing_values[Hash] module to verify passwords. Make sure to link:database-hooks#_defining_hooks[hash your passwords] before saving them to the database.
@@ -91,9 +91,9 @@ module.exports = {
 | Key | Values | Description
 | serializer | lucid, database | Serializer to be used for fetching the user from the database.
 | scheme | session, basic, jwt, api | Scheme to be used for fetching and authenticating user credentials.
-| uid | Database field name | Database field to be used as unique identifier for a given user.
+| uid | Database field name | Database field to be used as a unique identifier for a given user.
 | password | Database field name | Field to be used for verifying user password
-| model | Model Namespace *(Lucid Only)* | Applicable only when using Lucid serializer. Given model is used for querying the database.
+| model | Model Namespace *(Lucid Only)* | Applicable only when using Lucid serializer. Given the model is used for querying the database.
 | table | Database table name *(Database Only)* | Applicable only when using Database serializer.
 |====
 
@@ -530,7 +530,7 @@ The `loggedIn` tag can be used to write `if/else` around the loggedin user.
 ----
 
 == Revoking tokens
-The `jwt` and `api` schemes exposes methods to revoke tokens using the `auth` interface.
+The `jwt` and `api` schemes expose methods to revoke tokens using the `auth` interface.
 
 NOTE: For jwt scheme only refresh tokens are revoked, since actual tokens are never saved in the database
 
