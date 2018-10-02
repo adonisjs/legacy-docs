@@ -2,7 +2,7 @@
 
 <img src="https://res.cloudinary.com/adonisjs/image/upload/q_100/v1497112678/adonis-purple_pzkmzt.svg" width="150px" align="right">
 
-This repo contains the documentation for AdonisJs framework written in [Asciidoc](http://asciidoctor.org/)
+This repo contains the documentation for AdonisJs framework written in [Asciidoc](https://asciidoctor.org/)
 
 The docs are compiled and render via [adonisjs.com](https://github.com/adonisjs/adonisjs.com) repo which itself is a Adonisjs app.
 
