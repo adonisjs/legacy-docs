@@ -118,6 +118,35 @@ trait('Test/Browser', {
 
 For all other options, do check link:https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions[puppeteer.launch] official documentation.
 
+== Browser API
+AdonisJs adds a wrapper on top of Puppeteer to make it more suitable for testing. The following is the API for the main browser and page objects.
+
+==== browser.visit
+The `browser.visit` method calls link:https://pptr.dev/#?product=Puppeteer&version=v1.8.0&show=api-pagegotourl-options[page.goto] method of Puppeteer and has the same signature.
+
+[source, js]
+----
+test('Visit home page', async ({ browser }) => {
+  const page = await browser.visit('/', {
+    waitUntil: 'load'
+  })
+
+  await page.assertHas('Adonis')
+})
+----
+
+You can access the actual page object of Puppeteer by accessing the `page.page` property.
+
+[source, js]
+----
+test('Visit home page', async ({ browser }) => {
+  const page = await browser.visit('/')
+
+  // puppeteer page object
+  page.page.addScriptTag()
+})
+----
+
 == Page interactions
 The most common thing you want to achieve when writing browser tests, is to interact with the webpage. Below is the list of methods for same.
 
