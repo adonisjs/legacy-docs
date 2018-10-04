@@ -1,7 +1,7 @@
 ---
 title: Traits
 permalink: traits
-category: lucid
+category: lucid-orm
 ---
 = Traits
 

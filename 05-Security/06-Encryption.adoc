@@ -1,6 +1,6 @@
 ---
 title: Encryption and Hashing
-permalink: encryption
+permalink: encryption-and-hashing
 category: security
 ---
 
