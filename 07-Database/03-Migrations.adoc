@@ -341,7 +341,7 @@ class UserSchema {
       await Database.table('new_users').transacting(trx).insert(users)
     })
 
-    // copy old table
+    // drop old table
     this.drop('users')
   }
 }
