@@ -12,9 +12,7 @@ It may be enough to write closure to handle your route for a small application, 
 
 Controllers are attached to one or many routes and are the common point of interaction between your models, views and any other services you may need.
 
-[NOTE]
-Controllers only job is to respond to an HTTP request. Do not use them internally by requiring them inside different files.
-[/NOTE]
+NOTE: Controllers only job is to respond to an HTTP request. Do not use them internally by requiring them inside different files.
 
 == Creating Controllers
 
@@ -51,18 +49,18 @@ A controller can be only accessed from a route. This is done by referencing them
 Route.get(url, 'UserController.index')
 ----
 
-The part before the dot (`.`) is a reference to the controller file. It is by default namespaced to `App/Controller/Http`. The second part is the name of the method you want to call inside this controller.
+The part before the dot (`.`) is a reference to the controller file. It is by default namespaced to `App/Controllers/Http`. The second part is the name of the method you want to call inside this controller.
 
 [source, js]
 ----
-// App/Controller/Http/UserController -> index()
+// app/Controllers/Http/UserController -> index()
 Route.get(url, 'UserController.index')
 
-// App/Controller/Http/Admin/UserController -> store()
+// app/Controllers/Http/Admin/UserController -> store()
 Route.post(url, 'Admin/UserController.store')
 
-// App/MyOwnController/UserController -> index()
-Route.post(url, 'App/MyOwnController/UserController.index')
+// app/MyOwnControllers/UserController -> index()
+Route.post(url, 'App/MyOwnControllers/UserController.index')
 ----
 
 Since these methods are route handlers, they will receive as an argument the link:http-context#_http_context[HTTP Context].
