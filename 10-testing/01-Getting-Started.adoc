@@ -57,7 +57,7 @@ test('validate user details', async ({ browser }) => {
 
   await page
     .type('email', 'wrong email')
-    .submit('form')
+    .submitForm('form')
     .waitForNavigation()
 
   page.session.assertError('email', 'Invalid user email address')
