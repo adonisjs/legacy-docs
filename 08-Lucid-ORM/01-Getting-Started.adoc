@@ -704,6 +704,23 @@ await User.createMany([
 ], trx)
 ----
 
+=== Transactions in Relationships
+When using transactions in many database operations which you need to pass a `trx` object as the third parameter of the method `attach`/`detach`
+[source, js]
+----
+const trx = await Database.beginTransaction()
+
+const user = await User.create({email: 'user@example.com', password: 'secret'})
+
+const userRole = await Role.find(1)
+
+await user.roles().attach([userRole.id], null, trx)
+
+await trx.commit()
+// if something gone wrong
+await trx.rollback
+----
+
 == Boot cycle
 Each model has a boot cycle where it gets booted, and that happens only once. So if you want to perform something that should occur only once, consider writing it inside the `boot` method.
 
