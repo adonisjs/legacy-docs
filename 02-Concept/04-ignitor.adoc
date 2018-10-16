@@ -1,0 +1,119 @@
+---
+permalink: ignitor
+title: Ignitor
+category: concept
+---
+
+= Ignitor
+
+toc::[]
+
+link:https://github.com/adonisjs/adonis-ignitor[Ignitor, window="_blank"] powers the bootstrapping of an AdonisJs application.
+
+In this guide, we learn about some of the features and functionality offered by the Ignitor package to manage our code.
+
+== Hooks
+Ignitor exposes a number of hooks to customize your application behavior.
+
+These hooks are registered inside the `start/hooks.js` file. Feel free to create this file if it does not already exist.
+
+Here's an example of how to use `hooks.after` to register a view global *after* all providers have booted:
+
+.start/hooks.js
+[source, js]
+----
+const { hooks } = require('@adonisjs/ignitor')
+
+hooks.after.providersBooted(() => {
+  const View = use('View')
+  View.global('time', () => new Date().getTime())
+})
+----
+
+Similar to `hooks.after`, you can also use `hooks.before` to register application logic *before* a hook occurs.
+
+Below is the list of available hooks:
+
+[options="header", cols="10%, 90%"]
+|====
+| Hook Event | Description
+| providersRegistered | Before/after all providers have registered
+| providersBooted | Before/after all providers have booted
+| preloading | Before/after preloading registered files
+| httpServer | Before/after HTTP server has started
+| aceCommand | Before/after ace command is executed
+|====
+
+== Preloading files
+Ignitor makes it easy to preload files after the HTTP server has started.
+
+To do so, modify the `server.js` file and add the `preLoad` method:
+
+[source, js]
+----
+new Ignitor(require('@adonisjs/fold'))
+  .appRoot(__dirname)
+  .preLoad('start/fire-zombies')
+  .fireHttpServer()
+  .catch(console.error)
+----
+
+NOTE: The `preLoad` method accepts a relative application root path, or an absolute path to any JavaScript file.
+
+To load multiple files, call the `preLoad` method multiple times:
+
+[source, js]
+----
+new Ignitor(require('@adonisjs/fold'))
+  .preLoad('')
+  .preLoad('')
+  // etc
+----
+
+== Ignitor methods
+Below is the list of methods available on the `ignitor` instance.
+
+==== appRoot(location)
+Define the absolute path to the application root:
+
+[source, js]
+----
+ignitor
+  .appRoot(__dirname)
+----
+
+==== modulesRoot(location)
+Define the absolute path to the application's `node_modules` parent directory.
+
+By default, the path set in `appRoot()` is used:
+
+[source, js]
+----
+ignitor
+  .modulesRoot(path.join(__dirname, '..'))
+----
+
+==== appFile(location)
+Define the relative path to the app file.
+
+By default, the `start/app.js` file is used:
+
+[source, js]
+----
+ignitor
+  .appFile('start/app.js')
+----
+
+==== loadCommands()
+Instruct Ignitor to load ace providers and commands.
+
+This is done when running an ace command, however, you can also load commands when starting the HTTP server:
+
+[source, js]
+----
+ignitor
+  .loadCommands()
+----
+
+
+

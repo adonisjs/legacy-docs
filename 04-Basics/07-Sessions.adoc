@@ -8,20 +8,25 @@ category: basics
 
 toc::[]
 
-AdonisJs has the first-class support for sessions and comes with a variety of inbuilt *drivers* to efficiently manage and store sessions. In this guide, we learn how to configure different drivers and use them.
+AdonisJs has first-class session support with a variety of inbuilt drivers to efficiently manage and store sessions.
+
+In this guide, we learn how to configure and use these different session drivers.
 
 == Setup
-If the session provider is not already set up, make sure to install it as defined below.
+If the session provider is not already set up, follow the instructions below.
+
+First, run the `adonis` command to download the session provider:
 
 [source, bash]
 ----
-adonis install @adonisjs/session
+> adonis install @adonisjs/session
 ----
 
-The above command installs the provider, creates the config file automatically and shows a small set of instructions to follow to set it up.
+The above command also creates the `config/session.js` file and displays a small set of instructions to help complete your set up.
 
-The first step is to register the provider inside `start/app.js` file.
+Next, register the session provider inside the `start/app.js` file:
 
+.start/app.js
 [source, js]
 ----
 const providers = [
@@ -29,8 +34,9 @@ const providers = [
 ]
 ----
 
-Also, register the middleware inside `start/kernel.js` file.
+Finally, register the session middleware inside the `start/kernel.js` file:
 
+.start/kernel.js
 [source, js]
 ----
 const globalMiddleware = [
@@ -39,38 +45,41 @@ const globalMiddleware = [
 ----
 
 == Supported drivers
-Below is the list of drivers supported by the session provider. You can change the current driver inside `config/session.js` file.
+Below is the list of drivers supported by the session provider. You can change the current driver inside the `config/session.js` file.
 
-NOTE: The redis driver relies on `@adonisjs/redis` make sure to install the provider.
+NOTE: The Redis driver requires the `@adonisjs/redis` package (see the link:redis[Redis] section for installation instructions).
 
 [options="header", cols="10, 20, 70"]
 |====
 | Name | Config key | Description
-| Cookie | cookie | Saves the session values in encrypted form inside cookies.
-| File | file | Saves inside a file on a server. Should not be used if you are running Adonisjs on multiple servers and behind a load balancer.
-| Redis | redis | Save inside redis. Ideal for scaling horizontally.
+| Cookie | cookie | Saves session values in encrypted cookies.
+| File | file | Saves session values in a file on a server (should not be used if you are running AdonisJs on multiple servers and behind a load balancer).
+| Redis | redis | Save in link:https://redis.io[Redis, window="_blank"] (ideal for scaling horizontally).
 |====
 
 == Basic example
-The `session` object is passed as part of HTTP link:http-context#_http_context[context], just like request and response. Let's see how to use sessions during the HTTP lifecycle.
+The `session` object is passed as part of the link:request-lifecycle#_http_context[HTTP Context], just like the `request` and `response` objects.
 
+Here's a quick example of how to use sessions during the HTTP lifecycle:
+
+.start/routes.js
 [source, js]
 ----
 Route.get('/', ({ session, response }) => {
   session.put('username', 'virk')
-  response.redirect('/print')
+  response.redirect('/username')
 })
 
-Route.get('/print', ({ session }) => {
-  return session.get('username')
+Route.get('/username', ({ session }) => {
+  return session.get('username') // 'virk'
 })
 ----
 
 == Session methods
-Here is the list of methods.
+Below is a list of all session methods and their example usages.
 
 ==== put(key, value)
-Add a key/value pair to the session store.
+Add a key/value pair to the session store:
 
 [source, js]
 ----
@@ -78,61 +87,65 @@ session.put('username', 'virk')
 ----
 
 ==== get(key, [defaultValue])
-Returns the value for a given or the default value.
+Return the value for a given key (accepts an optional default value):
 
 [source, js]
 ----
-session.get('username', 'fallbackName')
+session.get('username')
+
+// default value
+session.get('username', 'defaultName')
 ----
 
 ==== all
-Get everything back as an object from the session store.
+Get everything back as an object from the session store:
 
 [source, js]
 ----
 session.all()
 ----
 
-==== increment(key, steps)
-Increment the value for a given key. Make sure the previous value is always a number.
+==== increment(key, [steps])
+Increment the value for a given key (ensure the previous value is a number):
 
 [source, js]
 ----
 session.increment('counter')
 
-// or increment by 5
+// increment by 5
 session.increment('counter', 5)
 ----
 
-==== decrement(key, steps)
-Decrement the value for a given key. Make sure the previous value is always a number.
+==== decrement(key, [steps])
+Decrement the value for a given key (ensure the previous value is a number):
 
 [source, js]
 ----
-session.increment('counter')
+session.decrement('counter')
 
-// or decrement by 2
+// decrement by 2
 session.decrement('counter', 2)
 ----
 
 ==== forget(key)
-Remove key/value pair from the store
+Remove a key/value pair from the session store:
 [source, js]
 ----
 session.forget('username')
 ----
 
-==== pull(key, defaultValue)
-Remove the value from the store and get it back.
+==== pull(key, [defaultValue])
+Return (and then remove) a key/value pair from the session store:
 
 [source, js]
 ----
 const username = session.pull('username') // returns username
-request.pull('username') // null
+
+session.get('username') // null
 ----
 
 ==== clear
-Empty the session store
+Empty the session store:
 
 [source, js]
 ----
@@ -140,22 +153,26 @@ session.clear()
 ----
 
 == Flash messages
-Flash messages are short-lived session values for a single request only. Mainly flash messages are used to *flash form errors* but can be used for any other purpose.
+Flash messages are short-lived session values for a single request only. They are mainly used to *flash form errors*, but can be used for any other purpose.
 
-Taking the example of HTML forms, let's say we want to validate the user data and redirect the request back to the form with the validation errors.
+=== HTML form example
 
-.Html form
+Let's say we want to validate submitted user data and redirect back to our form if there are validation errors.
+
+Start with the following HTML form:
+
 [source, edge]
 ----
 <form method="POST" action="/users">
   {{ csrfField() }}
   <input type="text" name="username" />
-  <button type="submit"> Submit </button>
+  <button type="submit">Submit</button>
 </form>
 ----
 
-Now let's register the route and validate the form data.
+Then, register the `/users` route to validate form data:
 
+.app/routes.js
 [source, js]
 ----
 const { validate } = use('Validator')
@@ -173,19 +190,23 @@ Route.post('users', ({ request, session, response }) => {
 })
 ----
 
-Now inside the view, we can grab the flash data using *view helpers*.
+Finally, rewrite the HTML form to retrieve flash data using link:sessions#_view_helpers[view helpers]:
 
 [source, edge]
 ----
-<input type="text" name="username" value="{{ old('username', '') }}" />
-{{ getErrorFor('username') }}
+<form method="POST" action="/users">
+  {{ csrfField() }}
+  <input type="text" name="username" value="{{ old('username', '') }}" />
+  {{ getErrorFor('username') }}
+  <button type="submit">Submit</button>
+</form>
 ----
 
-=== Methods
-Below is the list of available methods
+=== Flash methods
+Below is a list of all session flash methods and their example usages.
 
 ==== flashAll
-Flash the request form data.
+Flash the request form data:
 
 [source, js]
 ----
@@ -193,7 +214,7 @@ session.flashAll()
 ----
 
 ==== flashOnly
-Flash only selected fields.
+Flash only the selected fields:
 
 [source, js]
 ----
@@ -201,7 +222,7 @@ session.flashOnly(['username', 'email'])
 ----
 
 ==== flashExcept
-Flash except selected fields.
+Flash the request form data except the selected fields:
 
 [source, js]
 ----
@@ -209,7 +230,7 @@ session.flashExcept(['password', 'csrf_token'])
 ----
 
 ==== withErrors
-Flash with an array of errors
+Flash with an array of errors:
 
 [source, js]
 ----
@@ -219,7 +240,7 @@ session
 ----
 
 ==== flash
-Flash custom object
+Flash a custom object:
 
 [source, js]
 ----
@@ -230,7 +251,7 @@ session.flash({ notification: 'You have been redirected back' })
 When using flash messages, you can use the following view helpers to read values from the flash session store.
 
 ==== old(key, defaultValue)
-Returns the value for a given key from the flash store.
+Returns the value for a given key from the flash store:
 
 [source, js]
 ----
@@ -243,7 +264,7 @@ session.flashOnly(['username'])
 ----
 
 ==== hasErrorFor(key)
-Find if there is an error for a given field inside the flash store.
+Returns `true` if there is an error for a given field inside the flash store:
 
 [source, js]
 ----
@@ -260,7 +281,7 @@ session
 ----
 
 ==== getErrorFor(key)
-Returns the error message for a given key
+Returns the error message for a given field:
 
 [source, js]
 ----
@@ -270,7 +291,7 @@ session
 ----
 
 ==== flashMessage(key, defaultValue)
-Returns the flash message for a given key
+Returns the flash message for a given key:
 
 [source, js]
 ----
@@ -280,18 +301,18 @@ session.flash({ notification: 'Update successful!' })
 [source, edge]
 ----
 @if(flashMessage('notification'))
-  <span> {{ flashMessage('notification') }} </span>
+  <span>{{ flashMessage('notification') }}</span>
 @endif
 ----
 
 == Session persistence
-Session values are persisted in bulk when the request ends. It keeps the request/response performant since you can mutate the session store as many times as you want and a bulk update is performed at the end.
+Session values are persisted in bulk when the request ends. This keeps the request/response performant since you can mutate the session store as many times as you want and a bulk update is only performed at the end.
 
-It is achieved using the middleware layer of Adonis, check out the implementation link:https://github.com/adonisjs/adonis-session/blob/develop/src/Session/Middleware.js#L89[here, window="_blank"].
+It is achieved via AdonisJs middleware (see the implementation link:https://github.com/adonisjs/adonis-session/blob/develop/src/Session/Middleware.js#L89[here, window="_blank"]).
 
-However, there is a caveat to it. In case an exception is thrown, the middleware layer breaks and session values are never committed.
+However, there is a caveat. If an exception is thrown, the middleware layer breaks and session values are never committed.
 
-AdonisJs first party packages handle this gracefully, but you should commit the session manually if you are handling exceptions of your own.
+AdonisJs first-party packages handle this gracefully, but you should commit the session manually if you are handling exceptions of your own:
 
 [source, js]
 ----

@@ -8,17 +8,20 @@ category: basics
 
 toc::[]
 
-AdonisJs comes with a fully featured logger built on top of link:https://github.com/winstonjs/winston[winston]. It follows link:https://tools.ietf.org/html/rfc5424#page-11[RFC5424] logging levels.
+AdonisJs comes with a fully featured logger built on top of link:https://github.com/winstonjs/winston[winston, window="_blank"], using link:https://tools.ietf.org/html/rfc5424#page-11[RFC5424] logging levels.
 
-Logger ships with following *drivers*. However, you free to add your drivers built on top of Winston transports.
+Logger ships with the following drivers:
 
 [ol-shrinked]
-1. Console ( console )
-2. File ( file )
+1. Console (`console`)
+2. File (`file`)
+
+You are free to add your own drivers built on top of link:https://github.com/winstonjs/winston#transports[winston transports].
 
 == Configuration
-The configuration for logger is saved inside `config/app.js` file under `logger` object.
+The configuration for Logger is saved inside the `config/app.js` file under the `logger` object:
 
+.config/app.js
 [source, js]
 ----
 logger: {
@@ -33,10 +36,12 @@ logger: {
 }
 ----
 
-The `file` driver saves the file inside `tmp` directory. However, you can define an absolute path to a different location.
+The `file` driver saves your log file inside the application root `tmp` directory.
+
+NOTE: You can define an absolute `filename` path to a different log file location if you wish.
 
 == Basic example
-Let's start with a basic example of logging data within your app. Also, all logging methods support link:http://www.diveintojavascript.com/projects/javascript-sprintf[sprintf] syntax.
+Let's start with a basic example of logging data within your app:
 
 [source, js]
 ----
@@ -50,7 +55,9 @@ Logger.info('request details %j', {
 })
 ----
 
-The logger follows link:https://tools.ietf.org/html/rfc5424#page-11[RFC5424] levels to log messages. Also, it exposes simple methods for each level.
+TIP: All logging methods support link:http://www.diveintojavascript.com/projects/javascript-sprintf[sprintf] syntax.
+
+The logger uses link:https://tools.ietf.org/html/rfc5424#page-11[RFC5424] log levels, exposing simple methods for each level:
 
 [options="header", cols="20%,20%,60%"]
 |====
@@ -66,7 +73,7 @@ The logger follows link:https://tools.ietf.org/html/rfc5424#page-11[RFC5424] lev
 |====
 
 == Switching transports
-You can switch transports on the fly using the `transport` method.
+You can switch transports on the fly using the `transport` method:
 
 [source, js]
 ----
@@ -76,7 +83,9 @@ Logger
 ----
 
 == Logging level
-Logger always has a certain logging level set via config file, which can be updated at runtime too. Any messages above the defined logging level are not logged. For example:
+Logger has a default config logging `level` which can be updated at runtime.
+
+Any messages above the defined logging level are not logged. For example:
 
 [source, js]
 ----
@@ -92,5 +101,5 @@ Logger.level = 'debug'
 Logger.debug('Some debugging info')
 ----
 
-This approach makes it easier to turn off debugging messages when your server is under high load.
+This approach could make it easier to turn off debugging messages when your server is under high load.
 

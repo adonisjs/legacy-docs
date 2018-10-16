@@ -8,32 +8,42 @@ permalink: contribution-guide
 
 toc::[]
 
-Open Source projects are maintained and backed by a **vibrant community** of users and collaborators. We encourage you to participate actively in the development and the future of Adonis either by contributing to the source code, improving documentation, reporting potential bugs and testing new features.
+Open Source projects are maintained and backed by a **vibrant community** of users and collaborators.
+
+We encourage you to participate actively in the development and the future of AdonisJs either by contributing to the source code, improving documentation, reporting potential bugs and/or testing new features.
 
 == Channels
 
-There are many ways to communicate with the Adonis team.
+There are many ways to communicate with the AdonisJs team.
 
-1. link:https://github.com/adonisjs[Github Repositories, window="_blank"] - Share bugs or create a feature request on the dedicated repository of the Adonis.
-2. link:https://forum.adonisjs.com[Forum, window="_blank"] - Ask any questions, showcase your project and participate in the life of the Adonis Framework.
-3. link:https:/link:g/k5myGAz[Discord, window="_blank"] - Join our Discord Server to instant chat with anyone in the community.
-4. link:https://twitter.com/adonisframework[Twitter, window="_blank"] - Stay in touch with the progress we make each day and be informed about awesome projects provided by the community.
+1. link:https://github.com/adonisjs[Github Repositories, window="_blank"]: Share bugs or create feature requests against the dedicated AdonisJs repositories.
+2. link:https://forum.adonisjs.com[Forum, window="_blank"]: Ask questions, showcase your project and participate in the life of the AdonisJs Framework.
+3. link:https:/link:g/k5myGAz[Discord, window="_blank"]: Join our Discord Server to chat instantly with others in the community.
+4. link:https://twitter.com/adonisframework[Twitter, window="_blank"]: Stay in touch with the progress we make each day and be informed about awesome projects provided by the community.
 
 == Bug Reports
 
-Providing a great bug report can seem natural in a first glance. Always try to be descriptive and provide enough context and information to reproduce the issue. Bug reports may also be sent in the form of a pull request containing a failing test.
+Providing a great bug report can seem simple at first glance.
+
+Always try to be descriptive and provide enough context and information to reproduce the issue.
+
+Bug reports may also be sent in the form of a pull request containing a failing test.
 
 1. Provide a clear title and description of the issue.
 2. Share the version of the framework you are on.
-3. Add as much code samples you can to demonstrate the issue. You can also provide a complete repository to reproduce the issue quickly.
+3. Add as much code samples as you can to demonstrate the issue. You can also provide a complete repository to reproduce the issue quickly.
 
-Remember that bug reports doesn’t mean that the bug will be fixed within an hour. It serves to help yourself and the community to start on the path of fixing the problem.
+Remember, bug reports don't mean the bug will be fixed within an hour!
+
+It serves yourself and the broader community to start on the path of fixing the problem before reporting it.
 
 == Coding Style
 
-Unfortunately, JavaScript doesn’t have any official coding style. For this reason, we make use of link:https://standardjs.com/[StandardJS, window="_blank"] to help us having a readable and consistent codebase.
+Unfortunately, JavaScript doesn’t have any official coding style.
 
-Be sure to lint your code before sending a Pull Request to any Adonis repositories.
+For this reason, AdonisJs uses link:https://standardjs.com/[StandardJS, window="_blank"] to help maintain a readable and consistent codebase.
+
+Please ensure you lint your code before sending pull requests to any AdonisJs repositories:
 
 [source, shell]
 ----
@@ -42,8 +52,10 @@ Be sure to lint your code before sending a Pull Request to any Adonis repositori
 
 == Documentation
 
-When adding a new feature into the core of the framework, be sure to create a parallel Pull Request in the documentation repository and to link them. This will help us understand your feature and to keep the documentation up-to-date.
+When adding a new feature to the core of the framework, be sure to create a parallel pull request in the link:https://github.com/adonisjs/docs[documentation repository] and link them.
+
+This will help the AdonisJs team understand your feature and keep the documentation updated.
 
 == Testing
 
-Before providing a Pull Request be sure to test the feature you are adding or create a regression test to show how a piece of code fails under specific circumstance while providing a bug fix.
+Before providing a pull request be sure to test the feature you are adding or create a regression test to show how a piece of code fails under specific circumstance while providing a bug fix.
