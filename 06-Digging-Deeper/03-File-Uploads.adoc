@@ -29,7 +29,7 @@ const Helpers = use('Helpers')
 
 Route.post('upload', async ({ request }) => {
   const profilePic = request.file('profile_pic', {
-    types: ['image'],
+    extnames: ['jpg', 'png', 'jpeg'],
     size: '2mb'
   })
 
@@ -67,7 +67,7 @@ const Helpers = use('Helpers')
 
 Route.post('upload', async ({ request }) => {
   const profilePics = request.file('profile_pics', {
-    types: ['image'],
+    extnames: ['jpg', 'png', 'jpeg'],
     size: '2mb'
   })
 
