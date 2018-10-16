@@ -1,7 +1,7 @@
 ---
 title: About AdonisJs
 permalink: about
-category: preface
+category: Preface
 ---
 
 = About AdonisJs
