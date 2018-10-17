@@ -64,7 +64,7 @@ To fulfill this requirement, AdonisJs uses the link:https://github.com/motdotla/
 Inside the root of every new AdonisJs project, you'll find an `.env.example` file.
 If you used AdonisJs CLI to install your application, this file will be automatically duplicated as `.env`. Otherwise, you should copy it manually.
 
-NOTE: The `.env` file should never be committed to your source control or shared with other people.
+WARNING: The `.env` file should never be committed to your source control or shared with other people.
 
 The `.env` file has a simple `key=value` syntax:
 
