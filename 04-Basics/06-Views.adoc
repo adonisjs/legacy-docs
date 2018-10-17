@@ -57,7 +57,7 @@ Now, create a route to render the `hello-world.edge` view:
 .start/routes.js
 [source, js]
 ----
-Route.get('/hello-world', ({ view }) => {
+Route.get('hello-world', ({ view }) => {
   return view.render('hello-world')
 })
 ----
