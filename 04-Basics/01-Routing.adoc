@@ -47,7 +47,7 @@ Route.patch(url, closure)
 Route.delete(url, closure)
 ----
 
-To register a route that responds to multiple verbs, use `Router.route`:
+To register a route that responds to multiple verbs, use `Route.route`:
 
 [source, js]
 ----
@@ -56,7 +56,7 @@ Route.route('/', () => {
 }, ['GET', 'POST', 'PUT']))
 ----
 
-To render a view directly (e.g. static pages), use `Router.on.render`:
+To render a view directly (e.g. static pages), use `Route.on.render`:
 
 [source, js]
 ----
