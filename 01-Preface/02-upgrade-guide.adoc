@@ -1,7 +1,7 @@
 ---
 title: Upgrading from 4.0
 permalink: upgrade-guide
-category: preface
+category: Preface
 ---
 
 = Upgrading from 4.0
