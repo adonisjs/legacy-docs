@@ -242,7 +242,7 @@ Removes `GET resource/create` and `GET resource/:id/edit` routes:
 [source, js]
 ----
 Route.resource('users', 'UserController')
-     .apiOnly()
+  .apiOnly()
 ----
 
 ==== only
@@ -253,7 +253,7 @@ Keeps only the passed routes:
 [source, js]
 ----
 Route.resource('users', 'UserController')
-     .only(['index', 'show'])
+  .only(['index', 'show'])
 ----
 
 ==== except
@@ -264,7 +264,7 @@ Keeps all routes except the passed routes:
 [source, js]
 ----
 Route.resource('users', 'UserController')
-     .except(['index', 'show'])
+  .except(['index', 'show'])
 ----
 
 === Resource Middleware
@@ -275,7 +275,7 @@ You can attach middleware to any resource as you would with a single route:
 [source, js]
 ----
 Route.resource('users', 'UserController')
-     .middleware(['auth'])
+  .middleware(['auth'])
 ----
 
 If you don't want to attach middleware to all routes generated via `Route.resource`, you can customize this behavior by passing a `Map` to the `middleware` method:
@@ -284,9 +284,9 @@ If you don't want to attach middleware to all routes generated via `Route.resour
 [source, js]
 ----
 Route.resource('users', 'UserController')
-     .middleware(new Map([
-       [['store', 'update', 'destroy'], ['auth']]
-     ]))
+  .middleware(new Map([
+    [['store', 'update', 'destroy'], ['auth']]
+  ]))
 ----
 
 In the example above, the auth middleware is only applied to the store, update and destroy routes.
@@ -299,7 +299,7 @@ You can define response formats for resourceful routes via the `formats` method:
 [source, js]
 ----
 Route.resource('users', 'UserController')
-     .formats(['json'])
+  .formats(['json'])
 ----
 
 == Routing Domains

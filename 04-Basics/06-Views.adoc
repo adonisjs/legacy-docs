@@ -177,7 +177,7 @@ For example, using the following example route…
 [source, js]
 ----
 Route.get('users/:id', 'UserController.show')
-     .as('profile')
+  .as('profile')
 ----
 
 …if you pass the route name and any route parameters…
