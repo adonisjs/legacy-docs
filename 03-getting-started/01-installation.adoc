@@ -46,8 +46,12 @@ For example, to create a new application called `yardstick`, simply:
 > adonis new yardstick
 ----
 
-NOTE: By default, the link:https://github.com/adonisjs/adonis-fullstack-app[fullstack blueprint, window="_blank"] is cloned from Github.
-You can customize this by using the options `--api-only` or `--slim`. You can also specify your own blueprint by using the option `--blueprint=<github-org/repo>`.
+[NOTE]
+======
+By default, the link:https://github.com/adonisjs/adonis-fullstack-app[fullstack blueprint, window="_blank"] is cloned from Github. You can customize this by using the options `--api-only` or `--slim`.
+
+You can also specify your own blueprint by using the option `--blueprint=<github-org/repo>`.
+======
 
 === Via Git
 
