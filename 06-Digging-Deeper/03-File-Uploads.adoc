@@ -119,6 +119,31 @@ if (!profilePics.movedAll()) {
 }
 ----
 
+== Validation Options
+The following validation options can be passed to validate the file before complete the move operation.
+
+[source, js]
+----
+const validationOptions = {
+  types: ['image'],
+  size: '2mb',
+  extnames: ['png', 'gif']
+}
+const avatar = request.file('avatar', validationOptions)
+
+// this is when validation occurs
+await avatar.move()
+----
+
+.validationOptions
+[role="resource-table", options="header", cols="20, 20, 60"]
+|====
+| Key | Value | Description
+| types | `String[]` | An array of types to be allowed. The value will be checked against the file link:https://www.npmjs.com/package/media-typer[media type]
+| size | `String` OR `Number` | The maxium size allowed for the file. The value is parsed using link:https://github.com/visionmedia/bytes.js#bytesparsestringnumber-value-numbernull[bytes.parse] method.
+| extnames | `String[]` | To have to more granular control over the file type, you can define the allowed extensions over defining the type.
+|====
+
 == Errors
 Following is the list of formats in which error(s) are returned.
 
@@ -145,7 +170,6 @@ NOTE: When using link:https://github.com/adonisjs/adonis-bodyparser/blob/develop
   type: "size"
 }
 ----
-
 Also, multiple file uploads `errors` method returns an array of errors in the same format.
 
 == File properties
@@ -162,7 +186,31 @@ Below is the list of file properties you can access on the file instance.
 | type [description]#File primary type#| `String` | `String` | `String`
 | subtype [description]#File sub type#| `String` | `String` | `String`
 | status [description]#File status. Set to `error` when fails#| `pending` | `consumed` | `moved`
+| extname [description]#File extension#| `String` | `String` | `String` |
 |====
+
+== Validating using Route Validator
+link:validator#_route_validator[Route validators] offers a neat way to validate user data before passing it to the controller. You can also validate files using the route validator too.
+
+[source, js]
+----
+'use strict'
+
+class StoreUser {
+  get rules () {
+    return {
+      avatar: 'file|file_ext:png,jpg|file_size:2mb'
+    }
+  }
+}
+
+module.exports = StoreUser
+----
+
+1. The `file` rule ensures the field is a valid link:https://github.com/adonisjs/adonis-bodyparser/blob/develop/src/Multipart/File.js[File].
+2. The `file_ext` rule defines the `extnames` allowed for the file.
+3. The `file_size` rule defines the maximum `size` for the file.
+4. The `file_types` rule defines the `types` allowed for the file.
 
 == Streaming files
 Majority of file uploading libraries/frameworks process the files for multiple times when you want to stream them to an external service like *s3*.
