@@ -8,13 +8,18 @@ category: concept
 
 toc::[]
 
-Ignitor is the package that powers the bootstrapping of an AdonisJs application. In this guide, we learn about some features and functionalities offered by this package to manage our code.
+link:https://github.com/adonisjs/adonis-ignitor[Ignitor, window="_blank"] powers the bootstrapping of an AdonisJs application.
+
+In this guide, we learn about some of the features and functionality offered by the Ignitor package to manage our code.
 
 == Hooks
-link:https://github.com/adonisjs/adonis-ignitor[Ignitor, window="_blank"] provides a bunch of hooks that you can use to customize the application behavior. The hooks are registered inside `start/hooks.js` file. Feel free to create this file, if it is missing.
+Ignitor exposes a number of hooks to customize your application behavior.
 
-Let's start with an example of register a view global after all the providers have been booted.
+These hooks are registered inside the `start/hooks.js` file. Feel free to create this file if it does not already exist.
 
+Here's an example of how to use `hooks.after` to register a view global *after* all providers have booted:
+
+.start/hooks.js
 [source, js]
 ----
 const { hooks } = require('@adonisjs/ignitor')
@@ -25,20 +30,24 @@ hooks.after.providersBooted(() => {
 })
 ----
 
-Just like `hooks.after`, you can make use of `hooks.before` to hook into before something happens. Below is the list of available hooks.
+Similar to `hooks.after`, you can also use `hooks.before` to register application logic *before* a hook occurs.
+
+Below is the list of available hooks:
 
 [options="header", cols="10%, 90%"]
 |====
-| Hook | Description
-| providersRegistered | Before/after all providers have been registered
-| providersBooted | Before/after all providers are booted.
-| preloading | Before/after pre loading registered files.
-| httpServer | Before/after HTTP server has been started.
-| aceCommand | Before/after ace command is executed.
+| Hook Event | Description
+| providersRegistered | Before/after all providers have registered
+| providersBooted | Before/after all providers have booted
+| preloading | Before/after preloading registered files
+| httpServer | Before/after HTTP server has started
+| aceCommand | Before/after ace command is executed
 |====
 
 == Preloading files
-Ignitor also makes it easy to preload a bunch of files after the HTTP server has been started. For this, you need to modify `server.js` file and call the following method.
+Ignitor makes it easy to preload files after the HTTP server has started.
+
+To do so, modify the `server.js` file and add the `preLoad` method:
 
 [source, js]
 ----
@@ -49,20 +58,23 @@ new Ignitor(require('@adonisjs/fold'))
   .catch(console.error)
 ----
 
-The `preLoad` method takes a relative path from the application path or an absolute path to any *.js* file. To load multiple files, call the `preLoad` method for multiple times.
+NOTE: The `preLoad` method accepts a relative application root path, or an absolute path to any JavaScript file.
+
+To load multiple files, call the `preLoad` method multiple times:
 
 [source, js]
 ----
 new Ignitor(require('@adonisjs/fold'))
   .preLoad('')
   .preLoad('')
+  // etc
 ----
 
 == Ignitor methods
-Below is the list of methods available on the ignitor instance.
+Below is the list of methods available on the `ignitor` instance.
 
 ==== appRoot(location)
-Define the absolute path to the application root.
+Define the absolute path to the application root:
 
 [source, js]
 ----
@@ -71,8 +83,9 @@ ignitor
 ----
 
 ==== modulesRoot(location)
-Define the absolute path to the application's modules root. This path contains the `node_modules` directory with the application's dependencies.
-By default, the path set in `appRoot()` is used.
+Define the absolute path to the application's `node_modules` parent directory.
+
+By default, the path set in `appRoot()` is used:
 
 [source, js]
 ----
@@ -81,7 +94,9 @@ ignitor
 ----
 
 ==== appFile(location)
-Relative path to the app file. By default `start/app.js` file is used.
+Define the relative path to the app file.
+
+By default, the `start/app.js` file is used:
 
 [source, js]
 ----
@@ -90,7 +105,9 @@ ignitor
 ----
 
 ==== loadCommands()
-Instruct ignitor to load ace providers and commands. It is done when running an ace command. However, you can also load commands when starting the HTTP server.
+Instruct Ignitor to load ace providers and commands.
+
+This is done when running an ace command, however, you can also load commands when starting the HTTP server:
 
 [source, js]
 ----

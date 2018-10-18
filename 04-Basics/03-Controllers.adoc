@@ -8,26 +8,31 @@ permalink: controllers
 
 toc::[]
 
-It may be enough to write closure to handle your route for a small application, but when your application starts growing it could be useful to organize them. This is where Controllers enter in the dance floor.
+While closures might be enough to handle route logic for small applications, when your application starts to grow, it becomes useful to organize application logic elsewhere.
 
-Controllers are attached to one or many routes and are the common point of interaction between your models, views and any other services you may need.
+This is where Controllers come into play.
 
-NOTE: Controllers only job is to respond to an HTTP request. Do not use them internally by requiring them inside different files.
+Controllers attach to one or many routes, grouping related request handling logic into single files, and are the common point of interaction between your models, views and any other services you may need.
+
+NOTE: A controller's only job is to respond to a HTTP request. Do not use them internally by requiring them inside different files.
 
 == Creating Controllers
 
-To create a new controller, make use of the `make:controller` command.
+To create a new controller, use the `make:controller` command:
 
 [source, bash]
 ----
-> adonis make:controller User --type http # HTTP Controller
-> adonis make:controller User --type ws   # WS Controller
-> adonis make:controller Admin/User       # Will use an Admin subfolder
+# HTTP Controller
+> adonis make:controller User --type http
+
+# WS Controller
+> adonis make:controller User --type ws
+
+# Will use an Admin subfolder
+> adonis make:controller Admin/User
 ----
 
-This command will create a file in the `App/Controllers/{TYPE}` folder with some boilerplate code.
-
-TIP: You can use the `--resource` flag to create a resourceful controller.
+This command creates a boilerplate file in the `App/Controllers/{TYPE}` folder:
 
 .app/Controllers/Http/UserController.js
 [source, js]
@@ -35,22 +40,33 @@ TIP: You can use the `--resource` flag to create a resourceful controller.
 'use strict'
 
 class UserController {
+  //
 }
 
 module.exports = UserController
 ----
 
+TIP: Use the `--resource` flag to create a resourceful controller.
+
 == Using a Controller
 
-A controller can be only accessed from a route. This is done by referencing them as a **String** in your route definition.
+A controller can only be accessed from a route.
 
+This is done by referencing the controller as a **string** in your route definition:
+
+.app/routes.js
 [source, js]
 ----
 Route.get(url, 'UserController.index')
 ----
 
-The part before the dot (`.`) is a reference to the controller file. It is by default namespaced to `App/Controllers/Http`. The second part is the name of the method you want to call inside this controller.
+The part before the dot is a reference to the controller file (e.g. `UserController`), and is by default namespaced to `App/Controllers/Http`.
 
+The part after the dot is the name of the method you want to call inside this controller (e.g. `index`).
+
+For example:
+
+.app/routes.js
 [source, js]
 ----
 // app/Controllers/Http/UserController -> index()
@@ -63,8 +79,9 @@ Route.post(url, 'Admin/UserController.store')
 Route.post(url, 'App/MyOwnControllers/UserController.index')
 ----
 
-Since these methods are route handlers, they will receive as an argument the link:http-context#_http_context[HTTP Context].
+As your defined controller methods are route handlers, they will receive the link:request-lifecycle#_http_context[HTTP Context] as an argument:
 
+.app/Controllers/Http/UserController.js
 [source, js]
 ----
 'use strict'

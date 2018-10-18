@@ -8,21 +8,26 @@ permalink: middleware
 
 toc::[]
 
-Middleware are a way to hook in the request lifecycle of your application. They are a set of functions executed in sequence and let you transform the request or the response.
+Middleware hook into the request lifecycle of your application.
 
-As an example, Adonis provide in its link:authentication#_auth_middleware[authentication provider] an `auth` middleware that verifies if the user of your application is authenticated. If the user is not authenticated and an exception will be thrown, and the request will never reach your route handler.
+They are a set of functions executed in sequence and let you transform the request and/or the response.
+
+As an example, AdonisJs provides an `auth` middleware that verifies if the user of your application is authenticated. If the user is not authenticated an exception will be thrown and the request will never reach your route handler.
 
 == Creating Middleware
 
-To create a new middleware, make use of the `make:middleware` command.
+To create a new middleware, use the `make:middleware` command:
 
 [source, bash]
 ----
 > adonis make:middleware CountryDetector
 ----
 
-This command will create a file in the `App/Middleware` folder with some boilerplate code. In our example middleware, we want to detect the country of the user from its ip address.
+This command will create a file in the `app/Middleware` folder with some boilerplate code.
 
+In our example `CountryDetector` middleware, we want to detect the country of the user from their ip address:
+
+.app/Middleware/CountryDetector.js
 [source, js]
 ----
 'use strict'
@@ -33,7 +38,6 @@ class CountryDetector {
   async handle ({ request }, next) {
     const ip = request.ip()
     request.country = geoip.lookup(ip).country
-
     await next()
   }
 }
@@ -41,55 +45,73 @@ class CountryDetector {
 module.exports = CountryDetector
 ----
 
-In this example. We are using the library `geoip-lite` and adding the country of the user inside the `request` object of the link:https://adonisjs.com/docs/request-lifecycle#http-context[HTTP Context].
+In this example, we are using the library `geoip-lite` and adding the country of the user inside the `request` object of the link:request-lifecycle#_http_context[HTTP Context].
 
 === Upstream & Downstream Middleware
 
-When creating your middleware, you'll decide if it runs before or after the request hit your route handler. This is done by defining the code before or after the `await next()` call.
+When creating your middleware, you'll need to decide if it runs before or after the request hits your route handler.
 
-NOTE: Your middleware can also run before **and** after the request hit your route handler.
+This is done by defining the code before or after the middleware `handle` method's `await next()` call:
 
+.app/Middleware/UpstreamExample.js
 [source, js]
 ----
 'use strict'
 
-class UpstreamMiddleware {
+class UpstreamExample {
   async handle ({ request }, next) {
     // Code...
-
     await next()
   }
 }
 
-module.exports = UpstreamMiddleware
+module.exports = UpstreamExample
 ----
 
-To access the `response` object for a downstream middleware, you need to unpack it from the link:https://adonisjs.com/docs/request-lifecycle#http-context[HTTP Context].
+To access the `response` object for downstream middleware, you'll need to unpack it from the passed link:request-lifecycle#_http_context[HTTP Context]:
 
+.app/Middleware/DownstreamExample.js
 [source, js]
 ----
 'use strict'
 
-class DownstreamMiddleware {
+class DownstreamExample {
   async handle ({ response }, next) {
     await next()
-
     // Code...
   }
 }
 
-module.exports = DownstreamMiddleware
+module.exports = DownstreamExample
+----
+
+If you want, your middleware code can also run before **and** after the request hits your route handler:
+
+.app/Middleware/BeforeAndAfterExample.js
+[source, js]
+----
+'use strict'
+
+class BeforeAndAfterExample {
+  async handle ({ response }, next) {
+    // Upstream code...
+    await next()
+    // Downstream code...
+  }
+}
+
+module.exports = BeforeAndAfterExample
 ----
 
 == Registering Middleware
 
-All of the middleware are registered inside the file `start/kernel.js`. They are separated into 3 categories.
+All middleware is registered inside the `start/kernel.js` file.
+
+Middleware is separated into 3 categories: **Server**, **Global** and **Named**.
 
 === Server Middleware
 
-Those middleware are executed before the request reaches the Routing system of Adonis. That means if the requested route isn't registered, it will still execute all middleware defined here.
-
-It is generally used for static assets or CORS control.
+Server middleware executes before the request reaches the AdonisJs routing system. This means if the requested route isn't registered, AdonisJs will still execute all middleware defined here:
 
 .start/kernel.js
 [source, js]
@@ -100,9 +122,11 @@ const serverMiddleware = [
 ]
 ----
 
+Server middleware is generally used to serve static assets or handle CORS.
+
 === Global Middleware
 
-Those middleware are executed after the route has been found. They are run in the sequence they have been defined so you must be careful when a middleware requires another one.
+Global middleware executes after the requested route has been found:
 
 .start/kernel.js
 [source, js]
@@ -112,46 +136,53 @@ const globalMiddleware = [
 ]
 ----
 
+Global middleware executes in the sequence they were defined, so you must be careful when one middleware requires another.
+
 === Named Middleware
 
-Those middleware are linked to a specific route or route groups. They are run in the sequence they have been defined in the route.
+Named middleware are assigned to a specific route or route group:
 
 .start/kernel.js
 [source, js]
 ----
 const namedMiddleware = {
-  auth: 'Adonis/Middleware/Auth'
+  auth: 'Adonis/Middleware/Auth',
 }
 ----
 
+.start/routes.js
 [source, js]
 ----
 Route.get(url, closure).middleware(['auth'])
 ----
 
+Named middleware executes in the sequence they were defined against their assigned route.
+
 == Middleware Properties
 
-Middleware can be configurable at runtime. Adonis make use of the []link:https://www.npmjs.com/package/haye#pipe-expression[pipe expression, window="_blank"] to define properties.
+AdonisJs uses the link:https://www.npmjs.com/package/haye#pipe-expression[pipe expression, window="_blank"] to define middleware properties.
 
-A good example could be the `auth` named middleware. This middleware accepts a different authentication scheme as a prop.
+For example, the `auth` middleware optionally accepts an authentication scheme as a middleware property:
 
+.start/routes.js
 [source, js]
 ----
-// We are using the Session Scheme for this route
+// Use the Session Scheme for this route
 Route.post(url, closure).middleware(['auth:session'])
 
-// We are using the JWT Scheme for this route
+// Use the JWT Scheme for this route
 Route.post(url, closure).middleware(['auth:jwt'])
 ----
 
-You can also pass multiple props by chaining them with a comma.
+You can also pass multiple props by chaining them with a comma:
 
+.start/routes.js
 [source, js]
 ----
 Route.post(url, closure).middleware(['auth:session,jwt'])
 ----
 
-Those properties are available as the third argument in your middleware `handle` method.
+Those properties are available as the third argument in your middleware `handle` method:
 
 [source, js]
 ----
