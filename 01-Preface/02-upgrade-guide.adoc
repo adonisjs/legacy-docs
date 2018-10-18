@@ -143,6 +143,24 @@ configure({
 })
 ----
 
+== Views
+
+==== css
+
+The `css` global has been changed to `style`. The `css` global is no longer supported
+
+Earlier
+[source, edge]
+----
+{{ css('style') }}
+----
+
+Now
+[source, edge]
+----
+{{ style('style') }}
+----
+
 == Lucid
 Previously, date formatting was inconsistent with newly created records and existing records.
 
