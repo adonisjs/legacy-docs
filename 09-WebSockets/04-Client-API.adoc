@@ -64,7 +64,6 @@ ws.connect()
 | reconnectionDelay | *1000* | How long to wait, before reconnecting. The value will be used as `n x delay`, where `n` is the current value of reconnection attempts.
 | query | *null* | Query string to passed to the connection URL. You can pass an object
 | encoder | *JsonEncoder* | The encoder to be used. The same encoder will be required on the server too.
-| debug | `true` if `NODE_ENV` is not set to `production` | `log` statements used for debugging and outputted to `console.log`
 |===
 
 It is recommended to listen for `open` and `close` events, to manage your application state properly.
