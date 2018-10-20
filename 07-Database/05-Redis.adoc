@@ -137,7 +137,7 @@ Subscribe to a pattern
 
 [source, js]
 ----
-Redis.psubscribe('h?llo', function (message, channel, pattern) {
+Redis.psubscribe('h?llo', function (pattern, message, channel) {
 })
 
 Redis.publish('hello')
