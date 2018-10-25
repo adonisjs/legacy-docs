@@ -292,7 +292,7 @@ Only creates the extension if it does not exists, otherwise silently ignores the
 ----
 class UserSchema {
   up () {
-    this.createIfNotExists('postgis')
+    this.createExtensionIfNotExists('postgis')
   }
 }
 ----
