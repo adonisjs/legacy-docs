@@ -438,7 +438,7 @@ Lucid models come with a bunch of instance methods to do common operations witho
 
 ==== reload
 Reload model from database.
-Example use case: you have a model with some hook on creation (eg. set some field to some uuid). To get that value in your model instance object you need to reload model from database.
+Example use case: you have a model with some hooks on creation. To get that value in your model instance you need to reload the model from the database.
 
 [source, js]
 ----
