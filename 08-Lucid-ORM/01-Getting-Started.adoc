@@ -432,6 +432,25 @@ const User = use('App/Models/User')
 const users = await User.truncate()
 ----
 
+
+== Instance methods
+Lucid models come with a bunch of instance methods to do common operations without using the query builder interface.
+
+==== reload
+Reload model from database.
+Example use case: you have a model with some hook on creation (eg. set some field to some uuid). To get that value in your model instance object you need to reload model from database.
+
+[source, js]
+----
+const User = use('App/Models/User')
+const user = await User.create(props)
+// user.serviceToken === undefined
+await user.reload()
+// user.serviceToken === 'E1Fbl3sjH'
+----
+
+
+
 == Aggregate helpers
 link:query-builder#_aggregate_helpers[Query Builder aggregate helpers] provide shortcut access to common aggregate queries. Static model methods can be used when you wish to aggregate the entire table.
 
