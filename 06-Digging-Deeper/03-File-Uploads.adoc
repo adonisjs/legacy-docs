@@ -254,4 +254,42 @@ NOTE: Always make sure to call `await request.multipart.process()` to start proc
 
 The `request.multipart.file` method lets you select a specific file, and the readable stream is accessed via `file.stream` property. Now you are free to consume the stream by piping it to *s3* or any other service you want.
 
+If you have fields with file, you can access them with `request.multipart.field`. 
+
+[source, js]
+----
+const Drive = use('Drive')
+
+Route.post('upload', async ({ request }) => {
+
+  request.multipart.field((name, value) => {
+            body[name] = value;
+          });
+          ... 
+  });
+
+  await request.multipart.process()
+})
+----
+
+The multipart methods are chainable. So you can chain them like 
+
+[source, js]
+----
+const Drive = use('Drive')
+
+Route.post('upload', async ({ request }) => {
+  request
+    .multipart
+    .field((name, value) => {
+            body[name] = value;
+          }).file('profile_pic', {}, async (file) => {
+    await Drive.disk('s3').put(file.clientName, file.stream)
+  }).process();
+          ... 
+  });
+
+})
+----
+
 The entire process is asynchronous and processes the file(s) only once.
