@@ -261,15 +261,13 @@ If you have fields with file, you can access them with `request.multipart.field`
 const Drive = use('Drive')
 
 Route.post('upload', async ({ request }) => {
-
+  let body={};
+  
   request.multipart.field((name, value) => {
-            body[name] = value;
-          });
-          ... 
+    body[name] = value;
   });
-
-  await request.multipart.process()
-})
+  await request.multipart.process();
+});
 ----
 
 The multipart methods are chainable. So you can chain them like 
@@ -279,17 +277,14 @@ The multipart methods are chainable. So you can chain them like
 const Drive = use('Drive')
 
 Route.post('upload', async ({ request }) => {
-  request
-    .multipart
-    .field((name, value) => {
-            body[name] = value;
-          }).file('profile_pic', {}, async (file) => {
-    await Drive.disk('s3').put(file.clientName, file.stream)
+
+  request.multipart.field((name, value) => {
+    body[name] = value;
+  }).file('profile_pic', {}, async (file) => {
+      await Drive.disk('s3').put(file.clientName, file.stream)
   }).process();
           ... 
-  });
-
-})
+});
 ----
 
 The entire process is asynchronous and processes the file(s) only once.
