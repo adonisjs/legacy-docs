@@ -7,13 +7,15 @@
 
 AdonisJS docs is the official repository for technical documentation of AdonisJS framework.
 
-You can find this documentation on http://adonisjs.com/docs/2.0/installation.
+You can find the latest documentation on http://adonisjs.com/docs/installation.
 
-In order to contribute to it, follow below steps.
+## Contribution
+
+In order to contribute to it, follow the steps below.
 
 1. Fork this repo.
-2. Make required changes.
-3. Create a pull request on `develop` branch.
+2. Make required changes on the `version` branch you want.
+3. Create a pull request on the `version` branch you changed. (e.g. `4.1` branch)
 4. Wait for it to get merged.
 
 Feel free to contact me, incase of any help.
