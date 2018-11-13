@@ -336,14 +336,14 @@ await auth
   .attempt(uid, password)
 ----
 
-==== generateForRefreshToken
-Generate a new JWT token using the refresh token.
+==== generateForRefreshToken(refresh_token, [jwtPayload])
+Generate a new JWT token using the refresh token. Passing jwtPayload=true encodes the user object within the token.
 
 [source, js]
 ----
 const refreshToken = request.input('refresh_token')
 
-await auth.generateForRefreshToken(refreshToken)
+await auth.generateForRefreshToken(refreshToken, true)
 ----
 
 ==== newRefreshToken
