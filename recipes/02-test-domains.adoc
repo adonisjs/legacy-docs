@@ -1,13 +1,13 @@
 ---
-permalink: dev-domains
-title: Using .dev domains
+permalink: test-domains
+title: Using .test domains
 category: recipes
 ---
-= Using .dev domains
+= Using .test domains
 
 toc::[]
 
-We all love to use pretty `.dev` domains when developing our apps in development. In this recipe, we learn how to bind custom domains to your app instead of accessing them via `localhost`.
+We all love to use pretty `.test` domains when developing our apps in development. In this recipe, we learn how to bind custom domains to your app instead of accessing them via `localhost`.
 
 NOTE: This technique has no technical advantage or disadvantage and instead used as a personal preference towards pretty domains.
 
@@ -30,7 +30,7 @@ hotel start
 Once it is running, you can run `hotel ls` command to see the list of registered apps/domains. Which is empty with the new installation.
 
 == Setup proxy
-Let's understand how this works in theory. We need to tell our *browser* or *system network* to pass through a proxy, which serves our `.dev` apps or pass the request to the actual URL.
+Let's understand how this works in theory. We need to tell our *browser* or *system network* to pass through a proxy, which serves our `.test` apps or pass the request to the actual URL.
 
 The entire process of proxy is very lightweight and doesn't impact your system performance or speed.
 
