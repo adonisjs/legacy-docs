@@ -1,27 +1,27 @@
 ---
 permalink: csrf
-title: CSRF protection
+title: CSRF Protection
 category: security
 ---
 
-= CSRF protection
+= CSRF Protection
 
 toc::[]
 
-link:https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)[Cross-Site Request Forgery ( CSRF )] allows an attacker to perform actions on behalf of another user without their knowledge or permission.
+link:https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)[Cross-Site Request Forgery (CSRF)] allows an attacker to perform actions on behalf of another user without their knowledge or permission.
 
-AdonisJs protects your application from CSRF attacks by denying unidentified requests. HTTP requests with *POST, PUT and DELETE* methods are checked to make sure that right people from right place invoke these requests.
+AdonisJs protects your application from CSRF attacks by denying unidentified requests. HTTP requests with *POST, PUT and DELETE* methods are checked to make sure that the right people from the right place invoke these requests.
 
 == Setup
-Make sure to install the `shield` provider and register the appropriate middleware.
-
+Install the `sheild` provider via npm by executing the following command:
 [source, bash]
 ----
-adonis install @adonisjs/shield
+> adonis install @adonisjs/shield
 ----
 
-Next, register the provider inside `start/app.js` file.
+Next, register the provider inside the `start/app.js` file:
 
+.start/app.js
 [source, js]
 ----
 const providers = [
@@ -29,10 +29,9 @@ const providers = [
 ]
 ----
 
-And finally, register the global middleware inside `start/kernel.js` file.
+Finally, register the global middleware inside the `start/kernel.js` file:
 
-NOTE: Shield middleware relies on link:sessions[sessions], so make sure they are set up correctly.
-
+.start/kernel.js
 [source, js]
 ----
 const globalMiddleware = [
@@ -40,9 +39,12 @@ const globalMiddleware = [
 ]
 ----
 
-== Config
-The configuration for CSRF is saved inside `config/shield.js` file.
+NOTE: Shield middleware relies on link:sessions[sessions], so make sure they are set up correctly.
 
+== Config
+The configuration for CSRF is saved inside the `config/shield.js` file:
+
+.config/shield.js
 [source, javascript]
 ----
 csrf: {
@@ -58,8 +60,8 @@ csrf: {
 | Key | Value | Description
 | enable  | Boolean | A boolean to turn on/off CSRF for the entire application.
 | methods | Array | HTTP verbs to be protected by CSRF. Consider adding all verbs which allow the end user to add or modify data.
-| filterUris | Array | A list of URLs/Routes to ignore. You can pass actual routes definition or a regular expression to match.
-| cookieOptions | Object | An object of link:https://www.npmjs.com/package/cookie#options-1[cookie options, window="_blank"]
+| filterUris | Array | A list of URLs/Routes to ignore. You can pass actual route definitions or a regular expression to match.
+| cookieOptions | Object | An object of link:https://www.npmjs.com/package/cookie#options-1[cookie options, window="_blank"].
 |====
 
 == How It Works?
@@ -67,13 +69,13 @@ csrf: {
 [ol-spaced]
 1. AdonisJs creates a *CSRF secret* for each user visiting your website.
 2. A corresponding token for the secret is generated for each request and passed to all views as `csrfToken` and `csrfField()` globals.
-3. Also, the same token is set to a cookie with key `XSRF-TOKEN`. Frontend Frameworks like *AngularJs* automatically reads this cookie and send it along with each Ajax request.
+3. Also, the same token is set to a cookie with key `XSRF-TOKEN`. Frontend Frameworks like *AngularJs* automatically read this cookie and send it along with each Ajax request.
 4. Whenever a *POST*, *PUT* or *DELETE* requests comes, the middleware verifies the token with the secret to make sure it is valid.
 
-NOTE: If you are using the `XSRF-TOKEN` cookie value, then do make sure the header key is `X-XSRF-TOKEN`
+NOTE: If you are using the `XSRF-TOKEN` cookie value, ensure the header key is `X-XSRF-TOKEN`.
 
 == View Helpers
-You can access the CSRF token using one of the following view helpers and make sure to set them inside your forms.
+You can access the CSRF token using one of the following view helpers to ensure it gets set inside your forms.
 
 To send the token along with each request, you need access to it. There are a few ways to get access to the CSRF token.
 
@@ -90,15 +92,17 @@ To send the token along with each request, you need access to it. There are a fe
 ----
 
 ==== csrfToken
-The `csrfToken` helper returns the raw value of the token.
+The `csrfToken` helper returns the raw value of the token:
 
 [source, edge]
 ----
 {{ csrfToken }}
 ----
 
-== Handling exception
-On validation failure, an exception is thrown with *EBADCSRFTOKEN* code. Make sure to listen for the exception and return an appropriate response.
+== Exception handling
+On validation failure, an exception is thrown with the code *EBADCSRFTOKEN*.
+
+Ensure you listen for this exception and return an appropriate response, like so:
 
 .app/Exceptions/Handler.js
 [source, javascript]

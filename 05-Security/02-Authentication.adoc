@@ -8,47 +8,56 @@ category: security
 
 toc::[]
 
-Every Web application deals with User Management and Authentication at some stage. The AdonisJs Authentication provider is a fully featured system to authenticate HTTP requests using multiple authenticators. Using authenticators, you can build traditional *session based* login systems to secure *REST API's*.
+The AdonisJs auth provider is a fully featured system to authenticate HTTP requests using multiple authenticators.
+
+Using authenticators you can build traditional *session based* login systems and secure your *REST APIs*.
 
 == Authenticators
-Each authenticator is a combination of serializers and an authentication scheme.
+Each authenticator is a combination of authentication scheme and serializer.
 
 === Schemes
 [support-list]
-* Sessions (session)
-* Basic Auth (basic)
-* JWT (jwt)
-* Personal API Tokens (api)
-
-&nbsp;
+* Session (`session`)
+* Basic Auth (`basic`)
+* JWT (`jwt`)
+* Personal API Tokens (`api`)
 
 === Serializers
 [support-list]
-* Lucid ( lucid )
-* Database ( database )
+* Lucid (`lucid`)
+* Database (`database`)
 
-== About Authentication
+== Authentication Categories
 
-[ol-spaced]
-1. Authentication is divided into two broad categories of *Stateful authentication* and *Stateless authentication*.
-2. Session-based authentication is considered *Stateful Authentication* since once logged in the user can navigate to different areas of the application without resending the credentials.
-3. *Stateless Authentication* requires the end-user to send the credentials on each HTTP request which is very common with REST API's.
-4. AdonisJs provides necessary tooling & helpers to manage both types of authentication with ease.
-5. Authentication provider makes use of the link:encryption-and-hashing#_hashing_values[Hash] module to verify passwords. Make sure to link:database-hooks#_defining_hooks[hash your passwords] before saving them to the database.
+Authentication is divided into two broad categories: *Stateful* and *Stateless*.
+
+Session-based authentication is considered *Stateful* since logged in users can navigate to different areas of the application without resending their credentials.
+
+*Stateless* authentication requires the user to resend their credentials on each HTTP request, which is very common with REST APIs.
+
+AdonisJs provides necessary tooling and helpers to manage both types of authentication with ease.
+
+== Password Hashing
+The AdonisJs auth provider uses the link:encryption-and-hashing#_hashing_values[Hash] module to verify passwords.
+
+Always link:database-hooks#_defining_hooks[hash your passwords] before saving them to the database.
 
 
 == Setup
-Authentication provider comes pre-installed with `fullstack` and `api` boilerplates. If not installed, follow the defined steps.
+The AdonisJs auth provider comes pre-installed with `fullstack` and `api` boilerplates.
 
-Install the package from npm and automatically set it up.
+If the auth provider is not already set up, follow the instructions below.
+
+First, run the `adonis` command to download the auth provider:
+
 [source, bash]
 ----
-adonis install @adonisjs/auth
+> adonis install @adonisjs/auth
 ----
 
-=== Registering provider
-Next, you need to register the provider inside the `start/app.js` file.
+Next, register the auth provider inside the `start/app.js` file:
 
+.start/app.js
 [source, bash]
 ----
 const providers = [
@@ -56,7 +65,9 @@ const providers = [
 ]
 ----
 
-=== Registering middleware
+Finally, register the auth middleware inside the `start/kernel.js` file:
+
+.start/kernel.js
 [source, js]
 ----
 const globalMiddleware = [
@@ -70,8 +81,78 @@ const namedMiddleware = {
 ----
 
 == Config
-Configuration for authentication is saved inside `config/auth.js` file. By default, it makes use of the `session` authenticator to authenticate requests.
+Your authentication configuration is saved inside the `config/auth.js` file.
 
+By default, the `session` authenticator is used to authenticate app requests.
+
+== Basic Example
+Let’s start with the example of logging in a user, then only showing them their profile if they are logged in.
+
+First, add the following routes to the `start/routes.js` file:
+
+.start/routes.js
+[source, js]
+----
+Route
+  .post('login', 'UserController.login')
+  .middleware('guest')
+
+Route
+  .get('users/:id', 'UserController.show')
+  .middleware('auth')
+----
+
+Next, create the `UserController` via the `adonis` command:
+
+[source, bash]
+----
+> adonis make:controller User
+----
+
+Add the `login` method to the `UserController`:
+
+.app/Controllers/Http/UserController.js
+[source, js]
+----
+class UserController {
+
+  async login ({ request, auth, response }) {
+    const { email, password } = request.all()
+    await auth.attempt(email, password)
+
+    return 'Logged in successfully'
+  }
+}
+----
+
+The `login` method above extracts the user's `email` and `password` from the request and logs them in if their credentials are valid.
+
+Finally, add the `show` method to the `UserController`:
+
+.app/Controllers/Http/UserController.js
+[source, js]
+----
+class UserController {
+  async login () {
+    ...
+  }
+
+  show ({ auth, params }) {
+    if (auth.user.id !== Number(params.id)) {
+      return "You cannot see someone else's profile"
+    }
+    return auth.user
+  }
+}
+----
+
+The `show` method above checks if the `id` route parameter equals the currently logged in user `id`. If so, the authenticated user model is returned (which AdonisJS converts to JSON in the final response).
+
+== Session
+
+=== Session Config
+
+.config/auth.js
 [source, javascript]
 ----
 module.exports = {
@@ -89,80 +170,20 @@ module.exports = {
 [options="header", cols="10%, 20%, 25%"]
 |====
 | Key | Values | Description
-| serializer | lucid, database | Serializer to be used for fetching the user from the database.
-| scheme | session, basic, jwt, api | Scheme to be used for fetching and authenticating user credentials.
-| uid | Database field name | Database field to be used as a unique identifier for a given user.
-| password | Database field name | Field to be used for verifying user password
-| model | Model Namespace *(Lucid Only)* | Applicable only when using Lucid serializer. Given the model is used for querying the database.
-| table | Database table name *(Database Only)* | Applicable only when using Database serializer.
+| serializer | `lucid`, `database` | Serializer used to fetch the user from the database.
+| scheme | `session`, `basic`, `jwt`, `api` | Scheme used to fetch and authenticate user credentials.
+| uid | Database field name | Database field used as the unique identifier for a given user.
+| password | Database field name | Field used to verify the user password.
+| model | Model namespace (`lucid` only) | Model used to query the database, applicable only when using the `lucid` serializer.
+| table | Database table name (`database` only) | Applicable only when using the `database` serializer.
 |====
 
+=== Session Methods
 
-== Basic Example
-Let's start with a basic example of making a user login and then showing them their profile, only if they are logged in.
-
-[source, js]
-----
-Route
-  .get('users/:id', 'UserController.show')
-  .middleware('auth')
-
-Route
-  .post('login', 'UserController.login')
-  .middleware('guest')
-----
-
-Let's create the `UserController` using the `adonis` command.
-
-[source, bash]
-----
-adonis make:controller User
-----
-
-=== Login user
-Let's start by creating the `login` method on the UserController, which takes the user credentials and log in the user if they are correct.
-
-[source, js]
-----
-class UserController {
-
-  async login ({ request, auth }) {
-    const { email, password } = request.all()
-    await auth.attempt(email, password)
-
-    return 'Logged in successfully'
-  }
-}
-----
-
-Yes, that is all you need to do to log in a user using their `email` and `password`.
-
-=== Showing profile
-Let's write the `show` method too, which returns the user profile as JSON.
-
-[source, js]
-----
-class UserController {
-  async login () {
-    ...
-  }
-
-  show ({ auth, params }) {
-    if (auth.user.id !== Number(params.id)) {
-      return 'You cannot see someone else\'s profile'
-    }
-    return auth.user
-  }
-}
-----
-
-The `auth.user` is the instance of the *User model*, so we can just return it. Also, we want to make sure the `id` received as params is same as currently logged in user id.
-
-== Sessions
-The *session authenticator* exposes following methods to login or authenticate a user.
+The *session* authenticator exposes the following methods to log in and authenticate users.
 
 ==== attempt(uid, password)
-Attempt to log in a user using their `uid` and `password`. It throws an exception if unable to find the user or if password mismatch.
+Login via `uid` and `password`, throwing an exception if no user is found or the password is invalid:
 
 [source, js]
 ----
@@ -170,7 +191,7 @@ await auth.attempt(uid, password)
 ----
 
 ==== login(user)
-Login a user using the `user` model instance. This method does not verify anything and simply mark the user as logged in.
+Login via `user` model instance, not verify anything but simply marking the user as logged in:
 
 [source, js]
 ----
@@ -180,7 +201,7 @@ await auth.login(user)
 ----
 
 ==== loginViaId(id)
-Login a user using their id. This method queries the database to make sure the user exists.
+Login a via user id, querying the database to ensure the user exists:
 
 [source, js]
 ----
@@ -188,9 +209,7 @@ await auth.loginViaId(1)
 ----
 
 ==== remember
-Anytime you call methods like `attempt`, `login` or `loginViaId`, you can chain the `remember` method to make sure that users are logged in again even after closing their browser.
-
-NOTE: The `remember` method creates a token for the user inside the `tokens` table. If you ever want to revoke the long-lived session of a particular user, simply set `is_revoked` to true.
+When calling methods like `attempt`, `login` or `loginViaId`, chain the `remember` method to ensure users stay logged in after closing their browser:
 
 [source, js]
 ----
@@ -199,8 +218,10 @@ await auth
   .attempt(email, password)
 ----
 
+NOTE: The `remember` method creates a token for the user inside the `tokens` table. If you ever want to revoke the long-lived session of a particular user, simply set `is_revoked` to true.
+
 ==== check
-Check if a user is already logged in by reading the session.
+Check if a user is already logged in by reading their session:
 
 [source, js]
 ----
@@ -212,7 +233,7 @@ try {
 ----
 
 ==== getUser
-This method calls the `check` method internally and returns the user details if they are logged in.
+Returns the logged in user instance (via the `check` method):
 
 [source, js]
 ----
@@ -224,7 +245,7 @@ try {
 ----
 
 ==== logout
-Logout the currently logged in user.
+Log out the currently logged in user:
 
 [source, js]
 ----
@@ -232,12 +253,16 @@ await auth.logout()
 ----
 
 == Basic Auth
-The basic authentication is stateless, where the end-user is supposed to pass the credentials on each request, so there is no concept of `login` and `logout`.
+As basic authentication is stateless with users passing credentials per request, there is no concept of `login` and `logout`.
+
+NOTE: The `Authorization = Basic <credentials>` header must be set to authenticate *basic* auth requests, where `<credentials>` is a `base64` encoded string of `uid:password`, where `uid` is the `uid` database field defined in the `config/auth.js` file.
+
+=== Basic Auth Methods
+
+The *basic* authenticator exposes the following methods to authenticate users.
 
 ==== check
-Check to see if the user has passed `basic auth` credentials in the request header or not. Also, this method verifies the user existence and their password
-
-NOTE: Set the `Authorization = Basic <credentials>`  header to authenticate the request. The credentials are a `base64` encoded string of `uid:password` where `uid` is the `uid` database field designated in the auth config.
+Check the user's basic auth credentials in the request header, verifying the user's existence and validating their password:
 
 [source, js]
 ----
@@ -249,7 +274,7 @@ try {
 ----
 
 ==== getUser
-Calls `check` internally and returns the user details.
+Returns the logged in user instance (via the `check` method):
 
 [source, js]
 ----
@@ -261,14 +286,18 @@ try {
 ----
 
 == JWT
-The link:https://jwt.io/[jwt authentication, window="_blank"] is an industry standard to implement stateless authentication using tokens, and AdonisJs has out of the box support for JWT.
+link:https://jwt.io/[JWT authentication, window="_blank"] is an industry standard to implement stateless authentication via string tokens. 
 
-NOTE: Set the `Authorization = Bearer <token>`  header to authenticate the request.
+AdonisJs supports JWT tokens out of the box via its *jwt* authenticator.
+
+NOTE: The `Authorization = Bearer <token>` header must be set to authenticate *jwt* auth requests, where `<token>` is a valid JWT token.
+
+=== JWT Config
 
 .config/auth.js
 [source, javascript]
 ----
-{
+module.exports = {
   authenticator: 'jwt',
   jwt: {
     serializer: 'Lucid',
@@ -278,27 +307,29 @@ NOTE: Set the `Authorization = Bearer <token>`  header to authenticate the reque
     password: 'password',
     options: {
       secret: Config.get('app.appKey'),
-      // Options to be used while generating token
+      // For additional options, see the table below...
     }
   }
 }
 ----
 
-.Additional Options
-
 [options="header"]
 |====
-| Key | Available Values | Default Value | Description
-| algorithm | HS256, HS384 | HS256 | Algorithm to be used for generating token
-| expiresIn | valid time in seconds or link:https://github.com/rauchg/ms.js[ms string] | null |  When to expire the token
-| notBefore | valid time in seconds or link:https://github.com/rauchg/ms.js[ms string] | null | Till when at least to keep the token valid
-| audience |  String | null  | A value to be checked against the `aud`
-| issuer |  Array or String | null | Value to be used for `iss`.
-| subject | String | null | A value to be checked against the `sub`.
+| Key | Values | Default Value | Description
+| algorithm | `HS256`, `HS384` | `HS256` | Algorithm used to generate tokens.
+| expiresIn | Valid time in seconds or link:https://github.com/rauchg/ms.js[ms string, window="_blank"] | null | When to expire tokens.
+| notBefore | Valid time in seconds or link:https://github.com/rauchg/ms.js[ms string, window="_blank"] | null | Minimum time to keep tokens valid.
+| audience |  String | null  | `aud` claim.
+| issuer |  Array or String | null | `iss` claim.
+| subject | String | null | `sub` claim.
 |====
 
-==== attempt(uid, password, [jwtPayload])
-Validate the user credentials and generate a JWT token in exchange.
+=== JWT Methods
+
+The *jwt* authenticator exposes the following methods to generate JWT tokens and authenticate users.
+
+==== attempt(uid, password, [jwtPayload], [jwtOptions])
+Validate the user credentials and generate a JWT token in exchange:
 
 [source, js]
 ----
@@ -306,7 +337,6 @@ await auth.attempt(uid, password)
 ----
 
 .Output
-
 [source, js]
 ----
 {
@@ -316,8 +346,8 @@ await auth.attempt(uid, password)
 }
 ----
 
-==== generate(user, [jwtPayload])
-Generate JWT token for a given user. Optionally you can pass a custom object to be encoded within the token. Passing `jwtPayload=true` encodes the user object within the token.
+==== generate(user, [jwtPayload], [jwtOptions])
+Generate JWT token for a given user:
 
 [source, js]
 ----
@@ -326,8 +356,10 @@ const user = await User.find(1)
 await auth.generate(user)
 ----
 
+You can optionally pass a custom object to be encoded within the token. Passing `jwtPayload=true` encodes the user object within the token.
+
 ==== withRefreshToken
-Instruct JWT authenticator to generate a refresh token as well. The refresh token is generated so that the clients can refresh the actual `jwt` token without asking for user credentials again.
+Instruct the JWT authenticator to generate a refresh token as well:
 
 [source, js]
 ----
@@ -335,6 +367,8 @@ await auth
   .withRefreshToken()
   .attempt(uid, password)
 ----
+
+The refresh token is generated so that the clients can refresh the actual `jwt` token without asking for user credentials again.
 
 ==== generateForRefreshToken(refresh_token, [jwtPayload])
 Generate a new JWT token using the refresh token. Passing jwtPayload=true encodes the user object within the token.
@@ -347,7 +381,7 @@ await auth.generateForRefreshToken(refreshToken, true)
 ----
 
 ==== newRefreshToken
-When generating a new `jwt` token, auth provider does not reissue a new refresh token and instead uses the old one. If you want, you can also regenerate a new refresh token.
+When generating a new `jwt` token, the auth provider does not reissue a new refresh token and instead uses the old one. If you want, you can also regenerate a new refresh token:
 
 [source, js]
 ----
@@ -357,7 +391,7 @@ await auth
 ----
 
 ==== check
-Check if the token has been sent in the `Authorization` header or not.
+Checks if a valid JWT token has been sent via the `Authorization` header:
 
 [source, js]
 ----
@@ -369,7 +403,7 @@ try {
 ----
 
 ==== getUser
-Calls the `check` method internally and returns the user if authentication passes.
+Returns the logged in user instance (via the `check` method):
 
 [source, js]
 ----
@@ -381,7 +415,7 @@ try {
 ----
 
 ==== listTokens
-List all JWT refresh tokens for the user.
+Lists all JWT refresh tokens for the user:
 
 [source, js]
 ----
@@ -389,18 +423,22 @@ await auth.listTokens()
 ----
 
 == Personal API tokens
-The personal API tokens become popular by link:https://github.com/blog/1509-personal-api-tokens[Github, window="_blank"], to use a token for automated scripts, where it is not possible to manually type the *email* and *password* every time.
+Personal API tokens were made popular by link:https://github.com/blog/1509-personal-api-tokens[Github, window="_blank"] for use in scripts as a revocable substitute for traditional *email* and *password* authentication.
 
-AdonisJs allows you to build applications, where your users can create personal API tokens and can use them to get authenticated.
+AdonisJs allows you to build apps where your users can create personal API tokens and use them to authenticate.
 
-NOTE: Set the `Authorization = Bearer <token>`  header to authenticate the request.
+NOTE: The `Authorization = Bearer <token>` header must be set to authenticate *api* auth requests, where `<token>` is a valid API token.
+
+=== API Methods
+
+The *api* authenticator exposes the following methods to generate API tokens and authenticate users.
 
 ==== attempt(uid, password)
-Generate a new token by validating the user credentials
+Valid the user credentials and then generate a new token for them:
 
 [source, js]
 ----
-await auth.attempt(uid, password)
+const token = await auth.attempt(uid, password)
 ----
 
 .Output
@@ -413,17 +451,17 @@ await auth.attempt(uid, password)
 ----
 
 ==== generate(user)
-Generate token for a given user
+Generate token for a given user:
 
 [source, js]
 ----
 const user = await User.find(1)
 
-await auth.generate(user)
+const token = await auth.generate(user)
 ----
 
 ==== check
-Check if the token has been passed as the `Authorization` header or not.
+Checks if a valid API token has been passed via the `Authorization` header:
 
 [source, js]
 ----
@@ -435,7 +473,7 @@ try {
 ----
 
 ==== getUser
-Calls the `check` method internally and returns the user if authentication passes.
+Returns the logged in user instance (via the `check` method):
 
 [source, js]
 ----
@@ -447,7 +485,7 @@ try {
 ----
 
 ==== listTokens
-List all API tokens for the user.
+List all API tokens for the user:
 
 [source, js]
 ----
@@ -455,9 +493,9 @@ await auth.listTokens()
 ----
 
 == Switching authenticators
-The auth provider makes it so simple to use and switch between multiple *authenticators* at runtime by calling the `authenticator` method.
+The auth provider makes it simple to switch between multiple *authenticators* at runtime by calling the `authenticator` method.
 
-Assuming the user is logged in using `session` authenticator, we can generate a JWT token for them as follows.
+Assuming the user is logged in using the `session` authenticator, we can generate a JWT token for them as follows:
 
 [source, js]
 ----
@@ -470,8 +508,11 @@ const auth
 ----
 
 == Auth middleware
-The `auth` middleware automates the flow of authenticating specific routes by adding the middleware on them. The middleware is registered as a name middleware inside `start/kernel.js`
+The `auth` middleware automates authentication for any applied routes.
 
+It is registered as a named middleware inside the `start/kernel.js` file:
+
+.start/kernel.js
 [source, javascript]
 ----
 const namedMiddleware = {
@@ -479,7 +520,9 @@ const namedMiddleware = {
 }
 ----
 
-Usage
+Usage:
+
+.start/routes.js
 [source, javascript]
 ----
 Route
@@ -488,8 +531,11 @@ Route
 ----
 
 == Guest middleware
-The `guest` middleware verify that you are not authenticated. The middleware is registered as a name middleware inside `start/kernel.js`
+The `guest` middleware verifies the user is not authenticated.
 
+It is registered as a named middleware inside the `start/kernel.js` file:
+
+.start/kernel.js
 [source, javascript]
 ----
 const namedMiddleware = {
@@ -497,7 +543,9 @@ const namedMiddleware = {
 }
 ----
 
-Usage
+Usage:
+
+.start/routes.js
 [source, javascript]
 ----
 // We don't want our logged-in user to access this view
@@ -507,10 +555,10 @@ Route
 ----
 
 == Helpers
-The auth provider does add a couple of helpers to the view instance so that you can write HTML around the state of a logged-in user.
+The auth provider adds a couple of helpers to the view instance so that you can write HTML around the state of a logged-in user.
 
 ==== auth
-Reference to the `auth` object
+Reference to the `auth` object:
 
 [source, edge]
 ----
@@ -518,7 +566,7 @@ Hello {{ auth.user.username }}!
 ----
 
 ==== loggedIn
-The `loggedIn` tag can be used to write `if/else` around the loggedin user.
+The `loggedIn` tag can be used to write `if/else` around the loggedin user:
 
 [source, edge]
 ----
@@ -532,10 +580,10 @@ The `loggedIn` tag can be used to write `if/else` around the loggedin user.
 == Revoking tokens
 The `jwt` and `api` schemes expose methods to revoke tokens using the `auth` interface.
 
-NOTE: For jwt scheme only refresh tokens are revoked, since actual tokens are never saved in the database
+NOTE: For `jwt`, refresh tokens are only revoked, since actual tokens are never saved in the database.
 
 ==== revokeTokens(tokens, delete = false)
-The following method will revoke the token by setting the flag inside the `tokens` table. However, you can pass `true` for the 2nd argument and row will be deleted from the database.
+The following method will revoke tokens by setting a flag in the `tokens` table:
 
 [source, js]
 ----
@@ -546,7 +594,7 @@ await auth
   .revokeTokens([refreshToken])
 ----
 
-Delete instead of setting the `is_revoked` flag.
+If `true` is passed as the 2nd argument, instead of setting the `is_revoked` database flag, the relevant row will be deleted from the database:
 
 [source, js]
 ----
@@ -557,7 +605,7 @@ await auth
   .revokeTokens([refreshToken], true)
 ----
 
-Revoke all
+To revoke all tokens, call `revokeTokens` without any arguments:
 
 [source, js]
 ----
@@ -566,7 +614,7 @@ await auth
   .revokeTokens()
 ----
 
-When revoking the `api` token for the currently loggedin user, you can access the value from the request header.
+When revoking the `api` token for the currently loggedin user, you can access the value from the request header:
 
 [source, js]
 ----
@@ -580,7 +628,7 @@ await auth
 
 
 ==== revokeTokensForUser(user, tokens, delete = false)
-This method works same as the `revokeTokens` method, but instead you can specify the user yourself.
+This method works the same as the `revokeTokens` method, but instead you can specify the user yourself:
 
 [source, js]
 ----
@@ -592,7 +640,7 @@ await auth
 ----
 
 
-== Tokens encryption
-The tokens are saved in plain format inside the database, whereas these tokens are sent in `encrypted` form to the end-user.
+== Token encryption
+Tokens are saved in plain format inside the database, but are sent in *encrypted* form to the end-user.
 
-It is done to ensure, that if someone gets access to your database, they are not able to use these tokens directly and have to figure out how to encrypt them using the secret key.
+This is done to ensure if someone accesses your database, they are not able to use your tokens directly (they'd have to figure out how to encrypt them using the secret key).

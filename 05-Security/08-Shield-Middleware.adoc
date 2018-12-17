@@ -1,27 +1,28 @@
 ---
 permalink: shield
-title: Shield middleware
+title: Shield Middleware
 category: security
 ---
 
-= Shield middleware
+= Shield Middleware
 
 toc::[]
 
-Apart from link:cors[Cors] and link:csrf[CSRF], AdonisJs also prevents your web applications from other malware attacks like *XSS*, *Content Sniffing*, *Script Injection* and so on.
+Apart from link:cors[CORS] and link:csrf[CSRF], AdonisJs also prevents your web applications from other malware attacks like *XSS*, *Content Sniffing*, *Script Injection* and so on.
 
 NOTE: There is no silver bullet to secure your websites completely. AdonisJs as a framework gives you a handful of ways to prevent common web attacks.
 
 == Setup
-Make sure to install the `shield` provider and register the appropriate middleware.
+Install the `shield` provider and register the appropriate middleware:
 
 [source, bash]
 ----
-adonis install @adonisjs/shield
+> adonis install @adonisjs/shield
 ----
 
-Next, register the provider inside `start/app.js` file.
+Next, register the provider inside the `start/app.js` file:
 
+.start/app.js
 [source, js]
 ----
 const providers = [
@@ -29,10 +30,9 @@ const providers = [
 ]
 ----
 
-And finally, register the global middleware inside `start/kernel.js` file.
+Finally, register the global middleware inside the `start/kernel.js` file:
 
-NOTE: Shield middleware relies on link:sessions[sessions], so make sure they are set up correctly.
-
+.start/kernel.js
 [source, js]
 ----
 const globalMiddleware = [
@@ -40,15 +40,20 @@ const globalMiddleware = [
 ]
 ----
 
+NOTE: Shield middleware relies on link:sessions[sessions], so make sure they are set up correctly.
+
 == Content Security Policy
 
-Content Security Policy(CSP) helps you in defining the trusted sources for loading and executing *scripts*, *styles*, *fonts* and various other resources.
+Content Security Policy (CSP) helps you define the trusted sources for loading and executing *scripts*, *styles*, *fonts* and various other resources.
 
-It is a good practice to be strict when allowing the execution of scripts from different sources. You must read this interesting article by link:http://www.html5rocks.com/en/tutorials/security/content-security-policy[HTML5 rocks, window="_blank"].
+It's good practice to be strict when allowing the execution of scripts from different sources.
+
+For more information, read this interesting article by link:http://www.html5rocks.com/en/tutorials/security/content-security-policy[HTML5 rocks, window="_blank"].
 
 === Configuration
-`csp` block inside the shield configuration file defines the rule for content security policy.
+The configuration for CSP is saved inside the `config/shield.js` file:
 
+.config/shield.js
 [source, javascript]
 ----
 csp: {
@@ -67,17 +72,19 @@ csp: {
 [options="header", cols="15,20,65"]
 |====
 | Key | Value | Description
-| directives | Object  | Directives helps you in defining policies to be applied to different resource types. You can get the list of all directives from link:http://content-security-policy.com[http://content-security-policy.com, window="_blank"].
-| reportOnly | Boolean | Do not stop the execution of the page, instead, log a warning that some rules are violated.
+| directives | Object  | Directives help you define policies to be applied to different resource types. You can get the list of all directives from link:http://content-security-policy.com[http://content-security-policy.com, window="_blank"].
+| reportOnly | Boolean | Set the value to `true` to log warnings that some rules are violated instead of stopping the execution of the page.
 | setAllHeaders | Boolean | Shield sets different HTTP headers for different browsers. Set the value to `true` to set all fallback headers, regardless of the browser.
-| disableAndroid | Boolean | Android is buggy with CSP you can disable it for Android in case you face any troubles.
+| disableAndroid | Boolean | As Android is known to be buggy with CSP, set the value to `true` to disable CSP for Android.
 |====
 
 === Browser support
-Almost all modern browsers widely support CSP, but here is the most accurate link:http://caniuse.com/#feat=contentsecuritypolicy[list, window="_blank"] of supported browsers.
+Almost all modern browsers support CSP.
+
+Here is the most accurate list of link:http://caniuse.com/#feat=contentsecuritypolicy[supported browsers, window="_blank"].
 
 === CSP policy via meta tags
-The `shield` middleware automatically sets the required HTTP headers for CSP to work but also gives you a view helper to set the meta tag.
+The `shield` middleware automatically sets the required HTTP headers for CSP to work, but also provides a view helper to set the meta tag if required:
 
 [source, edge]
 ----
@@ -91,8 +98,11 @@ The `shield` middleware automatically sets the required HTTP headers for CSP to 
 ----
 
 === CSP Nonce
-Script tags with inline javascript code are automatically trusted and executed by the browser. To stop this behavior, you must only allow the trusted inline script blocks by adding `@nonce` to the`scriptSrc` array.
+Script tags with inline JavaScript code are automatically trusted and executed by the browser.
 
+This behavior can be stopped by adding `@nonce` to your configuration `scriptSrc` array:
+
+.config/shield.js
 [source, js]
 ----
 csp: {
@@ -103,7 +113,7 @@ csp: {
 }
 ----
 
-Now you have to tell the browser that your selected inline script blocks should be executed, and that selection is made with the help of a view global.
+To tell the browser which inline script blocks should still execute, append a `nonce` attribute using the `cspNonce` view global in your templates like so:
 
 [source, edge]
 ----
@@ -116,8 +126,9 @@ Now you have to tell the browser that your selected inline script blocks should 
 Malware protection helps in protecting your website from *XSS* attacks, unwanted *iframe embeds*, *content-type sniffing* and stopping IE from executing unsolicited scripts in the context of your web page.
 
 === XSS
-Make use of the below defined configuration to enable/disable XSS protection. It is done by setting `X-XSS-Protection=1; mode=block`
+Edit the `xss` configuration object to enable/disable XSS protection (sets the header `X-XSS-Protection=1; mode=block`):
 
+.config/shield.js
 [source, javascript]
 ----
 xss: {
@@ -127,8 +138,11 @@ xss: {
 ----
 
 === No Sniff
-The majority of modern browsers attempts to detect the *Content-Type* of a request by sniffing its content. Which means a file ending in *.txt* can be executed as a javascript file if it contains javascript code. To disable this behavior set `nosniff=false`.
+The majority of modern browsers attempts to detect the *Content-Type* of a request by sniffing its content, meaning a file ending in *.txt* could be executed as JavaScript if it contains JavaScript code.
 
+To disable this behavior set `nosniff` to `false`:
+
+.config/shield.js
 [source, javascript]
 ----
 {
@@ -137,8 +151,11 @@ The majority of modern browsers attempts to detect the *Content-Type* of a reque
 ----
 
 === No Open
-Stop IE from executing unknown script in the context of your website by setting the value of `X-Download-Options` to *noopen*.
+IE users can execute webpages in the context of your website, which is a serious security risk.
 
+To stop IE from executing unknown scripts in the context of your website, ensure `noopen` is set to `true` (sets the header `X-Download-Options: noopen`):
+
+.config/shield.js
 [source, javascript]
 ----
 {
@@ -147,10 +164,11 @@ Stop IE from executing unknown script in the context of your website by setting 
 ----
 
 === XFrame
-The `xframe` option within the `config/shield.js` file makes it easier for you to control the embed behavior of your website inside an iframe.
+The `xframe` option within the `config/shield.js` file makes it easy for you to control the embed behavior of your website inside an iframe.
 
-You can choose from `DENY`, `ALLOW` or `ALLOW-FROM http://mywebsite.com`.
+Available options are `DENY`, `SAMEORIGIN` or `ALLOW-FROM http://example.com`:
 
+.config/shield.js
 [source, javascript]
 ----
 {
