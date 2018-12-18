@@ -31,7 +31,7 @@ When updating your session configuration, considering the following suggestions:
 * The `sameSite` value should also be set to `true`, ensuring your session cookie is not visible/accessible via different domains.
 
 == Form Method Spoofing
-As HTML forms are only capable of making `GET` and `POST` requests, you cannot use HTTP verbs like `PUT` or `DELETE` to perform RESTful operations via a form's `method` attribute.
+As HTML forms are only capable of making `GET` and `POST` requests, you cannot use HTTP verbs like `PUT` or `DELETE` to perform resourceful operations via a form's `method` attribute.
 
 To work around this, AdonisJs implements link:request#_method_spoofing[form method spoofing], enabling you to send your intended HTTP method via the request URL's `_method` query string parameter:
 
