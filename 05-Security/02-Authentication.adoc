@@ -10,8 +10,9 @@ toc::[]
 
 The AdonisJs auth provider is a fully featured system to authenticate HTTP requests using multiple authenticators.
 
-
 Using authenticators you can build traditional *session based* login systems and secure your *APIs*.
+
+NOTE: For opinionated user profile management, check out the official link:https://github.com/adonisjs/adonis-persona[Adonis Persona, window="_blank"] package – a simple, functional service to let you *create*, *verify* and *update* user profiles in AdonisJs.
 
 == Authenticators
 Each authenticator is a combination of authentication scheme and serializer.
@@ -42,7 +43,6 @@ AdonisJs provides necessary tooling and helpers to manage both types of authenti
 The AdonisJs auth provider uses the link:encryption-and-hashing#_hashing_values[Hash] module to verify passwords.
 
 Always link:database-hooks#_defining_hooks[hash your passwords] before saving them to the database.
-
 
 == Setup
 The AdonisJs auth provider comes pre-installed with `fullstack` and `api` boilerplates.
