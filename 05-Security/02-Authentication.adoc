@@ -34,7 +34,7 @@ Authentication is divided into two broad categories: *Stateful* and *Stateless*.
 
 Session-based authentication is considered *Stateful* since logged in users can navigate to different areas of the application without resending their credentials.
 
-*Stateless* authentication requires the user to resend their credentials on each HTTP request, which is very common with REST APIs.
+*Stateless* authentication requires the user to resend their credentials on each HTTP request, which is very common with APIs.
 
 AdonisJs provides necessary tooling and helpers to manage both types of authentication with ease.
 
