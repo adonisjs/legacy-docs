@@ -10,7 +10,8 @@ toc::[]
 
 The AdonisJs auth provider is a fully featured system to authenticate HTTP requests using multiple authenticators.
 
-Using authenticators you can build traditional *session based* login systems and secure your *REST APIs*.
+
+Using authenticators you can build traditional *session based* login systems and secure your *APIs*.
 
 == Authenticators
 Each authenticator is a combination of authentication scheme and serializer.
