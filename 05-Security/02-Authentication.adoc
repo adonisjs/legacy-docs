@@ -116,7 +116,7 @@ Add the `login` method to the `UserController`:
 ----
 class UserController {
 
-  async login ({ request, auth, response }) {
+  async login ({ auth, request }) {
     const { email, password } = request.all()
     await auth.attempt(email, password)
 
