@@ -493,7 +493,7 @@ List all API tokens for the user:
 await auth.listTokens()
 ----
 
-== Switching authenticators
+== Switching Authenticators
 The auth provider makes it simple to switch between multiple *authenticators* at runtime by calling the `authenticator` method.
 
 Assuming the user is logged in using the `session` authenticator, we can generate a JWT token for them as follows:
@@ -508,7 +508,7 @@ const auth
   .generate(user)
 ----
 
-== Auth middleware
+== Auth Middleware
 The `auth` middleware automates authentication for any applied routes.
 
 It is registered as a named middleware inside the `start/kernel.js` file:
@@ -531,7 +531,7 @@ Route
   .middleware(['auth'])
 ----
 
-== Guest middleware
+== Guest Middleware
 The `guest` middleware verifies the user is not authenticated.
 
 It is registered as a named middleware inside the `start/kernel.js` file:
@@ -578,7 +578,7 @@ The `loggedIn` tag can be used to write `if/else` around the loggedin user:
 @endloggedIn
 ----
 
-== Revoking tokens
+== Revoking Tokens
 The `jwt` and `api` schemes expose methods to revoke tokens using the `auth` interface.
 
 NOTE: For `jwt`, refresh tokens are only revoked, since actual tokens are never saved in the database.
@@ -641,7 +641,7 @@ await auth
 ----
 
 
-== Token encryption
+== Token Encryption
 Tokens are saved in plain format inside the database, but are sent in *encrypted* form to the end-user.
 
 This is done to ensure if someone accesses your database, they are not able to use your tokens directly (they'd have to figure out how to encrypt them using the secret key).
