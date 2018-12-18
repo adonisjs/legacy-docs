@@ -64,7 +64,7 @@ csrf: {
 | cookieOptions | Object | An object of link:https://www.npmjs.com/package/cookie#options-1[cookie options, window="_blank"].
 |====
 
-== How It Works?
+== How It Works
 
 [ol-spaced]
 1. AdonisJs creates a *CSRF secret* for each user visiting your website.
