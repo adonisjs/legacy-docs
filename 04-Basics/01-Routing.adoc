@@ -53,7 +53,7 @@ To register a route that responds to multiple verbs, use `Route.route`:
 ----
 Route.route('/', () => {
   //
-}, ['GET', 'POST', 'PUT']))
+}, ['GET', 'POST', 'PUT'])
 ----
 
 To render a view directly (e.g. static pages), use `Route.on.render`:
