@@ -8,13 +8,15 @@ category: security
 
 toc::[]
 
-AdonisJs comes with a couple of providers for *hashing values* and *encrypting data*. Hashing values are different from encryption since hashed values cannot be decrypted once encrypted that is not the case with encryption.
+AdonisJs ships with providers for *hashing values* and *encrypting data*.
+
+*Hashing values* is different to *encrypting data*, since hashed values cannot be decrypted once encrypted.
 
 == Encrypting Data
 
-AdonisJs encryption provider makes use of link:https://nodejs.org/api/crypto.html[Node.js crypto module, window="_blank"] to encrypt and decrypt values.
+The AdonisJs encryption provider uses the link:https://nodejs.org/api/crypto.html[Node.js crypto module, window="_blank"] to encrypt and decrypt values.
 
-NOTE: Make sure that *appKey* inside `config/app.js` is defined before you can encrypt values.
+NOTE: Your *appKey* must be defined inside the `config/app.js` file before you can encrypt values.
 
 ==== encrypt(value)
 [source, javascript]
@@ -31,15 +33,16 @@ const decrypted = Encryption.decrypt('encrypted value')
 ----
 
 == Hashing Values
-AdonisJs hash provider comes with multiple drivers to hash user data. By default it makes use of link:https://en.wikipedia.org/wiki/Bcrypt[bcrypt, window="_blank"], however support Argon via link:https://npm.im/argon2[argon2 npm package, window="_blank"].
+The AdonisJs hash provider comes with multiple drivers to hash user data.
 
-NOTE: `@adonisjs/framework` version `>=5.0.8` supports multiple drivers. So make sure to upgrade the package for desired results.
+By default it uses link:https://en.wikipedia.org/wiki/Bcrypt[bcrypt, window="_blank"], however there is Argon support via the link:https://npm.im/argon2[argon2 npm package, window="_blank"].
+
+NOTE: Multiple drivers are supported by `@adonisjs/framework` version `>=5.0.8`.
 
 === Config
-The config is defined inside `config/hash.js` file and allows following values.
+The config is defined inside the `config/hash.js` file:
 
-NOTE: You will have to install link:https://npm.im/argon2[argon2 npm package, window="_blank"] package from npm if using `argon` driver.
-
+.config/hash.js
 [source, js]
 ----
 module.exports = {
@@ -53,13 +56,23 @@ module.exports = {
 }
 ----
 
+NOTE: If using the `argon` driver, you will have to install the link:https://npm.im/argon2[argon2 npm package, window="_blank"] package via npm.
+
 ==== make(value, [config])
-Hash a plain string value. Optionally inline config can be passed to override the defaults inside the config file.
+Hash a plain string value:
 
 [source, javascript]
 ----
 const Hash = use('Hash')
 const safePassword = await Hash.make(request.input('password'))
+----
+
+Optionally, inline config can be passed to override config file defaults:
+
+[source, javascript]
+----
+const Hash = use('Hash')
+const safeExample = await Hash.make('example', config)
 ----
 
 ==== verify(value, hashedValue)

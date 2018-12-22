@@ -8,27 +8,32 @@ category: security
 
 toc::[]
 
-Being a Web framework, AdonisJs provides a handful of tools to keep your websites secure from common web attacks. In this guide, we learn about the best practices to keep your AdonisJs applications secure.
+AdonisJs provides a handful of tools to keep your websites secure from common web attacks.
 
-NOTE: If you find any security bug, make sure to share it via mailto:virk@adonisjs.com[email]. Please do not create a GitHub issue, since it may impact the applications running in production. We disclose the problem after pushing the patch for the bug.
+In this guide, we learn about the best practices to keep your AdonisJs applications secure.
+
+NOTE: If you discover any security bugs, mailto:virk@adonisjs.com[please inform us immediately via email]. Do not create GitHub issues, as this may impact applications running in production. Found issues will be disclosed once patches have been pushed to the codebase.
 
 == Session Security
-Sessions can leak important information if not handled with care. AdonisJs encrypts and signs all the cookies using the `appKey` defined in `config/app.js` file. Make sure to keep it secret, never share it with anyone and never push it to version control systems like Github.
+Sessions can leak important information if not handled with care.
+
+AdonisJs encrypts and signs all cookies using the `appKey` defined in the `config/app.js` file.
+
+Keep your `appKey` secret – don't share it with anyone, and never push it to version control systems like Github.
 
 === Session Config
-Session configuration is saved inside `config/session.js` file. You can tweak it as per your own needs, but do consider the following suggestions.
+Session configuration is saved inside the `config/session.js` file.
+
+When updating your session configuration, considering the following suggestions:
 
 [ul-spaced]
-* Make sure `httpOnly` is set to *true*. Keeping it to *false* makes the cookie accessible using Javascript via `document.cookie`.
-* Also `sameSite` property makes sure that your session cookie is not visible/accessible from different domains.
+* The `httpOnly` value should be set to `true`, as setting it to `false` will make your cookies accessible via Javascript using `document.cookie`.
+* The `sameSite` value should also be set to `true`, ensuring your session cookie is not visible/accessible via different domains.
 
-== Forms & Views
-To keep the development cycle simple and productive, AdonisJs ships with some features that you may want to consider before releasing your website to the public.
+== Form Method Spoofing
+As HTML forms are only capable of making `GET` and `POST` requests, you cannot use HTTP verbs like `PUT` or `DELETE` to perform resourceful operations via a form's `method` attribute.
 
-=== Form Method Spoofing
-HTML forms are capable of only making *GET* and *POST* requests, which means you cannot make use of all HTTP verbs to perform RESTful operations.
-
-To make this easy AdonisJs let you define the HTTP method as a query string inside the URL which is known as link:request#_method_spoofing[Form method spoofing].
+To work around this, AdonisJs implements link:request#_method_spoofing[form method spoofing], enabling you to send your intended HTTP method via the request URL's `_method` query string parameter:
 
 .Route
 [source, javascript]
@@ -43,12 +48,15 @@ Route.put('/users/:id', 'UserController.update')
 </form>
 ----
 
-Setting `_method=PUT` converts the HTTP method to `PUT` instead of `POST`. It makes it so easier to make use of any HTTP verb by simply spoofing it. Here are a couple of things you should know about.
+In the example above, appending `?_method=PUT` to the form's `action` URL converts the request HTTP method from `POST` to `PUT`.
+
+Here are a couple of things you should know about method spoofing:
 
 [ul-spaced]
-* AdonisJs only spoof methods when actual HTTP method is `POST` which means making a `GET` request with *_method* is not spoofed.
-* You can turn off the form spoofing by setting `allowMethodSpoofing=false` inside `config/app.js`.
+* AdonisJs only spoofs methods where the source HTTP method is `POST`, meaning `GET` requests passing an intented HTTP `_method` are not spoofed.
+* Method spoofing can be disabled by setting `allowMethodSpoofing` to `false` inside the `config/app.js` file:
 +
+.config/app.js
 [source, javascript]
 ----
 http: {
@@ -57,27 +65,30 @@ http: {
 ----
 
 == File Uploads
-Attackers often try to upload malicious files to the server and later execute those uploaded files to gain access to the server or perform some destructive actions.
+Attackers often try to upload malicious files to servers to later execute and gain access to servers to perform some kind of destructive activity.
 
-Not only files are uploaded to acquire the server access; often you find people trying to upload huge files so that your server stays busy in uploading files and start throwing *TIMEOUT* errors for other requests.
+Besides uploading malicious files, attackers may also try to upload *huge* files so you server stays busy uploading and starts throwing *TIMEOUT* errors for subsequent requests.
 
-To overcome this situation, AdonisJs let you define the *maximum upload size* to be processed by the server which means any file larger than the specified size are denied without processing and keeps your server in a healthy state.
+To combat this scenario, AdonisJs lets you define the *maximum upload size* processable by your server. This means any file larger than the specified `maxSize` is denied, keeping your server in a healthy state.
 
-[ul-spaced]
-* Make sure to set `maxSize` inside `config/bodyParser.js` file.
-+
+Set your `maxSize` value inside the `config/bodyParser.js` file:
+
+.config/bodyParser.js
 [source, javascript]
 ----
 uploads: {
   maxSize: '2mb'
 }
 ----
-* Never store uploaded files inside the `public` directory, since files in `public` directory can be accessed directly.
-* Always rename files before uploading.
-* Never share the actual location of the file with the end users. Instead, try to save the file reference inside the database with a *unique id* and set up a route to serve the file using the `id`.
-+
 
-.Example
+Here are a few tips to consider when handling file uploads:
+
+[ul-spaced]
+* Rename user files before uploading/storing.
+* Don't store uploaded files inside the `public` directory, since `public` files can be accessed directly.
+* Don't share the actual location of uploaded files with your users. Instead, consider saving a reference to uploaded file paths in your database (each file having a *unique id*), and set up a route to serve those uploaded files via `id`, like so:
++
+.start/routes.js
 [source, javascript]
 ----
 const Helpers = use('Helpers')

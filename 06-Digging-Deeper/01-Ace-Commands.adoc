@@ -1,31 +1,32 @@
 ---
-title: Ace commands
+title: Ace Commands
 permalink: ace
 category: digging-deeper
 ---
 
-= Ace commands
+= Ace Commands
 
 toc::[]
 
-Ace is a powerful command line tool crafted for AdonisJs. So far you have been using lots of ace commands to generate *controllers*, *models*, or to *run migrations*.
+*Ace* is a powerful command line tool crafted for AdonisJs.
 
-In this guide, we learn about the internals of Ace and how to create commands.
+So far, you have used various Ace commands to generate *controllers*, *models*, or to *run migrations*.
+
+In this guide, we learn about Ace internals and how to create *commands*.
 
 == Introduction
 Every AdonisJs project has an `ace` file in the project root, which is a regular Javascript file but without the `.js` extension.
 
-The `ace` file is used to execute project-specific commands, and for reusable commands, you must bundle them as npm packages.
+The `ace` file is used to execute project-specific commands. For reusable commands, you must bundle them as npm packages.
 
-Let's run the following code to see the list of available commands.
+Run the following code to see the list of available Ace commands:
 
 [source, bash]
 ----
-node ace
+> node ace
 ----
 
-Output
-
+.Output
 [source, bash]
 ----
 Usage:
@@ -45,20 +46,18 @@ Available Commands:
   migration:status     Check migrations current status
 ----
 
-NOTE: For convenience, the `adonis` command proxies all the commands for a given project. +
-For example running `adonis migration:run` has the same result as running `node ace migration:run`.
+NOTE: For convenience, the `adonis` command proxies all the commands for a given project. For example, running `adonis migration:run` has the same result as running `node ace migration:run`.
 
-== Creating commands
-Let's quickly build a command to pull random quotes of *Paul Graham* using link:http://gophergala.github.io/wisdom[wisdom API] and display it on the terminal.
+== Creating Commands
+Let's quickly build an Ace command to pull random quotes from *Paul Graham* via the link:http://gophergala.github.io/wisdom[wisdom API] and output them to the terminal.
 
 === Setup
 [source, bash]
 ----
-adonis make:command Quote
+> adonis make:command Quote
 ----
 
-Follow the output instructions and register the command inside the commands array in `start/app.js` file.
-
+.Output
 [source, bash]
 ----
 ✔ create  app/Commands/Quote.js
@@ -70,13 +69,22 @@ Follow the output instructions and register the command inside the commands arra
 └───────────────────────────────────────────────────────────┘
 ----
 
+Following the output instructions, register your newly created command inside the `commands` array in the `start/app.js` file:
+
+.start/app.js
+[source, javascript]
+----
+const commands = [
+  'App/Commands/Quote',
+]
+----
+
 Now, if we run `adonis`, we should see the `quote` command inside the list of available commands.
 
 === Showing quotes
-Let's replace everything inside the command file with the following code.
+Replace everything inside the command file with the following code:
 
-NOTE: Make sure to install link:https://npmjs.org/package/got[got] from npm. It is used to consume the HTTP API.
-
+.app/Commands/Quote.js
 [source, js]
 ----
 'use strict'
@@ -104,11 +112,15 @@ class Quote extends Command {
 module.exports = Quote
 ----
 
-Running `adonis quote` prints the quote from the terminal.
+NOTE: Make sure to install the link:https://npmjs.org/package/got[got] package via npm, which is used to consume the HTTP API in the command code above.
+
+Running `adonis quote` prints the retrieved quote to the terminal.
 
 
-== Command signature
-The command signature defines the command name, required/optional options, and flags. The signature is defined as an expression string.
+== Command Signature
+The command signature defines the command name, required/optional options, and flags.
+
+The signature is defined as an expression string, like so:
 
 [source, js]
 ----
@@ -117,12 +129,14 @@ static get signature () {
 }
 ----
 
-[ol-shrinked]
-1. In above signature `greet` is the command name
-2. The `{ name }` is the required argument to be passed when running the command.
-3. Everything after the `:` is the description of the argument.
+In the example signature above:
 
-The command signature can in multiple lines using the ES6 template literals.
+[ol-shrinked]
+1. `greet` is the command name
+2. `{ name }` is a required argument to be passed when running the command
+3. Everything after the `:` is the description of the argument name preceding it
+
+The command signature can span multiple lines using ES6 template literals:
 
 [source, js]
 ----
@@ -137,7 +151,7 @@ static get signature () {
 
 
 ==== Optional arguments
-The arguments can be optional by appending `?` to the name.
+Arguments can be optional by appending `?` to the argument name:
 
 [source, js]
 ----
@@ -145,7 +159,7 @@ The arguments can be optional by appending `?` to the name.
 ----
 
 ==== Default value
-You can also define default value for an argument
+You can also define a default value for an argument like so:
 
 [source, js]
 ----
@@ -153,7 +167,7 @@ You can also define default value for an argument
 ----
 
 ==== Flags
-The flags are prefixed with `--` and has the same signature as arguments
+Flags are prefixed with `--` and have the same signature as arguments:
 
 [source, js]
 ----
@@ -165,15 +179,17 @@ static get signature () {
 }
 ----
 
-When running the command, we can pass the `--log` as follows.
+Using the example signature above, you would pass the `--log` flag when the command is run like so:
 
-[source, js]
+[source, bash]
 ----
-adonis send:email --log
+> adonis send:email --log
 ----
 
 ==== Flags with values
-At times you may want to accept values with flags, same can be done by tweaking the expression as follows.
+At times you may want to accept values with flags.
+
+This can be done by tweaking the signature expression as follows:
 
 [source, js]
 ----
@@ -185,12 +201,10 @@ static get signature () {
 }
 ----
 
-The `=@value` instructs ace to make sure a value is always passed to the `--driver` flag.
+In the example above, `=@value` instructs Ace to ensure a value is always passed with the `--driver` flag.
 
-== Command action
-The `handle` method on the command class is invoked every time command is executed. It receives an object of `arguments` and `flags`.
-
-NOTE: All *arguments* and *flags* are passed in camel case format. For example `--file-path` flag is set as `filePath` key inside the object.
+== Command Action
+The `handle` method on the command class is invoked every time a command is executed, and receives an object of `arguments` and `flags`:
 
 [source, js]
 ----
@@ -200,11 +214,13 @@ async handle (args, flags) {
 }
 ----
 
+NOTE: All *arguments* and *flags* are passed in camel case format. For example, a `--file-path` flag would be set as the key `filePath` inside the passed `flags` object.
+
 == Questions
-Within your command, you can prompt users and accept values by asking interactive questions.
+Within your command, you can prompt users for answers and accept values by asking interactive questions.
 
 ==== ask(question, [defaultAnswer])
-Prompt for free text question.
+Prompt the user for textual input:
 
 [source, js]
 ----
@@ -218,17 +234,8 @@ async handle () {
 }
 ----
 
-==== confirm(question)
-Prompt user for a `Yes/no` question.
-
-[source, js]
-----
-const deleteFiles = await this
-  .confirm('Are you sure you want to delete selected files?')
-----
-
 ==== secure(question, [defaultAnswer])
-Prompt user for a secure input like a password or some secret.
+The `secure` method is similar to `ask`, but the user's input is hidden (useful when asking for sensitive information e.g. a password):
 
 [source, js]
 ----
@@ -236,8 +243,17 @@ const password = await this
   .secure('What is your password?')
 ----
 
+==== confirm(question)
+Prompt the user for a `yes/no` answer:
+
+[source, js]
+----
+const deleteFiles = await this
+  .confirm('Are you sure you want to delete selected files?')
+----
+
 ==== multiple(title, choices, [selected])
-Prompt for a multiple choice question
+Prompt the user for answers to a multiple choice question:
 
 [source, js]
 ----
@@ -249,7 +265,7 @@ const lunch = await this
   ])
 ----
 
-The options can also be an object.
+Your `choices` array values can be objects:
 
 [source, js]
 ----
@@ -266,7 +282,7 @@ const lunch = await this
   ])
 ----
 
-Also, you can pass an array of preselected values.
+You can also pass an array of preselected values:
 
 [source, js]
 ----
@@ -276,12 +292,12 @@ const lunch = await this
     'Vegetable & feta cheese filo pie',
     'Roasted Cauliflower + Aubergine'
   ], [
-    'Roasted vegetable lasagna.'
+    'Roasted vegetable lasagna',
   ])
 ----
 
 ==== choice(question, choices, [selected])
-choose one value from a list of options.
+Prompt the user for a single answer to a multiple choice question:
 
 [source, js]
 ----
@@ -291,7 +307,7 @@ const client = await this
   ])
 ----
 
-Also can also be an object.
+Your `choices` array values can be objects:
 
 [source, js]
 ----
@@ -308,7 +324,7 @@ const client = await this
   ])
 ----
 
-Also, you can pre-select one of the available options.
+You can also pass a preselected value:
 
 [source, js]
 ----
@@ -325,70 +341,77 @@ const client = await this
   ], 'npm')
 ----
 
-==== openEditor(question, [defaultValue])
-Open default editor and get value on editor window exits
+== Colorful Output
+Ace uses link:https://npmjs.org/package/kleur[kleur, window="_blank"] to output colorful log messages to the terminal.
 
-[source, js]
-----
-const message = this
-  .openEditor('Enter commit message')
-----
+NOTE: You can access the command kleur instance via `this.chalk`.
 
-== Colorful logs
-Ace uses link:https://npmjs.org/package/kleur[kleur, window="_blank"] to colorful output messages on the terminal, you can access the instance of kleur as `this.chalk`.
+=== Helper methods
 
-Also, there are some helper methods to log consistently styled messages.
-
-==== error(message)
-Log error message to `stderr` in red color.
-
-[source, js]
-----
-this.error('Something went bad')
-----
+The following helper methods log consistently styled messages to the terminal.
 
 ==== info(message)
-Log info message to `stdout` in cyan color.
+Logs an info message to the console with *cyan* color:
 
 [source, js]
 ----
 this.info('Something worth sharing')
 ----
 
-==== warn(message)
-Log message in yellow color
-
-[source, js]
-----
-this.warn('Fire in the hole')
-----
-
 ==== success(message)
-Log message in green color
+Logs a success message to the console with *green* color:
 
 [source, js]
 ----
 this.success('All went fine')
 ----
 
+==== warn(message)
+Logs a warning message to the console with *yellow* color:
+
+[source, js]
+----
+this.warn('Fire in the hole')
+----
+
+NOTE: `warn` uses `console.warn` instead of `console.log`.
+
+==== error(message)
+Logs an error message to the console with *red* color:
+
+[source, js]
+----
+this.error('Something went bad')
+----
+
+NOTE: `error` uses `console.error` instead of `console.log`.
+
 ==== completed(action, message)
-Mark an action as completed
+Prints an action with message to the console:
 
 [source, js]
 ----
 this.completed('create', 'config/app.js')
 ----
 
+.Output
+[source, bash]
+----
+create: config/app.js
+----
+
 ==== failed(action, message)
-Unable to complete an action
+Prints a failed action with message to the console:
 
 [source, js]
 ----
 this.failed('create', 'config/app.js')
 ----
 
+NOTE: `failed` uses `console.error` instead of `console.log`.
+
 ==== table(head, body)
-Print tabular data
+Prints tabular data to the console:
 
 [source, js]
 ----
@@ -398,7 +421,19 @@ const body = [['virk', 22], ['joe', 23]]
 this.table(head, body)
 ----
 
-Also, you can define the head row color.
+.Output
+[source, bash]
+----
+┌──────┬─────┐
+│ Name │ Age │
+├──────┼─────┤
+│ virk │ 22  │
+├──────┼─────┤
+│ joe  │ 23  │
+└──────┴─────┘
+----
+
+The head row color can also be defined:
 
 [source, js]
 ----
@@ -410,35 +445,41 @@ this.table(head, body, options)
 ----
 
 ==== icon(type)
-Print icon for one of the following types.
-
-[options="header"]
-|====
-| Icon | Name
-| ℹ | info
-| ✔ | success
-| ⚠ | warn
-| ✖ | error
-|====
+Returns a colored icon for a given type:
 
 [source, js]
 ----
 console.log(`${this.icon('success')} Completed`)
 ----
 
-== File management
-Ace makes it simple to interact with the file system by offering Promise first API.
+.Output
+[source, bash]
+----
+✔ Completed
+----
+
+[options="header"]
+|====
+| Type | Color | Icon
+| `info` | cyan | ℹ
+| `success` | green | ✔
+| `warn` | yellow | ⚠
+| `error` | red | ✖
+|====
+
+== File Management
+Ace makes it simple to interact with the file system by offering a Promise first API.
 
 ==== writeFile(location, contents)
-Write file to a given location. Missing directories are created automatically.
+Write file to a given location (automatically creates missing directories):
 
 [source, js]
 ----
-await this.writeFile(Helpers.appRoot('Models/User.js'))
+await this.writeFile(Helpers.appRoot('Models/User.js'), '…')
 ----
 
 ==== ensureFile(location)
-Ensure file exists at a given location, otherwise an empty file is created.
+Ensure file exists, otherwise create an empty file:
 
 [source, js]
 ----
@@ -446,7 +487,7 @@ await this.ensureFile(Helpers.appRoot('Models/User.js'))
 ----
 
 ==== ensureDir(location)
-Ensure directory exists at a given location, otherwise an empty directory is created.
+Ensure directory exists, otherwise create an empty directory:
 
 [source, js]
 ----
@@ -454,7 +495,7 @@ await this.ensureDir(Helpers.appRoot('Models'))
 ----
 
 ==== pathExists(location)
-Find a path exists or not.
+Returns a boolean indicating whether path exists or not:
 
 [source, js]
 ----
@@ -466,7 +507,7 @@ if (exists) {
 ----
 
 ==== removeFile(location)
-Remove file from a given location
+Remove file from a given location:
 
 [source, js]
 ----
@@ -474,7 +515,7 @@ await this.removeFile('some-location')
 ----
 
 ==== removeDir(location)
-Remove directory from a given location
+Remove directory from a given location:
 
 [source, js]
 ----
@@ -482,7 +523,7 @@ await this.removeDir('some-location')
 ----
 
 ==== readFile(location)
-Read contents of a given file
+Read contents of a given file:
 
 [source, js]
 ----
@@ -490,7 +531,7 @@ const contents = await this.readFile('some-location', 'utf-8')
 ----
 
 ==== copy(src, dest)
-Copy file/directory from one location to other
+Copy file/directory from one location to other:
 
 [source, js]
 ----
@@ -498,15 +539,15 @@ await this.copy(src, dest)
 ----
 
 ==== move(src, dest)
-Move file/directory from one location to other
+Move file/directory from one location to other:
 
 [source, js]
 ----
 await this.move(src, dest)
 ----
 
-== Database connection management
-When you use database access (Lucid or directly), you must remember to manually close the database connection.
+== Database Connection Management
+When using database access in an Ace command (via link:lucid[Lucid] or directly), you must remember to manually close the database connection:
 
 [source, js]
 ----
@@ -532,7 +573,7 @@ class Quote extends Command {
     let quote = await Quote.query().orderByRaw('rand()').first()
     console.log(quote.content)
 
-    // This is the crucial line. Without it, the command runner will not exit.
+    // Without the following line, the command will not exit!
     Database.close()
   }
 }

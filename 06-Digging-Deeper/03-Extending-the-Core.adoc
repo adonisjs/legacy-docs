@@ -8,14 +8,14 @@ category: digging-deeper
 
 toc::[]
 
-AdonisJs is fully extendible to the core. In this guide we learn about the ways, you can transparently extend parts of the framework.
+AdonisJs is fully extendible to the core.
 
-== Where to write code?
-The easiest way to get started is to make use of link:ignitor#_hooks[applications hooks] and later move code inside a provider if you want to share your code as a package.
+In this guide, we learn how to extend parts of the framework.
 
-The hooks live inside `start/hooks.js` file and bunch of pre-existing hooks can be used to execute the code at a specific time.
+== Where to Write Code
+The easiest way to get started is to use link:ignitor#_hooks[applications hooks], and only later move code inside a provider if you want to share your code as a package.
 
-NOTE: Hooks callbacks are synchronous. You must create a provider and use the `boot` method to write async code.
+Hooks live inside the `start/hooks.js` file and can be used to execute code at a specific time in the application lifecycle:
 
 .start/hooks.js
 [source, js]
@@ -27,13 +27,17 @@ hooks.after.providersRegistered(() => {
 })
 ----
 
-Providers live inside the `providers` directory in the project root. Always make sure to register the provider inside the `start/app.js` file.
+NOTE: Hook callbacks are synchronous. You must create a provider and use the `boot` method to write asynchronous code.
+
+Providers live inside the `providers` directory in the project root:
 
 [source, bash]
 ----
 ├── providers
   ├── AppProvider.js
 ----
+
+Your providers must be registered inside the `start/app.js` file:
 
 .start/app.js
 [source, js]
@@ -45,7 +49,7 @@ const providers = [
 ]
 ----
 
-Generally, providers are used to adding functionality to your application by binding namespaces to the IoC container. However, you can use the providers to run some code when it has been booted.
+Providers are generally used to add functionality to your application by binding namespaces to the IoC container, however you can also use providers to run custom code when booted:
 
 [source, js]
 ----
@@ -58,11 +62,14 @@ class AppProvider extends ServiceProvider {
 }
 ----
 
-== Adding macros/getters
-Macros let you add methods to the existing classes. A class must extend link:https://www.npmjs.com/package/macroable[Macroable] class to be extended.
+== Adding Macros/Getters
+Macros let you add methods to existing classes.
 
-TIP: You can use hooks or the provider `boot` method to add macros.
+A class must extend the link:https://www.npmjs.com/package/macroable[Macroable] class to be extended via macros.
 
+TIP: Use link:ignitor#_hooks[hooks] or a provider's `boot` method to add macros.
+
+For example, if a macro was defined like so:
 [source, js]
 ----
 const Response = use('Adonis/Src/Response')
@@ -73,7 +80,7 @@ Response.macro('sendStatus', (status) => {
 })
 ----
 
-And use it as follows.
+It could then be used as follows:
 
 [source, js]
 ----
@@ -82,7 +89,7 @@ Route.get('/', ({ response }) => {
 })
 ----
 
-In the same way you can also add `getters` to the macroable classes.
+In the same way, you can also add `getters` to your macroable classes:
 
 [source, js]
 ----
@@ -96,7 +103,7 @@ Request.getter('id', function () {
 }, true)
 ----
 
-Below is the list of classes you can add getters/macros on.
+Below is the list of classes you can add getters/macros to:
 
 [ol-shrinked]
 1. link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Context/index.js[Adonis/Src/HttpContext, window="_blank"]
@@ -104,12 +111,14 @@ Below is the list of classes you can add getters/macros on.
 3. link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Response/index.js[Adonis/Src/Response, window="_blank"]
 4. link:https://github.com/adonisjs/adonis-framework/blob/develop/src/Route/index.js[Adonis/Src/Route, window="_blank"]
 
-== Extending providers
-Some existing providers let you extend them by adding new functionality. For example: **Session provider** allows new drivers to be added and **Auth provider** allows new serializers and schemes.
+== Extending Providers
+Some existing providers let you extend them by adding new functionality.
 
-NOTE: Make sure to refer the documentation of individual providers to understand the extending capabilities.
+For example, the **Session Provider** allows new drivers to be added, while the **Auth Provider** allows new serializers and schemes.
 
-To keep the extend interface unified and simplistic, you make use of `Ioc.extend` method to add new drivers or serializers.
+NOTE: Refer to the documentation of individual providers to understand their extending capabilities.
+
+To keep the extend interface unified and simple, use the `Ioc.extend` method to add new drivers or serializers:
 
 [source, js]
 ----
@@ -124,7 +133,7 @@ hooks.after.providersRegistered(() => {
 })
 ----
 
-If you are developing a provider, and want to use the same interface for exposing extending capabilities, make sure to bind a `Manager` object as follows.
+If you are developing a provider and want to use the same interface for exposing extending capabilities, make sure to bind a `Manager` object as follows:
 
 [source, js]
 ----
@@ -140,6 +149,6 @@ class MyProvider extends ServiceProvider {
 }
 ----
 
-1. The manager object must have a method `extend` on it. The values passed to `ioc.extend` will be forwarded to this method.
+1. The manager object must have an `extend` method. The values passed to `ioc.extend` will be forwarded to this method.
 2. The `namespace` must be same as the binding namespace.
-3. You have to manage the registration/lifecycle of a driver.
+3. You must manage the registration/lifecycle of your drivers.

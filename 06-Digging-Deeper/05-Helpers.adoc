@@ -8,10 +8,12 @@ category: digging-deeper
 
 toc::[]
 
-The Helpers Provider gives a handful of convenient methods to get *absolute paths* to specific directories of your application. It is helpful for the 3rd party *Service providers* since relying on relative paths is not very useful.
+The AdonisJs *Helpers Provider* enables a number of convenient methods to supercharge your application.
+
+Many of these methods can be used to retrieve *absolute paths* to specific directories within your application.
 
 == Basic Example
-Anywhere inside your application, you can make use of Helper's provider to get paths to different directories.
+From anywhere within your application, simply pull in the *Helpers Provider* and use it to retrieve paths to your different directories:
 
 [source, js]
 ----
@@ -19,11 +21,11 @@ const Helpers = use('Helpers')
 const welcomeView = Helpers.viewsPath('welcome.edge')
 ----
 
-== Helper Methods
-Below is the list of available methods on the Helpers provider.
+== Path Helpers
+Below is the list of path related helpers available via the *Helpers Provider*.
 
 ==== appRoot
-Returns path to the application root.
+Returns path to the application root:
 
 [source, js]
 ----
@@ -31,7 +33,7 @@ Helpers.appRoot()
 ----
 
 ==== publicPath([toFile])
-Returns path to the public directory or path to a file inside the directory.
+Returns path to the public directory or file inside the directory:
 
 [source, js]
 ----
@@ -41,9 +43,7 @@ const cssFile = Helpers.publicPath('style.css')
 ----
 
 ==== configPath([toFile])
-Returns path to the config directory or path to a file inside the directory.
-
-NOTE: It is recommended to make use of the link:/03-getting-started/03-configuration-and-env.adoc[Config Provider] to read the values from the config files.
+Returns path to the config directory or file inside the directory:
 
 [source, js]
 ----
@@ -52,8 +52,10 @@ const configPath = Helpers.configPath()
 const appConfig = Helpers.configPath('app.js')
 ----
 
+TIP: Use the link:configuration-and-env[Config Provider] to read config file values.
+
 ==== resourcesPath([toFile])
-Returns path to the resources directory or path to a file inside the directory.
+Returns path to the resources directory or file inside the directory:
 
 [source, js]
 ----
@@ -63,7 +65,7 @@ const appSass = Helpers.resourcesPath('assets/sass/app.scss')
 ----
 
 ==== migrationsPath([toFile])
-Returns path to the migrations directory or path to a file inside the directory.
+Returns path to the migrations directory or file inside the directory:
 
 [source, js]
 ----
@@ -73,7 +75,7 @@ const UserSchema = Helpers.migrationsPath('UserSchema.js')
 ----
 
 ==== seedsPath([toFile])
-Returns path to the seeds directory or path to a file inside the directory.
+Returns path to the seeds directory or file inside the directory:
 
 [source, js]
 ----
@@ -83,7 +85,7 @@ const DatabaseSeed = Helpers.seedsPath('Database.js')
 ----
 
 ==== databasePath([toFile])
-Returns path to the database directory or path to a file inside the directory.
+Returns path to the database directory or file inside the directory:
 
 [source, js]
 ----
@@ -93,7 +95,7 @@ const factoryFile = Helpers.databasePath('factory.js')
 ----
 
 ==== viewsPath([toFile])
-Returns path to the views directory or path to a file inside the directory.
+Returns path to the views directory or file inside the directory:
 
 [source, js]
 ----
@@ -103,7 +105,7 @@ const welcomeView = Helpers.viewsPath('welcome.edge')
 ----
 
 ==== tmpPath([toFile])
-Returns path to the tmp directory or path to a file inside the directory.
+Returns path to the tmp directory or file inside the directory:
 
 [source, js]
 ----
@@ -112,8 +114,11 @@ const tmpPath = Helpers.tmpPath()
 const resized = Helpers.tmpPath('resized.jpg')
 ----
 
+== Other Helpers
+Below is the list of other helpers available via the *Helpers Provider*.
+
 ==== promisify
-Returns Promisify callback style functions.
+Returns link:https://www.npmjs.com/package/pify[promisified, window="_blank"] callback functions:
 
 [source, js]
 ----
@@ -125,7 +130,7 @@ await fs.unlink(Helpers.tmpPath('image.jpg'))
 ----
 
 ==== isAceCommand
-Returns whether the process was started as the ace command or not.
+Returns whether the process was started as the ace command or not:
 
 [source, js]
 ----
