@@ -1,31 +1,34 @@
 ---
-title: Mails
+title: Mail
 permalink: mail
 category: digging-deeper
 ---
 
-= Mails
+= Mail
 
 toc::[]
 
-AdonisJs has first class support for sending emails. The mail provider comes with a handful of drivers to send emails, which includes.
+AdonisJs has first class support for sending email.
+
+The *Mail Provider* supports a number of drivers including:
 
 [ul-shrinked]
-- Smtp ( smtp )
-- Spark Post ( sparkpost )
-- Mailgun ( mailgun )
-- Amazon SES ( ses )
+- Smtp (`smtp`)
+- Spark Post (`sparkpost`)
+- Mailgun (`mailgun`)
+- Amazon SES (`ses`)
 
 == Setup
-The mail provider is not part of the default project structure and must be installed as defined in following steps.
+As the *Mail Provider* is not installed by default, we need to pull it from `npm`:
 
 [source, bash]
 ----
-adonis install @adonisjs/mail
+> adonis install @adonisjs/mail
 ----
 
-Next, register the provider inside `start/app.js` file.
+Next, register the provider inside the `start/app.js` file:
 
+.start/app.js
 [source, js]
 ----
 const providers = [
@@ -33,16 +36,18 @@ const providers = [
 ]
 ----
 
-The configuration is saved inside `config/mail.js` file. Make sure to update the settings as per your needs.
+NOTE: Mail configuration is saved inside the `config/mail.js` file, which is created by the `adonis install` command when installing the *Mail Provider*.
 
 == Basic Example
-Let's start with the basic example of sending email on user registration.
+Let's start with the basic example of sending email on user registration:
 
+.start/routes.js
 [source, js]
 ----
 Route.post('user', 'UserController.store')
 ----
 
+.app/Controllers/Http/UserController.js
 [source, js]
 ----
 const Mail = use('Mail')
@@ -67,8 +72,9 @@ class UserController {
 module.exports = UserController
 ----
 
-Finally, we need to create `emails/welcome.edge` view, which is the HTML body.
+Finally, create the `emails/welcome.edge` view file containing the HTML body:
 
+.resources/views/emails/welcome.edge
 [source, edge]
 ----
 <h2> Hello {{ username }} </h2>
@@ -81,7 +87,7 @@ Finally, we need to create `emails/welcome.edge` view, which is the HTML body.
 Below is the list of methods you can use to send emails.
 
 ==== send(views, data, callback)
-Send email using one or multiple Edge views.
+Send email using one or many link:views[Edge views]:
 
 [source, js]
 ----
@@ -92,16 +98,18 @@ await Mail.send('view', data, (message) => {
 })
 ----
 
-The `views` can be a single view or an array of views for a specific content type.
+The `views` argument can be a single view or array of views per content type:
 
 [source, js]
 ----
 await Mail.send(['welcome', 'welcome.text'])
 ----
 
-The view ending with `.text` is used as the plain text body of the email. In the same way, you can set the mail body for Apple watch.
+In the example above, the `welcome` view is used for the HTML version of the email, while the `welcome.text` view is used for the plain text version.
 
-If you're using edge as the template engine, you can also use `-text` instead of `.text` as the plain text body template suffix.
+TIP: If you're using link:http://edge.adonisjs.com/[Edge, window="_blank"] as your template engine, you can also use `‑text` instead of `.text` as the plain text body template suffix.
+
+Using template suffixes, you can also set the mail body for *Apple watch*:
 
 [source, js]
 ----
@@ -109,7 +117,7 @@ await Mail.send(['welcome', 'welcome.text', 'welcome.watch'])
 ----
 
 ==== raw(body, callback)
-Use raw string to send the mail. The email *HTML body* will be set when the string is HTML, otherwise plain text email will be sent.
+Use a raw string to send the mail (when the string is HTML the email *HTML body* will be set, otherwise just a plain text email will be sent):
 
 [source, js]
 ----
@@ -125,10 +133,10 @@ await Mail.raw('<h1> HTML email </h1>', (message) => {
 ----
 
 == Message API
-Below is the list of methods you can use to build message using fluent message API.
+Below is the list of methods you can use to build a mail message using the fluent `message` API.
 
 ==== to(address, [name])
-Set `to` address.
+Set `to` address:
 
 [source, js]
 ----
@@ -139,7 +147,7 @@ message.to(user.email, user.name)
 ----
 
 ==== from(address, [name])
-Set `from` address.
+Set `from` address:
 
 [source, js]
 ----
@@ -150,7 +158,7 @@ message.from('team@yardstick.io', 'Yardstick')
 ----
 
 ==== cc(address, [name])
-Add cc address on the email
+Add cc address to the email:
 
 [source, js]
 ----
@@ -161,7 +169,7 @@ message.cc(user.email, user.name)
 ----
 
 ==== bcc(address, [name])
-Add bcc address on the email.
+Add bcc address to the email:
 
 [source, js]
 ----
@@ -171,10 +179,10 @@ message.bcc(user.email)
 message.bcc(user.email, user.name)
 ----
 
-Also, you can call the above methods for multiple times to defined various addresses.
+NOTE: You can call the above methods multiple times to define multiple addresses.
 
 ==== replyTo(address, [name])
-Set `replyTo` email address
+Set `replyTo` email address:
 
 [source, js]
 ----
@@ -182,7 +190,7 @@ message.replyTo('noreply@yardstick.io')
 ----
 
 ==== inReplyTo(messageId)
-Set email message id
+Set email message id:
 
 [source, js]
 ----
@@ -190,7 +198,7 @@ message.inReplyTo(someThread.id)
 ----
 
 ==== subject(value)
-Set email subject
+Set email subject:
 
 [source, js]
 ----
@@ -198,15 +206,15 @@ message.subject('Welcome to yardstick')
 ----
 
 ==== text(value)
-Manually set the plain text body for the email.
+Manually set the plain text body for the email:
 
 [source, js]
 ----
 message.text('Email plain text version')
 ----
 
-==== attach(filePath, options)
-Attach file(s) with email.
+==== attach(filePath, [options])
+Attach file(s) to the email:
 
 [source, js]
 ----
@@ -214,7 +222,7 @@ message
   .attach(Helpers.tmpPath('guides/getting-started.pdf'))
 ----
 
-Set custom file name
+Set custom file name:
 
 [source, js]
 ----
@@ -224,8 +232,8 @@ message
   })
 ----
 
-==== attachData(data, filename, options)
-Attach raw data as a `String`, `Buffer` or `Stream`.
+==== attachData(data, filename, [options])
+Attach raw data as a `String`, `Buffer` or `Stream`:
 
 [source, js]
 ----
@@ -238,31 +246,35 @@ message.attachData(new Buffer('hello'), 'hello.txt')
 message.attachData(fs.createReadStream('hello.txt'), 'hello.txt')
 ----
 
-==== embed(filePath, cid, options)
-Embed image into HTML body using *content id*. Make sure the `cid` is unique for each image for a given email.
+==== embed(filePath, cid, [options])
+Embed an image into the HTML body using a *content id*:
 
 [source, js]
 ----
 message.embed(Helpers.publicPath('logo.png'), 'logo')
 ----
 
-Later inside the template, you can say
+Then inside the template, you can say:
 
 [source, edge]
 ----
 <img src="cid:logo" />
 ----
 
+NOTE: Ensure the `cid` is unique for each image in a given email.
+
 ==== driverExtras(extras)
-Pass an object of values to the current driver. The mail provider passes the object to the driver, and it is up to the driver to consume these values.
+Pass an object of values to the current driver:
 
 [source, js]
 ----
 message.driverExtras({ campaign_id: 20 })
 ----
 
-== Switching connections
-Mail provider allows defining multiple connections inside `config/mail.js` file. Connections can be for same or a different driver.
+The *Mail Provider* passes the object through to the driver, and it is up to the driver to consume these values.
+
+== Switching Connections
+The *Mail Provider* defines multiple connections inside the `config/mail.js` file:
 
 .config/mail.js
 [source, js]
@@ -280,7 +292,7 @@ Mail provider allows defining multiple connections inside `config/mail.js` file.
 }
 ----
 
-Using the above config, you can switch to `sparkpost` connection using the `connection` method.
+Using the above configuration, you could switch to the `sparkpost` connection via the `connection` method like so:
 
 [source, js]
 ----
@@ -291,20 +303,22 @@ await Mail
 ----
 
 == Drivers
-Below sections are instructions related to specific drivers.
+Below are configuration instructions relating to each specific driver.
 
 === SES
-The `ses` driver relies on link:https://npmjs.org/package/aws-sdk[aws-sdk, window="_blank"]. Make sure to install the dependencies from npm, since it is installed by default.
+The `ses` driver requires the link:https://npmjs.org/package/aws-sdk[aws-sdk, window="_blank"] package.
+
+Ensure to install it via `npm` before using the `ses` driver:
 
 [source, bash]
 ----
-npm i aws-sdk
+> npm i aws-sdk
 ----
 
 === SparkPost
-You can pass the following extra options when using sparkpost as the driver.
+The `sparkpost` driver accepts an optional `extras` configuration object:
 
-Via config
+.config/mail.js
 [source, js]
 ----
 {
@@ -315,9 +329,9 @@ Via config
 }
 ----
 
-Check out sparkpost link:https://developer.sparkpost.com/api/transmissions.html#header-options-attributes[options attributes] docs to learn more about available options.
+Check out SparkPost's link:https://developer.sparkpost.com/api/transmissions.html#header-options-attributes[documentation, window="_blank"] to learn more about their available options.
 
-Also, you can pass `extras` at runtime using the `driverExtras` method.
+You can also pass `extras` at runtime using the `driverExtras` method:
 
 [source, js]
 ----
@@ -330,23 +344,22 @@ await Mail.send('view', data, (message) => {
 ----
 
 === Mailgun
-You can pass the following extra options when using mailgun as the driver.
+The `mailgun` driver accepts an optional `extras` configuration object:
 
-Via config
+.config/mail.js
 [source, js]
 ----
 {
   extras: {
     'o:tag': '',
-    'o:campaign': '',
-    ....
+    'o:campaign': ''
   }
 }
 ----
 
-Check out link:https://mailgun-documentation.readthedocs.io/en/latest/api-sending.html#sending[mailgun docs] to learn more about available options.
+Check out Mailgun's link:https://mailgun-documentation.readthedocs.io/en/latest/api-sending.html#sending[documentation, window="_blank"] to learn more about their available options.
 
-Also, you can pass `extras` at runtime using the `driverExtras` method.
+You can also pass `extras` at runtime using the `driverExtras` method:
 
 [source, js]
 ----

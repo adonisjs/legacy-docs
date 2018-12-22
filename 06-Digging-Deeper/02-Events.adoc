@@ -8,13 +8,15 @@ category: digging-deeper
 
 toc::[]
 
-AdonisJs ships with a dedicated *Event provider*, which internally uses link:https://github.com/asyncly/EventEmitter2[EventEmitter2, window="_blank"] with a bunch of convivence on top of it.
+AdonisJs ships with a dedicated *Event Provider*.
 
-Also, the event provider has a link:testing-fakes#_events_fake[fake] implementation, which can be used for assertions when writing tests.
+Internally, it uses the link:https://github.com/asyncly/EventEmitter2[EventEmitter2, window="_blank"] package, with other convenient functionality added on top of it.
 
-== About events
-1. Event listeners are defined inside `start/events.js` file.
-2. Events listeners can be defined as *Closures* or you can bind an IoC container namespace.
+The *Event Provider* has a link:testing-fakes#_events_fake[fake] implementation, which can be used for assertions when writing tests.
+
+== Events Overview
+1. Event listeners are defined inside the `start/events.js` file.
+2. Events listeners can be defined as *closures*, or you can bind an IoC container *namespace* instead:
 +
 [source, javascript]
 ----
@@ -25,19 +27,25 @@ Event.on('new::user', async (user) => {
 Event.on('new::user', 'User.registered')
 ----
 
-3. The `app/Listeners` directory is storing Event listeners.
-4. When binding listeners to the events, you are not required to enter the entire namespace. For example, A listener stored as `app/Listeners/User.js` is referenced as `User.<method>`.
-5. Make use of `make:listener` command to create a new event listener.
+3. Namespaced event listeners are stored inside the `app/Listeners` directory.
+4. When binding listeners to events, you are not required to enter the entire namespace. For example, A listener stored as `app/Listeners/User.js` is referenced as `User.<method>`.
+5. The `make:listener` command can be used to create new event listeners:
 +
 [source, bash]
 ----
-adonis make:listener User
-
+> adonis make:listener User
+----
++
+.Output
+[source, bash]
+----
 ✔ create  app/Listeners/User.js
 ----
 
-== Basic example
-Let's say we want to emit an event every time a user register on our website, and inside the *event listener*, we send an email to the registered user.
+== Basic Example
+Let's say we want to emit an event every time a user registers on our website, and inside an *event listener*, send an email to the registered user.
+
+First, we need to create the relevant route and controller:
 
 .start/routes.js
 [source, js]
@@ -59,18 +67,20 @@ class UserController {
 }
 ----
 
-Next, we need to bind a listener for the `new::user` event, so that we can send the email. The same is done by creating a file inside the `start` directory.
+Next, we need to a listener for the `new::user` event so we can send the email.
+
+To do so, create an `events.js` file inside the `start` directory:
 
 [source, bash]
 ----
 # Mac / Linux
-touch start/events.js
+> touch start/events.js
 
 # Windows
-type NUL > start/events.js
+> type NUL > start/events.js
 ----
 
-Now let's write the following code inside it.
+Finally, write our event handling code inside the `start/events.js` file:
 
 [source, js]
 ----
@@ -85,18 +95,17 @@ Event.on('new::user', async (user) => {
 })
 ----
 
-As you can see, AdonisJs makes it easier to use the `await` keyword inside the Event listener callback.
-
+As you can see, AdonisJs makes it easy to use the `await` keyword inside the event listener callback.
 
 == API
-Below is the list of methods that can be used to interact with the *Event provider*.
+Below is the list of methods that can be used to interact with the *Event Provider*.
 
 ==== on(event, listener)
-Bind single or multiple listeners for a given event. The `listener` can be a function or reference to the IoC container binding.
+Bind single or multiple listeners for a given event. The `listener` can be a closure function or reference to one (or many) IoC container bindings:
 
 [source, js]
 ----
-Event.on('new::user', async () => {
+Event.on('new::user', async () => { 
 
 })
 
@@ -107,10 +116,11 @@ Event.on('new::user', 'User.registered')
 Event.on('new::user', ['Mailer.sendEmail', 'SalesForce.trackLead'])
 ----
 
-The `when` method is an alias of `on` method.
+==== when(event, listener)
+The `when` method aliases the xref:_onevent_listener[on] method.
 
 ==== once(event, listener)
-Same as xref:_on_event_listener[on], but instead called only for one time.
+Same as xref:_onevent_listener[on], but only called one time:
 
 [source, js]
 ----
@@ -120,7 +130,7 @@ Event.once('new::user', () => {
 ----
 
 ==== onAny(listener)
-Bind listener for any event.
+Bind listener for any event:
 
 [source, js]
 ----
@@ -133,7 +143,7 @@ Event.onAny('EventsLogger.track')
 ----
 
 ==== times(number)
-The `times` is chained with `on` or `when` to limit the number of times the listener should be fired.
+The `times` method is chained with `on` or `when` to limit the number of times the listener should be fired:
 
 [source, js]
 ----
@@ -145,17 +155,18 @@ Event
 ----
 
 ==== emit(event, data)
-Emit an event with optional data. Also, you can use `fire` method, which is an alias for `emit`.
+Emit an event with optional data:
 
 [source, js]
 ----
 Event.emit('new::user', user)
 ----
 
-==== removeListener(event, listener)
-Remove listener(s) for a given event.
+==== fire(event, data)
+The `fire` method aliases the xref:_emitevent_data[emit] method.
 
-NOTE: You must bind an IoC container reference to remove it later.
+==== removeListener(event, listener)
+Remove listener(s) for a given event:
 
 [source, js]
 ----
@@ -165,10 +176,13 @@ Event.on('new::user', 'User.registered')
 Event.removeListener('new::user', 'User.registered')
 ----
 
-Also, you can make use of the alias method called `off`.
+NOTE: You must bind an IoC container reference to remove it later.
+
+==== off(event, listener)
+The `off` method aliases the xref:_removelistenerevent_listener[removeListener] method.
 
 ==== removeAllListeners(event)
-Remove all listeners for a given event.
+Remove all listeners for a given event:
 
 [source, js]
 ----
@@ -176,7 +190,7 @@ Event.removeAllListeners()
 ----
 
 ==== listenersCount(event)
-Returns the number of listeners for a given event.
+Return the number of listeners for a given event:
 
 [source, js]
 ----
@@ -184,7 +198,7 @@ Event.listenersCount('new::user')
 ----
 
 ==== getListeners(event)
-Returns an array of listeners for a given event.
+Return an array of listeners for a given event:
 
 [source, js]
 ----
@@ -192,7 +206,7 @@ Event.getListeners('new::user')
 ----
 
 ==== hasListeners(event)
-Find if there are any listeners for a given event.
+Return a `boolean` indicating whether there are any listeners for a given event:
 
 [source, js]
 ----
