@@ -159,6 +159,21 @@ Route.get('posts/:id', closure).as('posts.show')
 route('posts.show', { id: 1 })
 ----
 
+Query:
+
+[source, js]
+----
+route('posts.show', { id: 1, query: { foo: 'bar' } })
+// equal to
+route('posts.show', { id: 1, qs: { foo: 'bar' } })
+----
+
+[source, html]
+----
+<a href="{{ route('posts.show', { id: 1, query: { foo: 'bar' } }) }}">Show post</a>
+// href="/post/1?foo=bar"
+----
+
 == Route Formats
 
 Route formats open up a new way for link:https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation[content negotiation, window="_blank"], where you can accept the response format as part of the URL.
