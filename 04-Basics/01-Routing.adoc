@@ -350,8 +350,8 @@ Prefix all route URLs defined in the group:
 [source, js]
 ----
 Route.group(() => {
-  Route.get('users', closure)   // GET /api/users/users
-  Route.post('users', closure)  // POST /api/users/users
+  Route.get('users', closure)   // GET /api/v1/users
+  Route.post('users', closure)  // POST /api/v1/users
 }).prefix('api/v1')
 ----
 
