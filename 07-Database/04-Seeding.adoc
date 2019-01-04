@@ -11,7 +11,7 @@ toc::[]
 Once you have your database schema ready with link:migrations[migrations], the next step is to add some data. This is where *database seeds* and *factories* come into the picture.
 
 == Seeds
-Seeds are Javascript classes with a `run` method on them. You are free to write any database related operation inside this method.
+Seeds are JavaScript classes with a `run` method on them. You are free to write any database related operation inside this method.
 
 Just like migrations, a seed file can also be created using the `adonis make` command.
 

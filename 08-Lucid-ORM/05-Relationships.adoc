@@ -705,7 +705,7 @@ await user.posts().save(post)
 ----
 
 ==== create
-The `create` is similar to the `save` method, but instead, accepts a normal javascript object and returns the related model instance.
+The `create` is similar to the `save` method, but instead, accepts a normal JavaScript object and returns the related model instance.
 
 Works with::
 - hasOne

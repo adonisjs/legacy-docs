@@ -8,7 +8,7 @@ category: database
 
 toc::[]
 
-AdonisJs query builder gives you a unified syntax to interact with SQL databases using Javascript methods. This guide is a reference to all the available methods on query builder.
+AdonisJs query builder gives you a unified syntax to interact with SQL databases using JavaScript methods. This guide is a reference to all the available methods on query builder.
 
 Checkout link:database[database introduction] guide to check the list of *supported databases*, *configuration options* and *debugging queries*.
 
@@ -428,7 +428,7 @@ const affectedRows = await Database
 Delete operations also return the number of affected rows.
 
 ==== delete
-Also, you can make use of `del()`, since `delete` is a reserved keyword in Javascript.
+Also, you can make use of `del()`, since `delete` is a reserved keyword in JavaScript.
 
 [source, javascript]
 ----

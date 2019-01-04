@@ -27,7 +27,7 @@ Session configuration is saved inside the `config/session.js` file.
 When updating your session configuration, considering the following suggestions:
 
 [ul-spaced]
-* The `httpOnly` value should be set to `true`, as setting it to `false` will make your cookies accessible via Javascript using `document.cookie`.
+* The `httpOnly` value should be set to `true`, as setting it to `false` will make your cookies accessible via JavaScript using `document.cookie`.
 * The `sameSite` value should also be set to `true`, ensuring your session cookie is not visible/accessible via different domains.
 
 == Form Method Spoofing

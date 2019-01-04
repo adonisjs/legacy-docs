@@ -8,7 +8,7 @@ category: lucid-orm
 
 toc::[]
 
-Lucid is an implementation of link:https://en.wikipedia.org/wiki/Active_record_pattern[Active Record, window="_blank"] pattern in Javascript. If you are coming from the *Laravel* or the *Rails* world, then you may be quite familiar with it.
+Lucid is an implementation of link:https://en.wikipedia.org/wiki/Active_record_pattern[Active Record, window="_blank"] pattern in JavaScript. If you are coming from the *Laravel* or the *Rails* world, then you may be quite familiar with it.
 
 == Introduction
 The reason behind using Models over writing plain database queries is the ease of use and the powerful API to drive the data flow. Lucid models under the hood take care of

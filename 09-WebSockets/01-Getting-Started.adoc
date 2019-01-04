@@ -119,7 +119,7 @@ Now let's switch from the server side to the client side code and subscribe to t
 -  Css is saved inside inside `public/style.css`.
 - Also make sure to serve the template by defining a route.
 
-Finally, let's get started by writing the Javascript code to connect to the websocket server. Also to keep things simple, we are using jQuery.
+Finally, let's get started by writing the JavaScript code to connect to the websocket server. Also to keep things simple, we are using jQuery.
 
 .public/chat.js
 [source, js]
