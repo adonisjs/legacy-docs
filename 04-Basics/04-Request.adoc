@@ -420,7 +420,7 @@ The above eaxmple works in the following cases:
 == Extending Request
 It is also possible to extend the `Request` prototype by adding your own methods, known as macros.
 
-NOTE: Since the code to extend `Request` need only execute once, you could use link:service-providers[providers] or link:ignitor[Ignitor hooks] to do so. Read link:extending-adonisjs[Extending the Core] for more information.
+NOTE: Since the code to extend `Request` need only execute once, you could use [providers](https://github.com/adonisjs/docs/blob/4.1/02-Concept/03-service-providers.adoc) or [Ignitor hooks](https://github.com/adonisjs/docs/blob/4.1/02-Concept/05-ignitor.adoc) to do so. Read [Extending the Core](https://github.com/adonisjs/docs/blob/4.1/06-Digging-Deeper/03-Extending-the-Core.adoc) for more information.
 
 [source, javascript]
 ----
