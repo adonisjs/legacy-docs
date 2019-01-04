@@ -15,7 +15,7 @@ So far, you have used various Ace commands to generate *controllers*, *models*, 
 In this guide, we learn about Ace internals and how to create *commands*.
 
 == Introduction
-Every AdonisJs project has an `ace` file in the project root, which is a regular Javascript file but without the `.js` extension.
+Every AdonisJs project has an `ace` file in the project root, which is a regular JavaScript file but without the `.js` extension.
 
 The `ace` file is used to execute project-specific commands. For reusable commands, you must bundle them as npm packages.
 

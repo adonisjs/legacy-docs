@@ -11,7 +11,7 @@ toc::[]
 AdonisJs makes it simpler and easy to write *functional tests* using the *Chrome* browser. Under the hood, it makes use of link:https://github.com/GoogleChrome/puppeteer[puppeteer, window="_blank"] to launch a real browser and run assertions.
 
 NOTE: Since AdonisJs uses Chrome engine, you cannot run your tests on multiple browsers like *IE* or *Firefox*. +
-Cross-browser testing is usually done for Frontend Javascript, which is out of the scope of AdonisJs.
+Cross-browser testing is usually done for Frontend JavaScript, which is out of the scope of AdonisJs.
 
 In this guide, we learn about opening a browser programmatically, and running tests like a real user are using the app.
 

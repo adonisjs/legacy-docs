@@ -117,9 +117,9 @@ Require css file from `edge` templates.
 
 
 == Scripts setup
-The scripts setup is done to bundle your frontend Javascript into a single file. I assume that you want to compile code to ES5 to target all major browsers.
+The scripts setup is done to bundle your frontend JavaScript into a single file. I assume that you want to compile code to ES5 to target all major browsers.
 
-NOTE: We use babel for ES6 to ES5 transpilation. Also *AdonisJs itself does not need babel*, it is just for the Javascript you are writing for the browser.
+NOTE: We use babel for ES6 to ES5 transpilation. Also *AdonisJs itself does not need babel*, it is just for the JavaScript you are writing for the browser.
 
 [source, bash]
 ----

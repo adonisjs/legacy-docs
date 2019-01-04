@@ -62,7 +62,7 @@ module.exports = UsersSchema
 
 As you can see, it is so simple to create/alter database tables using schema files, since you can chain different methods to define the field attributes.
 
-The schema file is a Javascript ES6 class with two required methods called `up` and `down` on it.
+The schema file is a JavaScript ES6 class with two required methods called `up` and `down` on it.
 
 up::
 The `up` method is used to take action on a table. It can be creating a new table or altering the existing table.

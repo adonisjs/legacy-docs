@@ -57,7 +57,7 @@ class UsersController {
 ----
 
 == Commands
-All link:http://redis.io/commands[redis commands, window="_blank"] are supported as Javascript functions. Also make sure to read link:https://github.com/luin/ioredis[ioredis, window="_blank"] documentation ( if required ).
+All link:http://redis.io/commands[redis commands, window="_blank"] are supported as JavaScript functions. Also make sure to read link:https://github.com/luin/ioredis[ioredis, window="_blank"] documentation ( if required ).
 
 [source, js]
 ----

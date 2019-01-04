@@ -7,7 +7,7 @@ category: websockets
 
 toc::[]
 
-This guide covers the documentation around the Javascript client used for connecting to the websocket server.
+This guide covers the documentation around the JavaScript client used for connecting to the websocket server.
 
 == Installation
 You can install the package from npm and then bundle it using Webpack or rollup.
@@ -217,7 +217,7 @@ const chat = ws.subscribe('chat')
 ----
 
 == Authentication
-The Javascript client makes it super easy to authenticate users. The auth credentials are only passed once to the server, during the initial connection and then same information can be reused to allow or disallow channel subscriptions.
+The JavaScript client makes it super easy to authenticate users. The auth credentials are only passed once to the server, during the initial connection and then same information can be reused to allow or disallow channel subscriptions.
 
 NOTE: If you are using sessions, then user will be authenticated automatically, if they have a valid session.
 

@@ -58,7 +58,7 @@ Lucid makes use of `sqlite` by default. However, you can change the configuratio
 All of the link:http://knexjs.org/#Installation-client[knex configuration, window="_blank"] options are supported as it is.
 
 == Basic Example
-Database query builder has fluent API, which means you can chain Javascript methods to create SQL queries.
+Database query builder has fluent API, which means you can chain JavaScript methods to create SQL queries.
 
 Let's see an example of selecting all users and returning them as JSON.
 [source, js]
