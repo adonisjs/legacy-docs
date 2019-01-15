@@ -199,7 +199,7 @@ await Database.from('users').whereNotExists(function () {
 ----
 await Database
   .table('users')
-  .whereBetween('age', [18,32])
+  .whereBetween('age', [18, 32])
 ----
 
 ==== whereNotBetween
