@@ -8,23 +8,24 @@ category: database
 
 toc::[]
 
-Migrations are mutations to your database as you keep evolving your application. Think of them as step by step screenshot of your database schema, that you can roll back at any given point of time.
+Migrations are documented database mutations, created throughout your application's development lifecycle that you can roll back or re-run at any point in time.
 
-Also, migrations make it easier to work as a team, where database changes from one developer are easily spotted and used by other developers in the organization.
+Migrations make it easier to work as a team, enabling database schema changes from one developer to be easily tracked and then applied by other developers in your organization.
 
-== Creating migrations
-Let's start from the beginning where we want to create a users table with the help of migrations.
+== Creating Migrations
 
-NOTE: Make sure the link:database#_setup[migrations provider] is registered inside `aceProviders` array inside `start/app.js` file.
+NOTE: To use migrations, the link:database#_setup[Migrations Provider] must first be registered inside the `start/app.js` file's `aceProviders` array.
 
-We make use of the `adonis make:migration` command to create a schema file for us.
+Let's create a *users* table with the help of migrations.
+
+First, call the `adonis make:migration` command to create a schema file:
 
 [source, bash]
 ----
-adonis make:migration users
+> adonis make:migration users
 ----
 
-On prompt choose `Create table` option and press kbd:[Enter]
+When prompted, choose the `Create table` option and press kbd:[Enter]:
 
 .Output
 [source, bash]
@@ -32,9 +33,9 @@ On prompt choose `Create table` option and press kbd:[Enter]
 ✔ create  database/migrations/1502691651527_users_schema.js
 ----
 
-== Defining schema
-Now quickly open the created file and write some code inside it.
+Your new schema file (prefixed with the current timestamp) is created in the `database/migrations` directory, ready to modify as required:
 
+.database/migrations/...users_schema.js
 [source, js]
 ----
 'use strict'
@@ -45,9 +46,6 @@ class UsersSchema extends Schema {
   up () {
     this.create('users', (table) => {
       table.increments()
-      table.string('username').unique()
-      table.string('email').unique()
-      table.string('password', 80)
       table.timestamps()
     })
   }
@@ -60,21 +58,99 @@ class UsersSchema extends Schema {
 module.exports = UsersSchema
 ----
 
-As you can see, it is so simple to create/alter database tables using schema files, since you can chain different methods to define the field attributes.
+== Schema Files
 
-The schema file is a JavaScript ES6 class with two required methods called `up` and `down` on it.
+A schema file requires two methods: `up` and `down`.
 
-up::
-The `up` method is used to take action on a table. It can be creating a new table or altering the existing table.
+=== up()
 
-down::
-The `down` method is the reverse of the up action. When `up` method creates a table, you drop it inside the `down` method.
+The `up` method is used to take action on a table. It can be used to create a new table or altering an existing table.
 
-== Multiple connections
-The schema files can also make use of a different connection by defining a `connection` property on them. Also, make sure that the same connection is defined inside `config/database.js` file.
+=== down()
 
-NOTE: A table `adonis_schema` is created to manage the lifecycle of migrations. This table will always be created inside the primary connection database, and there is no option to override it.
+The `down` method is used to revert the changes applied in the `up` method. When `up` is used to create a table, `down` would be used to  drop that table.
 
+Update the schema file link:#_creating_migrations[you just created] with the following code:
+
+.database/migrations/...users_schema.js
+[source, js]
+----
+'use strict'
+
+const Schema = use('Schema')
+
+class UsersSchema extends Schema {
+  up () {
+    this.create('users', (table) => {
+      table.increments()
+      table.string('username', 80).notNullable().unique()
+      table.string('email', 254).notNullable().unique()
+      table.string('password', 60).notNullable()
+      table.timestamps()
+    })
+  }
+
+  down () {
+    this.drop('users')
+  }
+}
+
+module.exports = UsersSchema
+----
+
+The example above demonstrates how to create/alter a database table using schema files, chaining together different column link:#_column_typesmodifiers[type/modifier methods] to define the characteristics of individual field attributes in the `up` method.
+
+== Column Types/Modifiers
+
+NOTE: For the full list of schema column type and modifier methods, see the link:https://knexjs.org/#Schema-Building[Knex API, window="_blank"] documentation.
+
+=== Column Types
+[options="header", cols="55, 45"]
+|====
+| Method | Description
+| `table.bigInteger(name)` | Adds a link:https://knexjs.org/#Schema-bigInteger[bigint, window="blank"] column.
+| `table.binary(name, [length])` | Adds a link:https://knexjs.org/#Schema-binary[binary, window="blank"] column.
+| `table.boolean(name)` | Adds a link:https://knexjs.org/#Schema-boolean[boolean, window="blank"] column.
+| `table.date(name)` | Adds a link:https://knexjs.org/#Schema-date[date, window="blank"] column.
+| `table.datetime(name, [precision])` | Adds a link:https://knexjs.org/#Schema-datetime[datetime, window="blank"] column.
+| `table.decimal(name, [precision], [scale])` | Adds a link:https://knexjs.org/#Schema-decimal[decimal, window="blank"] column.
+| `table.enu(col, values, [options])` | Adds a link:https://knexjs.org/#Schema-enum[enum, window="blank"] column.
+| `table.float(name, [precision], [scale])` | Adds a link:https://knexjs.org/#Schema-float[float, window="blank"] column.
+| `table.increments(name)` | Adds an link:https://knexjs.org/#Schema-increments[auto incrementing, window="_blank"] column.
+| `table.integer(name)` | Adds an link:https://knexjs.org/#Schema-integer[integer, window="blank"] column.
+| `table.json(name)` | Adds a link:https://knexjs.org/#Schema-json[json, window="blank"] column.
+| `table.string(name, [length=255])` | Adds a link:https://knexjs.org/#Schema-string[string, window="blank"] column.
+| `table.text(name, [textType])` | Adds a link:https://knexjs.org/#Schema-text[text, window="blank"] column.
+| `table.time(name, [precision])` | Adds a link:https://knexjs.org/#Schema-time[time, window="blank"] column.
+| `table.timestamp(name, [useTz], [precision])` | Adds a link:https://knexjs.org/#Schema-timestamp[timestamp, window="blank"] column.
+| `table.timestamps([useTimestamps], [defaultToNow])` | Adds link:https://knexjs.org/#Schema-timestamps[created/updated, window="blank"] columns.
+| `table.uuid(name)` | Adds a link:https://knexjs.org/#Schema-uuid[uuid, window="blank"] column.
+|====
+
+=== Column Modifiers
+[options="header", cols="40, 60"]
+|====
+| Method | Description
+| `.after(field)` | Set column to be inserted link:https://knexjs.org/#Schema-alter[after, window="blank"] `field`.
+| `.alter()` | Marks the column as an link:https://knexjs.org/#Schema-alter[alter/modify, window="blank"].
+| `.collate(collation)` | Set column link:https://knexjs.org/#Chainable[collation, window="blank"] (e.g. `utf8_unicode_ci`).
+| `.comment(value)` | Set column link:https://knexjs.org/#Schema-comment[comment, window="blank"].
+| `.defaultTo(value)` | Set column link:https://knexjs.org/#Schema-defaultTo[default value, window="blank"].
+| `.first()` | Set column to be inserted at the link:https://knexjs.org/#Schema-first[first position, window="blank"].
+| `.index([indexName], [indexType])` | Specifies column as an link:https://knexjs.org/#Chainable[index, window="blank"].
+| `.inTable(table)` | Set link:https://knexjs.org/#Schema-inTable[foreign key table, window="blank"] (chain after `.references`).
+| `.notNullable()` | Set column to link:https://knexjs.org/#Schema-notNullable[not null, window="blank"].
+| `.nullable()` | Set column to be link:https://knexjs.org/#Schema-nullable[nullable, window="blank"].
+| `.primary([constraintName])` | Set column as the link:https://knexjs.org/#Schema-primary[primary key, window="blank"] for a table.
+| `.references(column)` | Set link:https://knexjs.org/#Schema-references[foreign key column, window="blank"].
+| `.unique()` | Set column as link:https://knexjs.org/#Chainable[unique, window="blank"].
+| `.unsigned()` | Set column to link:https://knexjs.org/#Schema-unsigned[unsigned, window="blank"] (if integer).
+|====
+
+== Multiple Connections
+Schema files can use a different connection by defining a `connection` getter (ensure your different connection exists inside the `config/database.js` file):
+
+.database/migrations/...users_schema.js
 [source, js]
 ----
 const Schema = use('Schema')
@@ -84,22 +160,20 @@ class UsersSchema extends Schema {
     return 'mysql'
   }
 
-  up () {
-  }
-
-  down () {
-  }
+  // ...
 }
 
 module.exports = UsersSchema
 ----
 
-== Run migrations
-Finally, we need to call another command to run the migrations, which executes the `up` method on this class.
+NOTE: The database table `adonis_schema` is always created inside the default connection database to manage the lifecycle of migrations (there is no option to override it).
+
+== Run Migrations
+We need to call the `migration:run` command to run migrations (which executes the `up` method on all pending migration files):
 
 [source, bash]
 ----
-adonis migration:run
+> adonis migration:run
 ----
 
 .Output
@@ -109,49 +183,49 @@ migrate: 1502691651527_users_schema.js
 Database migrated successfully in 117 ms
 ----
 
-== Migrations status
-Also, you can check the migration status by running `migration:status` command.
+== Migration Status
+You can check the status of all migrations by running the following command:
 
 [source, bash]
 ----
-adonis migration:status
+> adonis migration:status
 ----
 
-Output
 link:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502694030/migration-status_zajqib.jpg[image:http://res.cloudinary.com/adonisjs/image/upload/q_100/v1502694030/migration-status_zajqib.jpg[], window="_blank"]
 
-There is a *Batch* next to each migration so that you can rollback to a given batch without manually altering the database tables.
+TIP: The *batch* value exists as a reference you can use to limit rollbacks at a later time.
 
-That is how migrations work under the hood.
+That is how migrations work under the hood:
 
-1. Every time you run `adonis migration:run`, a new batch is created for all the pending schema files.
-2. Files which are migrated once, are not executed again.
-3. Running `adonis migration:rollback`  rollbacks the last batch migrations in reverse order.
+1. Calling `adonis migration:run` runs all pending schema files and assigns them to a new batch.
+2. Once a batch of migration files are run, they are not run again.
+3. Calling `adonis migration:rollback` rollbacks the last batch of migrations in reverse order.
 
-TIP: Do not create all tables in a single schema file, instead create a new file for each database change. This way you keep your database atomic and can roll back to any version.
+TIP: Don't create multiple tables in a single schema file. Instead, create a new file for each database change. This way you keep your database atomic and can roll back to any version.
 
-== Migrations commands
-Below is the list of available command with their description. Also, make sure to append `--help` to the command name to see a list of available options. For example:
+== Migration Commands
+Below is the list of available migration commands.
 
-
-=== Commands list
+=== Command List
 [options="header"]
 |====
 | Command  | Description
-| make:migration | Create a new migration file,
-| migration:run | Run all pending migrations.
-| migration:rollback | Rollback last set of migrations.
-| migration:refresh | Rollback all migrations to the `0` batch and then re-run them from the start.
-| migration:reset | Rollback all migrations to the `0` batch.
-| migration:status | Get status of all the migrations.
+| `make:migration` | Create a new migration file.
+| `migration:run` | Run all pending migrations.
+| `migration:rollback` | Rollback last set of migrations.
+| `migration:refresh` | Rollback all migrations to the `0` batch then re-run them from the start.
+| `migration:reset` | Rollback all migrations to the `0` batch.
+| `migration:status` | Get the status of all the migrations.
 |====
 
 
-=== Command help
+=== Command Help
+For detailed command options, append `--help` to a each migration command:
+
 
 [source, bash]
 ----
-adonis migration:run --help
+> adonis migration:run --help
 ----
 
 .Output
@@ -170,11 +244,11 @@ About:
   Run all pending migrations
 ----
 
-== Table's API
-Below is the list of methods available to interact with database tables.
+== Schema Table API
+Below is the list of schema methods available to interact with database tables.
 
 ==== create
-Create a new database table
+Create a new database table:
 
 [source, js]
 ----
@@ -185,7 +259,7 @@ up () {
 ----
 
 ==== createIfNotExists
-Create a new database table only if it doesn't exists
+Create a new database table (only if it doesn't exist):
 
 [source, js]
 ----
@@ -196,7 +270,7 @@ up () {
 ----
 
 ==== rename(from, to)
-Rename existing database table
+Rename an existing database table:
 
 [source, js]
 ----
@@ -206,7 +280,7 @@ up () {
 ----
 
 ==== drop
-Drop database table
+Drop a database table:
 
 [source, js]
 ----
@@ -216,7 +290,7 @@ down () {
 ----
 
 ==== dropIfExists
-Drop database table only when it exists
+Drop a database table (only if it exists):
 
 [source, js]
 ----
@@ -226,7 +300,7 @@ down () {
 ----
 
 ==== alter
-Select database table for alternation.
+Select a database table for alteration:
 
 [source, js]
 ----
@@ -238,7 +312,7 @@ up () {
 ----
 
 ==== raw
-Run an arbitrary SQL query.
+Run an arbitrary SQL query:
 
 [source, js]
 ----
@@ -254,7 +328,7 @@ up () {
 ----
 
 ==== hasTable
-Tells whether a table exists or not. It is an `async` method.
+Returns whether a table exists or not (this is an `async` method):
 
 [source, js]
 ----
@@ -271,10 +345,10 @@ async up () {
 == Extensions
 Below is the list of extension methods you can execute when running migrations.
 
-NOTE: Extension only works with PostgreSQL database.
+NOTE: Extensions only work with a PostgreSQL database.
 
 ==== createExtension(extensionName)
-Create a database extension.
+Create a database extension:
 
 [source, javascript]
 ----
@@ -286,7 +360,7 @@ class UserSchema {
 ----
 
 ==== createExtensionIfNotExists(extensionName)
-Only creates the extension if it does not exists, otherwise silently ignores the *createExtension* command.
+Create a database extension (only if doesn't exist):
 
 [source, javascript]
 ----
@@ -298,7 +372,7 @@ class UserSchema {
 ----
 
 ==== dropExtension(extensioName)
-Drop an existing database extension.
+Drop a database extension:
 
 [source, javascript]
 ----
@@ -310,7 +384,7 @@ class UserSchema {
 ----
 
 ==== dropExtensionIfExists(extensionName)
-Drop database extension only if it exists, otherwise silently ignores the *dropExtension* command.
+Drop a database extension (only if it exists):
 
 [source, javascript]
 ----
@@ -321,10 +395,10 @@ class UserSchema {
 }
 ----
 
-== Executing arbitrary code
-Commands are written inside `up` and `down` methods are scheduled to be executed later inside a migration. In case you want to execute *arbitrary* database commands, you can wrap them inside the `schedule` function.
+== Executing Arbitrary Code
+Commands written inside the `up` and `down` methods are scheduled to be executed later inside a migration.
 
-NOTE: The `schedule` method receives the *transaction object* and it is important to run all database commands inside the same transaction; otherwise queries will hang forever.
+If you need to execute *arbitrary* database commands, wrap them inside the `schedule` function:
 
 
 [source, javascript]
@@ -347,13 +421,15 @@ class UserSchema {
 }
 ----
 
-== Schema builder API
-The schema builder API is the same as the link:http://knexjs.org/#Schema-Building[knex api], so make sure to read their documentation.
+NOTE: The `schedule` method receives a *transaction object*. It is important to run all database commands inside the same transaction, otherwise your queries will hang forever.
+
+== Schema Builder API
+The schema builder API uses the link:http://knexjs.org/#Schema-Building[Knex API, window="_blank"], so make sure to read their documentation for more information.
 
 ==== fn.now()
-Knex has a method called link:http://knexjs.org/#Schema-timestamp[knex.fn.now()], which is used to set the current timestamp on the database field.
+Knex has a method called link:http://knexjs.org/#Schema-timestamp[knex.fn.now(), window="_blank"], which is used to set the current timestamp on the database field.
 
-In AdonisJs, you reference this method as `this.fn.now()`.
+In AdonisJs, you reference this method as `this.fn.now()`:
 
 [source, js]
 ----

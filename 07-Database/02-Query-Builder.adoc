@@ -1,23 +1,30 @@
 ---
 permalink: query-builder
-title: Query builder
+title: Query Builder
 category: database
 ---
 
-= Query builder
+= Query Builder
 
 toc::[]
 
-AdonisJs query builder gives you a unified syntax to interact with SQL databases using JavaScript methods. This guide is a reference to all the available methods on query builder.
+The AdonisJs *Query Builder* provides a unified syntax to interact with SQL databases using JavaScript methods.
 
-Checkout link:database[database introduction] guide to check the list of *supported databases*, *configuration options* and *debugging queries*.
+This guide is a reference to all the available methods on the *Query Builder*.
+
+TIP: See the database link:database[Getting Started] guide for the list of supported databases, config options and how to debug your SQL queries.
 
 == Introduction
-Writing SQL queries can be tedious in so many ways, even if you are good with SQL.
+Writing SQL queries can be tedious, even if you are proficient with SQL.
 
-Let's imagine you write all of your queries for MySQL, and after some time your manager asks you to migrate everything to PostgreSQL. Now you have to re-write/amend your MySQL queries to make sure they work well with PostgreSQL.
+=== Syntax Abstraction
 
-Another issue can be of building incremental queries with conditional blocks.
+Imagine all your queries are written for MySQL, and at a later time you're asked to migrate everything to PostgreSQL. You'd have to rewrite/amend your MySQL queries to ensure they still work well with PostgreSQL.
+
+*Query Builder* abstracts away connection specific syntax so you're free to concentrate on your app functionality instead of variations in SQL dialects.
+
+=== Conditional Queries
+Another issue can be building incremental queries with conditional blocks:
 
 .Without Query Builder
 [source, javascript]
@@ -39,8 +46,8 @@ if (username) {
 }
 ----
 
-== Basic example
-Let's review a basic example of working with the query builder by chaining different methods.
+== Basic Example
+Here's a basic example using the *Query Builder* to chain different methods:
 
 [source, javascript]
 ----
@@ -59,7 +66,7 @@ class UserController {
 ----
 
 == Selects
-The `select` method defines the fields to be selected for a given query.
+The `select` method defines the fields to be selected for a given query:
 
 [source, javascript]
 ----
@@ -75,18 +82,20 @@ select `id`, `username` from `users`
 select * from `users`
 ----
 
-Also, you can define aliases
+You can define query *aliases* like so:
 [source, js]
 ----
 await Database.select('username as uname')
 ----
 
 == Where Clauses
-Query builder offers a bunch of dynamic methods to add *where* clauses. Also, it supports sub-queries by passing a `closure` or `another query` instead of the actual value.
+*Query Builder* offers numerous dynamic methods to add *where* clauses.
 
-Also make sure to reference the link:http://knexjs.org/#Builder-wheres[knex documentation, window="_blank"]
+It also supports subqueries by passing a *closure* or *another query* instead of the actual value.
 
-NOTE: Passing `undefined` to the where clause causes an error during SQL compilation. Make sure that dynamic values are not `undefined` before passing them.
+For detailed `where` information, see Knex's link:http://knexjs.org/#Builder-wheres[documentation, window="_blank"].
+
+NOTE: Passing `undefined` to the `where` clause causes an error during SQL compilation, so ensure dynamic values are not `undefined` before passing them.
 
 ==== where
 
@@ -97,7 +106,7 @@ const users = await Database.from('users').where('id', 1)
 const users = await Database.from('users').where({ id: 1 })
 ----
 
-Also, you can define the comparison operator to the where clause.
+You can pass a comparison operator to the `where` clause like so:
 
 [source, javascript]
 ----
@@ -106,19 +115,22 @@ const adults = await Database
   .where('age', '>', 18)
 ----
 
-==== where ( with callback )
-You can also add a callback to the *where* clause. Callback outputs a little different SQL query by grouping all the where clauses.
+==== where (with callback)
+You can pass a callback to the `where` clause to group all clauses contained withing the callback:
 
 [source, javascript]
 ----
 await Database.from('users').where(function () {
-  this.where('id', 1)
+  this
+    .where('id', 1)
+    .orWhere('id', '>', 10)
 })
 ----
 
+.SQL Output
 [source, sql]
 ----
-select * from `users` where (`id` = 1)
+select * from `users` where (`id` = 1 or `id` > 10)
 ----
 
 ==== whereNot
@@ -187,7 +199,7 @@ await Database.from('users').whereNotExists(function () {
 ----
 await Database
   .table('users')
-  .whereBetween('age',[18,32])
+  .whereBetween('age', [18,32])
 ----
 
 ==== whereNotBetween
@@ -195,11 +207,11 @@ await Database
 ----
 await Database
   .table('users')
-  .whereNotBetween('age',[45,60])
+  .whereNotBetween('age', [45,60])
 ----
 
 ==== whereRaw
-Convenience helper for `.where(Database.raw(query))`
+Convenience helper for `.where(Database.raw(query))`:
 
 [source, javascript]
 ----
@@ -219,7 +231,7 @@ await Database
   .innerJoin('accounts', 'user.id', 'accounts.user_id')
 ----
 
-Also, you can pass a closure to construct the join.
+You can also pass a callback to construct the join:
 
 [source, javascript]
 ----
@@ -347,7 +359,7 @@ await Database
 ----
 
 ==== having(column, operator, value)
-NOTE: `groupBy()` clause is always required before making use of `having()` method.
+NOTE: `groupBy()` must be called before `having()`.
 
 [source, javascript]
 ----
@@ -367,15 +379,20 @@ await Database
 ----
 
 == Inserts
-Insert operation returns the `id` of the inserted row. In the case of bulk inserts, the `id` of the first record is returned, and it is more of a limitation with MYSQL itself. link:http://dev.mysql.com/doc/refman/5.6/en/information-functions.html#function_last-insert-id[LAST_INSERT_ID].
 
 ==== insert(values)
+The `insert` operation creates a row and returns its newly created `id`:
 [source, javascript]
 ----
 const userId = await Database
   .table('users')
   .insert({username: 'foo', ...})
+----
 
+In the case of bulk inserts, the `id` of the first record is returned (this is a limitation with MySQL itself; see link:http://dev.mysql.com/doc/refman/5.6/en/information-functions.html#function_last-insert-id[LAST_INSERT_ID, window="_blank"]):
+
+[source, javascript]
+----
 // BULK INSERT
 const firstUserId = await Database
   .from('users')
@@ -383,7 +400,7 @@ const firstUserId = await Database
 ----
 
 ==== into(tableName)
-Method `into` is more readable than `table/from` when insert rows to the database.
+The `into` method is a more readable alternative than using `table/from` when inserting database rows:
 
 [source, javascript]
 ----
@@ -392,8 +409,8 @@ const userId = await Database
   .into('users')
 ----
 
-=== PostgreSQL only
-For PostgreSQL, you have to define the returning column explicitly. All other database clients ignore this statement.
+=== PostgreSQL Return Column
+For PostgreSQL, you have to define the returning column explicitly (all other database clients ignore this statement):
 
 [source, javascript]
 ----
@@ -404,7 +421,7 @@ const userId = await Database
 ----
 
 == Updates
-All update operations return the number of affected rows.
+All update operations return the number of affected rows:
 
 [source, javascript]
 ----
@@ -414,7 +431,7 @@ const affectedRows = await Database
   .update('lastname', 'Virk')
 ----
 
-Pass an object for multiple columns.
+To update multiple columns, pass those columns/values as an object:
 
 [source, javascript]
 ----
@@ -425,10 +442,9 @@ const affectedRows = await Database
 ----
 
 == Deletes
-Delete operations also return the number of affected rows.
 
 ==== delete
-Also, you can make use of `del()`, since `delete` is a reserved keyword in JavaScript.
+Delete operations also return the number of affected rows:
 
 [source, javascript]
 ----
@@ -438,8 +454,10 @@ const affectedRows = await Database
   .delete()
 ----
 
+NOTE: As `delete` is reserved a reserved keyword in JavaScript, you can also use the alternative `del()` method.
+
 ==== truncate
-Truncate removes all the rows from a database and set auto increment id back to *0*.
+Truncate removes all table rows, resetting the table auto increment id to `0`:
 
 [source, javascript]
 ----
@@ -447,7 +465,7 @@ await Database.truncate('users')
 ----
 
 == Pagination
-Query builder provides a handful of convenient ways to paginate results from the database.
+*Query Builder* provides convenient methods to paginate database results.
 
 ==== forPage(page, [limit=20])
 [source, javascript]
@@ -479,13 +497,13 @@ NOTE: The output of the `paginate` method is different from the `forPage` method
 }
 ----
 
-NOTE: The `total` key will be a string if you are using **PostgreSQL** since that JavaScript is unable to handle `bigint` natively. See link:https://github.com/adonisjs/adonis-lucid/issues/339#issuecomment-387399508[this issue] for a recommended way to solve this.
+NOTE: If using *PostgreSQL*, the `total` key will be a string since JavaScript is unable to handle `bigint` natively (see link:https://github.com/adonisjs/adonis-lucid/issues/339#issuecomment-387399508[this issue, window="_blank"] for a recommended solution).
 
 == Database Transactions
-Database transactions are safe operations, which are not reflected in the database until and unless you explicitly commit your changes.
+Database transactions are safe operations which are not reflected in the database until you explicitly commit your changes.
 
 ==== beginTransaction
-The `beginTransaction` method returns the transaction object, which can be used to perform any queries.
+The `beginTransaction` method returns the transaction object, which can be used to perform any queries:
 
 [source, javascript]
 ----
@@ -497,8 +515,7 @@ await trx.rollback() // will not insert anything
 ----
 
 ==== transaction
-Also, you can wrap your transactions inside a *callback*. The major difference is, you do not have to call `commit or `rollback` manually. If any of your queries throws an error, the transaction
-rolls back automatically. Otherwise, it is committed.
+You can also wrap your transactions inside a callback:
 
 [source, javascript]
 ----
@@ -507,9 +524,13 @@ await Database.transaction(async (trx) => {
 })
 ----
 
+NOTE: You do not have to call `commit` or `rollback` manually inside this callback.
+
+If any of your queries throws an error, the transaction rolls back automatically, otherwise, it is committed.
+
 == Aggregates
 
-The Lucid Query Builder exposes the full power of link:http://knexjs.org/#Builder-count[knex's aggregate methods].
+*Query Builder* exposes the full power of Knex's link:http://knexjs.org/#Builder-count[aggregate methods, window="_blank"].
 
 ==== count()
 [source, javascript]
@@ -536,13 +557,13 @@ const total = count[0].total                    // returns number
 ----
 
 ==== countDistinct
-The `countDistinct` is same as count, but adds distinct expression.
+`countDistinct` is the same as `count`, but adds a `distinct` expression:
 
 [source, javascript]
 ----
 const count = await Database
   .from('users')
-  .countDistinct('id')                          // Returns array
+  .countDistinct('id')                          // returns array
 
 const total = count[0]['count(distinct "id")']  // returns number
 ----
@@ -590,7 +611,7 @@ await Database.from('users').avgDistinct('age as age')  // returns array
 ----
 
 ==== increment
-Increment the column existing value by *1*.
+Increase the column value by `1`:
 
 [source, javascript]
 ----
@@ -601,7 +622,7 @@ await Database
 ----
 
 ==== decrement
-Opposite of `increment`.
+Decrease the column value by `1`:
 
 [source, javascript]
 ----
@@ -613,11 +634,13 @@ await Database
 
 === Aggregate Helpers
 
-Query Builder also extends knex's query aggregates with helpful shortcut methods for common aggregate queries.
+The AdonisJs *Query Builder* also extends Knex's query aggregates with helpful shortcut methods for common aggregate queries. These helper methods end the query builder chain and return a value.
 
-Helper methods end the query builder chaining and return a value. All helpers accept a column name to be used for aggregation. When possible Lucid will choose a default for the column name. Some methods, such as `sum()`, require a column name.
+All helpers accept a column name to be used for aggregation. When possible, *Query Builder* will choose a default for the column name.
 
-The knex query builder underlying Lucid defines methods `count()`, `countDistinct()`, `avg()`, `avgDistinct()`, `sum()`, `sumDistinct()`, `min()`, and `max()`. To avoid confusion and naming collisions, Lucid prefixes its aggregate helper methods with `get`.
+Some methods, such as `sum()`, require a column name.
+
+The underlying Knex query builder defines the methods: `count()`, `countDistinct()`, `avg()`, `avgDistinct()`, `sum()`, `sumDistinct()`, `min()`, and `max()`. To avoid confusion and naming collisions, *Query Builder* prefixes its aggregate helper methods with `get` (e.g. `getCount`).
 
 ==== getCount(columnName = '*')
 [source, javascript]
@@ -675,14 +698,14 @@ await Database.from('users').getAvgDistinct('age')      // returns number
 == Helpers
 
 ==== pluck(column)
-The `pluck` method will return an array of values for the selected column.
+The `pluck` method will return an array of values for the selected column:
 [source, javascript]
 ----
 const usersIds = await Database.from('users').pluck('id')
 ----
 
 ==== first
-The `first` method adds a *limit 1* clause to the query.
+The `first` method adds a `limit 1` clause to the query:
 
 [source, javascript]
 ----
@@ -690,7 +713,7 @@ await Database.from('users').first()
 ----
 
 ==== clone
-Clone the current query chain for re-usability.
+Clones the current query chain for later usage:
 
 [source, javascript]
 ----
@@ -704,7 +727,7 @@ await query
 ----
 
 ==== columnInfo
-Returns information for a given column.
+Returns information for a given column:
 
 [source, javascript]
 ----
@@ -713,7 +736,7 @@ const username = await Database
   .columnInfo('username')
 ----
 
-== Sub queries
+== Subqueries
 [source, javascript]
 ----
 const subquery = Database
@@ -732,7 +755,7 @@ select * from `users` where `id` in (select `account_name` from `accounts` where
 ----
 
 == Raw Queries
-The `Database.raw` method should be used for running raw SQL queries.
+The `Database.raw` method should be used for running raw SQL queries:
 
 [source, js]
 ----
@@ -740,8 +763,10 @@ await Database
   .raw('select * from users where username = ?', [username])
 ----
 
-== Closing connection
-The database connections can be closed by calling the `close` method. By default this method all close all open database connections. To close selected connections, make sure to pass an array of connection names.
+== Closing Connections
+Database connections can be closed by calling the `close` method. By default, this method closes all open database connections.
+
+To close selected connections, pass an array of connection names:
 
 [source, js]
 ----
