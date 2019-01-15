@@ -68,7 +68,7 @@ The `up` method is used to take action on a table. It can be used to create a ne
 
 === down()
 
-The `down` method is used to revert the changes applied in the `up` method. When `up` is used to create a table, `down` would be used to  drop that table.
+The `down` method is used to revert the changes applied in the `up` method. When `up` is used to create a table, `down` would be used to drop that table.
 
 Update the schema file link:#_creating_migrations[you just created] with the following code:
 
