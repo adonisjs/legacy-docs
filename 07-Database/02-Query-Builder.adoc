@@ -207,7 +207,7 @@ await Database
 ----
 await Database
   .table('users')
-  .whereNotBetween('age', [45,60])
+  .whereNotBetween('age', [45, 60])
 ----
 
 ==== whereRaw
