@@ -490,7 +490,7 @@ await user.reload()
 // user.serviceToken === 'E1Fbl3sjH'
 ----
 
-NOTE: A model with properties set during a creation hook will require *reloading* to retreive the values set during that hook.
+NOTE: A model with properties set during a creation hook will require *reloading* to retrieve the values set during that hook.
 
 == Aggregate Helpers
 Query Builder link:query-builder#_aggregate_helpers[aggregate helpers] provide shortcuts to common aggregate queries.
