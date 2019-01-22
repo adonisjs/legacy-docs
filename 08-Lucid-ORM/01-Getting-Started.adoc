@@ -10,7 +10,7 @@ toc::[]
 
 *Lucid* is the AdonisJS implementation of the link:https://en.wikipedia.org/wiki/Active_record_pattern[active record pattern, window="_blank"].
 
-If you're familiar with the *Laravel* or *Ruby on Rails*, you'll find many similarities between Lucid and Laravel's link:https://laravel.com/docs/eloquent[Eloquent, window="_blank"] or Rails' link:https://guides.rubyonrails.org/active_record_basics.html[Active Record, window="_blank"].
+If you're familiar with *Laravel* or *Ruby on Rails*, you'll find many similarities between Lucid and Laravel's link:https://laravel.com/docs/eloquent[Eloquent, window="_blank"] or Rails' link:https://guides.rubyonrails.org/active_record_basics.html[Active Record, window="_blank"].
 
 == Introduction
 Active record models are generally preferred over plain database queries for their ease of use and powerful APIs to drive application data flow.
