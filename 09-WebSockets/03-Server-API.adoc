@@ -8,10 +8,10 @@ category: websockets
 
 toc::[]
 
-In this guide we jump into the functional aspect of *Channels*, *Authentication* and exchanging real time messages.
+In this guide we dive deeper into *channels*, *authentication* and exchanging *real time messages*.
 
-== Registering channels
-The channels are registered inside `start/socket.js` file. You are free to register as many channels as you want and there is no linear overhead with the number of channels.
+== Registering Channels
+WebSocket channels are registered in the `start/socket.js` file:
 
 .start/socket.js
 [source, js]
@@ -23,9 +23,11 @@ Ws.channel('news', ({ socket }) => {
 })
 ----
 
-The channel handler, very much like the Route handler receives a `context`. By default the context will have `socket` and `request` properties and more will be added by middleware like `Auth` and `Session`.
+Channel handlers receive a `context` object, similar to HTTP  link:request-lifecycle#_http_context[route handlers].
 
-Once a subscription is made, you can use the `socket` instance to exchange messages.
+By default, channel `context` objects contain `socket` and `request` properties (with more added by optional middleware like `Auth`, `Session`, etc).
+
+Once a subscription is made, use the `socket` instance to exchange messages:
 
 [source, js]
 ----
@@ -37,8 +39,8 @@ socket.emit('message', 'Hello world')
 socket.emit('typing', true)
 ----
 
-=== Dynamic topics
-You can also define channels, which can accept subscriptions for dynamic topics. Let's see the following example.
+=== Dynamic Topics
+Channels can be registered to accept dynamic topic subscriptions:
 
 [source, js]
 ----
@@ -47,9 +49,10 @@ Ws.channel('chat:*', ({ socket }) => {
 })
 ----
 
-The `*` indicates that channel can accept any words after the static keyword. Continuing with the chat example, you can create a multiroom chat just using one channel.
+In the example above, `*` sets the channel to accept any subscriptions to topics beginning with `chat:` (e.g. `chat:watercooler`, `chat:intro`, etc).
 
-==== client
+Subscriptions to dynamic topics are made via the link:websocket-client#_subscribetopic[Client API]:
+
 [source, js]
 ----
 const watercooler = ws.subscribe('chat:watercooler')
@@ -57,10 +60,10 @@ const intro = ws.subscribe('chat:intro')
 const news = ws.subscribe('chat:news')
 ----
 
-Now we have made three subscriptions with different topics, but all pointing to the same channel. When we will emit events, they will be delivered to specific topics only.
+In the example above, our different topic subscriptions all point to the same channel, but when topic specific events are emitted, they will be delivered to their specific topic subscribers only.
 
-== Registering middleware
-The middleware are registered inside `start/wsKernel.js` file. The same HTTP pattern is followed to register global and named middleware.
+== Registering Middleware
+Middleware is registered inside the `start/wsKernel.js` file:
 
 .start/wsKernel.js
 [source, js]
@@ -75,8 +78,9 @@ const namedMiddleware = {
 }
 ----
 
-And then use the named middleware on any channel.
+Named middleware is applied per channel in the `start/socket.js` file:
 
+.start/socket.js
 [source, js]
 ----
 Ws
@@ -84,33 +88,43 @@ Ws
   .middleware(['auth'])
 ----
 
-== Creating middleware
-When creating your own middleware, you need to define `wsHandle` method on it. Which also means, that you can re-use the same class for Http and Websocket middleware.
+== Creating Middleware
+WebSocket middleware required a `wsHandle` method.
 
+You can share HTTP and WebSocket middleware by ensuring both `handle` (for HTTP requests) and `wsHandle` methods are defined on your middleware class:
+
+.app/Middleware/CustomMiddleware.js
 [source, js]
 ----
+'use strict'
+
 class CustomMiddleware {
-  // for http
+  // for HTTP
   async handle (ctx, next) {
   }
 
-  // for ws
+  // for WebSocket
   async wsHandle (ctx, next) {
   }
 }
+
+module.exports = CustomMiddleware
 ----
 
-== Broadcast from anywhere
-Websocket communication is not always within the socket lifecycle. Quite often, you want to emit events during the HTTP lifecycle.
+== Broadcast Anywhere
+As pre-registered WebSocket channels can be accessed from anywhere inside your application, WebSocket communication isn't limited to the socket lifecycle.
 
-This is quite simple, since you can access pre-registered channels anywhere inside your code.
+Emit WebSocket events during the HTTP lifecycle like so:
 
+.app/Controllers/Http/UserController.js
 [source, js]
 ----
 const Ws = use('Ws')
 
 class UserController {
   async register () {
+    // ...
+
     Ws
       .getChannel('subscriptions')
       .topic('subscriptions')
@@ -119,26 +133,34 @@ class UserController {
 }
 ----
 
-You start by selecting a channel using `getChannel(name)` method. Now inside that channel, you can broadcast messages to any topic using `topic(name)` method.
+In the example above, we:
 
-After calling `.topic` you get an object which has following methods.
+[ol-shrinked]
+1. Select the channel via the `getChannel(name)` method
+2. Select the channel topic via the `topic(name)` method
+3. Broadcast to topic subscribers via the `broadcast(event)` message
+
+`topic()` returns an object containing the following methods:
 
 [source, js]
 ----
 const chat = Ws.getChannel('chat:*')
 const { broadcast, emitTo } = chat.topic('chat:watercooler')
 
-// broadcast: send to everyone
+// broadcast: send to everyone (except the caller)
 // emitTo: send to selected socket ids
 ----
+
+NOTE: For more info, see the list of link:#_methods[socket methods] below.
 
 == Socket API
 
 === Events
-The following events are reserved and must not be used.
+
+The following events are reserved and *must not be emitted*.
 
 ==== error
-Invoked when an error is received
+Invoked when an error is received:
 
 [source, js]
 ----
@@ -147,7 +169,7 @@ socket.on('error', () => {
 ----
 
 ==== close
-Invoked when subscription is closed.
+Invoked when a subscription is closed:
 
 [source, js]
 ----
@@ -156,18 +178,20 @@ socket.on('close', () => {
 ----
 
 === Methods
-Below is the list of methods you can call on the socket instance.
+The following methods can be called on the socket instance.
 
 ==== emit(event, data, [ackCallback])
-Emit event to the connected client. This method will only send message to your own connection.
+Emit event to the connected client:
 
 [source, js]
 ----
 socket.emit('id', socket.id)
 ----
 
+NOTE: This method only sends a message to your own connection.
+
 ==== emitTo(event, data, socketIds[])
-Emit messages to an array of socket ids
+Emit event to an array of socket ids:
 
 [source, js]
 ----
@@ -175,7 +199,7 @@ socket.emitTo('greeting', 'hello', [someIds])
 ----
 
 ==== broadcast(event, data)
-Emit event to everyone except yourself
+Emit event to everyone *except* yourself:
 
 [source, js]
 ----
@@ -183,7 +207,7 @@ socket.broadcast('message', 'hello everyone!')
 ----
 
 ==== broadcastToAll(event, data)
-Emit event to everyone including yourself
+Emit event to everyone *including* yourself:
 
 [source, js]
 ----
@@ -191,7 +215,7 @@ socket.broadcastToAll('message', 'hello everyone!')
 ----
 
 ==== close()
-Forcefully close subscription from server
+Forcefully close a subscription from the server:
 
 [source, js]
 ----
@@ -199,10 +223,10 @@ socket.close()
 ----
 
 === Properties
-Following are the read only properties you can access on the socket instance.
+The following *read-only* properties can be accessed on the socket instance.
 
 ==== id
-Socket unique id
+Socket unique id:
 
 [source, js]
 ----
@@ -210,7 +234,7 @@ socket.id
 ----
 
 ==== topic
-The topic under which the subscription socket was created
+Topic under which the subscription socket was created:
 
 [source, js]
 ----
@@ -218,7 +242,7 @@ socket.topic
 ----
 
 ==== connection
-Reference to TCP connection, this connection is shared across multiple sockets for a single client for multiplexing.
+Reference to the TCP connection (shared across multiple sockets for a single client for multiplexing):
 
 [source, js]
 ----
