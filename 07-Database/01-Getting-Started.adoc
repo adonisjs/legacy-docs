@@ -20,10 +20,10 @@ The list of supported databases and their equivalent drivers are as follows:
 [options="header", cols="25, 75"]
 |====
 | Database | NPM Driver
-| MariaDB | `npm i mariasql`
+| MariaDB | `npm i mysql` or `npm i mysql2`
 | MSSQL | `npm i mssql`
 | MySQL | `npm i mysql` or `npm i mysql2`
-| Oracle | `npm i oracledb` or `npm i strong-oracle`
+| Oracle | `npm i oracledb`
 | PostgreSQL | `npm i pg`
 | SQLite3 | `npm i sqlite3`
 |====
