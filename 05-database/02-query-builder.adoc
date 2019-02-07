@@ -259,7 +259,7 @@ yield Database.table('users').orderBy('id', 'desc')
 ==== orderByRaw(column, [direction=asc])
 [source, javascript]
 ----
-yield Database.table('users').orderBy('col NULLS LAST DESC')
+yield Database.table('users').orderByRaw('col NULLS LAST DESC')
 ----
 
 ==== having(column, operator, value)
