@@ -18,7 +18,7 @@ There are many ways to communicate with the AdonisJs team.
 
 1. link:https://github.com/adonisjs[Github Repositories, window="_blank"]: Share bugs or create feature requests against the dedicated AdonisJs repositories.
 2. link:https://forum.adonisjs.com[Forum, window="_blank"]: Ask questions, showcase your project and participate in the life of the AdonisJs Framework.
-3. link:https:/link:g/k5myGAz[Discord, window="_blank"]: Join our Discord Server to chat instantly with others in the community.
+3. link:https://discord.gg/vDcEjq6[Discord, window="_blank"]: Join our Discord Server to chat instantly with others in the community.
 4. link:https://twitter.com/adonisframework[Twitter, window="_blank"]: Stay in touch with the progress we make each day and be informed about awesome projects provided by the community.
 
 == Bug Reports
