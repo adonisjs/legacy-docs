@@ -207,8 +207,8 @@ Also, you can authenticate users beforehand by using the `Auth/Client` trait.
 const { test, trait } = use('Test/Suite')('Post')
 
 trait('Test/ApiClient')
-trait('Session/Client')
 trait('Auth/Client')
+trait('Session/Client')
 
 test('get list of posts', async ({ client }) => {
   const user = await User.find(1)
