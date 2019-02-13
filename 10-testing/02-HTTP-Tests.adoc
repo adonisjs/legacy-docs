@@ -202,6 +202,8 @@ test('get list of posts', async ({ client }) => {
 == Authentication
 Also, you can authenticate users beforehand by using the `Auth/Client` trait.
 
+IMPORTANT: Define the `trait` in the `const { test, trait } = use('Test/Suite')('Post')` block to prevent error
+
 [source, js]
 ----
 const { test, trait } = use('Test/Suite')('Post')
