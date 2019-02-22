@@ -159,6 +159,34 @@ Route.get('posts/:id', closure).as('posts.show')
 route('posts.show', { id: 1 })
 ----
 
+`route` helpers also accept a optional parameters object as third argument, it will handle `protocol`, `domain` and `query` options:
+
+[source, js]
+----
+route('posts.show', { id: 1 }, {
+  query: { foo: 'bar' }
+});
+
+// resulting in /post/1?foo=bar
+
+// Without parameters:
+route('auth.login', null, {
+  domain: 'auth.example.com',
+  protocol: 'https',
+  query: { redirect: '/dashboard' }
+});
+
+// resulting in https://auth.example.com/login?redirect=%2Fdashboard
+----
+
+The same rules apply for the view.
+
+[source, html]
+----
+<a href="{{ route('posts.show', { id: 1 }, {query: { foo: 'bar' }}) }}">Show post</a>
+// href="/post/1?foo=bar"
+----
+
 == Route Formats
 
 Route formats open up a new way for link:https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation[content negotiation, window="_blank"], where you can accept the response format as part of the URL.
