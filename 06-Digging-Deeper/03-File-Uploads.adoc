@@ -121,7 +121,7 @@ if (!profilePics.movedAll()) {
   const movedFiles = profilePics.movedList()
 
   await Promise.all(movedFiles.map((file) => {
-    return removeFile(path.join(file._location, file._fileName))
+    return removeFile(path.join(file._location, file.fileName))
   }))
 
   return profilePics.errors()
