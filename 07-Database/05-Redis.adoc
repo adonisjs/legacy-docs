@@ -84,9 +84,9 @@ Redis has built-in support for publish/subscribe (pub/sub) to share messages on 
 
 AdonisJs offers a clean API on top of Redis pub/sub to subscribe to different events and act upon them.
 
-Set your Redis subscribers in the `start/events.js` file:
+Set your Redis subscribers in the `start/redis.js` file:
 
-.start/events.js
+.start/redis.js
 [source, js]
 ----
 'use strict'
@@ -98,7 +98,7 @@ Redis.subscribe('music', async (track) => {
 })
 ----
 
-NOTE: Create the `start/events.js` file if it does not exist.
+NOTE: Create the `start/redis.js` file if it does not exist and load it inside your `server.js`: `.preLoad('start/redis')`.
 
 Once a subscriber has been registered, you can publish data to this channel from the same or different server:
 
