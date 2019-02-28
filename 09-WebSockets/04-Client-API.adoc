@@ -136,7 +136,7 @@ Remove event listener:
 const messageHandler = function () {}
 
 chat.on('message', messageHandler)
-chat.off(messageHandler)
+chat.off('message', messageHandler)
 ----
 
 ==== close()
