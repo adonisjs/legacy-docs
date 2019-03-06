@@ -40,7 +40,7 @@ module.exports = User
 
 In the example above, we added a `profile` method to the `User` model returning a `hasOne` relationship typed to the `Profile` model.
 
-If the `Post` model does not exist, generate it:
+If the `Profile` model does not exist, generate it:
 
 [source, bash]
 ----
