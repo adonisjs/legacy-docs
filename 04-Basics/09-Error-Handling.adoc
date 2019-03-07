@@ -118,7 +118,34 @@ const CustomException = use('App/Exceptions/CustomException')
 throw new CustomException(message, status, code)
 ----
 
+You can set default messages, status and codes in a custom exception:
+
+.app/Exceptions/NotEditableException.js
+[source, js]
+----
+const { LogicalException } = require('@adonisjs/generic-exceptions')
+const message = 'The item is in an status where modifications are disallowed'
+const status = 403
+const code = 'E_NOT_EDITABLE'
+
+class NotEditableException extends LogicalException {
+  constructor () {
+    super(message, status, code)
+  }
+}
+
+module.exports = NotEditableException
+----
+
+[source, js]
+----
+const NotEditableException = use('App/Exceptions/NotEditableException')
+
+throw new NotEditableException()
+----
+
 The beauty of this approach is that you can give a unique name to your exceptions as the class name, and then catch and respond to them appropriately.
+
 
 === A step further
 We can take custom exception handling a step further by defining `handle` and `report` methods on our custom exception class:
