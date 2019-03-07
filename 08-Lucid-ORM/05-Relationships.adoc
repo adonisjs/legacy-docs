@@ -563,6 +563,19 @@ const users = await User
 
 In the example above, a `where` constraint is added to the `posts` relation while eager loading `posts.comments` at the same time.
 
+=== Retrieving loaded models data
+To retrieve the loaded data you must call the `getRelated` method:
+
+[source, js]
+----
+const user = await User
+  .query()
+  .with('posts')
+  .fetch()
+
+const posts = user.getRelated('posts')
+----
+
 == Lazy Eager Loading
 To load relationships *after* already fetching data, use the `load` method.
 
@@ -591,6 +604,18 @@ await user.loadMany({
   posts: (builder) => builder.where('is_published', true),
   profiles: null
 })
+----
+
+=== Retrieving loaded models data
+To retrieve the loaded data you must call the `getRelated` method:
+
+[source, js]
+----
+const user = await User.find(1)
+await user.loadMany(['posts', 'profiles'])
+
+const posts = user.getRelated('posts')
+const profiles = user.getRelated('profiles')
 ----
 
 == Filtering Data
