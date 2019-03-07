@@ -111,7 +111,7 @@ Require css file from `edge` templates.
 [source, edge]
 ----
 <head>
-  {{ css('app') }}
+  {{ style('/public/app') }}
 </head>
 ----
 
@@ -123,7 +123,7 @@ NOTE: We use babel for ES6 to ES5 transpilation. Also *AdonisJs itself does not 
 
 [source, bash]
 ----
-npm i --save-dev babel-loader babel-core babel-preset-env
+npm i --save-dev babel-loader @babel/core @babel/preset-env
 ----
 
 [source, js]
@@ -163,6 +163,6 @@ Require js file from `edge` templates.
 [source, edge]
 ----
 <head>
-  {{ script('app') }}
+  {{ script('/public/app') }}
 </head>
 ----
