@@ -677,6 +677,8 @@ const posts = await Post
   .fetch()
 ----
 
+NOTE: In a whereHas closure, you can also filter the result using fields in the pivot table used in a many to many relation.
+
 ==== doesntHave
 The opposite of the `has` clause:
 
