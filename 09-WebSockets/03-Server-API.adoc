@@ -125,10 +125,11 @@ class UserController {
   async register () {
     // ...
 
-    Ws
-      .getChannel('subscriptions')
-      .topic('subscriptions')
-      .broadcast('new:user')
+    const topic = Ws.getChannel('subscriptions').topic('subscriptions')
+    // if no one is listening, so the `topic('subscriptions')` method will return `null`
+    if(topic){
+      topic.broadcast('new:user')
+    }
   }
 }
 ----
