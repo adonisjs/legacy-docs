@@ -723,7 +723,7 @@ const user = await User.find(1, trx)
 
 [source, js]
 ----
-const user = await User.query(trx).andWhere('username','virk).first()
+const user = await User.query(trx).where('username','virk).first()
 ----
 
 [source, js]
