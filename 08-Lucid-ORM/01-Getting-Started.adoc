@@ -773,6 +773,16 @@ You can also pass the `trx` object to the `createMany` method:
 
 [source, js]
 ----
+const user = await User.find(1, trx)
+----
+
+[source, js]
+----
+const user = await User.query(trx).where('username','virk).first()
+----
+
+[source, js]
+----
 await User.createMany([
   { username: 'virk' }
 ], trx)
@@ -791,6 +801,7 @@ const user = await User.create({email: 'user@example.com', password: 'secret'})
 const userRole = await Role.find(1)
 
 await user.roles().attach([userRole.id], null, trx)
+await userRole.load('user', null, trx)
 
 await trx.commit()
 // if something gone wrong
