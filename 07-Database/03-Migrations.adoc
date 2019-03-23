@@ -131,7 +131,7 @@ NOTE: For the full list of schema column type and modifier methods, see the link
 [options="header", cols="40, 60"]
 |====
 | Method | Description
-| `.after(field)` | Set column to be inserted link:https://knexjs.org/#Schema-alter[after, window="blank"] `field`.
+| `.after(field)` | Set column to be inserted link:https://knexjs.org/#Schema-after[after, window="blank"] `field`.
 | `.alter()` | Marks the column as an link:https://knexjs.org/#Schema-alter[alter/modify, window="blank"].
 | `.collate(collation)` | Set column link:https://knexjs.org/#Chainable[collation, window="blank"] (e.g. `utf8_unicode_ci`).
 | `.comment(value)` | Set column link:https://knexjs.org/#Schema-comment[comment, window="blank"].
