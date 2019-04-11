@@ -7,16 +7,16 @@ category: testing
 = Fakes
 
 toc::[]
-Quite often you want to fake out the original implementation of certain parts of your application when writing tests. Since AdonisJs leverages an IoC container to manage dependencies, it becomes so easy to create `fake` implementations when writing tests
+Quite often, you'll want to swap out the original implementation of certain parts of your application with a fake implementation when writing tests.
 
-== Self-implementing fakes
-Let's start with a basic example of faking out a service which sends an email to a given user.
+Since AdonisJs leverages an IoC container to manage dependencies, it's incredibly easy to create fake implementations when writing tests.
 
-NOTE: Creating too many fakes in testing may lead to false tests, where all your are testing is the syntax and not the implementation.
-  +
-  Always make sure to keep *fakes* as the last option when writing tests.
+== Self-Implementing Fakes
+Let's start with a basic example of faking a service that normally sends emails.
 
-.app/Services/UserRegistration
+NOTE: Creating too many test fakes may lead to false tests, where all you are testing is the syntax and not the implementation. As a rule, try to keep fakes as the last option when writing your tests.
+
+.app/Services/UserRegistration.js
 [source, js]
 ----
 class UserRegistration {
@@ -30,9 +30,9 @@ class UserRegistration {
 }
 ----
 
-Now let's say this service is used by the *UserController*, when testing the user registration, a bunch of false emails is sent to some email address.
+Without implementing a fake, each time we test our application's user registration logic, a verification email would be sent to the passed email address!
 
-To avoid this behavior, it makes sense to fake out the `UserRegistration` service.
+To avoid this behavior, it makes sense to fake the `UserRegistration` service:
 
 [source, js]
 ----
@@ -53,14 +53,14 @@ test('register user', async () => {
 })
 ----
 
-The `ioc.fake` method let you bind a value to the IoC container, and when any part of the application tries to resolve the namespace, the fake value is return over the actual value.
+The `ioc.fake` method lets you bind a fake value to the IoC container, and when any part of the application tries to resolve the bound namespace, the fake value is returned instead of the actual value.
 
-In the same way, we need to call `ioc.restore` to remove the fake.
+Once finished with a fake, `ioc.restore` can be called to remove it.
 
-This approach works great for a majority of use cases until you can create a fake which is similar to the actual implementation. For greater control, you can make use of external libraries like link:http://sinonjs.org/[sinonjs].
+This approach works great for a majority of use cases until you can create a fake which is similar to the actual implementation. For greater control, you can use external libraries like link:http://sinonjs.org/[Sinon.JS, window="_blank"].
 
-== Mail fake
-AdonisJs mail provider comes with a fake, which can be used when writing tests.
+== Mail Fake
+The AdonisJs link:mail[Mail Provider] comes with a built-in `fake` method:
 
 [source, js]
 ----
@@ -80,12 +80,12 @@ test('register user', async ({ assert }) => {
 })
 ----
 
-Calling `Mail.fake` method binds a fake to the IoC container. From this point, all emails are stored in memory as an array of objects, which can later be used for running assertions.
+Calling `Mail.fake` binds a fake mailer to the IoC container. Once faked, all emails are stored in memory as an array of objects which can be later run assertions against.
 
-Below is the list of available methods on a fake mailer.
+The following methods are available on the fake mailer.
 
 ==== recent()
-Returns the recent email object
+Returns the most recent email object:
 
 [source, js]
 ----
@@ -93,7 +93,7 @@ Mail.recent()
 ----
 
 ==== pullRecent()
-Returns the recent email object and removes it from the in-memory array.
+Returns the recent email object and removes it from the in-memory array:
 
 [source, js]
 ----
@@ -101,15 +101,16 @@ Mail.pullRecent()
 ----
 
 ==== all()
-Returns all emails
+Returns all emails:
 
 [source, js]
 ----
-assert.lengthof(Mail.all(), 1)
+const mails = Mail.all()
+assert.lengthof(mails, 1)
 ----
 
 ==== clear()
-Clear the in-memory emails array
+Clears the in-memory emails array:
 
 [source, js]
 ----
@@ -117,15 +118,15 @@ Mail.clear()
 ----
 
 ==== restore()
-Restore the original emailer class
+Restore the original emailer class:
 
 [source, js]
 ----
 Mail.restore()
 ----
 
-== Events fake
-Just like `Mail` provider, `Event` provider also comes with an in-built faker object to store events inside an in-memory array and use them later for assertions.
+== Events Fake
+The AdonisJs link:events[Event Provider] also comes with a built-in `fake` method:
 
 [source, js]
 ----
@@ -145,7 +146,9 @@ test('register user', async ({ assert }) => {
 })
 ----
 
-Alternatively, you can `trap` an event inline and run assertions inside the callback.
+Calling `Event.fake` binds a fake event emitter to the IoC container. Once faked, all emitted events are stored in memory as an array of objects which can be later run assertions against.
+
+You can also `trap` an event inline and run assertions inside the passed callback:
 
 [source, js]
 ----
@@ -165,10 +168,10 @@ test('register user', async ({ assert }) => {
 })
 ----
 
-Here is the list of all available methods
+The following methods are available on the fake event emitter.
 
 ==== recent()
-Returns the recent event object
+Returns the most recent event object:
 
 [source, js]
 ----
@@ -176,7 +179,7 @@ Event.recent()
 ----
 
 ==== pullRecent()
-Returns the recent event object and removes it from the in-memory array.
+Returns the recent event object and removes it from the in-memory array:
 
 [source, js]
 ----
@@ -184,15 +187,16 @@ Event.pullRecent()
 ----
 
 ==== all()
-Returns all events
+Returns all events:
 
 [source, js]
 ----
-Event.all()
+const events = Event.all()
+assert.lengthof(events, 1)
 ----
 
 ==== clear()
-Clear in-memory array of events
+Clears the in-memory array of events:
 
 [source, js]
 ----
@@ -200,17 +204,17 @@ Event.clear()
 ----
 
 ==== restore()
-Restore the original event class
+Restore the original event class:
 
 [source, js]
 ----
 Event.restore()
 ----
 
-== Database transactions
-A struggle to keep the database clean for each test is quite hard. You may end up using link:testing#_lifecycle_hooks[lifecycle hooks] to `truncate` the tables after each test.
+== Database Transactions
+Keeping your database clean for each test can be difficult.
 
-To make this process easy, AdonisJs ships with a *database transaction trait*, which wraps all of your databases queries inside a transaction and roll it back after each test.
+AdonisJs ships with a `DatabaseTransactions` trait that wraps your databases queries inside a transaction then rolls them back after each test:
 
 [source, js]
 ----
@@ -219,5 +223,4 @@ const { test, trait } = use('Test/Suite')('User registration')
 trait('DatabaseTransactions')
 ----
 
-That is all 😊
-
+Alternatively, you could set a link:testing#_lifecycle_hooks[Lifecycle Hook] to truncate your database tables after each test, but using the `DatabaseTransactions` trait would be far simpler.
