@@ -68,7 +68,10 @@ class User extends Model {
     return access === 'admin' ? 1 : 0
   }
 }
+----
 
+[source, js]
+----
 const user = new User()
 user.access = 'admin'
 
