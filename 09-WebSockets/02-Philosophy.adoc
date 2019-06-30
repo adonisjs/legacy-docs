@@ -62,7 +62,7 @@ Multiplexing requires a standard to define data packet structure.
 
 As a consumer of the WebSocket server package you don't have to worry about packet types, but when writing a client for the server, it's critically important to understand them.
 
-Your WebSocket data encoder decodes network data as an *object* (or equalvent data type for your programming language) containing a structure similar to:
+Your WebSocket data encoder decodes network data as an *object* (or equivalent data type for your programming language) containing a structure similar to:
 
 [source, js]
 ----

@@ -89,7 +89,7 @@ Ws
 ----
 
 == Creating Middleware
-WebSocket middleware required a `wsHandle` method.
+WebSocket middleware require a `wsHandle` method.
 
 You can share HTTP and WebSocket middleware by ensuring both `handle` (for HTTP requests) and `wsHandle` methods are defined on your middleware class:
 
