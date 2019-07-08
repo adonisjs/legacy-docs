@@ -805,7 +805,7 @@ await userRole.load('user', null, trx)
 
 await trx.commit()
 // if something gone wrong
-await trx.rollback
+await trx.rollback()
 ----
 
 == Boot Cycle
