@@ -404,6 +404,15 @@ await User.first()
 await User.firstOrFail()
 ----
 
+==== last
+Find the latest row from the database:
+
+[source, js]
+----
+const User = use('App/Models/User')
+await User.last()
+----
+
 ==== findOrCreate (whereAttributes, values)
 Find a record, if not found a new record will be created and returned:
 
