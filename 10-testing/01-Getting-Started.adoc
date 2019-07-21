@@ -152,10 +152,10 @@ For example, we can have a suite of tests for *user registration*:
 
 [source, js]
 ----
-const Suite = use('Test/Suite')('User registeration')
+const Suite = use('Test/Suite')('User registration')
 
 // or destructuring
-const { test } = use('Test/Suite')('User registeration')
+const { test } = use('Test/Suite')('User registration')
 ----
 
 The `test` function obtained from the `Suite` instance is used to define tests:
@@ -174,7 +174,7 @@ For example, we call the `Test/Browser` trait so we can test via web browser:
 
 [source, js]
 ----
-const { test, trait } = use('Test/Suite')('User registeration')
+const { test, trait } = use('Test/Suite')('User registration')
 
 trait('Test/Browser')
 
@@ -189,7 +189,7 @@ You can define custom traits with a closure or IoC container binding:
 
 [source, js]
 ----
-const { test, trait } = use('Test/Suite')('User registeration')
+const { test, trait } = use('Test/Suite')('User registration')
 
 trait(function (suite) {
   suite.Context.getter('foo', () => {
@@ -216,7 +216,7 @@ Each suite has lifecycle hooks which can be used to perform repetitive tasks (fo
 
 [source, js]
 ----
-const Suite = use('Test/Suite')('User registeration')
+const Suite = use('Test/Suite')('User registration')
 
 const { before, beforeEach, after, afterEach } = Suite
 
