@@ -655,7 +655,7 @@ const total = await Database
 ----
 const total = await Database
   .from('users')
-  .countDistinct('id')                          // returns number
+  .getCountDistinct('id')                          // returns number
 ----
 
 ==== getMin(columnName)
