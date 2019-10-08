@@ -159,7 +159,7 @@ Route.get('posts/:id', closure).as('posts.show')
 route('posts.show', { id: 1 })
 ----
 
-`route` helpers also accept a optional parameters object as third argument, it will handle `protocol`, `domain` and `query` options:
+`route` helpers also accept an optional parameters object as a third argument to handle `protocol`, `domain` and `query` options:
 
 [source, js]
 ----
