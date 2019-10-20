@@ -492,6 +492,14 @@ await user.reload()
 
 NOTE: A model with properties set during a creation hook will require *reloading* to retrieve the values set during that hook.
 
+==== is
+You may need to determine if two models are the "same". This method can be used to verify that two models have the same primary key, table, and database connection:
+
+[source, js]
+----
+user.is(anotherUser)
+----
+
 == Aggregate Helpers
 Query Builder link:query-builder#_aggregate_helpers[aggregate helpers] provide shortcuts to common aggregate queries.
 
