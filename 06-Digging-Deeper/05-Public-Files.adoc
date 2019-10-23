@@ -10,11 +10,11 @@ toc::[]
 
 AdonisJS can serve static assets and public files
 
-NOTE: It would be better to use CDN or reverse proxy like Nginx / Apache etc to serve static files
+NOTE: It would be better to use a CDN or a reverse proxy(i.e Nginx or Apache) to serve static files.
 
 == Setup
 
-To serve public files `'Adonis/Middleware/Static',` server middleware must be enabled in `start/kernel.js`
+To serve public files, the `Adonis/Middleware/Static` server middleware must be enabled in the file `start/kernel.js`.
 
 .start/kernel.js
 [source, js]
