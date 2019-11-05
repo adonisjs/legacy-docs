@@ -132,7 +132,7 @@ if (validation.fails()) {
 }
 ----
 
-NOTE: You can optionally pass link:http://indicative.adonisjs.com/docs/custom-messages[custom error messages, window="_blank"] to return when your validation fails as your third method parameter.
+NOTE: You can optionally pass link:https://indicative.adonisjs.com/guides/master/custom-messages[custom error messages, window="_blank"] to return when your validation fails as your third method parameter.
 
 ==== validateAll(data, rules, [messages], [formatter])
 Same as `validate` but continues to validate all fields, whereas the `validate` method stops on first error:
@@ -153,7 +153,7 @@ const data = sanitize(request.all(), rules)
 ----
 
 ==== sanitizor
-Returns a reference to Indicative's link:http://indicative.adonisjs.com/docs/api/extend#_adding_sanitization_rules[sanitizor, window="_blank"]:
+Returns a reference to Indicative's link:https://indicative.adonisjs.com/guides/master/sanitizer[sanitizor, window="_blank"]:
 
 [source, js]
 ----
@@ -162,7 +162,7 @@ const slug = sanitizor.slug('My first blog post')
 ----
 
 ==== formatters
-Returns a reference to Indicative's link:http://indicative.adonisjs.com/docs/formatters[formatters, window="_blank"]:
+Returns a reference to Indicative's link:https://indicative.adonisjs.com/guides/master/error-formatters[formatters, window="_blank"]:
 
 [source, js]
 ----
@@ -341,7 +341,7 @@ module.exports = StoreUser
 ----
 
 === Formatter
-You can also define the link:http://indicative.adonisjs.com/docs/formatters#_available_formatters[Indicative formatter, window="_blank"] as a property on the validator class:
+You can also define the link:https://indicative.adonisjs.com/guides/master/error-formatters#existing-formatters[Indicative formatter, window="_blank"] as a property on the validator class:
 
 [source, js]
 ----
