@@ -146,6 +146,8 @@ response.type('application/json')
 == Cookies
 Use the following methods to set/remove response cookies.
 
+NOTE: You might have trouble setting cookie values from a different domain using XMLHttpRequest. For more details, please refer to this https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials[link].
+
 ==== cookie
 Set a cookie value:
 
