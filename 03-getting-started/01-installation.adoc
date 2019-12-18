@@ -18,6 +18,7 @@ Ensure your versions of those tools match the following criteria:
 
 - Node.js >= 8.0.0
 - npm >= 3.0.0
+- git
 
 TIP: You can use tools like link:https://github.com/creationix/nvm[nvm, window="_blank"] to help manage multiple versions of Node.js and npm at the same time.
 
