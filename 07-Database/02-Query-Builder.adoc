@@ -228,7 +228,7 @@ await Database
 ----
 await Database
   .table('users')
-  .innerJoin('accounts', 'user.id', 'accounts.user_id')
+  .innerJoin('accounts', 'users.id', 'accounts.user_id')
 ----
 
 You can also pass a callback to construct the join:
