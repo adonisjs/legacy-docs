@@ -192,13 +192,21 @@ NOTE: The `accessSecret` parameter is required when the *OAuth 1* protocol is us
 == User API
 Below is the list of available methods on an link:https://github.com/adonisjs/adonis-ally/blob/develop/src/AllyUser.js[AllyUser, window="_blank"] instance.
 
-==== getName
-Returns the user name:
+==== getId
+Returns the user id:
 
 [source, js]
 ----
 const user = await ally.driver('facebook').getUser()
 
+user.getId()
+----
+
+==== getName
+Returns the user name:
+
+[source, js]
+----
 user.getName()
 ----
 
