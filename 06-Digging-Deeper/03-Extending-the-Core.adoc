@@ -133,6 +133,21 @@ hooks.after.providersRegistered(() => {
 })
 ----
 
+For auth provider you need to provide a fourth argument to `Ioc.extend` function, either `scheme` or `serializer` depending on which one you're extending
+
+[source, js]
+----
+const { ioc } = require('@adonisjs/fold')
+const { hooks } = require('@adonisjs/ignitor')
+
+hooks.after.providersRegistered(() => {
+Ioc.extend('Adonis/Src/Auth', 'mongo', function () {
+  return new MongoSerializer()
+}, 'serializer')
+})
+----
+
+
 If you are developing a provider and want to use the same interface for exposing extending capabilities, make sure to bind a `Manager` object as follows:
 
 [source, js]
