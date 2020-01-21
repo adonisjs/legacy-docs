@@ -525,7 +525,7 @@ Assuming the user is logged in using the `session` authenticator, we can generat
 // loggedin user via sessions
 const user = auth.user
 
-const auth
+auth
   .authenticator('jwt')
   .generate(user)
 ----
