@@ -160,7 +160,7 @@ When upload validation fails, the link:https://github.com/adonisjs/adonis-bodypa
 
 NOTE: The link:https://github.com/adonisjs/adonis-bodyparser/blob/develop/src/Multipart/FileJar.js[FileJar, window="_blank"] `errors` method returns an *array* of errors.
 
-Are few example error objects are listed below.
+A few example error objects are list below.
 
 ==== Type error
 
