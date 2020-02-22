@@ -133,7 +133,7 @@ hooks.after.providersRegistered(() => {
 })
 ----
 
-For auth provider you need to provide a fourth argument to `Ioc.extend` function, either `scheme` or `serializer` depending on which one you're extending
+For auth provider you need to provide a fourth argument to `Ioc.extend` function, either `scheme` or `serializer` depending on which one you're extending.
 
 [source, js]
 ----
