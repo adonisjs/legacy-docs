@@ -141,7 +141,9 @@ const { ioc } = require('@adonisjs/fold')
 const { hooks } = require('@adonisjs/ignitor')
 
 hooks.after.providersRegistered(() => {
-Ioc.extend('Adonis/Src/Auth', 'mongo', function () {
+  Ioc.extend('Adonis/Src/Auth', 'mongo', function () {
+    return new MongoSerializer()
+  }, 'serializer')
   return new MongoSerializer()
 }, 'serializer')
 })
