@@ -114,7 +114,7 @@ NOTE: For the full list of schema column type and modifier methods, see the link
 | `table.date(name)` | Adds a link:https://knexjs.org/#Schema-date[date, window="blank"] column.
 | `table.datetime(name, [precision])` | Adds a link:https://knexjs.org/#Schema-datetime[datetime, window="blank"] column.
 | `table.decimal(name, [precision], [scale])` | Adds a link:https://knexjs.org/#Schema-decimal[decimal, window="blank"] column.
-| `table.enu(col, values, [options])` | Adds a link:https://knexjs.org/#Schema-enum[enum, window="blank"] column.
+| `table.enum(col, values, [options])` | Adds a link:https://knexjs.org/#Schema-enum[enum, window="blank"] column.
 | `table.float(name, [precision], [scale])` | Adds a link:https://knexjs.org/#Schema-float[float, window="blank"] column.
 | `table.increments(name)` | Adds an link:https://knexjs.org/#Schema-increments[auto incrementing, window="_blank"] column.
 | `table.integer(name)` | Adds an link:https://knexjs.org/#Schema-integer[integer, window="blank"] column.
