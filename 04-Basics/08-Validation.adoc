@@ -173,7 +173,7 @@ validate(data, rules, messages, formatters.JsonApi)
 == Route validator
 Data validation normally occurs during the HTTP request/response lifecycle, and you can end up writing the same validation code inside each controller.
 
-AdonisJs **Route Validators** can make the repetetive process of validation simpler:
+AdonisJs **Route Validators** can make the repetitive process of validation simpler:
 
 [source, js]
 ----
