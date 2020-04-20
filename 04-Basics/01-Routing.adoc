@@ -433,3 +433,7 @@ Route.group(() => {
   //
 }).domain('blog.adonisjs.com')
 ----
+
+
+====
+link:folder-structure[Previous] | link:middleware[Next]
