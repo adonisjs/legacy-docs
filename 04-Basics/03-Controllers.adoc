@@ -94,3 +94,7 @@ class UserController {
 
 module.exports = UserController
 ----
+
+
+====
+link:middleware[Previous] | link:request[Next]
