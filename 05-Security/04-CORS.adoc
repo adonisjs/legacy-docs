@@ -64,3 +64,7 @@ origin: function (currentOrigin) {
 ----
 
 For all other options, please inspect the comments inside the link:https://github.com/adonisjs/adonis-cors/blob/develop/config/cors.js#L3[config file, window="_blank"].
+
+
+====
+link:authentication[Previous] | link:csrf[Next]
