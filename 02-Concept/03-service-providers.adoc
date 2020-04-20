@@ -262,3 +262,7 @@ And run all tests via:
 [ol-spaced]
 1. *Why not install `@adonisjs/fold` as a dependency?* +
   This requirement is so the main application version of `@adonisjs/fold` is always installed for your provider to use. Otherwise, each provider will end up shipping its own version of the AdonisJS IoC container. If you have ever worked with gulp, they also link:https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/guidelines.md[recommend] (p:14) not to install gulp as a dependency when creating plugins.
+
+
+====
+link:service-providers[Previous] | link:ignitor[Next]
