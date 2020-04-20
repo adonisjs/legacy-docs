@@ -167,3 +167,7 @@ module.exports = CustomException
 ----
 
 If set, AdonisJs calls the custom exception's `handle` method to create and return the exception response.
+
+
+====
+link:validator[Previous] | link:logger[Next]
