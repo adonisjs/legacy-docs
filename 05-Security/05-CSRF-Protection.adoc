@@ -116,3 +116,7 @@ class ExceptionHandler {
   }
 }
 ----
+
+
+====
+link:cors[Previous] | link:encryption-and-hashing[Next]
