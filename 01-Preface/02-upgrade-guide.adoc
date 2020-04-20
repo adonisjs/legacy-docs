@@ -217,4 +217,4 @@ image:https://pbs.twimg.com/media/DTHfXErU8AADIyQ.png[]
 
 
 ====
-link:about[Previous] | link:upgrade-guide[Next]
+link:about[Previous] | link:contribution-guide[Next]

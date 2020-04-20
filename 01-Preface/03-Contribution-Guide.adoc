@@ -61,4 +61,5 @@ This will help the AdonisJs team understand your feature and keep the documentat
 Before providing a pull request be sure to test the feature you are adding or create a regression test to show how a piece of code fails under specific circumstance while providing a bug fix.
 
 
-link:upgrade-guide[Previous] | link:01-Request-Lifecycle[Next]
+====
+link:upgrade-guide[Previous] | link:request-lifecycle[Next]
