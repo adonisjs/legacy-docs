@@ -138,3 +138,7 @@ This can be done by using the `ENV_SILENT` environment variable:
 If you are starting your application with `NODE_ENV` set to `testing`, AdonisJs will load your `.env.testing` file and merge its values over your `.env` file.
 
 This is useful to set different credentials when testing your codebase.
+
+
+====
+link:installation[Previous] | link:folder-structure[Next]
