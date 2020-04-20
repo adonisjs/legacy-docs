@@ -240,3 +240,7 @@ Also, you can easily define link:testing-fakes[fakes] for them too.
 
 3. *How do I wrap an npm module as a service provider?* +
   link:service-providers[Here's] the complete guide for that.
+
+
+====
+link:request-lifecycle[Previous] | link:service-providers[Next]
