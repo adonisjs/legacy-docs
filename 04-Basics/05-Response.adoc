@@ -331,3 +331,7 @@ Response.macro('sendStatus', function (status) {
   this.status(status).send(status)
 })
 ----
+
+
+====
+link:request[Previous] | link:views[Next]
