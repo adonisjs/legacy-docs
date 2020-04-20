@@ -212,3 +212,7 @@ Return a `boolean` indicating whether there are any listeners for a given event:
 ----
 Event.hasListeners('new::user')
 ----
+
+
+====
+link:ace[Previous] | link:extending-adonisjs[Next]
