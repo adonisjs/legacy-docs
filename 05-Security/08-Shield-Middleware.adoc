@@ -175,3 +175,7 @@ Available options are `DENY`, `SAMEORIGIN` or `ALLOW-FROM http://example.com`:
   xframe: 'DENY'
 }
 ----
+
+
+====
+link:encryption-and-hashing[Previous] | link:ace[Next]
