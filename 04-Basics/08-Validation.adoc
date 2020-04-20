@@ -459,3 +459,7 @@ get rules () {
 ----
 
 NOTE: Since the code to extend `Validator` need only execute once, you could use link:service-providers[providers] or link:ignitor[Ignitor hooks] to do so. Read link:extending-adonisjs[Extending the Core] for more information.
+
+
+====
+link:sessions[Previous] | link:exceptions[Next]
