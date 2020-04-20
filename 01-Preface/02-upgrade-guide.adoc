@@ -214,3 +214,7 @@ Middleware is now resolved by the middleware parsing layer at the time of **boot
 Errors will now appear nicely formatted in your terminal as shown below:
 
 image:https://pbs.twimg.com/media/DTHfXErU8AADIyQ.png[]
+
+====
+
+link:about[Previous] | link:upgrade-guide[Next]
