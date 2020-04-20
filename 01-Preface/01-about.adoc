@@ -39,3 +39,7 @@ Since your projects have their own standards and conventions, it may become hard
 No. The AdonisJs Framework is a combination of multiple packages that gracefully integrate with the rest of your application.
 +
 The framework provides a robust link:ioc-container[dependency injection] layer leveraged by all official and 3rd party packages to offer functionality without manually wiring up each part of your app.
+
+
+
+link:upgrade-guide[Next]
