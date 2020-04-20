@@ -98,3 +98,7 @@ Route.get('download/:fileId', async ({ params, response }) => {
   response.download(Helpers.tmpPath('uploads/${file.path}'))
 })
 ----
+
+
+====
+link:logger[Previous] | link:authentication[Next]
