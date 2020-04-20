@@ -127,3 +127,7 @@ This directory is automatically created when you run `adonis make:model <name>`.
 
 The `app/Validators` directory is used to store all your route validators.
 This directory is automatically created when you run `adonis make:validator <name>` (you need to have installed the link:validator[Validator Provider] to use this command).
+
+
+====
+link:configuration-and-env[Previous] | link:routing[Next]
