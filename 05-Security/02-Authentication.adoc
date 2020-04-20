@@ -667,3 +667,7 @@ await auth
 Tokens are saved in plain format inside the database, but are sent in *encrypted* form to the end-user.
 
 This is done to ensure if someone accesses your database, they are not able to use your tokens directly (they'd have to figure out how to encrypt them using the secret key).
+
+
+====
+link:security-introduction[Previous] | link:cors[Next]
