@@ -265,4 +265,4 @@ And run all tests via:
 
 
 ====
-link:service-providers[Previous] | link:ignitor[Next]
+link:ioc-container[Previous] | link:ignitor[Next]
