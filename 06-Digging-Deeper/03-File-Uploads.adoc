@@ -275,3 +275,7 @@ NOTE: You must call `await request.multipart.process()` to start processing uplo
 The `request.multipart.file` method lets you select a specific file and access its readable stream via the `file.stream` property so you can pipe the stream to *Amazon S3* or any other external service you want.
 
 The entire process is asynchronous and processes the file(s) only once.
+
+
+====
+link:events[Extending the Core] | link:file-system[File Storage]

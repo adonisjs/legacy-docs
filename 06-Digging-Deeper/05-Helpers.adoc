@@ -136,3 +136,7 @@ Returns whether the process was started as the ace command or not:
 ----
 Helpers.isAceCommand()
 ----
+
+
+====
+link:file-system[File Storage] | link:internationalization[Internationalization]

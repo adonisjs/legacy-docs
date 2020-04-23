@@ -370,3 +370,7 @@ await Mail.send('view', data, (message) => {
   })
 })
 ----
+
+
+====
+link:internationalization[Internationalization] | link:social-auth[Social Authentication]

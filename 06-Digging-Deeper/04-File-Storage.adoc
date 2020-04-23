@@ -150,3 +150,7 @@ Get signed url for a given file (expiry set to `15mins` by default):
 ----
 const url = await Drive.disk('s3').getSignedUrl('unicorn.jpg')
 ----
+
+
+====
+link:file-uploads[File Uploads] | link:helpers[Helpers]

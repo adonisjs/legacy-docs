@@ -215,4 +215,4 @@ Event.hasListeners('new::user')
 
 
 ====
-link:ace[Previous] | link:extending-adonisjs[Next]
+link:ace[Ace Commands] | link:extending-adonisjs[Extending the Core]

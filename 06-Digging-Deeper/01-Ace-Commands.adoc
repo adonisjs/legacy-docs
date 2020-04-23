@@ -581,4 +581,4 @@ class Quote extends Command {
 
 
 ====
-link:shield[Previous] | link:events[Next]
+link:shield[Shield Middleware] | link:events[Events]

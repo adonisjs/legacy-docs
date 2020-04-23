@@ -503,8 +503,12 @@ Alternatively, you can use the `@mustache` tag to write multiple lines:
 ----
 @mustache(antl.formatNumber(
   20,
-  { currency: 'usd', style: 'currency }
+  { currency: 'usd', style: 'currency' }
 ))
 ----
 
 NOTE: There is no way to switch loader inside templates.
+
+
+====
+link:helpers[Helpers] | link:mail[Mail]
