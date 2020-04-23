@@ -130,4 +130,4 @@ This directory is automatically created when you run `adonis make:validator <nam
 
 
 ====
-link:configuration-and-env[Previous] | link:routing[Next]
+link:configuration-and-env[Configuration] | link:routing[Routing]

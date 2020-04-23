@@ -141,4 +141,4 @@ This is useful to set different credentials when testing your codebase.
 
 
 ====
-link:installation[Previous] | link:folder-structure[Next]
+link:installation[Installation] | link:folder-structure[Directory Structure]
