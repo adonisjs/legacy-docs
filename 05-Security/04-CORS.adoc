@@ -67,4 +67,4 @@ For all other options, please inspect the comments inside the link:https://githu
 
 
 ====
-link:authentication[Previous] | link:csrf[Next]
+link:authentication[Authentication] | link:csrf[CSRF Protection]

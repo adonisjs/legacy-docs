@@ -670,4 +670,4 @@ This is done to ensure if someone accesses your database, they are not able to u
 
 
 ====
-link:security-introduction[Previous] | link:cors[Next]
+link:security-introduction[Introduction] | link:cors[CORS]

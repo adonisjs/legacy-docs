@@ -178,4 +178,4 @@ Available options are `DENY`, `SAMEORIGIN` or `ALLOW-FROM http://example.com`:
 
 
 ====
-link:encryption-and-hashing[Previous] | link:ace[Next]
+link:encryption-and-hashing[Encryption and Hashing] | link:ace[Ace Commands]

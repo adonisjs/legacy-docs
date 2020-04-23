@@ -101,4 +101,4 @@ Route.get('download/:fileId', async ({ params, response }) => {
 
 
 ====
-link:logger[Previous] | link:authentication[Next]
+link:logger[Logger] | link:authentication[Authentication]

@@ -119,4 +119,4 @@ class ExceptionHandler {
 
 
 ====
-link:cors[Previous] | link:encryption-and-hashing[Next]
+link:cors[CORS] | link:encryption-and-hashing[Encryption and Hashing]

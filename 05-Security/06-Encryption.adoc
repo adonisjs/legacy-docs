@@ -90,4 +90,4 @@ if (isSame) {
 
 
 ====
-link:csrf[Previous] | link:shield[Next]
+link:csrf[CSRF Protection] | link:shield[Shield Middleware]
