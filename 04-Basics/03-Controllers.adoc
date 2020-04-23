@@ -97,4 +97,4 @@ module.exports = UserController
 
 
 ====
-link:middleware[Previous] | link:request[Next]
+link:middleware[Middleware] | link:request[Request]

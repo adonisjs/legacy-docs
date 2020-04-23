@@ -193,4 +193,4 @@ async handle (context, next, properties) {
 
 
 ====
-link:routing[Previous] | link:controllers[Next]
+link:routing[Routing] | link:controllers[Controllers]

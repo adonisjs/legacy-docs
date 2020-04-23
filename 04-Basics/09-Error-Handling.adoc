@@ -170,4 +170,4 @@ If set, AdonisJs calls the custom exception's `handle` method to create and retu
 
 
 ====
-link:validator[Previous] | link:logger[Next]
+link:validator[Validator] | link:logger[Logger]

@@ -334,4 +334,4 @@ Response.macro('sendStatus', function (status) {
 
 
 ====
-link:request[Previous] | link:views[Next]
+link:request[Request] | link:views[Views]

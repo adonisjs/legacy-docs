@@ -328,4 +328,4 @@ class MyCustomException extends GE.LogicalException {
 
 
 ====
-link:views[Previous] | link:validator[Next]
+link:views[Viwes] | link:validator[Validator]

@@ -436,4 +436,4 @@ Route.group(() => {
 
 
 ====
-link:folder-structure[Previous] | link:middleware[Next]
+link:folder-structure[Directory Structure] | link:middleware[Middleware]

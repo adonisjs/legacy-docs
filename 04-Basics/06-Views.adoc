@@ -402,4 +402,4 @@ The following editor plugins provide Edge syntax highlighting support:
 
 
 ====
-link:response[Previous] | link:sessions[Next]
+link:response[Response] | link:sessions[Sessions]

@@ -433,4 +433,4 @@ Request.macro('cartValue', function () {
 
 
 ====
-link:controllers[Previous] | link:response[Next]
+link:controllers[Previous] | link:response[Response]
