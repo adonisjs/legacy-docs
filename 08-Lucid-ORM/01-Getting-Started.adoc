@@ -787,7 +787,7 @@ const user = await User.find(1, trx)
 
 [source, js]
 ----
-const user = await User.query(trx).where('username','virk).first()
+const user = await User.query(trx).where('username','virk').first()
 ----
 
 [source, js]
@@ -822,6 +822,7 @@ Each model has a boot cycle where its `boot` method is called *once*.
 
 If you want to perform something that should only occur once, consider writing it inside the model `boot` method:
 
+
 [source, js]
 ----
 const Model = use('Model')
@@ -838,3 +839,7 @@ class User extends Model {
 
 module.exports = User
 ----
+
+
+====
+link:redis[Redis] | link:database-hooks[Hooks]

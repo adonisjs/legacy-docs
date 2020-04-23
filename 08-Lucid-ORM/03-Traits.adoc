@@ -165,3 +165,7 @@ module.exports = Slugify
 ----
 await User.query().whereSlug('some value')
 ----
+
+
+====
+link:database-hooks[Hooks] | link:database-getters-setters[Mutators]

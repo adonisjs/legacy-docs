@@ -117,3 +117,7 @@ Below is the list of available database lifecycle events to hook into:
 | `afterFetch` | After the `fetch` method is executed. The hook method receives an array of model instances.
 | `afterPaginate` | After the `paginate` method is executed. The hook method receives two arguments: an array of model instances and the pagination metadata.
 |====
+
+
+====
+link:lucid[Getting Started With Lucid ORM] | link:traits[Traits]

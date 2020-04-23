@@ -122,3 +122,7 @@ console.log(json.fullname) // firstname + lastname
 - All computed property names (e.g. `fullname`) must be returned in an array from the model class static `computed` getter.
 - Computed property method definitions are prefixed with `get`, the same as getter method definitions (e.g. `getFullname`).
 - Computed properties receive an object of existing model attributes for use in their method definitions.
+
+
+====
+link:traits[Traits] | link:relationships[Relationships]

@@ -996,3 +996,7 @@ await user
 ----
 
 NOTE: In the case of `belongsToMany`, this method also drops the relationship from the pivot table.
+
+
+====
+link:database-getters-setters[Mutators] | link:serializers[Serialization]
