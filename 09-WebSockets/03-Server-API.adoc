@@ -249,3 +249,7 @@ Reference to the TCP connection (shared across multiple sockets for a single cli
 ----
 socket.connection
 ----
+
+
+====
+link:websocket-philosophy[Philosophy] | link:websocket-client[Client API]

@@ -79,3 +79,7 @@ Your WebSocket data encoder decodes network data as an *object* (or equivalent d
 2. The property `d` is the data associated with that packet.
 
 TIP: Learn more about AdonisJs WebSocket packets link:https://github.com/adonisjs/adonis-websocket-protocol[here, window="_blank"].
+
+
+====
+link:websocket[Getting Started with WebSocket] | link:websocket-server[Server API]

@@ -295,3 +295,7 @@ Ws.channel('chat', ({ auth }) => {
   console.log(auth.user)
 }).middleware(['auth'])
 ----
+
+
+====
+link:websocket-server[Server API] | link:testing[Getting Started With Testing]

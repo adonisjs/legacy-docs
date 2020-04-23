@@ -261,3 +261,7 @@ class ChatController {
 ----
 
 NOTE: Event methods must be prefixed with the `on` keyword.
+
+
+====
+link:serializers[Serialization] | link:websocket-philosophy[Philosophy]
