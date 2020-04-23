@@ -152,3 +152,7 @@ class MyProvider extends ServiceProvider {
 1. The manager object must have an `extend` method. The values passed to `ioc.extend` will be forwarded to this method.
 2. The `namespace` must be same as the binding namespace.
 3. You must manage the registration/lifecycle of your drivers.
+
+
+====
+link:events[Events] | link:file-uploads[File Uploads]
