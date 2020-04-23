@@ -698,3 +698,7 @@ await page
 ----
 
 NOTE: The difference between `assertFn` and `assertEval` is that `assertEval` selects an element before running the function.
+
+
+====
+link:api-tests[HTTP Tests] | link:testing-fakes[Fakes]

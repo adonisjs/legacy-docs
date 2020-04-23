@@ -380,3 +380,7 @@ Assert the request was redirected to a given URL:
 ----
 response.assertRedirect('/there')
 ----
+
+
+====
+link:testing[Getting Started With Testing] | link:browser-tests[Browser Tests]

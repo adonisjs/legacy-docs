@@ -224,3 +224,7 @@ trait('DatabaseTransactions')
 ----
 
 Alternatively, you could set a link:testing#_lifecycle_hooks[Lifecycle Hook] to truncate your database tables after each test, but using the `DatabaseTransactions` trait would be far simpler.
+
+
+====
+link:browser-tests[Browser Tests] | link:nginx-proxy[Nginx proxy]

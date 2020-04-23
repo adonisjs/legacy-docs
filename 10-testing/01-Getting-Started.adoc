@@ -273,3 +273,5 @@ test('must throw exception', async ({ assert }) => {
 In the above example, if `badOperation` doesn't throw an exception, the test still fails since we planned for `1` assertion and `0` were made.
 
 
+====
+link:websocket-client[Client API] | link:api-tests[HTTP Tests]
