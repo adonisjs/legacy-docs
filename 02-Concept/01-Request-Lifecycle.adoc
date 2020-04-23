@@ -57,4 +57,4 @@ Route.get('/', (ctx) => {
 
 
 ====
-link:contribution-guide[Previous] | link:ioc-container[Next]
+link:contribution-guide[Contribution Guide] | link:ioc-container[IoC Container]

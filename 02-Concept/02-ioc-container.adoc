@@ -243,4 +243,4 @@ Also, you can easily define link:testing-fakes[fakes] for them too.
 
 
 ====
-link:request-lifecycle[Previous] | link:service-providers[Next]
+link:request-lifecycle[Request Lifecycle] | link:service-providers[Service Providers]

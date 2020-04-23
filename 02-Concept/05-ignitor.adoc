@@ -117,4 +117,4 @@ ignitor
 
 
 ====
-link:service-providers[Previous] | link:installation[Next]
+link:service-providers[Service Providers] | link:installation[Installation]

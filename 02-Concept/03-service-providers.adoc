@@ -265,4 +265,4 @@ And run all tests via:
 
 
 ====
-link:ioc-container[Previous] | link:ignitor[Next]
+link:ioc-container[IoC Container] | link:ignitor[Ignitor]
