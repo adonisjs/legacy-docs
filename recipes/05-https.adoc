@@ -62,3 +62,7 @@ pem.createCertificate({ days: 1, selfSigned: true }, (error, keys) => {
     .catch(console.error)
 })
 ----
+
+
+====
+link:why-adonis-install[Why Adonis install?] | link:number-guessing-game[Number guessing game]

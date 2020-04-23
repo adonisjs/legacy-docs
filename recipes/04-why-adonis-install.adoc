@@ -29,3 +29,7 @@ Most commonly performed steps are
 
 === instructions.md
 The `.md` files are the small set of instructions to be followed by hand from the user of the provider. So it is a nice place to drop some usage and setup instructions written in Github flavored markdown.
+
+
+====
+link:frontend-assets[Managing frontend assets] | link:using-https[Using Https]

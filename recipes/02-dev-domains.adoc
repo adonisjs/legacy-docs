@@ -97,3 +97,6 @@ The `--domain` flag takes the *domain* and the *URL*. In this case
 - `domain=yardstick`
 - `url=http://localhost:3333`
 
+
+====
+link:nginx-proxy[Nginx proxy] | link:frontend-assets[Managing frontend assets]

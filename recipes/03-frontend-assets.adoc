@@ -166,3 +166,7 @@ Require js file from `edge` templates.
   {{ script('/public/app') }}
 </head>
 ----
+
+
+====
+link:dev-domains[Using .dev domains] | link:why-adonis-install[Why Adonis install?]

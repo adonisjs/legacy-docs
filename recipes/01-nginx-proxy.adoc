@@ -75,3 +75,7 @@ server {
 4. Change value of `trustProxy` to *true* inside link:https://github.com/adonisjs/adonis-slim-app/blob/develop/config/app.js#L43[config/app.js] file.
 
 Now visiting `myapp.com` shows your Adonisjs application, since `nginx` is proxying all the requests to the application running on a specified port.
+
+
+====
+link:testing-fakes[Fakes] | link:dev-domains[Using .dev domains]
