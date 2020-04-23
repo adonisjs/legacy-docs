@@ -298,3 +298,7 @@ Since factories and seeds fit many different use cases you might be confused how
 ----
 > adonis seed --files='UsersSeeder.js, PostsSeeder.js'
 ----
+
+
+====
+link:migrations[Migrations] | link:redis[Redis]

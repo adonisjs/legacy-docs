@@ -226,3 +226,6 @@ await Redis.quit('primary')
 await Redis.quit(['primary', 'secondary'])
 ----
 
+
+====
+link:seeds-and-factories[Seeds & Factories] | link:lucid[Getting Started With Lucid ORM]

@@ -774,3 +774,7 @@ Database.close() // all
 
 Database.close(['sqlite', 'mysql'])
 ----
+
+
+====
+link:database[Getting Started With Database] | link:migrations[Migrations]
