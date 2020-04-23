@@ -42,4 +42,4 @@ The framework provides a robust link:ioc-container[dependency injection] layer l
 
 
 ====
-link:upgrade-guide[Next]
+link:upgrade-guide[Upgrading from 4.0]

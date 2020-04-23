@@ -217,4 +217,4 @@ image:https://pbs.twimg.com/media/DTHfXErU8AADIyQ.png[]
 
 
 ====
-link:about[Previous] | link:contribution-guide[Next]
+link:about[About AdonisJs] | link:contribution-guide[Contribution Guide]

@@ -62,4 +62,4 @@ Before providing a pull request be sure to test the feature you are adding or cr
 
 
 ====
-link:upgrade-guide[Previous] | link:request-lifecycle[Next]
+link:upgrade-guide[Upgrading from 4.0] | link:request-lifecycle[Request Lifecycle]
