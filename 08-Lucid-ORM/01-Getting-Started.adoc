@@ -787,7 +787,7 @@ const user = await User.find(1, trx)
 
 [source, js]
 ----
-const user = await User.query(trx).where('username','virk).first()
+const user = await User.query(trx).where('username','virk').first()
 ----
 
 [source, js]
@@ -795,6 +795,15 @@ const user = await User.query(trx).where('username','virk).first()
 await User.createMany([
   { username: 'virk' }
 ], trx)
+----
+
+Also you can pass the `trx` object to the `delete` method:
+
+[source, js]
+----
+const user = await User.find(1, trx)
+
+await user.delete(trx)
 ----
 
 === Transactions in Relationships

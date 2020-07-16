@@ -36,6 +36,27 @@ class User extends Model {
 module.exports = User
 ----
 
+=== Hook Within Transactions
+To use hooks within link:lucid#_transactions[transactions] just add second param `trx` into hook closure
+
+[source, js]
+----
+const Model = use('Model')
+const Hash = use('Hash')
+
+class User extends Model {
+  static boot () {
+    super.boot()
+
+    this.addHook('beforeCreate', async (userInstance, trx) => {
+      // here you can use transaction object `trx`
+    })
+  }
+}
+
+module.exports = User
+----
+
 In the example above, the `beforeCreate` closure is executed when creating a `User` model to ensure the user's password is hashed before it's saved.
 
 === Hook File
