@@ -539,14 +539,14 @@ const count = await Database
   .from('users')
   .count()                                      // returns array
 
-const total = count[0]['count(*)']              // returns number
+const total = count[0]['count']              // returns number
 
 // COUNT A COLUMN
 const count = await Database
   .from('users')
   .count('id')                                  // returns array
 
-const total = count[0]['count("id")']           // returns number
+const total = count[0]['count']           // returns number
 
 // COUNT COLUMN AS NAME
 const count = await Database
@@ -565,7 +565,7 @@ const count = await Database
   .from('users')
   .countDistinct('id')                          // returns array
 
-const total = count[0]['count(distinct "id")']  // returns number
+const total = count[0]['count']  // returns number
 ----
 
 ==== min
