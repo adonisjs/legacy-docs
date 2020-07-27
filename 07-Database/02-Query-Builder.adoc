@@ -611,7 +611,7 @@ await Database.from('users').avgDistinct('age as age')  // returns array
 ----
 
 ==== increment
-Increase the column value by `1`:
+Increase the column value by the specified amount:
 
 [source, javascript]
 ----
@@ -622,7 +622,7 @@ await Database
 ----
 
 ==== decrement
-Decrease the column value by `1`:
+Decrease the column value by the specified amount:
 
 [source, javascript]
 ----
