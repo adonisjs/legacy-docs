@@ -13,7 +13,7 @@ link:https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)[Cross-Sit
 AdonisJs protects your application from CSRF attacks by denying unidentified requests. HTTP requests with *POST, PUT and DELETE* methods are checked to make sure that the right people from the right place invoke these requests.
 
 == Setup
-Install the `sheild` provider via npm by executing the following command:
+Install the `shield` provider via npm by executing the following command:
 [source, bash]
 ----
 > adonis install @adonisjs/shield
