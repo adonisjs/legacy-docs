@@ -287,7 +287,7 @@ try {
 ----
 
 == JWT
-link:https://jwt.io/[JWT authentication, window="_blank"] is an industry standard to implement stateless authentication via string tokens. 
+link:https://jwt.io/[JWT authentication, window="_blank"] is an industry standard to implement stateless authentication via string tokens.
 
 AdonisJs supports JWT tokens out of the box via its *jwt* authenticator.
 
@@ -302,7 +302,7 @@ module.exports = {
   authenticator: 'jwt',
   jwt: {
     serializer: 'Lucid',
-    model: 'App/Model/User',
+    model: 'App/Models/User',
     scheme: 'jwt',
     uid: 'email',
     password: 'password',
@@ -317,13 +317,35 @@ module.exports = {
 [options="header"]
 |====
 | Key | Values | Default Value | Description
-| algorithm | `HS256`, `HS384` | `HS256` | Algorithm used to generate tokens.
+| algorithm | `HS256`, `HS384`, `RS256` | `HS256` | Algorithm used to generate tokens.
 | expiresIn | Valid time in seconds or link:https://github.com/rauchg/ms.js[ms string, window="_blank"] | null | When to expire tokens.
 | notBefore | Valid time in seconds or link:https://github.com/rauchg/ms.js[ms string, window="_blank"] | null | Minimum time to keep tokens valid.
 | audience |  String | null  | `aud` claim.
 | issuer |  Array or String | null | `iss` claim.
 | subject | String | null | `sub` claim.
+| public | String | null | `public` key to verify the token encrypted with RSA algorithm.
 |====
+
+----
+  To secure JWT using `RS256` asymmetric algorithm, you need to explictly provide `algorithm` option and set it to `RS256`.
+  You must provide your `private key` via `secret` option which will be used by the framework to sign your JWT.
+  And you must provide your `public key` via `public` option, which will be used by the framework
+  to verify the JWT.
+
+  const fs = use("fs");
+  module.exports = {
+    authenticator: 'jwt',
+    jwt: {
+      //...
+      options: {
+        algorithm: 'RS256',
+        secret: fs.readFileSync('absolute-path-to-your-private-key-file'),
+        public: fs.readFileSync('absolute-path-to-your-public-key-file'),
+        // For additional options, see the table above...
+      }
+    }
+  }
+----
 
 === JWT Methods
 
@@ -503,7 +525,7 @@ Assuming the user is logged in using the `session` authenticator, we can generat
 // loggedin user via sessions
 const user = auth.user
 
-const auth
+auth
   .authenticator('jwt')
   .generate(user)
 ----

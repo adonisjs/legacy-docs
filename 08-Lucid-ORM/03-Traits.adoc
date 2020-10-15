@@ -7,34 +7,42 @@ category: lucid-orm
 
 toc::[]
 
-Traits make it possible to add functionality to your Models from *outside-in*. Think of them as building blocks for your models.
+*Traits* make it possible to add functionality to models *from the outside in*.
 
-Using traits, you can
+Using model traits, you can:
 
 [ol-shrinked]
 1. Add new methods to your model class.
-2. Listen for model hooks.
-3. Add methods to query builder instance for a given model.
+2. Listen for model link:database-hooks[hooks].
+3. Add methods to the link:lucid#_query_builder[Query Builder] instance for a given model.
 
 == Creating a Trait
-Create a new file inside `app/Models/Traits` directory or use the following ace command to do it for you.
+Traits are stored in the `app/Models/Traits` directory.
+
+Use the `make:trait` command to generate a trait file:
 
 [source, bash]
 ----
-adonis make:trait Slugify
+> adonis make:trait Slugify
 ----
 
-You will find your new trait in `app/Models/Traits/Slugify.js`.
+.Output
+[source, bash]
+----
+✔ create  app/Models/Traits/Slugify.js
+----
 
-== Manually Creating a Trait
-Traits are saved inside `app/Models/Traits`. Each trait must have a `register` method which receives the model class and an `options` object as its parameters.
+Traits require a `register` method receiving the `Model` class and an `customOptions` object as its parameters:
 
 .app/Models/Traits/Slugify.js
 [source, js]
 ----
-class Slugify {
+'use strict'
 
-  register (Model, options) {
+class Slugify {
+  register (Model, customOptions = {}) {
+    const defaultOptions = {}
+    const options = Object.assign(defaultOptions, customOptions)
   }
 }
 
@@ -42,7 +50,7 @@ module.exports = Slugify
 ----
 
 == Registering a Trait
-Register your trait with a Lucid model as follows:
+Add a trait to a Lucid model like so:
 
 [source, js]
 ----
@@ -57,8 +65,7 @@ class User extends Model {
 ----
 
 == Registering a Trait with Options
-Sometimes, it may be useful to pass initialization options to your trait. The options you supply will be given directly to the `register()` method. If you do not supply options, and empty `options = {}` will be passed
-for you.
+If required, you can pass initialization options when adding a trait:
 
 [source, js]
 ----
@@ -72,7 +79,9 @@ class User extends Model {
 }
 ----
 
-If you supply options, it is strongly recommended that you also supply default options in your trait:
+The options you pass will be forwarded to the trait's `register()` method.
+
+When passing options, it's recommended you define *default trait options* like so:
 
 .app/Models/Traits/Slugify.js
 [source, js]
@@ -90,23 +99,25 @@ class Slugify {
 module.exports = Slugify
 ----
 
-== Extending a Model's Methods
+== Extending Model Methods
+Use traits to add static and instance model methods:
 
+.app/Models/Traits/Slugify.js
 [source, js]
 ----
 class Slugify {
 
   register (Model, options) {
-    // Add an instance method
-    Model.prototype.printUsername = function () {
-      console.log(this.username)
-    }
-
     // Add a static method
     Model.newAdminUser = function () {
       let m = new Model()
       m.isAdmin = true
       return m
+    }
+
+    // Add an instance method
+    Model.prototype.printUsername = function () {
+      console.log(this.username)
     }
   }
 }
@@ -114,7 +125,8 @@ class Slugify {
 module.exports = Slugify
 ----
 
-== Using Model Hooks
+== Adding Model Hooks
+Use traits to link:database-hooks[hook] into database lifecycle events:
 
 [source, js]
 ----
@@ -130,8 +142,8 @@ class Slugify {
 module.exports = Slugify
 ----
 
-== Extending QueryBuilder
-Also, you can add macros to the `QueryBuilder` for a given model.
+== Extending Query Builder
+Use traits to add macros to a model's link:lucid#_query_builder[Query Builder]:
 
 [source, js]
 ----
@@ -148,8 +160,7 @@ class Slugify {
 module.exports = Slugify
 ----
 
-Then use it as:
-
+.Usage
 [source, js]
 ----
 await User.query().whereSlug('some value')

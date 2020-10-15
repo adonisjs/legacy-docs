@@ -8,19 +8,30 @@ category: testing
 
 toc::[]
 
-Every time you make a change to your application, you want to test the behavior to ensure that it works fine. Manually testing changes by visiting each web page or API is impossible and hence automated testing makes sure that everything works fine.
+Manually testing your application by visiting each webpage or API endpoint can be tedious, and sometimes even impossible.
 
-In this guide, we learn about the benefits and different ways to test your application
+Automated testing is the preferred strategy to confirm your application continues to behave as expected as you make changes to your codebase.
 
-== Test cases
-If you are new to testing, you may find it hard to discover the benefits of testing. But once you get into the habit of writing tests, your code quality and confidence over code improve drastically.
+In this guide, we learn about the benefits of testing and different ways to test your application's code.
 
-To build a better mental model, testing is divided into multiple categories, so that you can write different types of test cases with a clear boundary.
+== Test Cases
+If you are new to testing, you may find it hard to understand the benefits.
 
-=== Unit tests
-Unit tests are written to test small pieces of code in isolation. For example: Testing a service directly, without worrying about how that service is used in real world.
+Once you get into the habit of writing tests, your code quality and confidence about your code's behavior should improve drastically.
 
-Unit tests ensure that each part of the application works fine on its own and also it is easier to write them since you do not need the whole application to work before you can test it.
+=== Test Categories
+Testing is divided into multiple categories, encouraging you to write different types of test cases with clear boundaries.
+
+These test categories include:
+
+[ul-shrinked]
+- link:#_unit_tests[Unit Tests]
+- link:#_functional_tests[Functional Tests]
+
+==== Unit Tests
+Unit tests are written to test small pieces of code in isolation.
+
+For example, you might test a class directly without worrying how that class is used in the real world:
 
 .Example
 [source, js]
@@ -43,8 +54,10 @@ test('validate user details', async ({ assert }) => {
 })
 ----
 
-=== Functional tests
-Functional tests are written to test your app like an end user. Which means opening up a browser programmatically and visiting the web pages to ensure they all work fine.
+==== Functional Tests
+Functional tests are written to test your application like an end-user.
+
+For example, you might programmatically open a browser and interact with various webpages to ensure they work as intended:
 
 .Example
 [source, js]
@@ -64,17 +77,17 @@ test('validate user details', async ({ browser }) => {
 })
 ----
 
-Both the above examples validate the email address for a given user, but the approach is different based on the type of test you are writing.
+Both the above test examples validate the email address for a given user, but the approach is different based on the type of test you are writing.
 
 == Setup
-First, we need to set up the testing engine by installing it from npm.
+As the *Vow Provider* is not installed by default, we need to pull it from `npm`:
 
 [source, bash]
 ----
-adonis install @adonisjs/vow
+> adonis install @adonisjs/vow
 ----
 
-Next, make sure to register the provider inside `aceProviders` array, since we do not want to boot testing engine when running your application in production.
+Next, register the provider in the `start/app.js` file `aceProviders` array:
 
 .start/app.js
 [source, js]
@@ -84,26 +97,40 @@ const aceProviders = [
 ]
 ----
 
-Once `@adonisjs/vow` is installed, it creates a sample test for you, along with some other files described below.
+NOTE: The provider is registered inside the `aceProviders` array since we do not want to boot the testing engine when running your app in production.
+
+Installing `@adonisjs/vow` creates the following files and directory:
 
 ==== vowfile.js
-The `vowfiles.js` is loaded before your tests are executed. You can use this file to define tasks that should occur before and after running all the tests.
+`vowfiles.js` is loaded before your tests are executed, and is used to define tasks that should occur before/after running all tests.
 
 ==== .env.testing
-This file contains the environment variables to be used when running tests. This file gets merged with `.env` file so must only define values you want to override from the `.env` file.
+`env.testing` contains the environment variables used when running tests. This file gets merged with `.env`, so you only need to define values you want to override from the `.env` file.
 
 ==== test
-All of the application tests are stored inside subfolders of `test` directory.
+All application tests are stored inside subfolders of the `test` directory. An example *unit test* is added to this directory when `@adonisjs/vow` is installed:
 
-== Running tests
-Vow provider automatically creates a *unit* test for you, which can be executed by running the following command.
+.test/unit/example.spec.js
+[source, js]
+----
+'use strict'
+
+const { test } = use('Test/Suite')('Example')
+
+test('make sure 2 + 2 is 4', async ({ assert }) => {
+  assert.equal(2 + 2, 4)
+})
+----
+
+== Running Tests
+Installing the *Vow Provider* creates an example *unit test* for you, which can be executed by running the following command:
 
 [source, bash]
 ----
-adonis test
+> adonis test
 ----
 
-Output
+.Output
 [source, bash]
 ----
 Example
@@ -115,21 +142,23 @@ passed      : 1
 time        : 6ms
 ----
 
-== Testing suite & traits
+== Testing Suite & Traits
 Before we dive into writing tests, let's understand some fundamentals which are important to understanding the flow of tests.
 
 === Suite
-Each file is a test suite, which defines a group of tests of same behavior. For example, We can have a suite of tests for *User registration*.
+Each file is a test suite, defining a group of tests with similar behavior.
+
+For example, we can have a suite of tests for *user registration*:
 
 [source, js]
 ----
-const Suite = use('Test/Suite')('User registeration')
+const Suite = use('Test/Suite')('User registration')
 
 // or destructuring
-const { test } = use('Test/Suite')('User registeration')
+const { test } = use('Test/Suite')('User registration')
 ----
 
-The `test` function obtained from the Suite instance is used for defining tests.
+The `test` function obtained from the `Suite` instance is used to define tests:
 
 [source, js]
 ----
@@ -139,13 +168,13 @@ test('return error when credentials are wrong', async (ctx) => {
 ----
 
 === Traits
-Traits are building blocks for your test suite. Since AdonisJs test runner is not bloated with a bunch of functionality, we ship different pieces of code as traits.
+To avoid bloating the test runner with unnecessary functionality, AdonisJs ships different pieces of code as *traits* (the building blocks for your test suite).
 
-For example: Using the browser to run your test.
+For example, we call the `Test/Browser` trait so we can test via web browser:
 
 [source, js]
 ----
-const { test, trait } = use('Test/Suite')('User registeration')
+const { test, trait } = use('Test/Suite')('User registration')
 
 trait('Test/Browser')
 
@@ -154,15 +183,13 @@ test('return error when credentials are wrong', async ({ browser }) => {
 })
 ----
 
-The beauty of this approach is that *Traits* can enhance your tests transparently without doing much work. For instance, if we remove `Test/Browser` trait. The `browser` object gets `undefined` inside our tests.
+NOTE: In the example above, if we were to remove the `Test/Browser` trait, the `browser` object would be `undefined` inside our tests.
 
-Also, you can define your traits either by defining a closure or an IoC container binding.
-
-NOTE: You do not have to create a trait for everything. Majority of the work can be done by using xref:_lifecycle_hooks[Lifecycle hooks]. Traits are helpful when you want to bundle a package to be used by others.
+You can define custom traits with a closure or IoC container binding:
 
 [source, js]
 ----
-const { test, trait } = use('Test/Suite')('User registeration')
+const { test, trait } = use('Test/Suite')('User registration')
 
 trait(function (suite) {
   suite.Context.getter('foo', () => {
@@ -175,17 +202,21 @@ test('foo must be bar', async ({ foo, assert }) => {
 })
 ----
 
+NOTE: Traits are helpful when you want to bundle a package to be used by others, though for most situations, you could simply use xref:_lifecycle_hooks[Lifecycle Hooks] instead.
+
 === Context
-Since each test has an isolated context, you can pass values to it by defining *getters* or *macros* and access them inside the test closure.
+Each test has an isolated context.
 
-By default, the context has only one property called `assert`, which is an instance of link:http://chaijs.com/api/assert/[chaijs/assert] to run assertions.
+By default, the context has only one property called `assert` which is an instance of link:http://chaijs.com/api/assert/[chaijs/assert, window="_blank"] to run assertions.
 
-== Lifecycle hooks
-Each suite has some lifecycle hooks, which can be used to perform repetitive tasks, like cleaning the database after each test and so on.
+You can pass custom values to each test context by defining *getters* or *macros* to be accessed inside the `test` callback closure (see the link:#_traits[Traits] closure example).
+
+== Lifecycle Hooks
+Each suite has lifecycle hooks which can be used to perform repetitive tasks (for example, cleaning the database after each test):
 
 [source, js]
 ----
-const Suite = use('Test/Suite')('User registeration')
+const Suite = use('Test/Suite')('User registration')
 
 const { before, beforeEach, after, afterEach } = Suite
 
@@ -207,9 +238,9 @@ afterEach(async () => {
 ----
 
 == Assertions
-The `assert` object is an instance of link:http://chaijs.com/api/assert/[chaijs/assert] which is passed to each test as a property on test context.
+The `assert` object is an instance of link:http://chaijs.com/api/assert/[chaijs/assert, window="_blank"], passed to each test as a property of the `test` callback context.
 
-To make your tests more reliable, you can also plan assertions to be executed for a given test. Let's consider this example.
+To make your tests more reliable, you can also plan assertions to be executed for a given test. Let's consider this example:
 
 [source, js]
 ----
@@ -222,9 +253,9 @@ test('must throw exception', async ({ assert }) => {
 })
 ----
 
-The above test passes even if an exception was never thrown and no assertions were run. Which means it is a bad test, which is passed because we structured it badly.
+The above test passes even if an exception was never thrown and no assertions were run. This is a bad test, passing only because we structured it poorly.
 
-To overcome this situation, you must plan some assertions, to make sure the `catch` block is always executed and an assertion has been made.
+To overcome this scenario, `plan` for your expected number of assertions:
 
 [source, js]
 ----
@@ -239,6 +270,6 @@ test('must throw exception', async ({ assert }) => {
 })
 ----
 
-This time, if `badOperation` doesn't throw an exception, the test still fails since we planned for `1` assertion and `0` were made.
+In the above example, if `badOperation` doesn't throw an exception, the test still fails since we planned for `1` assertion and `0` were made.
 
 

@@ -8,14 +8,16 @@ category: lucid-orm
 
 toc::[]
 
-Hooks are the actions you perform before or after a specified database operation. Hooks plays a significant role in keeping your code base DRY and comfortable to reason about.
+*Hooks* are actions performed before or after database link:#_lifecycle_events[lifecycle events].
 
-For example: *Hashing* the user password before saving it to the database.
+Using model hooks helps keep your codebase link:https://en.wikipedia.org/wiki/Don%27t_repeat_yourself[DRY, window="_blank"], providing convenient lifecycle code injection from wherever your hooks are defined.
 
-== Defining hooks
-Hooks can be defined inline within the Model class or by referencing a `file.method` from the *Hooks* directory.
+A classic hook example is link:encryption-and-hashing#_hashing_values[hashing] the user password before saving the user to a database.
 
-=== Binding closure
+== Defining Hooks
+Hooks can be defined in a model class file via a closure, or by referencing any `file.method` handler in the `app/Models/Hooks` directory.
+
+=== Binding Closure
 [source, js]
 ----
 const Model = use('Model')
@@ -34,16 +36,37 @@ class User extends Model {
 module.exports = User
 ----
 
-Now every time we create a user, the `beforeCreate` hook closure is executed with the current instance of the user and hashes the password.
+=== Hook Within Transactions
+To use hooks within link:lucid#_transactions[transactions] just add second param `trx` into hook closure
 
-=== Hook file
-It is always nice to keep extracted pieces of code into their files. AdonisJs comes with a dedicated directory `app/Models/Hooks` to store model hooks.
+[source, js]
+----
+const Model = use('Model')
+const Hash = use('Hash')
 
-Let's use `adonis make:hook` command to create a hook for us.
+class User extends Model {
+  static boot () {
+    super.boot()
+
+    this.addHook('beforeCreate', async (userInstance, trx) => {
+      // here you can use transaction object `trx`
+    })
+  }
+}
+
+module.exports = User
+----
+
+In the example above, the `beforeCreate` closure is executed when creating a `User` model to ensure the user's password is hashed before it's saved.
+
+=== Hook File
+AdonisJs has a dedicated `app/Models/Hooks` directory to store model hooks.
+
+Use the `make:hook` command to create a hook file:
 
 [source, bash]
 ----
-adonis make:hook User
+> adonis make:hook User
 ----
 
 .Output
@@ -52,8 +75,9 @@ adonis make:hook User
 ✔ create  app/Models/Hooks/UserHook.js
 ----
 
-Let's open the created file and move the code to hash the password inside it.
+Open the new `UserHook.js` file and paste in the code below:
 
+.app/Models/Hooks/UserHook.js
 [source, js]
 ----
 'use strict'
@@ -67,7 +91,7 @@ UserHook.hashPassword = async (user) => {
 }
 ----
 
-Now we can remove the inline code from the model and instead reference this file and method.
+With a hook `file.method` defined, we can remove the inline closure from our link:#_binding_closure[previous example] and instead reference the hook file and method like so:
 
 [source, js]
 ----
@@ -84,9 +108,9 @@ module.exports = User
 ----
 
 == Aborting Database Operations
-Hooks can also abort the database operations by throwing exceptions.
+Hooks can abort database operations by throwing exceptions:
 
-.app/Models/Hooks/User.js
+.app/Models/Hooks/UserHook.js
 [source, javascript]
 ----
 UserHook.validate = async (user) => {
@@ -97,20 +121,20 @@ UserHook.validate = async (user) => {
 ----
 
 == Lifecycle Events
-Below is the list of lifecycle events and their description
+Below is the list of available database lifecycle events to hook into:
 
-[options="header"]
+[options="header", cols="35, 65"]
 |====
 | Event | Description
-| beforeCreate | Before creating a new row.
-| afterCreate | After a new record is created.
-| beforeUpdate | Before updating a row.
-| afterUpdate | After a row has been updated.
-| beforeSave | This event occurs before *creating* or *updating* a new record.
-| afterSave | After a new record has been *created* or *updated*.
-| beforeDelete | Before removing a row.
-| afterDelete | After a row is removed.
-| afterFind | After a single row is fetched from the database.
-| afterFetch | After the `fetch` method is executed. The hook method receives an array of the model instances.
-| afterPaginate | After the `paginate` method is executed. The hook receives two arguments, where the first is the array of model instances and 2nd the pagination metadata.
+| `beforeCreate` | Before creating a new record.
+| `afterCreate` | After a new record is created.
+| `beforeUpdate` | Before updating a record.
+| `afterUpdate` | After a record has been updated.
+| `beforeSave` | Before *creating or updating* a new record.
+| `afterSave` | After a new record has been *created or updated*.
+| `beforeDelete` | Before removing a record.
+| `afterDelete` | After a record is removed.
+| `afterFind` | After a single record is fetched from the database.
+| `afterFetch` | After the `fetch` method is executed. The hook method receives an array of model instances.
+| `afterPaginate` | After the `paginate` method is executed. The hook method receives two arguments: an array of model instances and the pagination metadata.
 |====

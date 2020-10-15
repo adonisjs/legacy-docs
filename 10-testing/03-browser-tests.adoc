@@ -8,17 +8,17 @@ category: testing
 
 toc::[]
 
-AdonisJs makes it simpler and easy to write *functional tests* using the *Chrome* browser. Under the hood, it makes use of link:https://github.com/GoogleChrome/puppeteer[puppeteer, window="_blank"] to launch a real browser and run assertions.
+AdonisJs makes it simple to write *functional tests* using the Chrome browser. Under the hood, it uses link:https://github.com/GoogleChrome/puppeteer[Puppeteer, window="_blank"] to launch a web browser and run assertions.
 
-NOTE: Since AdonisJs uses Chrome engine, you cannot run your tests on multiple browsers like *IE* or *Firefox*. +
-Cross-browser testing is usually done for Frontend Javascript, which is out of the scope of AdonisJs.
+In this guide, we learn about opening a browser programmatically and running tests like a real user is using your application.
 
-In this guide, we learn about opening a browser programmatically, and running tests like a real user are using the app.
+NOTE: Since AdonisJs uses the Chrome engine, you cannot run your tests on multiple browsers like *IE* or *Firefox*. Cross-browser testing is usually implemented for frontend JavaScript, which is out of the scope of the AdonisJs documentation.
 
 == Setup
-The provider to run browser tests is not shipped by default. Hence we need to pull it from `npm`.
 
-NOTE: link:https://github.com/GoogleChrome/puppeteer[Puppeteer, window="_blank"] comes with a bundled Chromium and takes a while to install it. You can skip the chromium installation by passing `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD` environment variable.
+NOTE: link:https://github.com/GoogleChrome/puppeteer[Puppeteer, window="_blank"] comes bundled with Chromium and takes a while to download and install. To skip the Chromium install, pass the `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD` environment variable. If skipped, make sure to define your link:#_custom_chromium_path[custom Chromium path] also.
+
+As the *Browser Provider* is not installed by default, we need to pull it from `npm`:
 
 [source, bash]
 ----
@@ -28,7 +28,7 @@ adonis install @adonisjs/vow-browser
 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true adonis install @adonisjs/vow-browser
 ----
 
-Next, we need to register the provider under `aceProviders` array.
+Next, register the provider in the `start/app.js` file `aceProviders` array:
 
 .start/app.js
 [source, js]
@@ -38,23 +38,33 @@ const aceProviders = [
 ]
 ----
 
-That is all!
-
 == Basic Example
-Now we have setup the provider; we can start making use of `Test/Browser` trait to open a new browser.
+Now we've set up the provider, we can use the `Test/Browser` trait to test against a web browser.
 
-Create a new functional test by running the following command.
+Create a new *functional test* by running the following command:
+
 [source, bash]
 ----
-adonis make:test hello-world
+> adonis make:test hello-world
 ----
 
-Output
+.make:test Menu
+[source, bash]
+----
+> Select the type of test to create
+  Unit test
+❯ Functional test
+----
+
+.Output
 [source, bash]
 ----
 create: test/functional/hello-world.spec.js
 ----
 
+Next, open the test file and paste in the following code:
+
+.test/functional/hello-world.spec.js
 [source, js]
 ----
 'use strict'
@@ -69,17 +79,45 @@ test('Visit home page', async ({ browser }) => {
 })
 ----
 
-Now if we run adonis test, hopefully, the test passes ( if you have not changed the default output of / route). Also, let’s talk about how everything works in a nutshell.
+Examining our test file…
 
-1. Very first we register the `Test/Browser` trait, which gives us the access to a `browser` object to make HTTP requests.
-2. Next, we visit a URL and access the save the reference to the page object.
-3. Finally, we run assertions to make sure the return HTML does contain `Adonis` as text.
+1. We register the `Test/Browser` trait, providing us a `browser` object to make HTTP requests with
+2. We visit the root `/` URL and save the reference to the page object
+3. We run an assertion to confirm the page HTML contains the text `Adonis`
 
-== Custom Chromium path
-If you have used `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD` environment variable to install the provider, the chromium is not installed by default, and you are supposed to pass a path to the executable file.
+Finally, run all your functional tests via the following command:
 
-1. First, make sure to download link:https://chromium.woolyss.com/download/[chromium] and place it in a directory, where Node.js can access it.
-2. After that, when making use of the `trait`, define the path to the executable file.
+[source, bash]
+----
+> adonis test functional
+----
+
+.Output
+[source, bash]
+----
+  Hello World
+    ✓ Visit home page (978ms)
+
+   PASSED
+
+  total       : 1
+  passed      : 1
+  time        : 998ms
+----
+
+++++
+Your first browser test <span style="background: lightgreen; padding: 0 5px;">PASSED</span>. Congratulations! 🎉
+<br>
+<br>
+++++
+
+NOTE: If the test failed, ensure you haven't changed the default output of the root `/` route.
+
+== Custom Chromium Path
+If you used the `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD` environment variable to install the *Browser Provider*, then Chromium is not installed by default and you must pass an executable path to Chromium yourself.
+
+1. First, download link:https://chromium.woolyss.com/download/[Chromium, window="_blank"] and place it in a Node.js accessible directory
+2. When using the `Test/Browser` trait, define your executable path to Chromium:
 +
 [source, js]
 ----
@@ -88,16 +126,29 @@ trait('Test/Browser', {
 })
 ----
 +
-Alternatively, you can define the executable path as an environment variable inside `.env.testing` file.
+Alternatively, define the executable path as an env var in the `.env.testing` file:
 +
+.env.testing
 [source, bash]
 ----
 CHROMIUM_PATH=/absolute/path/to/chromium
 ----
 
 == Configuration
-Below is the list of options you can configure when launching a new browser.
+The following browser options can be configured via the `Test/Browser` trait:
 
+==== options
+
+[role="resource-table", options="header", cols="30%,70%"]
+|====
+| Key | Description
+| `headless` [description]#Boolean <true># | Whether to run tests in headless mode or launch a real browser.
+| `executablePath` [description]#String# | Path to the Chromium executable (only required when you don't use bundled Chromium).
+| `slowMo` [description]#Number# | Number of millseconds used for slowing down each browser interaction (can be used to see tests in slow motion).
+| `dumpio` [description]#Boolean <false># | Log all browser console messages to the terminal.
+|====
+
+.Example Usage
 [source, js]
 ----
 trait('Test/Browser', {
@@ -105,24 +156,15 @@ trait('Test/Browser', {
 })
 ----
 
-==== options
-
-[role="resource-table", options="header", cols="30%,70%"]
-|====
-| Key | Description
-| headless [description]#Boolean <true># | Whether to run tests in headless mode or launch a real browser.
-| executablePath [description]#String# | Path to the `Chromium` executable, it is only required, when you don't make use of bundled chromium.
-| slowMo [description]#Number# | Pass number of millseconds to be used for slowing down each browser interaction. It can be used to see tests in slow motion.
-| dumpio [description]#Boolean <false># | Log all browser console messages to the terminal.
-|====
-
-For all other options, do check link:https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions[puppeteer.launch] official documentation.
+For all other options, see the link:https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions[puppeteer.launch] official documentation.
 
 == Browser API
-AdonisJs adds a wrapper on top of Puppeteer to make it more suitable for testing. The following is the API for the main browser and page objects.
+AdonisJs adds a wrapper on top of Puppeteer to make it more suitable for testing.
+
+The following API is for the main browser and page objects.
 
 ==== browser.visit
-The `browser.visit` method calls link:https://pptr.dev/#?product=Puppeteer&version=v1.8.0&show=api-pagegotourl-options[page.goto] method of Puppeteer and has the same signature.
+Calls the Puppeteer link:https://pptr.dev/#?product=Puppeteer&version=v1.8.0&show=api-pagegotourl-options[page.goto, window="_blank"] method and has the same signature:
 
 [source, js]
 ----
@@ -135,7 +177,7 @@ test('Visit home page', async ({ browser }) => {
 })
 ----
 
-You can access the actual page object of Puppeteer by accessing the `page.page` property.
+You can access the actual Puppeteer page object via the `page.page` property:
 
 [source, js]
 ----
@@ -147,13 +189,13 @@ test('Visit home page', async ({ browser }) => {
 })
 ----
 
-== Page interactions
-The most common thing you want to achieve when writing browser tests, is to interact with the webpage. Below is the list of methods for same.
+== Page Interactions
+The following methods can be used to interact with a webpage.
 
-TIP: Browser client supports all link:https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors[CSS selectors]. Feel free to use your CSS selector skills.
+TIP: The page interaction methods support all link:https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors[CSS selectors, window="_blank"].
 
 ==== type(selector, value)
-Type inside an element with given selector.
+Type inside an element with the given selector:
 
 [source, js]
 ----
@@ -169,7 +211,7 @@ test('Visit home page', async ({ browser }) => {
 })
 ----
 
-To type multiple values, you can chain methods
+To type multiple values, chain method calls:
 
 [source, js]
 ----
@@ -179,7 +221,7 @@ await page
 ----
 
 ==== select(selector, value)
-Select value inside a select box
+Select the value inside a select box:
 
 [source, js]
 ----
@@ -187,7 +229,7 @@ await page
   .select('[name="gender"]', 'Male')
 ----
 
-To select multiple options, pass an array of values.
+To select multiple values, pass an array:
 
 [source, js]
 ----
@@ -196,7 +238,7 @@ await page
 ----
 
 ==== radio(selector, value)
-Select a radio button, based of it's value
+Select a radio button based on its value:
 
 [source, js]
 ----
@@ -205,7 +247,7 @@ await page
 ----
 
 ==== check(selector)
-Check a checkbox
+Check a checkbox:
 
 [source, js]
 ----
@@ -214,7 +256,7 @@ await page
 ----
 
 ==== uncheck(selector)
-Uncheck a checkbox
+Uncheck a checkbox:
 
 [source, js]
 ----
@@ -223,7 +265,7 @@ await page
 ----
 
 ==== submitForm(selector)
-Submit a selected form
+Submit a selected form:
 
 [source, js]
 ----
@@ -236,7 +278,7 @@ await page
 ----
 
 ==== click(selector)
-Click an element.
+Click an element:
 
 [source, js]
 ----
@@ -245,7 +287,7 @@ await page
 ----
 
 ==== doubleClick(selector)
-Double click an element
+Double click an element:
 
 [source, js]
 ----
@@ -254,7 +296,7 @@ await page
 ----
 
 ==== rightClick(selector)
-Right click on an element
+Right click an element:
 
 [source, js]
 ----
@@ -263,7 +305,7 @@ await page
 ----
 
 ==== clear(selector)
-Clear value of a given element.
+Clear the value of a given element:
 
 [source, js]
 ----
@@ -272,7 +314,7 @@ await page
 ----
 
 ==== attach(selector, [files])
-Attach one or multiple files
+Attach one or multiple files:
 
 [source, js]
 ----
@@ -283,7 +325,7 @@ await page
 ----
 
 ==== screenshot(saveToPath)
-Take and save screenshot of the current state of webpage
+Save a screenshot of the current state of a webpage:
 
 [source, js]
 ----
@@ -293,17 +335,15 @@ await page
   .screenshot()
 ----
 
-== Waiting for actions
-Quite often you have to wait for a certain action to take effect. For example:
+== Waiting For Actions
+There are times when you might have to wait for an action to take effect.
 
-[ol-shrinked]
-- Waiting for an element to appear on the webpage.
-- Waiting for a page to redirect and so on.
+For example, you might have to wait for an element to appear on the page before you can click it, or you might have to wait for a webpage to redirect, and so on.
 
-&nbsp;
+The following methods can be used to handle such scenarios.
 
 ==== waitForElement(selector, timeout = 15000)
-Wait for a element to be present inside DOM. The default timeout is to `15 seconds`.
+Wait until an element appears inside the DOM:
 
 [source, js]
 ----
@@ -312,8 +352,10 @@ await page
   .assertHasIn('div.alert', 'Success!')
 ----
 
+NOTE: The default wait timeout is `15` seconds.
+
 ==== waitUntilMissing(selector)
-Wait until an element disppears from the DOM.
+Wait until an element disappears from the DOM:
 
 [source, js]
 ----
@@ -323,7 +365,7 @@ await page
 ----
 
 ==== waitForNavigation()
-Wait until page is navigated properly to a new URL.
+Wait until a page has navigated properly to a new URL:
 
 [source, js]
 ----
@@ -334,7 +376,7 @@ await page
 ----
 
 ==== waitFor(closure)
-Wait until the `Closure` returns true. The closure is executed in browser context and has access to variables like `window`, `document` and so on.
+Wait until the passed closure function returns true:
 
 [source, js]
 ----
@@ -344,19 +386,23 @@ await page
   })
 ----
 
+NOTE: The closure is executed in the browser context and has access to variables like `window`, `document`, and so on.
+
 ==== pause(timeout = 15000)
-Pause the webpage for a given timeframe
+Pause the webpage for a given timeframe:
 
 [source, js]
 ----
 await page.pause()
 ----
 
-== Reading values
-Below is the list of methods you can use to read the values from the web page.
+NOTE: The default pause timeout is `15` seconds.
+
+== Reading Values
+The following methods can be used to read values from a webpage.
 
 ==== getText([selector])
-Get text for a given element or the entire page
+Get text for a given element or the entire page:
 
 [source, js]
 ----
@@ -369,7 +415,7 @@ await page
 ----
 
 ==== getHtml([selector])
-Get HTML for a given element or entire web page
+Get HTML for a given element or the entire page:
 
 [source, js]
 ----
@@ -382,7 +428,7 @@ await page
 ----
 
 ==== isVisible(selector)
-Find if a given element is visible on page or not.
+Find if a given element is visible:
 
 [source, js]
 ----
@@ -393,7 +439,7 @@ assert.isFalse(isVisible)
 ----
 
 ==== hasElement(selector)
-Find if an element exists in DOM.
+Find if an element exists in the DOM:
 
 [source, js]
 ----
@@ -404,7 +450,7 @@ assert.isFalse(hasElement)
 ----
 
 ==== isChecked(selector)
-Find if a checkbox is checked
+Find whether a checkbox is checked:
 
 [source, js]
 ----
@@ -415,7 +461,7 @@ assert.isTrue(termsChecked)
 ----
 
 ==== getAttribute(selector, name)
-Get value for a given attribute
+Get the value of a given attribute:
 
 [source, js]
 ----
@@ -424,7 +470,7 @@ const dataTip = await page
 ----
 
 ==== getAttributes(selector)
-Get all attributes for a given element
+Get all attributes for a given element selector:
 
 [source, js]
 ----
@@ -433,7 +479,7 @@ const attributes = await page
 ----
 
 ==== getValue(selector)
-Get value for a given form element
+Get the value of a given form element:
 
 [source, js]
 ----
@@ -444,7 +490,7 @@ assert.equal(value, 'virk')
 ----
 
 ==== getPath()
-Get current webpage path
+Get the current webpage path:
 
 [source, js]
 ----
@@ -453,7 +499,7 @@ await page
 ----
 
 ==== getQueryParams()
-Get query params
+Get the current query parameters:
 
 [source, js]
 ----
@@ -462,7 +508,7 @@ await page
 ----
 
 ==== getQueryParam(key)
-Get value for a single query param
+Get the value of a single query parameter:
 
 [source, js]
 ----
@@ -471,7 +517,7 @@ await page
 ----
 
 ==== getTitle()
-Get webpage title
+Get the webpage title:
 
 [source, js]
 ----
@@ -480,10 +526,12 @@ await page
 ----
 
 == Assertions
-One way to run assertions is to read the value for certain elements and then run assertions manually. Whereas the browser client bundles a bunch of helper methods to run inline assertions.
+One way to run assertions is to read the value of target elements and then assert against those values manually.
+
+The AdonisJS browser client provides a number of convenient helper methods to run inline page assertions to simplify the process for you.
 
 ==== assertHas(expected)
-Assert the webpage includes the expected text value
+Assert the webpage includes the expected text value:
 
 [source, js]
 ----
@@ -492,7 +540,7 @@ await page
 ----
 
 ==== assertHasIn(selector, expected)
-Assert a given selector contains the expected value.
+Assert a given selector contains the expected value:
 
 [source, js]
 ----
@@ -501,7 +549,7 @@ await page
 ----
 
 ==== assertAttribute(selector, attribute, expected)
-Assert the value of an attribute is same as expected
+Assert the value of an attribute is the same as the expected value:
 
 [source, js]
 ----
@@ -510,7 +558,7 @@ await page
 ----
 
 ==== assertValue(selector, expected)
-Assert value for a given form element.
+Assert the value for a given form element:
 
 [source, js]
 ----
@@ -519,7 +567,7 @@ await page
 ----
 
 ==== assertIsChecked(selector)
-Assert that checkbox is checked
+Assert a checkbox is checked:
 
 [source, js]
 ----
@@ -528,7 +576,7 @@ await page
 ----
 
 ==== assertIsNotChecked(selector)
-Assert that checkbox is not checked
+Assert a checkbox is not checked:
 
 [source, js]
 ----
@@ -537,7 +585,7 @@ await page
 ----
 
 ==== assertIsVisible(selector)
-Assert element is visible
+Assert an element is visible:
 
 [source, js]
 ----
@@ -546,7 +594,7 @@ await page
 ----
 
 ==== assertIsNotVisible(selector)
-Assert element is not visible
+Assert an element is not visible:
 
 [source, js]
 ----
@@ -555,7 +603,7 @@ await page
 ----
 
 ==== assertPath(value)
-Assert the value of current path
+Assert the value of the current path:
 
 [source, js]
 ----
@@ -564,7 +612,7 @@ await page
 ----
 
 ==== assertQueryParam(key, value)
-Assert the value of a query param
+Assert the value of a query parameter:
 
 [source, js]
 ----
@@ -573,7 +621,7 @@ await page
 ----
 
 ==== assertExists(selector)
-Assert that an element exists inside DOM
+Assert an element exists inside the DOM:
 
 [source, js]
 ----
@@ -582,7 +630,7 @@ await page
 ----
 
 ==== assertNotExists(selector)
-Assert that an element does not exists inside DOM
+Assert an element does not exist inside the DOM:
 
 [source, js]
 ----
@@ -591,7 +639,7 @@ await page
 ----
 
 ==== assertCount(selector, expectedCount)
-Assert over the number of elements for a given selector
+Assert the number of elements for a given selector:
 
 [source, js]
 ----
@@ -600,7 +648,7 @@ await page
 ----
 
 ==== assertTitle(expected)
-Assert webpage title
+Assert the webpage title:
 
 [source, js]
 ----
@@ -609,7 +657,7 @@ await page
 ----
 
 ==== assertEval(selector, fn, [args], expected)
-Assert the value of a function executed on a given selector. The `fn` is executed in browser context.
+Assert the value of a function executed on a given selector (`fn` is executed in the browser context):
 
 [source, js]
 ----
@@ -621,7 +669,7 @@ await page
 
 In above example, we count the number of `tr` inside a table and assert that count is `2`.
 
-Also, you can pass *args* to the selector fn.
+You can also pass *arguments* (`[args]`) to the selector `fn`:
 
 [source, js]
 ----
@@ -636,12 +684,10 @@ await page
   )
 ----
 
-In the above example, we assert over a given attribute of `div.notification`. The attribute is dynamic and passed as an argument.
+In the above example, we assert over a given attribute of the `div.notification` element. The given attribute is dynamic and passed as an argument (`['id']`).
 
 ==== assertFn(fn, [args], expected)
-Assert the output of a given function. The `fn` is executed in browser context.
-
-The difference between `assertFn` and `assertEval` is that the later one pre-selects an element before running the function.
+Assert the output of a given function (`fn` is executed in the browser context):
 
 [source, js]
 ----
@@ -650,3 +696,5 @@ await page
     return document.title
   }, 'Welcome to Adonis')
 ----
+
+NOTE: The difference between `assertFn` and `assertEval` is that `assertEval` selects an element before running the function.

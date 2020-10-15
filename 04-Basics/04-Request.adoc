@@ -412,7 +412,7 @@ Route.put('users', 'UserController.update')
 <form method="POST" action="/users?_method=PUT">
 ----
 
-The above eaxmple works in the following cases:
+The above example works in the following cases:
 
 1. The original request method is `POST`.
 2. `allowMethodSpoofing` is enabled inside the `config/app.js` file.

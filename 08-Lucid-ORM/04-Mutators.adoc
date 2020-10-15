@@ -8,13 +8,18 @@ category: lucid-orm
 
 toc::[]
 
-As the name suggests, getters and setters help you transform data before saving or after fetching it from the database.
+*Getters and setters* provide link:https://stackoverflow.com/a/1568230/1210490[many benefits, window="_blank"], including the ability to transform your data before saving and retrieving from a database.
 
-In this guide, we learn about *getters*, *setters* and *computed properties*, with the uses case of where and when to use them.
+In this guide, we learn when and where to use getters, setters and computed properties (also known as *accessors and mutators*).
 
 == Getters
-Defining *getters* can be helpful if you want to format the data for display only. For example: Converting the post title to title case.
+*Getters* are called when retrieving a value from a model instance.
 
+They are often used to transform model data for display.
+
+For example, converting a `Post` title to title case:
+
+.app/Models/Post.js
 [source, js]
 ----
 'use strict'
@@ -38,17 +43,20 @@ const post = await Post.find(postId)
 return post.toJSON()
 ----
 
-Assuming the post title is saved as `title` field inside the database. AdonisJs executes the `getTitle` method and uses the return value.
+In the example above, assuming the `Post` title is saved as a `title` field in the database, AdonisJs executes the `getTitle` method and uses the returned value when `post.title` is referenced.
 
 [ul-spaced]
-- Getters always start with the `get` keyword followed by the *camel case* version of the field name.
-- Getters are synchronous, which means you cannot run asynchronous code inside them. You must use link:database-hooks[hooks] for that.
-- The return value is used instead of the actual value.
-- Getters are evaluated when you call `toJSON` on the model instance or the serializer instance.
+- Getters always start with the `get` keyword followed by the *camel case* version of the field name (e.g. `field_name` → `getFieldName`).
+- A getter's return value is used instead of the actual database field name value when that field is referenced on a model instance.
+- Getters are automatically evaluated when you call `toJSON` on a model instance or link:serializers[serializer] instance.
+- As getters are synchronous, you cannot run asynchronous code inside them (for asynchronous functionality, use link:database-hooks[hooks]).
 
 == Setters
-Setters are called when you set a value to a model instance. It can be helpful in normalizing data before saving it to the database.
+*Setters* are called when assigning a value to a model instance.
 
+They are often used to normalize data before saving to a database:
+
+.app/Models/User.js
 [source, js]
 ----
 'use strict'
@@ -60,7 +68,10 @@ class User extends Model {
     return access === 'admin' ? 1 : 0
   }
 }
+----
 
+[source, js]
+----
 const user = new User()
 user.access = 'admin'
 
@@ -70,15 +81,16 @@ await user.save()
 
 [ul-spaced]
 - Setters always starts with the `set` keyword followed by the *camel case* version of the field name.
-- Setters are synchronous, which means you cannot run asynchronous code inside them. You must use link:database-hooks[hooks] for that.
-- Setters receives the current value of a given field.
-- They are executed when you *set/update* value of a given field on the model instance.
+- A setter executes when you set/update the value of the given field on the model instance.
+- Setters receive the current value of a given field to parse before assignment.
+- As setters are synchronous, you cannot run asynchronous code inside them (for asynchronous functionality, use link:database-hooks[hooks]).
 
-== Computed properties
-Computed properties are virtual properties which don't exist in your database but instead set in the JSON representation.
+== Computed Properties
+Computed properties are virtual values which only exist in a model instance's JSON representation.
 
-*For example:* Creating a full name property from the user first and the last name.
+To create a computed `fullname` property from a `User` first/last name:
 
+.app/Models/User.js
 [source, js]
 ----
 'use strict'
@@ -96,7 +108,7 @@ class User extends Model {
 }
 ----
 
-Now whenever you call `toJSON` on the user instance, a `fullname` property gets added to the return value.
+In the example above, when `toJSON` is called on the `User` instance, a `fullname` property gets added to the return value:
 
 [source, js]
 ----
@@ -107,6 +119,6 @@ console.log(json.fullname) // firstname + lastname
 ----
 
 [ul-spaced]
-- Computed properties must be returned as an array from the `computed` getter.
-- Computed methods are defined the same as the `getters`.
-- They receive the existing attributes as an object.
+- All computed property names (e.g. `fullname`) must be returned in an array from the model class static `computed` getter.
+- Computed property method definitions are prefixed with `get`, the same as getter method definitions (e.g. `getFullname`).
+- Computed properties receive an object of existing model attributes for use in their method definitions.

@@ -75,7 +75,7 @@ For example, if a macro was defined like so:
 const Response = use('Adonis/Src/Response')
 const Request = use('Adonis/Src/Request')
 
-Response.macro('sendStatus', (status) => {
+Response.macro('sendStatus', function (status) {
   this.status(status).send(status)
 })
 ----

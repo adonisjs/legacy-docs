@@ -7,22 +7,26 @@ category: websockets
 
 toc::[]
 
-This guide covers the philosophy of the Websocket server. By the end of this guide, you will know about *channels*, *topic subscriptions* and *multiplexing*.
+This guide covers the philosophy of the WebSocket server.
 
-== Pure websockets
-AdonisJs makes use of pure Websockets and does not support any other transports like polling. Websockets are widely supported by all the major browsers and by removing extra overhead of multiple transports, we make it easier to scale the server.
+By the end of this guide, you will know about *channels*, *topic subscriptions* and *multiplexing*.
 
-The websocket server *scales naturally on Node.js cluster* without any 3rd party dependencies like Redis. Also there is no need of sticky sessions.
+== Pure WebSockets
+AdonisJs uses pure link:https://developer.mozilla.org/en-US/docs/Glossary/WebSockets[WebSockets, window="_blank"] and doesn't rely on polling.
+
+Using pure WebSockets (supported by all major browsers), AdonisJs makes it easier to *scale apps horizontally within a Node.js cluster* without any 3rd party dependencies (e.g. Redis) and without the need for sticky sessions.
 
 == Multiplexing
-Multiplexing is a way of re-using the same TCP connection, but seperating the *events* and *authentication* layer between channels.
+Multiplexing reuses the same TCP connection while separating *event* and *authentication* layers between channels.
 
-This way only one connection is maintained from client to server, but Adonis gives you clean abstraction layer to manage channel subscriptions and exchange messages on that.
+Multiplexing maintains a single connection from client to server, with AdonisJS providing a clean abstraction layer to manage channel subscriptions and exchange your application messages.
 
-== Channels & topics
-Once a client makes a Websocket connection, they are required to subscribe to a *topic* in order to exchange messages.
+== Channels & Topics
+Once a client makes a WebSocket connection, they are required to subscribe to a *topic* in order to exchange messages.
 
-Channels and topics are inter related, so let's write some code to understand them.
+Channels and topics are interrelated, so let's write some code to better understand them.
+
+Register a channel like so:
 
 [source, js]
 ----
@@ -31,8 +35,9 @@ Ws.channel('chat', ({ socket }) => {
 })
 ----
 
-- Above we registered a channel called `chat`.
-- All subscriptions to the `chat` channel, will have a static topic called `chat`. In short the channel and the topic name are same.
+In the example above, all subscriptions to the `chat` channel have a static topic called `chat` (i.e. the channel and the topic name are same).
+
+To register a channel with dynamic/wildcard topics:
 
 [source, js]
 ----
@@ -41,21 +46,23 @@ Ws.channel('chat:*', ({ socket }) => {
 })
 ----
 
-This time we extend the possibility of accepting dynamic topics. For example: A user can subscribe to topic `chat:watercooler`, `chat:intro` and so on.
+In the example above, the `chat` channel accepts dynamic topics, so a user could subscribe to the channel `chat:watercooler`, `chat:intro`, `chat:news`, etc.
 
-The wildcard approach, opens up a new world of possibilities. For example: you can create dynamic topics for private a chat between two users.
+This dynamic/wildcard approach opens up an exciting world of creative possibilities (e.g. dynamic topics for private chats between two users).
 
-== Data encoders
-Websocket server makes use of data encoders while passing messages over the network. By default is makes use of `JSON` encoder, which has limitations when you want to pass binary data.
+== Data Encoders
+The WebSocket server uses data encoders when passing messages.
 
-However, you can make use of link:https://www.npmjs.com/package/@adonisjs/msgpack-encoder[@adonisjs/msgpack-encoder, window="_blank"] which works great with *ArrayBuffers* and *Blobs*.
+By default, the WebSocket server uses the JSON encoder, which has limitations when passing binary data.
 
-== Message packets
-It's impossible to build a multiplexing layer without having a standard around data packets.
+If required, the AdonisJs link:https://www.npmjs.com/package/@adonisjs/msgpack-encoder[@adonisjs/msgpack-encoder, window="_blank"] package can be used to handle *ArrayBuffers* and *Blobs*.
 
-As a consumer of the package, you never have to worry about the packets type, but when writing a client for Adonis websocket server, it's really important to understand them.
+== Message Packets
+Multiplexing requires a standard to define data packet structure.
 
-Once the network data is decoded by an encoder, you will end up with an *Object (or equalvent data type for your programming language)* similar to be following structure.
+As a consumer of the WebSocket server package you don't have to worry about packet types, but when writing a client for the server, it's critically important to understand them.
+
+Your WebSocket data encoder decodes network data as an *object* (or equivalent data type for your programming language) containing a structure similar to:
 
 [source, js]
 ----
@@ -68,7 +75,7 @@ Once the network data is decoded by an encoder, you will end up with an *Object 
 }
 ----
 
-1. The property `t` is the type of the packet. We use numbers over strings, since it's less data to transfer.
-2. The `d` is the data associated to that packet.
+1. The property `t` is the type of the packet (we use numbers over strings, since numbers are less data to transfer).
+2. The property `d` is the data associated with that packet.
 
-You can learn more about packets and helpers libraries link:https://github.com/adonisjs/adonis-websocket-protocol[here, window="_blank"]
+TIP: Learn more about AdonisJs WebSocket packets link:https://github.com/adonisjs/adonis-websocket-protocol[here, window="_blank"].

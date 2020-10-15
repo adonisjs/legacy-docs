@@ -12,7 +12,7 @@ AdonisJs makes it simple to validate user input with the help of a dedicated val
 
 In this guide you learn how to validate data *manually* or via *route validators*.
 
-NOTE: AdonisJs validation uses link:http://indicative.adonisjs.com[Indicative, window="_blank"] under the hood. For full usage details, see the official Indicative link:http://indicative.adonisjs.com[documentation].
+NOTE: AdonisJs validation uses link:https://indicative-v5.adonisjs.com[Indicative, window="_blank"] under the hood. For full usage details, see the official Indicative link:https://indicative-v5.adonisjs.com[documentation].
 
 == Setup
 Follow the below instructions to set up the validation provider.
@@ -132,7 +132,7 @@ if (validation.fails()) {
 }
 ----
 
-NOTE: You can optionally pass link:http://indicative.adonisjs.com/docs/custom-messages[custom error messages, window="_blank"] to return when your validation fails as your third method parameter.
+NOTE: You can optionally pass link:https://indicative-v5.adonisjs.com/docs/custom-messages[custom error messages, window="_blank"] to return when your validation fails as your third method parameter.
 
 ==== validateAll(data, rules, [messages], [formatter])
 Same as `validate` but continues to validate all fields, whereas the `validate` method stops on first error:
@@ -153,7 +153,7 @@ const data = sanitize(request.all(), rules)
 ----
 
 ==== sanitizor
-Returns a reference to Indicative's link:http://indicative.adonisjs.com/docs/api/extend#_adding_sanitization_rules[sanitizor, window="_blank"]:
+Returns a reference to Indicative's link:https://indicative-v5.adonisjs.com/docs/api/extend#_adding_sanitization_rules[sanitizor, window="_blank"]:
 
 [source, js]
 ----
@@ -162,7 +162,7 @@ const slug = sanitizor.slug('My first blog post')
 ----
 
 ==== formatters
-Returns a reference to Indicative's link:http://indicative.adonisjs.com/docs/formatters[formatters, window="_blank"]:
+Returns a reference to Indicative's link:https://indicative-v5.adonisjs.com/docs/formatters[formatters, window="_blank"]:
 
 [source, js]
 ----
@@ -341,7 +341,7 @@ module.exports = StoreUser
 ----
 
 === Formatter
-You can also define the link:http://indicative.adonisjs.com/docs/formatters#_available_formatters[Indicative formatter, window="_blank"] as a property on the validator class:
+You can also define the link:https://indicative-v5.adonisjs.com/docs/formatters#_available_formatters[Indicative formatter, window="_blank"] as a property on the validator class:
 
 [source, js]
 ----
@@ -381,7 +381,7 @@ NOTE: Return a `boolean` from the `authorize` method to tell the validator wheth
 All route validators can access the current request context via `this.ctx`.
 
 == Custom Rules
-AdonisJs supports all link:https://indicative.adonisjs.com[Indicative] validations, but also adds a few custom rules.
+AdonisJs supports all link:https://indicative-v5.adonisjs.com[Indicative] validations, but also adds a few custom rules.
 
 Below is the list of custom AdonisJs rules.
 

@@ -8,39 +8,39 @@ category: database
 
 toc::[]
 
-Creating data-driven apps is AdonisJs is comparatively simple with the help of strong Database query builder, link:lucid[Lucid ORM], link:migrations[migrations] and link:seeds-and-factories[database seeder].
+Creating AdonisJs data-driven apps is greatly simplified via its powerful link:query-builder[Query Builder], link:lucid[Lucid ORM], link:migrations[Migrations], link:seeds-and-factories[Factories], and link:seeds-and-factories[Seeds].
 
-In this guide, we understand the basics of Database provider.
+In this guide we'll learn to setup and use the *Database Provider*.
 
-NOTE: AdonisJs makes use of link:http://knexjs.org[Knex.js, window="_blank"] internally, so make sure to read the knex docs whenever required.
+NOTE: The Data Provider uses link:https://knexjs.org[Knex.js, window="_blank"] internally, so browse the Knex documentation whenever further information is required.
 
-== Supported databases
-Following is the list of supported database and their equivalent drivers.
+== Supported Databases
+The list of supported databases and their equivalent drivers are as follows:
 
-[options="header"]
+[options="header", cols="25, 75"]
 |====
-| Database | Npm driver
-| PostgreSQL | `npm i pg`
-| MySQL | `npm i mysql` or +
-`npm i mysql2`
-| SQLite3 | `npm i sqlite3`
-| MariaDB | `npm i mariasql`
-| Oracle | `npm i oracledb` or +
-`npm i strong-oracle`
+| Database | NPM Driver
+| MariaDB | `npm i mysql` or `npm i mysql2`
 | MSSQL | `npm i mssql`
+| MySQL | `npm i mysql` or `npm i mysql2`
+| Oracle | `npm i oracledb`
+| PostgreSQL | `npm i pg`
+| SQLite3 | `npm i sqlite3`
 |====
 
 == Setup
-Certain project boilerplates have lucid pre-configured by default. If not, here are the setup instructions.
 
 === Installation
+If the *Database Provider* (*Lucid*) is not installed, pull it from `npm`:
+
 [source, bash]
 ----
-adonis install @adonisjs/lucid
+> adonis install @adonisjs/lucid
 ----
 
-Once the installation has been done, register the providers inside `start/app.js` file.
+Next, register the following providers inside the `start/app.js` file:
 
+.start/app.js
 [source, js]
 ----
 const providers = [
@@ -52,15 +52,27 @@ const aceProviders = [
 ]
 ----
 
-=== Configuration
-Lucid makes use of `sqlite` by default. However, you can change the configuration from `config/database.js` file and choose from one of the available databases.
+NOTE: Many AdonisJs boilerplates have *Lucid* installed by default.
 
-All of the link:http://knexjs.org/#Installation-client[knex configuration, window="_blank"] options are supported as it is.
+=== Configuration
+The *Database Provider* uses the `sqlite` connection by default.
+
+The default connection can be set via the `config/database.js` file:
+
+.config/database.js
+[source, js]
+----
+module.exports = {
+  connection: 'mysql',
+}
+----
+
+All of the Knex link:http://knexjs.org/#Installation-client[configuration options, window="_blank"] are supported as is.
 
 == Basic Example
-Database query builder has fluent API, which means you can chain Javascript methods to create SQL queries.
+The AdonisJs link:query-builder[Query Builder] has a *fluent* API, meaning you can chain/append JavaScript methods to create your SQL queries.
 
-Let's see an example of selecting all users and returning them as JSON.
+For example, to select and return all users as JSON:
 [source, js]
 ----
 const Database = use('Database')
@@ -70,8 +82,8 @@ Route.get('/', async () => {
 })
 ----
 
-=== Where clause
-Adding a where clause is as simple as calling a method.
+=== Where Clause
+To add a where clause to a query, chain a `where` method:
 
 [source, js]
 ----
@@ -80,7 +92,7 @@ Database
   .where('age', '>', 18)
 ----
 
-An `orWhere` clause
+To add another where clause, chain an `orWhere` method:
 
 [source, js]
 ----
@@ -90,12 +102,12 @@ Database
   .orWhere('vip', true)
 ----
 
-Check out the link:query-builder[query builder docs] for complete API reference.
+See the link:query-builder[Query Builder] documentation for the complete API reference.
 
-== Multiple connections
-By default, AdonisJs makes use of the connection defined inside `config/database.js` file for making all database queries.
+== Multiple Connections
+By default, AdonisJs uses the `connection` value defined inside the `config/database.js` file when making database queries.
 
-However, you can set multiple database connections inside `config/database.js` file, and at runtime, you can select any of the defined connections to make the queries.
+You can select any of the connections defined inside the `config/database.js` file at runtime to make your queries:
 
 [source, js]
 ----
@@ -104,9 +116,9 @@ Database
   .table('users')
 ----
 
-Since AdonisJs creates a pool of connections and reuses them, all used connections are maintained unless the process dies.
+NOTE: Since AdonisJs pools connections for reuse, all used connections are maintained unless the process dies.
 
-To close a connection manually, call the `close` method with connection name(s).
+To close a connection, call the `close` method passing any connection names:
 
 [source, js]
 ----
@@ -118,8 +130,8 @@ const users = await Database
 Database.close(['mysql'])
 ----
 
-== Table prefixing
-The database provider allows transparent table prefixing for all queries by defining a `prefix` inside the config file.
+== Table Prefixing
+The *Database Provider* can automatically prefix table names by defining a `prefix` value inside the `config/database.js` file:
 
 .config/database.js
 [source, js]
@@ -134,7 +146,7 @@ module.exports = {
 }
 ----
 
-Now all queries on the `sqlite` connection have `my_` as the table prefix.
+Now, all queries on the `sqlite` connection will have `my_` as their table prefix:
 
 [source, js]
 ----
@@ -143,14 +155,14 @@ await Database
   .select('*')
 ----
 
-Output
+.SQL Output
 [source, sql]
 ----
 select * from `my_users`
 ----
 
 ==== withOutPrefix
-Optionally you can skip the *prefixing* by calling `withOutPrefix`.
+If a `prefix` value is defined you can ignore it by calling `withOutPrefix`:
 
 [source, js]
 ----
@@ -160,10 +172,12 @@ await Database
 ----
 
 == Debugging
-Debugging database queries can be handy in development as well as in production. Let's go through the available strategies on debugging queries.
+Debugging database queries can be handy in both development and production.
+
+Let's go through the available strategies to debug queries.
 
 === Globally
-By setting `debug: true` inside the config file enables debugging for all queries globally.
+Setting `debug: true` inside the `database/config.js` file enables debugging for all queries globally:
 
 .config/database.js
 [source, js]
@@ -179,8 +193,11 @@ module.exports = {
 }
 ----
 
-Also, you can turn on debugging by listening for the `query` event on Database provider. The best place to register a listener is under the `start/hooks.js` file.
+You can also debug queries via the *Database Provider* `query` event.
 
+Listen for the `query` event by defining a hook inside the `start/hooks.js` file:
+
+.start/hooks.js
 [source, js]
 ----
 const { hooks } = require('@adonisjs/ignitor')
@@ -191,8 +208,10 @@ hooks.after.providersBooted(() => {
 })
 ----
 
-=== Individually
-Also, you can listen for `query` event on a single query at runtime.
+NOTE: Create the `start/hooks.js` file if it does not exist.
+
+=== Locally
+You can listen for the `query` event per query at runtime:
 
 [source, js]
 ----
@@ -204,7 +223,9 @@ await Database
 
 ////
 === Slow query logs
-Tracking slow SQL queries is helpful to keep your app running a healthy mode. AdonisJs makes it easier to track slow SQL queries by listening for the `slow:query` event.
+Tracking slow SQL queries is helpful to keep your app running smoothly.
+
+AdonisJs makes it easy to track slow SQL queries by listening for the `slow:query` event:
 
 [source, js]
 ----
@@ -213,7 +234,7 @@ Database.on('slow:query', (sql, time) => {
 })
 ----
 
-The configuration is saved next to the connection settings in `config/database.js` file.
+The configuration for slow queries is saved next to the connection settings in the `config/database.js` file:
 
 [source, js]
 ----

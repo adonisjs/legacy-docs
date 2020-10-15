@@ -8,16 +8,16 @@ category: database
 
 toc::[]
 
-Once you have your database schema ready with link:migrations[migrations], the next step is to add some data. This is where *database seeds* and *factories* come into the picture.
+Once you've prepared your database schema with link:migrations[migrations], the next step is to add some data. This is where database *seeds* and *factories* come into the picture.
 
 == Seeds
-Seeds are Javascript classes with a `run` method on them. You are free to write any database related operation inside this method.
+Seeds are JavaScript classes containing a `run` method. Within the `run` method you are free to write any database related operations your seed requires.
 
-Just like migrations, a seed file can also be created using the `adonis make` command.
+Like migrations, a seed file is created using the `adonis make` command:
 
 [source, bash]
 ----
-adonis make:seed User
+> adonis make:seed User
 ----
 
 .Output
@@ -26,8 +26,9 @@ adonis make:seed User
 ✔ create  database/seeds/UserSeeder.js
 ----
 
-Now open this file and type the following code inside it.
+Now open this file and type the following code inside it:
 
+.database/seeds/UserSeeder.js
 [source, js]
 ----
 const Factory = use('Factory')
@@ -43,16 +44,16 @@ class UserSeeder {
 module.exports = UserSeeder
 ----
 
-Run the seed file by calling `adonis seed`. It executes the `run` method on all the seed files.
+Run the seed file by calling the `adonis seed` command, which will execute the `run` method on all existing seed files.
 
 Since you can write any database related code inside your seed files and execute them from the command line, they are helpful in offloading some tasks from your actual application code.
 
-However, the real power of seeds is unlocked when you combine them with *Factories*.
+However, the real power of seeds is unlocked when combined with *Factories*.
 
 == Factories
-The database factories are used to define a blueprint of a data structure and then using that blueprint to generate dummy data. Let's check out this example.
+Factories define data structures (blueprints) used to generate dummy data.
 
-The factory blueprints are defined inside `database/factory.js` file.
+Factory blueprints are set inside the `database/factory.js` file:
 
 [source, js]
 ----
@@ -62,12 +63,13 @@ const Hash = use('Hash')
 Factory.blueprint('App/Models/User', async (faker) => {
   return {
     username: faker.username(),
+    email: faker.email(),
     password: await Hash.make(faker.password())
   }
 })
 ----
 
-Now every time you generate a model instance from this blueprint, it prefills the attributes from the keys we defined.
+When a model instance is generated from a factory blueprint, the model's attributes are prefilled using the keys defined inside the blueprint:
 
 [source, js]
 ----
@@ -76,7 +78,7 @@ const user = await Factory
   .create()
 ----
 
-Also, we can save multiple rows at a given point of time.
+Many model instances can be generated at the same time:
 
 [source, js]
 ----
@@ -85,14 +87,25 @@ const usersArray = await Factory
   .createMany(5)
 ----
 
-=== Creating relationships
-It is so simple to use Lucid models and factories to set up associations. Let's say we want to create a post and associate it with a user.
+=== Creating Relationships
+Say we want to create a `User` model and relate a `Post` to it.
 
-NOTE: Make sure to define the `posts` relationship on the User model for this to work. Learn more about relationships link:relationships[here].
+NOTE: For the example below, a `posts` relationship must first be defined on the User model. Learn more about relationships link:relationships[here].
 
-Post blueprint
+First, create blueprints for both models in the `database/factory.js` file:
+
+.database/factory.js
 [source, js]
 ----
+// User blueprint
+Factory.blueprint('App/Models/User', (faker) => {
+  return {
+    username: faker.username(),
+    password: faker.password()
+  }
+})
+
+// Post blueprint
 Factory.blueprint('App/Models/Post', (faker) => {
   return {
     title: faker.sentence(),
@@ -101,18 +114,7 @@ Factory.blueprint('App/Models/Post', (faker) => {
 })
 ----
 
-User blueprint
-[source, js]
-----
-Factory.blueprint('App/Models/User', (faker) => {
-  return {
-    username: faker.username(),
-    password: faker.password()
-  }
-})
-----
-
-Now let's use these blueprints to create a user and associate posts with it.
+Then, create a `User`, make a `Post`, and associate both models to each other:
 
 [source, js]
 ----
@@ -122,22 +124,69 @@ const post = await Factory.model('App/Models/Post').make()
 await user.posts().save(post)
 ----
 
-You may have noticed that we used the `make` method on the `Post` blueprint. This method does not persist the post inside the database and instead gives us an instance of the `Post` model with pre-filled dummy data.
+You may have noticed that we used the `make` method on the `Post` blueprint.
 
-== Available commands
-Below is the list of available commands with their usage and description.
+Unlike the `create` method, the `make` method does not persist the `Post` model to the database, instead returning an unsaved instance of the `Post` model pre-filled with dummy data (the `Post` model is saved when the `.posts().save()` method is called).
 
-[options="header"]
+== Seed Commands
+Below is the list of available seed commands.
+
+[options="header", cols="30, 20, 50"]
 |====
 | Command | Options | Description
-| adonis make:seed | None | Make a new seed file
-| adonis seed | `--files` | Execute seed files. Also, you can pass a comma-separated list of files to be executed. Otherwise, all files get executed.
+| `adonis make:seed` | None | Make a new seed file.
+| `adonis seed` | `--files` | Execute seed files (you can optionally pass a comma-separated list of `--files` to be executed, otherwise, all files get executed).
 |====
 
-== Usage without Lucid
-You can also make use of link:query-builder[Database provider] if you have decided not to make use of link:lucid[Lucid models].
+== Model Factory API
+Below is the list of available methods when using link:lucid[Lucid model] factories.
 
-The blueprints are defined the same way, but instead, you make use of the `table name` over the model name.
+==== create
+Persist and return model instance:
+
+[source, js]
+----
+await Factory
+  .model('App/Models/User')
+  .create()
+----
+
+==== createMany
+Persist and return many model instances:
+
+[source, js]
+----
+await Factory
+  .model('App/Models/User')
+  .createMany(3)
+----
+
+==== make
+Return model instance but do not persist it to the database:
+
+[source, js]
+----
+await Factory
+  .model('App/Models/User')
+  .make()
+----
+
+==== makeMany
+Return array of model instances but do not persist them to the database:
+
+[source, js]
+----
+await Factory
+  .model('App/Models/User')
+  .makeMany(3)
+----
+
+== Usage Without Lucid
+If your application doesn't use link:lucid[Lucid models] you can still use the link:query-builder[Database Provider] to generate factory database records.
+
+==== blueprint
+
+To define your factory blueprint without Lucid, pass a table name as the first parameter instead of a model name (e.g. `users` instead of `App/Models/User`):
 
 [source, js]
 ----
@@ -149,8 +198,8 @@ Factory.blueprint('users', (faker) => {
 })
 ----
 
-=== Creating rows
-The rows are created using the following factory methods.
+==== create
+Created a table record:
 
 [source, js]
 ----
@@ -160,7 +209,7 @@ run () {
 ----
 
 ==== table
-A different table name can also be defined at runtime.
+Define a different table name at runtime:
 
 [source, js]
 ----
@@ -171,7 +220,7 @@ await Factory
 ----
 
 ==== returning
-For PostgreSQL, you can also define a returning column
+For PostgreSQL, define a returning column:
 
 [source, js]
 ----
@@ -182,7 +231,7 @@ await Factory
 ----
 
 ==== connection
-Choose a different connection at runtime.
+Choose a different connection at runtime:
 
 [source, js]
 ----
@@ -194,7 +243,7 @@ await Factory
 ----
 
 ==== createMany
-Create multiple rows
+Create multiple records:
 
 [source, js]
 ----
@@ -203,51 +252,10 @@ await Factory
   .createMany(3)
 ----
 
-== Model factories API
-Below is the list of available methods when you are using `Lucid models` via Factory.
+== Custom Data
+The methods `make`, `makeMany`, `create` and `createMany` accept a custom data object which is passed directly to your blueprints.
 
-==== create
-Persist and return model instance
-
-[source, js]
-----
-await Factory
-  .model('App/Models/User')
-  .create()
-----
-
-==== createMany
-Persist and return many model instances
-
-[source, js]
-----
-await Factory
-  .model('App/Models/User')
-  .createMany()
-----
-
-==== make
-Return model instance with prefilled dummy data and do not persist it to the database.
-
-[source, js]
-----
-await Factory
-  .model('App/Models/User')
-  .make()
-----
-
-==== makeMany
-Return an array of model instances with prefilled dummy data and do not persist them to the database.
-
-[source, js]
-----
-await Factory
-  .model('App/Models/User')
-  .makeMany(3)
-----
-
-== Custom data
-All methods `make`, `makeMany`, `create` and `createMany` accepts a custom data object, which is passed directly to the blueprints. For example
+For example:
 
 [source, js]
 ----
@@ -256,7 +264,7 @@ const user = await Factory
   .create({ status: 'admin' })
 ----
 
-Now inside your blueprint, you can consume it as follows.
+Inside your blueprint, your custom data object is consumed like so:
 
 [source, js]
 ----
@@ -269,23 +277,24 @@ Factory.blueprint('App/Models/User', async (faker, i, data) => {
 ----
 
 == Faker API
-The `faker` object passed to factory blueprint is a reference to link:http://chancejs.com[chancejs, window="_blank"] library. Make sure to read their documentation for the list of available methods and properties.
+The `faker` object passed to a factory blueprint is a reference to the link:http://chancejs.com[Chance, window="_blank"] random generator JavaScript library.
+
+Make sure to read Chance's link:http://chancejs.com[documentation, window="_blank"] for the full list of available `faker` methods and properties.
 
 == FAQ's
-Since factories and seeds fit into many different use cases, the chances are you may get confused on how and when to use them. So here is the list of some frequently asked questions.
+Since factories and seeds fit many different use cases you might be confused how/when to use them, so here is a list of frequently asked questions.
 
 [ol-spaced]
-1. *Does factories and seeds have to be used together?* +
-  No. Factories and seeds are not dependent upon each other and can be used independently. +
-For example, you can make use of seed files to import data from a different app to Adonisjs app.
+1. *Do factories and seeds have to be used together?* +
+  No. Factories and seeds are not dependent upon each other and can be used independently. For example, you could just use seed files to import data into an AdonisJs app from a completely different app.
 
 2. *Can I use factories when writing tests?* +
-  Yes. Just import the factory provider and use it.
+  Yes. Import the factory provider (`Factory`) into your test and use as required.
 
-3. *How to run only selected seed files?* +
-  You can pass `--files` with a list of comma-separated filenames to `adonis seed` command. It makes sure to run only those files.
+3. *Can I run only selected seed files?* +
+  Yes. Passing `--files` with a list of comma-separated filenames to the `adonis seed` command ensures only those files are run, for example:
 +
 [source, bash]
 ----
-adonis seed --files='UsersSeeder.js, PostsSeeder.js'
+> adonis seed --files='UsersSeeder.js, PostsSeeder.js'
 ----

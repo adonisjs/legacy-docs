@@ -8,27 +8,37 @@ category: testing
 
 toc::[]
 
-In this guide, we learn how to write tests against an API server. If you are new to testing with AdonisJs or in general, make sure to read the link:testing[getting started] guide.
+In this guide, we learn how to write HTTP tests against an API server.
 
-== Basic example
-Let's get started with a basic example to test an endpoint that returns a list of posts in JSON.
+If you are new to testing with AdonisJs, or just testing in general, consider reading the link:testing[Getting Started] guide before continuing further.
 
-NOTE: Upcoming example assumes that you have database tables set up with a `Post` model.
+== Basic Example
+Let's start with a basic example to test a HTTP endpoint returns a list of posts in JSON format.
 
-Let's start by creating a *functional test* since we are testing the API endpoint like an end-user.
+NOTE: The following example assumes you've created a `Post` model with related database table, and defined a `GET /posts` route that returns all `Post` models.
+
+First, make a new *functional test* (since we'll test the API like an end-user):
 
 [source, bash]
 ----
-adonis make:test Post
+> adonis make:test Post
 ----
 
-Output
+.make:test Menu
+[source, bash]
+----
+> Select the type of test to create
+  Unit test
+❯ Functional test
+----
+
+.Output
 [source, bash]
 ----
 create: test/functional/post.spec.js
 ----
 
-Let's open the test file and paste following code inside it.
+Next, open the test file and paste in the following code:
 
 .test/functional/post.spec.js
 [source, js]
@@ -54,29 +64,53 @@ test('get list of posts', async ({ client }) => {
 })
 ----
 
-Now if we run `adonis test`, hopefully, the test passes. Also, let's talk about how everything works in a nutshell.
+Examining our test file…
 
-1. Very first we register the `Test/ApiClient` trait, which gives us an HTTP client to make requests on a URL.
-2. We create a dummy post before hitting the `posts` URL.
-3. Finally, we run assertions to make sure the return HTTP status is `200` with one post having the same *title* and *body*.
+1. We register the `Test/ApiClient` trait, providing us an HTTP `client` to make requests with
+2. We create a dummy `Post` instance
+3. We request the `/posts` URL and capture the response
+4. We run assertions against the response to ensure the HTTP status is `200`
+and at least one returned post has the same `title` and `body` as our dummy `Post` instance
 
-Congratulations 👏  &nbsp; You have got your first test passing.
+Finally, run all your functional tests via the following command:
 
-== Client methods
-Below is the list of available methods you can call when making HTTP requests.
+[source, bash]
+----
+> adonis test functional
+----
+
+.Output
+[source, bash]
+----
+  Post
+    ✓ get list of posts (286ms)
+
+   PASSED
+
+  total       : 1
+  passed      : 1
+  time        : 289ms
+----
+
+++++
+Your first HTTP test <span style="background: lightgreen; padding: 0 5px;">PASSED</span>. Congratulations! 🎉
+++++
+
+== Client Methods
+The following methods can be called when making HTTP requests.
 
 ==== get(url)
-Make an HTTP `GET` request to a given url.
+Make an HTTP `GET` request to a given url:
 
 [source, js]
 ----
 client.get('posts')
 ----
 
-Just like `get`, you can use other methods like `post`, `put`, `delete` to make HTTP requests.
+TIP: The `post`, `patch`, `put`, `delete`, and `head` methods can also be used to make HTTP requests.
 
 ==== header(key, value)
-Set `key/value` pair as an header when making the HTTP request.
+Set a header `key/value` pair when making the HTTP request:
 
 [source, js]
 ----
@@ -86,7 +120,7 @@ client
 ----
 
 ==== send(body)
-Send request body when making the HTTP request.
+Send request body when making the HTTP request:
 
 [source, js]
 ----
@@ -99,17 +133,17 @@ client
 ----
 
 ==== query(queryObject)
-Set query string
+Set query string parameters:
 
 [source, js]
 ----
 client
   .get('posts')
-  .query({ order: 'desc', page: 1 })
+  .query({ order: 'desc', page: 1 }) // ?order=desc&page=1
 ----
 
 ==== type(type)
-Set request content type.
+Set the request content type:
 
 [source, js]
 ----
@@ -119,7 +153,7 @@ client
 ----
 
 ==== accept(type)
-Set the data type you want to accept from the server.
+Set the data type you want to accept from the server:
 
 [source, js]
 ----
@@ -129,7 +163,7 @@ client
 ----
 
 ==== cookie(key, value)
-Set request cookies. Since all cookies are encrypted in AdonisJs, this method makes sure to encrypt the values properly, so that AdonisJs server can parse them.
+Set request cookies:
 
 [source, js]
 ----
@@ -138,8 +172,10 @@ client
   .cookie('name', 'virk')
 ----
 
+NOTE: As all cookies are encrypted in AdonisJs, this method makes sure to encrypt the values properly so that AdonisJs server can parse them.
+
 ==== plainCookie(key, value)
-Set a cookie which doesn't get encrypted
+Set a cookie which doesn't get encrypted:
 
 [source, js]
 ----
@@ -149,15 +185,17 @@ client
 ----
 
 ==== end
-The `end` method ends the HTTP request chain and returns the response. Make sure always to call the 'end' method.
+End the HTTP request chain, execute the request and return the response:
 
 [source, js]
 ----
 const response = await client.get('posts').end()
 ----
 
-== Multipart requests
-The API client also makes it possible to make multipart requests and send files as part of the request body.
+NOTE: You must call `end` to execute HTTP `client` requests.
+
+== Multipart Requests
+To make multipart requests and send files with the request body:
 
 [source, js]
 ----
@@ -168,7 +206,7 @@ await client
   .end()
 ----
 
-Also, you can set HTML form style field names to send an array of data.
+You can also set HTML form style field names to send an array of data:
 
 [source, js]
 ----
@@ -180,9 +218,9 @@ await client
 ----
 
 == Sessions
-When writing tests, you may want to set sessions beforehand, and same can be done by using the `Session/Client` trait.
+When writing tests, you may want to set sessions beforehand.
 
-NOTE: Make sure you have installed the session provider before you can take advantage of the `Session/Client` trait.
+This can be done by using the `Session/Client` trait:
 
 [source, js]
 ----
@@ -199,16 +237,18 @@ test('get list of posts', async ({ client }) => {
 })
 ----
 
+NOTE: The AdonisJs link:sessions#_setup[Session Provider] must be installed before you can take advantage of the `Session/Client` trait.
+
 == Authentication
-Also, you can authenticate users beforehand by using the `Auth/Client` trait.
+You can authenticate users beforehand by using the `Auth/Client` trait:
 
 [source, js]
 ----
 const { test, trait } = use('Test/Suite')('Post')
 
 trait('Test/ApiClient')
-trait('Session/Client')
 trait('Auth/Client')
+trait('Session/Client')
 
 test('get list of posts', async ({ client }) => {
   const user = await User.find(1)
@@ -220,7 +260,7 @@ test('get list of posts', async ({ client }) => {
 })
 ----
 
-Alternatively, you can pass a custom scheme to be used for authenticating users.
+To authenticate with a custom scheme:
 
 [source, js]
 ----
@@ -229,7 +269,7 @@ client
   .loginVia(user, 'jwt')
 ----
 
-Moreover, for a basic auth, you must pass the `username` and the `password` to log in the user.
+For basic auth, pass the user's `username` and the `password`:
 
 [source, js]
 ----
@@ -239,10 +279,10 @@ client
 ----
 
 == Assertions
-Below is the list of assertions you can run when using the API client.
+The following assertions can be called on HTTP `client` responses.
 
 ==== assertStatus
-Assert response status
+Assert the response status:
 
 [source, js]
 ----
@@ -250,7 +290,7 @@ response.assertStatus(200)
 ----
 
 ==== assertJSON
-Response the response body to `deepEqual` the expected value.
+Assert the response body should `deepEqual` the expected value:
 
 [source, js]
 ----
@@ -259,7 +299,7 @@ response.assertJSON({
 ----
 
 ==== assertJSONSubset
-Assert subset of JSON. This assertion tests a subset of objects, which is quite helpful when some keys inside an object are not determinable. For example: *timestamps*
+Assert a subset of JSON:
 
 [source, js]
 ----
@@ -269,8 +309,10 @@ response.assertJSONSubset({
 })
 ----
 
+TIP: This assertion tests a subset of objects, which is helpful when values inside an object are not determinable (e.g. timestamps).
+
 ==== assertText
-Assert plain text returned by the server
+Assert plain text returned by the server:
 
 [source, js]
 ----
@@ -278,7 +320,7 @@ response.assertText('Hello world')
 ----
 
 ==== assertError
-Assert the error received as response
+Assert the response error:
 
 [source, js]
 ----
@@ -292,7 +334,7 @@ response.assertError([
 ----
 
 ==== assertCookie
-Assert that the server set a cookie with value
+Assert the server set a cookie with value:
 
 [source, js]
 ----
@@ -300,7 +342,7 @@ response.assertCookie('key', 'value')
 ----
 
 ==== assertPlainCookie
-Assert plain cookie
+Assert a plain cookie value:
 
 [source, js]
 ----
@@ -308,7 +350,7 @@ response.assertPlainCookie('key', 'value')
 ----
 
 ==== assertCookieExists
-Assert that the server set a cookie with the given name
+Assert the server set a cookie with the given name:
 
 [source, js]
 ----
@@ -316,7 +358,7 @@ response.assertCookieExists('key')
 ----
 
 ==== assertPlainCookieExists
-Assert that the plain cookie given exists
+Assert a plain cookie exists:
 
 [source, js]
 ----
@@ -324,7 +366,7 @@ response.assertPlainCookieExists('key')
 ----
 
 ==== assertHeader
-Assert that the server sent a header.
+Assert the server sent a header:
 
 [source, js]
 ----
@@ -332,7 +374,7 @@ response.assertHeader('content-type', 'application/json')
 ----
 
 ==== assertRedirect
-Assert that the request was redirected to a given URL.
+Assert the request was redirected to a given URL:
 
 [source, js]
 ----

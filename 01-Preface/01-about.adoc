@@ -30,7 +30,7 @@ Below is the list of frequently asked questions. If you think a common question 
 [ol-spaced]
 1. *How is AdonisJs different to Express or Koa?*
 +
-Express and Koa are routing libraries with a thin layer of middleware on top. There are great for several use cases but fall apart when projects start to grow.
+Express and Koa are routing libraries with a thin layer of middleware on top. They are great for several use cases but fall apart when projects start to grow.
 +
 Since your projects have their own standards and conventions, it may become harder to hire developers to work on them. As AdonisJs follows a set of standardized conventions, it should be easier to hire someone to work on existing AdonisJs apps.
 

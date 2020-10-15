@@ -7,17 +7,21 @@ category: websockets
 
 toc::[]
 
-This guide covers the documentation around the Javascript client used for connecting to the websocket server.
+This guide covers the JavaScript *WebSocket client* used to connect to the link:websocket-server[WebSocket server].
 
 == Installation
-You can install the package from npm and then bundle it using Webpack or rollup.
+
+=== NPM
+As the *WebSocket client* is not installed by default, we need to pull it from `npm`:
 
 [source, bash]
 ----
-npm i @adonisjs/websocket-client
+> npm i @adonisjs/websocket-client
 ----
 
-and then import it as follows
+TIP: Once installed, bundle the package using Webpack, Rollup, etc.
+
+Then, import the WebSocket client like so:
 
 [source, js]
 ----
@@ -25,7 +29,9 @@ import Ws from '@adonisjs/websocket-client'
 const ws = Ws('ws://localhost:3333')
 ----
 
-Also you can grab the UMD bundle from unpkg.
+=== UNPKG
+
+Alternatively, source the UMD bundle directly from link:https://unpkg.com[unpkg, window="_blank"]:
 [source, html]
 ----
 <script src="https://unpkg.com/@adonisjs/websocket-client"></script>
@@ -35,15 +41,13 @@ Also you can grab the UMD bundle from unpkg.
 ----
 
 == Polyfill
-The module build requires link:https://babeljs.io/docs/plugins/transform-regenerator[regenerator-runtime] polyfill, so make sure to add it via babel.
+The module build requires the link:https://babeljs.io/docs/plugins/transform-regenerator[regenerator-runtime, window="_blank"] polyfill (add it via link:https://babeljs.io[Babel, window="_blank"]).
 
-== Production builds
-The development build contains a bunch of log statements, so it is recommended to use link:https://webpack.js.org/plugins/define-plugin/[Webpack DefinePlugin] or link:https://github.com/rollup/rollup-plugin-replace[rollup-plugin-replace] in order to define `NODE_ENV`.
+== Production Builds
+As the development build contains a number of log statements, we recommend defining `NODE_ENV` via link:https://webpack.js.org/plugins/define-plugin/[Webpack DefinePlugin, window="_blank"] or link:https://github.com/rollup/rollup-plugin-replace[rollup-plugin-replace, window="_blank"].
 
-== Getting started
-Let's get started by connecting to the Websocket server and make some subscriptions.
-
-NOTE: If `url` is not defined, it will fallback to the current hostname. Otherwise a complete URL with `ws` protocol is required.
+== Getting Started
+Connect to a WebSocket server via the client like so:
 
 [source, js]
 ----
@@ -53,20 +57,22 @@ const ws = Ws(url, options)
 ws.connect()
 ----
 
+NOTE: The `url` parameter will fallback to the current hostname if a full `ws://` url value is omitted.
+
 ==== options
 
 [role="resource-table", options="header", cols="30%, 10%, 60%"]
 |===
 | Key | Default Value | Description
-| path | *adonis-ws* | The path to the used for making the connection. Only change, if you changed it on the server
-| reconnection | *true* | Whether or not make reconnect automatically after disconnect
-| reconnectionAttempts | *10* | Number to reconnection attempts to be made, before giving up
-| reconnectionDelay | *1000* | How long to wait, before reconnecting. The value will be used as `n x delay`, where `n` is the current value of reconnection attempts.
-| query | *null* | Query string to passed to the connection URL. You can pass an object
-| encoder | *JsonEncoder* | The encoder to be used. The same encoder will be required on the server too.
+| `path` | `adonis-ws` | The path used to make the connection (only change if you changed it on the server).
+| `reconnection` | `true` | Whether to reconnect automatically after disconnect.
+| `reconnectionAttempts` | `10` | Number of reconnection attempts before abandoning.
+| `reconnectionDelay` | `1000` | How long to wait before reconnecting. The value will be used as `n x delay`, where `n` is the current value of reconnection attempts.
+| `query` | `null` | Query string to pass to the connection URL (also accepts an object).
+| `encoder` | `JsonEncoder` | The encoder to use (the same encoder will be required on the server).
 |===
 
-It is recommended to listen for `open` and `close` events, to manage your application state properly.
+To manage your application state, listen for the `open`/`close` events:
 
 [source, js]
 ----
@@ -81,7 +87,7 @@ ws.on('close', () => {
 })
 ----
 
-Once, connected you can subscribe to different/multiple topics.
+Once connected, subscribe to different/multiple topics:
 
 [source, js]
 ----
@@ -100,10 +106,10 @@ chat.on('close', () => {
 ----
 
 == Subscription API
-Following is the list of methods to be used for sending/receiving messages.
+The following methods are used to send/receive messages.
 
 ==== emit(event, data)
-Send event to the server
+Send event to the server:
 
 [source, js]
 ----
@@ -114,7 +120,7 @@ chat.emit('message', {
 ----
 
 ==== on(event, callback)
-Bind event listener
+Bind event listener:
 
 [source, js]
 ----
@@ -123,18 +129,18 @@ chat.on('new:user', () => {})
 ----
 
 ==== off(event, callback)
-Remove event listener
+Remove event listener:
 
 [source, js]
 ----
 const messageHandler = function () {}
 
 chat.on('message', messageHandler)
-chat.off(messageHandler)
+chat.off('message', messageHandler)
 ----
 
 ==== close()
-Initiate request to close the subscription. You must wait for the `close` event, to mark the subscription as closed.
+Initiate request to close the subscription:
 
 [source, js]
 ----
@@ -145,8 +151,10 @@ chat.on('close', () => {
 chat.close()
 ----
 
+NOTE: Listen for the link:#_close_2[close event] to confirm the subscription closed.
+
 ==== leaveError
-The `leaveError` event is emitted, when server refuses to close the subscription. This ideally will never occur.
+Emitted when the server refuses to close the subscription:
 
 [source, js]
 ----
@@ -156,7 +164,7 @@ chat.on('leaveError', (response) => {
 ----
 
 ==== error
-Emitted when error occurs on the TCP connection. Ideally you must be listening to `ws.on('error')` event.
+Emitted when an error occurs on the TCP connection:
 
 [source, js]
 ----
@@ -164,8 +172,10 @@ chat.on('error', (event) => {
 })
 ----
 
+NOTE: Preferably, listen for the `ws.on('error')` event instead.
+
 ==== close
-Emitted when subscription is closed.
+Emitted when the subscription is closed:
 
 [source, js]
 ----
@@ -174,15 +184,10 @@ chat.on('close', () => {
 ----
 
 == Ws API
-Below is the list of methods available on a single `ws` connection.
-
-[source, js]
-----
-const ws = Ws(url, options)
-----
+The following methods are available on a single `ws` connection.
 
 ==== connect
-Initiate the connection
+Initiate the connection:
 
 [source, js]
 ----
@@ -190,15 +195,17 @@ ws.connect()
 ----
 
 ==== close
-Forcefully close the connection. After this, all subscription will removed and no reconnection will be triggered.
+Forcefully close the connection:
 
 [source, js]
 ----
 ws.close()
 ----
 
+NOTE: Removes all subscriptions and does not trigger a reconnection.
+
 ==== getSubscription(topic)
-Returns instance of a subscription for a given topic. If there is no subscription `null` will be returned.
+Returns the subscription instance for a given topic:
 
 [source, js]
 ----
@@ -208,21 +215,27 @@ ws.getSubscription('chat').on('message', () => {
 })
 ----
 
+NOTE: If no subscriptions for the given topic, returns `null`.
+
 ==== subscribe(topic)
-Subscribe to a topic. Subscribing to the same topic twice, will raise an exception.
+Subscribe to a topic:
 
 [source, js]
 ----
 const chat = ws.subscribe('chat')
 ----
 
-== Authentication
-The Javascript client makes it super easy to authenticate users. The auth credentials are only passed once to the server, during the initial connection and then same information can be reused to allow or disallow channel subscriptions.
+NOTE: Subscribing to the same topic twice raises an exception.
 
-NOTE: If you are using sessions, then user will be authenticated automatically, if they have a valid session.
+== Authentication
+The AdonisJs WebSocket client makes it simple to authenticate users.
+
+Auth credentials are only passed once to the server during the initial connection, so the same information can be reused to allow/disallow channel subscriptions.
+
+NOTE: If your application uses sessions, users will be authenticated automatically providing they have a valid session.
 
 ==== withBasicAuth(username, password)
-Authenticate user using basic auth
+Authenticate via basic auth:
 
 [source, js]
 ----
@@ -234,7 +247,7 @@ ws
 ----
 
 ==== withApiToken(token)
-Authenticate user using api token
+Authenticate via api token:
 
 [source, js]
 ----
@@ -246,7 +259,7 @@ ws
 ----
 
 ==== withJwtToken(token)
-Authenticate user using JWT token
+Authenticate via JWT token:
 
 [source, js]
 ----
@@ -257,10 +270,11 @@ ws
   .connect()
 ----
 
-On the server, you can access the user information from the `auth` object.
+=== User Information
 
-NOTE: You must setup required middleware before running the following code. Learn more about link:websocket-server#_registering_middleware[middleware]
+On the server, access user information via the `auth` object:
 
+.start/socket.js
 [source, js]
 ----
 Ws.channel('chat', ({ auth }) => {
@@ -268,8 +282,13 @@ Ws.channel('chat', ({ auth }) => {
 })
 ----
 
-In order to enforce authenticated connections, make sure to define the named middleware.
+NOTE: link:websocket-server#_registering_middleware[Required middleware] must be set up to access the `auth` object.
 
+=== Channel Middleware
+
+To authenticate connections, ensure the `auth` named middleware is applied:
+
+.start/socket.js
 [source, js]
 ----
 Ws.channel('chat', ({ auth }) => {
