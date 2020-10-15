@@ -55,7 +55,7 @@ Logger.info('request details %j', {
 })
 ----
 
-TIP: All logging methods support link:http://www.diveintojavascript.com/projects/javascript-sprintf[sprintf] syntax.
+TIP: All logging methods support link:https://www.cplusplus.com/reference/cstdio/printf/[sprintf] syntax. See the "format" section. 
 
 The logger uses link:https://tools.ietf.org/html/rfc5424#page-11[RFC5424] log levels, exposing simple methods for each level:
 
