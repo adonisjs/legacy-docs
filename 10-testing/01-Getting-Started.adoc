@@ -64,6 +64,7 @@ For example, you might programmatically open a browser and interact with various
 ----
 const { test, trait } = use('Test/Suite')('Example functional test')
 trait('Test/Browser')
+trait('Test/Session')
 
 test('validate user details', async ({ browser }) => {
   const page = await browser.visit('/')
