@@ -399,3 +399,4 @@ The following editor plugins provide Edge syntax highlighting support:
 1. link:https://github.com/poppinss/edge-sublime-syntax[Sublime Text, window="_blank"]
 2. link:https://github.com/poppinss/edge-atom-syntax[Atom, window="_blank"]
 3. link:https://github.com/duyluonglc/vscode-edge[Visual Studio Code, window="_blank"]
+4. link:https://github.com/watzon/vim-edge-template[VIM, window="_blank"]
