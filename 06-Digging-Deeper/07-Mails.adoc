@@ -352,12 +352,12 @@ The `mailgun` driver accepts an optional `extras` configuration object:
 {
   extras: {
     'o:tag': '',
-    'o:campaign': ''
+    'o:tracking': ''
   }
 }
 ----
 
-Check out Mailgun's link:https://mailgun-documentation.readthedocs.io/en/latest/api-sending.html#sending[documentation, window="_blank"] to learn more about their available options.
+Check out Mailgun's link:https://documentation.mailgun.com/en/latest/api-sending.html#sending[documentation, window="_blank"] to learn more about their available options.
 
 You can also pass `extras` at runtime using the `driverExtras` method:
 
@@ -366,7 +366,7 @@ You can also pass `extras` at runtime using the `driverExtras` method:
 await Mail.send('view', data, (message) => {
   message.driverExtras({
     'o:tag': '',
-    'o:campaign': ''
+    'o:tracking': ''
   })
 })
 ----
