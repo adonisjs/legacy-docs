@@ -194,6 +194,18 @@ const response = await client.get('posts').end()
 
 NOTE: You must call `end` to execute HTTP `client` requests.
 
+==== timeout
+Set timeout for test execution:
+
+[source, js]
+----
+test('get list of posts', async ({ client }) => {
+  const response = await client.get('/posts').end()
+
+  response.assertStatus(200)
+}).timeout(0)
+----
+
 == Multipart Requests
 To make multipart requests and send files with the request body:
 
