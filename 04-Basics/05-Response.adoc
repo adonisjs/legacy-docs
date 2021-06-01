@@ -172,6 +172,7 @@ In that case, may want to set a plain cookie instead:
 // not signed or encrypted
 response.plainCookie('cartTotal', 20)
 ----
+> Do note, the value is still JSON.stringified and converted to base64 encoded string to avoid encoding issues.
 
 == Redirects
 Use one of the following methods to redirect requests to a different URL.
