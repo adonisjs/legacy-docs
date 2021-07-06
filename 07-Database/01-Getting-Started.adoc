@@ -177,7 +177,7 @@ Debugging database queries can be handy in both development and production.
 Let's go through the available strategies to debug queries.
 
 === Globally
-Setting `debug: true` inside the `database/config.js` file enables debugging for all queries globally:
+Setting `debug: true` inside the `config/database.js` file enables debugging for all queries globally:
 
 .config/database.js
 [source, js]
