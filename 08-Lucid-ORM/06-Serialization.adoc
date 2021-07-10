@@ -10,7 +10,7 @@ toc::[]
 
 *Serializers* provide clean abstractions to transform database results.
 
-AdonisJs ships with the default link:https://github.com/adonisjs/adonis-lucid/blob/develop/src/Lucid/Serializers/Vanilla.js[Vanilla Serializer, window="_blank"], but you are free to create and use any serializer your application requires.
+AdonisJs ships with the default link:https://github.com/adonisjs/adonis-lucid/blob/v6.1.3/src/Lucid/Serializers/Vanilla.js[Vanilla Serializer, window="_blank"], but you are free to create and use any serializer your application requires.
 
 A common serializer usage is to format data as per the link:http://jsonapi.org/[JSON:API, window="_blank"] spec.
 
